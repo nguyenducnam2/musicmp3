@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+    <body>
+        <div>Create song</div>
+        <form th:action=${"/admin/song/save"} th:object="${song}" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:field="${song.id}" />
+            <div>Name:<input th:field="${song.name}"/></div>
+            <div>File media(*mp3,mp4)<input type="file" name="file"/></div>
+            <div>Price:<input th:field="${song.price}"/></div>
+            <div>Lyric: <textarea th:field="${song.lyric}"  cols="60" rows="15"></textarea></div>       
+            <div>
+                Genre:
+                <select th:field="${song.genreId}">
+                    <option th:each="item:${listgenre}" th:text="${item.name}"  th:value="${item.id}"></option>
+                </select>
+            </div>
+            <!--        <div>
+                         Artist:
+                         <select th:field="${song.artistId}" >
+                             <option th:each="item:${listartist}" th:text="${item.name}" value="${item.id}"></option>
+                         </select>
+                     </div> -->
+            <div>
+                Album:
+                <select th:field="${song.albumId}">
+                    <option  th:each="item:${listalbum}" th:text="${item.name}" th:value="${item.id}"></option>
+                </select>
+            </div>
+            <div><input type="submit" value="create"/></div>
+        </form>
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="iq-card">
+                            <div class="iq-card-header d-flex justify-content-between">
+                                <div class="iq-header-title">
+                                    <h4 class="card-title">Add Song</h4>
+                                </div>
+                            </div>
+                            <div class="iq-card-body">
+                                <form th:action=${"/admin/song/save"} th:object="${song}" method="post" enctype="multipart/form-data">
+                                    <input type="hidden"  th:field="${song.id}" />
+                                    <div class="form-group">
+                                        <label>Song Name:</label>
+                                        <input type="text" th:field="${song.name}" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>File media(<span style="color: red;">*</span>mp3,mp4):</label>
+                                        <div class="custom-file">
+                                            <input type="file" name="file" class="custom-file-input" id="customFile">
+                                            <label class="custom-file-label" for="customFile">Choose file</label>
+                                        </div>
+                                    </div>
+                                      <div class="form-group">
+                                        <label>Price:</label>
+                                        <input type="text" th:field="${song.price}" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Genre:</label>
+                                        <select class="form-control" id="exampleFormControlSelect1" th:field="${song.genreId}">
+                                            <option th:each="item:${listgenre}" th:text="${item.name}" th:value="${item.id}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Album:</label>
+                                        <select class="form-control" id="exampleFormControlSelect1" th:field="${song.albumId}">
+                                            <option th:each="item:${listalbum}" th:text="${item.name}" th:value="${item.id}"></option>
+                                        </select>
+                                    </div>                          
+                                    <div class="form-group">
+                                        <label>Lyric:</label>
+                                        <textarea th:field="${song.lyric}" class="form-control" rows="4"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="reset" class="btn btn-danger">Reset</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

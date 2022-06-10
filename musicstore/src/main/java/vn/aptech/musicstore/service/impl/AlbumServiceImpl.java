@@ -1,0 +1,51 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package vn.aptech.musicstore.service.impl;
+
+import java.util.List;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import vn.aptech.musicstore.entity.Album;
+import vn.aptech.musicstore.repository.AlbumRepository;
+import vn.aptech.musicstore.service.AlbumService;
+
+/**
+ *
+ * @author namng
+ */
+@Service
+public class AlbumServiceImpl implements AlbumService {
+    
+    @Autowired
+    private AlbumRepository repo;
+    
+    @Override
+    public List<Album> findAll() {
+        return repo.findAll();
+    }
+    
+    @Override
+    public Optional<Album> findById(int id) {
+        return repo.findById(id);
+    }
+    
+    @Override
+    public Album save(Album alb) {
+        return repo.save(alb);
+    }
+    
+    @Override
+    public void deleteById(int id) {
+        repo.deleteById(id);
+    }
+
+    @Override
+    public boolean existsById(int id) {
+        return repo.existsById(id);
+    }
+    
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+    <body>
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div><a th:href="@{/admin/album/create}">Create Album</a></div>
+                        <div>Album List</div>
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>Date</th>
+                                <th>Poster</th>
+                                <th>Artist</th>
+                                <th>Action</th>
+                            </tr>
+                            <tr th:each="item:${list}">
+                                <td th:text="${item.name}"></td>
+                                <td th:text="${item.releaseDate}"></td>
+                                <td>
+                                    <img style="width: 200px;height: 200px;" th:src="@{'/album/'+${item.image}}"/>
+                                </td>
+                                <td th:text="${item.artist.name}"></td>
+                                <td>
+                                    <p><a th:href="@{/admin/album/delete/{id}(id=${item.id})}">Delete</a></p>
+                                    <p><a th:href="@{/admin/album/update/{id}(id=${item.id})}">Update</a></p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>Create Album</div>
+        <form th:object="${album}" th:action="@{/admin/album/processupdate}" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:field="${album.id}"/>
+            <div>Name:<input th:field="${album.name}"/></div>
+            <div>Release-Date:<input type="date" th:field="${album.releaseDate}"/></div>
+            <div>Poster:<input type="file" name="file"/></div>
+            <div>
+                <select th:field="${album.artistId}">
+                    <option th:each="item:${listartist}" th:value="${item.id}" th:text="${item.name}"></option>
+                </select>
+            </div>
+            <div><input type="submit" value="create"/></div>
+        </form>
+    </body>
+</html>
