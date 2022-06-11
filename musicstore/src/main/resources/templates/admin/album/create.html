@@ -4,25 +4,52 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
     <body>
-        <div>Create Album</div>
-        <form th:object="${album}" th:action="@{/admin/album/save}" method="post" enctype="multipart/form-data">
-            <input type="hidden" th:field="${album.id}"/>
-            <div>Name:<input th:field="${album.name}"/></div>
-            <div>Release-Date:<input type="date" th:field="${album.releaseDate}"/></div>
-            <div>Poster:<input type="file" name="file"/></div>
-            <div>
-                <select th:field="${album.artistId}">
-                    <option th:each="item:${listartist}" th:value="${item.id}" th:text="${item.name}"></option>
-                </select>
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="iq-card">
+                            <div class="iq-card-header d-flex justify-content-between">
+                                <div class="iq-header-title">
+                                    <h4 class="card-title">Add Album</h4>
+                                </div>
+                            </div>
+                            <div class="iq-card-body">
+                                <form th:action=${"/admin/album/save"} th:object="${album}" method="post" enctype="multipart/form-data">
+                                    <input type="hidden"  th:field="${album.id}" />
+                                    <div class="form-group">
+                                        <label>Album Name:</label>
+                                        <input type="text" th:field="${album.name}" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Poster:</label>
+                                        <div class="custom-file">
+                                            <input type="file" name="file" class="custom-file-input" id="customFile">
+                                            <label class="custom-file-label" for="customFile">Choose file</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputdate">Release Date:</label>
+                                        <input type="date" th:field="${album.releaseDate}" class="form-control" id="exampleInputdate" value="2019-12-18">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Artist:</label>
+                                        <select class="form-control" id="exampleFormControlSelect1" th:field="${album.artistId}">
+                                            <option th:each="item:${listartist}" th:value="${item.id}" th:text="${item.name}"></option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="reset" class="btn btn-danger">Reset</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div><input type="submit" value="create"/></div>
-        </form>
+        </div>
     </body>
 </html>

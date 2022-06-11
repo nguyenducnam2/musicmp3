@@ -8,33 +8,6 @@ and open the template in the editor.
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{admin/layout.html}">
     <body>
-        <div>Create song</div>
-        <form th:action=${"/admin/song/save"} th:object="${song}" method="post" enctype="multipart/form-data">
-            <input type="hidden" th:field="${song.id}" />
-            <div>Name:<input th:field="${song.name}"/></div>
-            <div>File media(*mp3,mp4)<input type="file" name="file"/></div>
-            <div>Price:<input th:field="${song.price}"/></div>
-            <div>Lyric: <textarea th:field="${song.lyric}"  cols="60" rows="15"></textarea></div>       
-            <div>
-                Genre:
-                <select th:field="${song.genreId}">
-                    <option th:each="item:${listgenre}" th:text="${item.name}"  th:value="${item.id}"></option>
-                </select>
-            </div>
-            <!--        <div>
-                         Artist:
-                         <select th:field="${song.artistId}" >
-                             <option th:each="item:${listartist}" th:text="${item.name}" value="${item.id}"></option>
-                         </select>
-                     </div> -->
-            <div>
-                Album:
-                <select th:field="${song.albumId}">
-                    <option  th:each="item:${listalbum}" th:text="${item.name}" th:value="${item.id}"></option>
-                </select>
-            </div>
-            <div><input type="submit" value="create"/></div>
-        </form>
         <div layout:fragment="content" id="content-page" class="content-page">
             <div class="container-fluid">
                 <div class="row">
@@ -59,7 +32,7 @@ and open the template in the editor.
                                             <label class="custom-file-label" for="customFile">Choose file</label>
                                         </div>
                                     </div>
-                                      <div class="form-group">
+                                    <div class="form-group">
                                         <label>Price:</label>
                                         <input type="text" th:field="${song.price}" class="form-control">
                                     </div>
@@ -88,6 +61,5 @@ and open the template in the editor.
                 </div>
             </div>
         </div>
-    </div>
-</body>
+    </body>
 </html>

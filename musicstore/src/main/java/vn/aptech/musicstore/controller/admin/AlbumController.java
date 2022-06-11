@@ -105,5 +105,11 @@ public class AlbumController {
         service.deleteById(id);
         return "redirect:/admin/album";
     }
+    
+    @GetMapping("/search")
+    public String search(Model model,@RequestParam("name")String name){
+        model.addAttribute("list", service.findByNameCustom(name));
+        return "admin/album/index";
+    }
 
 }

@@ -4,18 +4,35 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
     <body>
-        <div>create</div>
-        <form th:action=${"/admin/genre/save"} th:object="${genre}" method="post">
-            <input type="hidden" th:field="${genre.id}" />
-            <div>Name:<input th:field="${genre.name}"/></div>
-            <div><input type="submit" value="create"/></div>
-        </form>
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="iq-card">
+                            <div class="iq-card-header d-flex justify-content-between">
+                                <div class="iq-header-title">
+                                    <h4 class="card-title">Add Genre</h4>
+                                </div>
+                            </div>
+                            <div class="iq-card-body">
+                                <form th:action=${"/admin/genre/save"} th:object="${genre}" method="post">
+                                    <input type="hidden"  th:field="${genre.id}" />
+                                    <div class="form-group">
+                                        <label>Genre Name:</label>
+                                        <input type="text" th:field="${genre.name}" class="form-control">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="reset" class="btn btn-danger">Reset</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

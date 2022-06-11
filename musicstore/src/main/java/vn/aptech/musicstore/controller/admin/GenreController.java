@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import vn.aptech.musicstore.entity.Genre;
 import vn.aptech.musicstore.service.GenreService;
 
@@ -55,6 +56,12 @@ public class GenreController {
     public String update(@PathVariable("id")int id,Model model){
         model.addAttribute("genre", service.findById(id));
         return "admin/genre/create";
+    }
+    
+    @GetMapping("/search")
+    public String search(Model model,@RequestParam("name")String name){
+        model.addAttribute("list", service.findByNameCustom(name));
+        return "admin/genre/index";
     }
     
     

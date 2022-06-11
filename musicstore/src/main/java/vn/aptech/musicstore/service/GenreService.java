@@ -7,6 +7,7 @@ package vn.aptech.musicstore.service;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.repository.query.Param;
 import vn.aptech.musicstore.entity.Genre;
 
 /**
@@ -18,4 +19,5 @@ public interface GenreService {
     Optional<Genre> findById(int id);
     Genre save(Genre genre);
     void deleteById(int id);
+    List<Genre> findByNameCustom(String name);
 }

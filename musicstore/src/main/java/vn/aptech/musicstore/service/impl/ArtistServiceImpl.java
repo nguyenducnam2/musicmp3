@@ -42,5 +42,10 @@ public class ArtistServiceImpl implements ArtistService{
     public void deleteById(int id) {
        repo.deleteById(id);
     }
+
+    @Override
+    public List<Artist> findByNameCustom(String name) {
+        return repo.findByNameCustom(name);
+    }
     
 }

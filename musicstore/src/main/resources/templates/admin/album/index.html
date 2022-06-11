@@ -11,33 +11,68 @@ and open the template in the editor.
         <div layout:fragment="content" id="content-page" class="content-page">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <div><a th:href="@{/admin/album/create}">Create Album</a></div>
-                        <div>Album List</div>
-                        <table>
-                            <tr>
-                                <th>Name</th>
-                                <th>Date</th>
-                                <th>Poster</th>
-                                <th>Artist</th>
-                                <th>Action</th>
-                            </tr>
-                            <tr th:each="item:${list}">
-                                <td th:text="${item.name}"></td>
-                                <td th:text="${item.releaseDate}"></td>
-                                <td>
-                                    <img style="width: 200px;height: 200px;" th:src="@{'/album/'+${item.image}}"/>
-                                </td>
-                                <td th:text="${item.artist.name}"></td>
-                                <td>
-                                    <p><a th:href="@{/admin/album/delete/{id}(id=${item.id})}">Delete</a></p>
-                                    <p><a th:href="@{/admin/album/update/{id}(id=${item.id})}">Update</a></p>
-                                </td>
-                            </tr>
-                        </table>
+                    <div class="col-sm-12">
+                        <div class="iq-card">
+                            <div class="iq-card-header d-flex justify-content-between">
+                                <div class="iq-header-title">
+                                    <h4 class="card-title">Album Lists</h4>
+                                </div>
+                                <div class="iq-search-bar">   
+                                    <form th:action="@{/admin/album/search}" class="searchbox">
+                                        <input type="text" class="text search-input" name="name" placeholder="Search Here..">
+                                        <a class="search-link" href="#"><i class="ri-search-line text-black"></i></a>
+                                        <a class="search-audio" href="#"><i class="las la-microphone text-black"></i></a> 
+                                    </form>
+                                </div>
+                                <div class="iq-card-header-toolbar d-flex align-items-center">
+                                    <a th:href="@{/admin/album/create}" class="btn btn-primary">Add New Album</a>
+                                </div>
+                            </div>
+                            <div class="iq-card-body">
+                                <div class="table-responsive">
+                                    <table class="data-tables table table-striped table-bordered" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 5%;">No</th>
+                                                <th style="width: 20%;">Poster</th>
+                                                <th style="width: 15%;">Name</th>
+                                                <th style="width: 15%;">Artist</th>
+                                                <!--<th style="width: 10%;">Price</th>
+                                                <th style="width: 10%;">Artist</th>
+                                                    <th style="width: 30%;">Audio</th> -->
+                                                    <th style="width: 10%;">Action</th> 
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="item:${list}">
+                                                <td th:text="${list.indexOf(item)+1}"></td>
+                                                <td>
+                                                    <img style="width: 160px;height: 150px;" th:src="@{'/album/'+${item.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
+                                                </td>
+                                                <td th:text="${item.name}"></td>
+                                                <td th:text="${item.artist.name}"></td>
+                                                <!--      <td>Edyta Gorniak</td> 
+                                                <td th:text="${item.artist.name}"></td> 
+                                                <td>
+                                                    <audio controls loop>
+                                                        <source th:src="@{'/audio/'+${item.media}}"/>
+                                                    </audio>
+                                                </td> -->
+                                                <td>
+                                                    <div class="flex align-items-center list-user-action">
+                                                        <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" th:href="@{/admin/album/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
+                                                        <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/admin/album/delete/{id}(id=${item.id})}"><i class="ri-delete-bin-line"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div>        
+        </div>                         
     </body>
 </html>

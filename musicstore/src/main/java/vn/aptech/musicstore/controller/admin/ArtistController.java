@@ -76,4 +76,10 @@ public class ArtistController {
         service.deleteById(id);
         return "redirect:/admin/artist";
     }
+    
+    @GetMapping("/search")
+    public String search(Model model,@RequestParam("name")String name){
+        model.addAttribute("list", service.findByNameCustom(name));
+        return "admin/artist/index";
+    }
 }

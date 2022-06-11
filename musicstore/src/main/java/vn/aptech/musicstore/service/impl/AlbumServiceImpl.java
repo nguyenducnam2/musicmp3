@@ -19,25 +19,25 @@ import vn.aptech.musicstore.service.AlbumService;
  */
 @Service
 public class AlbumServiceImpl implements AlbumService {
-    
+
     @Autowired
     private AlbumRepository repo;
-    
+
     @Override
     public List<Album> findAll() {
         return repo.findAll();
     }
-    
+
     @Override
     public Optional<Album> findById(int id) {
         return repo.findById(id);
     }
-    
+
     @Override
     public Album save(Album alb) {
         return repo.save(alb);
     }
-    
+
     @Override
     public void deleteById(int id) {
         repo.deleteById(id);
@@ -47,5 +47,9 @@ public class AlbumServiceImpl implements AlbumService {
     public boolean existsById(int id) {
         return repo.existsById(id);
     }
-    
+
+    @Override
+    public List<Album> findByNameCustom(String name) {
+        return repo.findByNameCustom(name);
+    }
 }
