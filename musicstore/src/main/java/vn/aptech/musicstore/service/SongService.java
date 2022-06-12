@@ -21,4 +21,5 @@ public interface SongService {
     void deleteById(int id);
     List<Song> findByAlbumId(int albumId);
     List<Song> findByName(String name);
+    List<Song> findByOrderByViewDesc();
 }

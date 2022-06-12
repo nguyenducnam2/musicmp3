@@ -23,4 +23,5 @@ public interface SongRepository extends JpaRepository<Song,Integer>{
     @Query("SELECT o FROM Song o WHERE o.name LIKE CONCAT('%',:name,'%')")
     List<Song> findByNameCustom(@Param("name") String name);
     
+    List<Song> findByOrderByViewDesc();
 }

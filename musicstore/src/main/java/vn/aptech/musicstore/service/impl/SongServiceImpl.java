@@ -52,5 +52,10 @@ public class SongServiceImpl implements SongService{
     public List<Song> findByName(String name) {
        return repo.findByNameCustom(name);
     }
+
+    @Override
+    public List<Song> findByOrderByViewDesc() {
+        return repo.findByOrderByViewDesc();
+    }
     
 }
