@@ -26,9 +26,20 @@ public class SongClientController {
     @GetMapping("/song/{id}")
     public String mediaPlayer(@PathVariable("id")int id,Model model){
         Song s=service.findById(id).orElseThrow();
+        s.setView(s.getView()+1); 
+        service.save(s);
+        model.addAttribute("song", s);
+        model.addAttribute("anotherlist", service.findByAlbumId(s.getAlbumId()));
+        return "client/song/mediaplayer";
+    }
+    
+    @GetMapping("/video/{id}")
+    public String videoPlayer(@PathVariable("id")int id,Model model){
+        Song s=service.findById(id).orElseThrow();
         s.setView(s.getView()+1);
         service.save(s);
         model.addAttribute("song", s);
-        return "client/song/mediaplayer";
+         model.addAttribute("anotherlist", service.findByAlbumId(s.getAlbumId()));
+        return "client/song/video";
     }
 }

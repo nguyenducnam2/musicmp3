@@ -44,6 +44,7 @@ and open the template in the editor.
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            
                                             <tr th:each="item:${list}">
                                                 <td th:text="${list.indexOf(item)+1}"></td>
                                                 <td>
@@ -54,9 +55,11 @@ and open the template in the editor.
                                                 <!--      <td>Edyta Gorniak</td> --> 
                                                 <td th:text="${item.artist.name}"></td>
                                                 <td>
-                                                    <audio controls loop>
+                                                   
+                                                    <audio  controls loop class="audiplay" nodownload>
                                                         <source th:src="@{'/audio/'+${item.media}}"/>
                                                     </audio>
+                                                   
                                                 </td>
                                                 <td>
                                                     <div class="flex align-items-center list-user-action">
@@ -73,6 +76,7 @@ and open the template in the editor.
                     </div>
                 </div>
             </div>        
-        </div>                         
+        </div>
+        
     </body>
 </html>
