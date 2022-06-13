@@ -76,9 +76,9 @@ public class SongController {
         s.setView(0);
         s.setArtistId(s.getAlbum().getArtistId());
         s.setArtist(s.getAlbum().getArtist());
-//        String path_directory = "C:\\Users\\namng\\Documents\\NetBeansProjects\\musicstore\\src\\main\\resources\\static\\image";
+    //   String path_directory = "C:\\Users\\namng\\Documents\\NetBeansProjects\\musicstore\\src\\main\\resources\\static\\audio";
 //        String path_directory = new ClassPathResource("static/image").getFile().getAbsolutePath();
-        Files.copy(file.getInputStream(), Paths.get(base_url+"\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+      Files.copy(file.getInputStream(), Paths.get(base_url+"\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
         service.save(s);
         }else{
         s.setMedia(service.findById(s.getId()).orElseThrow().getMedia());

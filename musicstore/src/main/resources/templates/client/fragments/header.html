@@ -15,7 +15,7 @@
                      <a href="index.html" class="header-logo">
                         <img src="images/logo.png" class="img-fluid rounded-normal" alt="">
                         <div class="pt-2 pl-2 logo-title">
-                           <span class="text-primary text-uppercase">Muzik</span>
+                           <span class="text-primary text-uppercase">Music</span>
                         </div>
                      </a>
                   </div>
@@ -32,8 +32,8 @@
                   <ul class="navbar-nav ml-auto navbar-list">
                      <li class="nav-item nav-icon">
                         <div class="iq-search-bar">
-                           <form action="#" class="searchbox">
-                              <input type="text" class="text search-input" placeholder="Search Here..">
+                           <form th:action="@{/result}" class="searchbox">
+                              <input type="text" name="searchname" class="text search-input" placeholder="Search Here..">
                               <a class="search-link" href="#"><i class="ri-search-line text-black"></i></a>
                               <a class="search-audio" href="#"><i class="las la-microphone text-black"></i></a>
                            </form>
@@ -43,8 +43,8 @@
                         <a href="#" class="search-toggle iq-waves-effect text-gray rounded"><span class="ripple rippleEffect " ></span>
                            <i class="ri-search-line text-black"></i>
                         </a>
-                        <form action="#" class="search-box p-0">
-                           <input type="text" class="text search-input" placeholder="Type here to search...">
+                        <form th:action="@{/result}" class="search-box p-0">
+                           <input type="text" name="searchname" class="text search-input" placeholder="Type here to search...">
                            <a class="search-link" href="#"><i class="ri-search-line text-black"></i></a>
                            <a class="search-audio" href="#"><i class="las la-microphone text-black"></i></a>
                         </form>

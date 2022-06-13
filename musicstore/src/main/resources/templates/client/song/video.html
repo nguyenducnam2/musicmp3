@@ -4,13 +4,106 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{client/layout.html}">
     <body>
-        <div>TODO write content</div>
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="iq-card">
+                            <div class="iq-card-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                         <div class="d-flex align-items-top justify-content-between iq-music-play-detail">
+                                            <div class="music-detail">
+                                                <h4 th:text="${song.name}+'  -  '+${song.artist.name}"><i class="las la-headphones"></h4>
+                                                <p class="mb-0"><p class="las la-headphones" th:text="'    '+${song.view}">   </p>
+                                                <div class="d-flex align-items-center">                                       
+                                                    <!--  <a href="javascript:void(0);" class="btn btn-primary iq-play mr-2">Play music</a> -->
+
+                                                </div>
+                                            </div>
+                                            <div class="music-right">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="iq-circle mr-2 share"><a href="javascript:void();"><i class="las la-share-alt-square text-primary"></i></a></div>
+                                                    <div class="iq-circle mr-2"><a href="javascript:void();"><i class="ri-heart-fill  text-primary"></i></a></div>                 
+                                                    <div class="iq-circle">
+                                                        <a href="javascript:void();"><i class="las la-download text-primary"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>     
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <video controls loop  style="width: 100%;">
+                                            <source th:src="@{'/audio/'+${song.media}}"/>
+                                        </video> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="iq-card">
+                        <div class="iq-card-body">
+                            <ul class="nav nav-tabs" id="myTab-1" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Other Songs</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Lyric</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/song/{id}(id=${song.id})}">Audio</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent-2">
+                                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                    <ul class="list-unstyled iq-music-slide mb-0">
+                                        <li class="mb-3" th:each="item:${anotherlist}" th:if="${song.id}!=${item.id}">
+                                            <div class="d-flex justify-content-between align-items-center row">
+                                                <div class="media align-items-center col-10 col-md-5">
+                                                    <div class="iq-realese-song ">
+                                                        <a th:href="@{/video/{id}(id=${item.id})}"><img th:src="@{'/album/'+${item.album.image}}" class="img-border-radius avatar-60 img-fluid" alt=""></a>
+                                                    </div>
+                                                    <div class="media-body ml-3">
+                                                        <p class="mb-0" th:text="${item.name}"></p>
+                                                        <small th:text="${item.artist.name}"></small>
+                                                    </div>
+                                                </div>
+                                                <p class="mb-0 col-md-2 col-md-2 iq-music-time" th:text="'4:34'">
+                                                <p class="mb-0 col-2 col-md-2 iq-music-play"><a th:href="@{/video/{id}(id=${item.id})}"><i class="las la-play-circle font-size-32"></i></a></p>
+                                                <div class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1">
+                                                    <div class="dropdown">
+                                                        <span class="dropdown-toggle text-primary" id="dropdownMenuButton2" data-toggle="dropdown" aria-expanded="false" role="button">
+                                                            <i class="ri-more-2-fill text-primary"></i>
+                                                        </span>
+                                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton2" style="">
+                                                            <a class="dropdown-item" href="#"><i class="ri-eye-fill mr-2"></i>View</a>
+                                                            <a class="dropdown-item" href="#"><i class="ri-delete-bin-6-fill mr-2"></i>Delete</a>
+                                                            <a class="dropdown-item" href="#"><i class="ri-file-download-fill mr-2"></i>Download</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                    <textarea th:text="${song.lyric}" disabled style="font-weight: bolder;background-color: white;font-family: unset;" class="form-control" rows="8"></textarea>
+                                </div>
+                                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                                    <p></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
