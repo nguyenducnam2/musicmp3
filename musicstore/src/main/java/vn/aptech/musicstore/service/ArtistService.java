@@ -20,4 +20,5 @@ public interface ArtistService {
     Artist save(Artist art);
     void deleteById(int id);
     List<Artist> findByNameCustom(String name);
+    List<Artist> findTop12ByOrderByIdDesc();
 }

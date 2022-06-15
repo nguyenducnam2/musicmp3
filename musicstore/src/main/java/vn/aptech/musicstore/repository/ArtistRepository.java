@@ -18,4 +18,6 @@ import vn.aptech.musicstore.entity.Artist;
 public interface ArtistRepository extends JpaRepository<Artist,Integer>{
     @Query("SELECT o FROM Artist o WHERE o.name LIKE CONCAT('%',:name,'%')")
     List<Artist> findByNameCustom(@Param("name") String name);
+    
+    List<Artist> findTop12ByOrderByIdDesc();
 }

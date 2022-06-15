@@ -21,4 +21,5 @@ public interface AlbumService {
     void deleteById(int id);
     boolean existsById(int id);
     List<Album> findByNameCustom(String name);
+    List<Album> findTop12();
 }

@@ -41,8 +41,8 @@ public class HomeClientController {
         }
         model.addAttribute("listsong", listsong);    
         model.addAttribute("listsong_hot", service_song.findByOrderByViewDesc());
-        model.addAttribute("listalbum", service_album.findAll());
-        model.addAttribute("listartist", service_artist.findAll());
+        model.addAttribute("listalbum", service_album.findTop12());
+        model.addAttribute("listartist", service_artist.findTop12ByOrderByIdDesc());
         return "client/index";
     }
     

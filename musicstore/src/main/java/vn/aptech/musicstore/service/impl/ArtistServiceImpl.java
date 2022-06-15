@@ -47,5 +47,10 @@ public class ArtistServiceImpl implements ArtistService{
     public List<Artist> findByNameCustom(String name) {
         return repo.findByNameCustom(name);
     }
+
+    @Override
+    public List<Artist> findTop12ByOrderByIdDesc() {
+        return repo.findTop12ByOrderByIdDesc();
+    }
     
 }

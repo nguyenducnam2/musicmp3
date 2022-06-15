@@ -55,7 +55,7 @@ public class SongServiceImpl implements SongService{
 
     @Override
     public List<Song> findByOrderByViewDesc() {
-        return repo.findByOrderByViewDesc();
+        return repo.findTop12ByOrderByViewDesc();
     }
     
 }

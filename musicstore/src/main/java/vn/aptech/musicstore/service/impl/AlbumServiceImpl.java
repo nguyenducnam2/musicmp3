@@ -52,4 +52,9 @@ public class AlbumServiceImpl implements AlbumService {
     public List<Album> findByNameCustom(String name) {
         return repo.findByNameCustom(name);
     }
+
+    @Override
+    public List<Album> findTop12() {
+        return repo.findTop12ByOrderByIdDesc();
+    }
 }
