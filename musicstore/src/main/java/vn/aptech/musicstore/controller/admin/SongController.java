@@ -93,7 +93,8 @@ public class SongController {
     }
     
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id")int id){
+    public String delete(@PathVariable("id")int id) throws IOException{
+        Files.delete(Paths.get(base_url+"\\audio"+File.separator+service.findById(id).orElseThrow().getMedia()));
         service.deleteById(id);
         return "redirect:/admin/song";
     }
