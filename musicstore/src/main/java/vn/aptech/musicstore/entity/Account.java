@@ -4,6 +4,9 @@
  */
 package vn.aptech.musicstore.entity;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +15,9 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  *
@@ -24,6 +30,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name="accounts")
 public class Account {
+    
+//    private final Set<GrantedAuthority> authorities = new HashSet<>();
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -31,4 +40,7 @@ public class Account {
     private String password;
     private String fullname;
     private String role;
+
+    
+   
 }

@@ -4,9 +4,11 @@
  */
 package vn.aptech.musicstore.service.impl;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -47,24 +49,23 @@ public class AccountServiceImpl implements AccountService,UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Account acc = repo.findByUsername(username);
+        Set<GrantedAuthority> authorities = new HashSet<>();
         if(acc == null){
             throw new UsernameNotFoundException("User not found!");
-        }
-        Account accRoles = repo.findRoleByUsername(username);
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        if (accRoles != null && authorities.size() > 0) {
-            GrantedAuthority au = new SimpleGrantedAuthority(accRoles.getRole());
+        }else {
+            GrantedAuthority au = new SimpleGrantedAuthority(acc.getRole());
             authorities.add(au);
-        } else {
-            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         }
+//        else {
+//            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+//        }
         boolean enabled= true;
-            boolean accountNonExpired = true;
-            boolean creadentialNonExpired = true;
-            boolean accountNonLocked = true;
-            
-            return new org.springframework.security.core.userdetails.User(acc.getUsername(), acc.getPassword(), enabled, 
-            accountNonExpired, creadentialNonExpired, accountNonExpired, authorities);
+        boolean accountNonExpired = true;
+        boolean creadentialNonExpired = true;
+        boolean accountNonLocked = true;
+        
+        return new org.springframework.security.core.userdetails.User(acc.getUsername(), acc.getPassword(), enabled, 
+        accountNonExpired, creadentialNonExpired, accountNonExpired, authorities);
     }
     
 }

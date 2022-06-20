@@ -50,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated();
         
         // muon vao account/create or save thi phai la role admin
-        http.authorizeHttpRequests().antMatchers("/admin/account/create","/admin/account/save").access(hasRole("ADMIN"));
+        http.authorizeHttpRequests().antMatchers("/admin/account/create","/admin/account/save").hasRole("ADMIN");
         //try cap route: /user =>y/c login
         http.authorizeHttpRequests()
                 //                .antMatchers("/admin/create","/admin/save")
