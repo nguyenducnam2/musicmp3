@@ -7,6 +7,7 @@ package vn.aptech.musicstore.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import static org.springframework.security.authorization.AuthorityAuthorizationManager.hasRole;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -46,11 +47,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeHttpRequests()
                 .antMatchers("/admin/login","logout").permitAll();
         http.authorizeHttpRequests()
-                .antMatchers("/admin/**")
+                .antMatchers("/admin/account/**").hasRole("ADMIN")
+                .antMatchers("/admin/**").hasAnyRole("ADMIN","USER")
+                .anyRequest()
                 .authenticated();
         
         // muon vao account/create or save thi phai la role admin
-        http.authorizeHttpRequests().antMatchers("/admin/account/create","/admin/account/save").hasRole("ADMIN");
+//        http.authorizeHttpRequests().antMatchers("/admin/account/create","/admin/account/save").hasRole("ADMIN");
         //try cap route: /user =>y/c login
         http.authorizeHttpRequests()
                 //                .antMatchers("/admin/create","/admin/save")

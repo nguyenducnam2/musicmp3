@@ -55,6 +55,7 @@ public class AccountServiceImpl implements AccountService,UserDetailsService {
         }else {
             GrantedAuthority au = new SimpleGrantedAuthority(acc.getRole());
             authorities.add(au);
+            System.out.println("Role Account: "+acc.getRole());
         }
 //        else {
 //            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
@@ -65,7 +66,7 @@ public class AccountServiceImpl implements AccountService,UserDetailsService {
         boolean accountNonLocked = true;
         
         return new org.springframework.security.core.userdetails.User(acc.getUsername(), acc.getPassword(), enabled, 
-        accountNonExpired, creadentialNonExpired, accountNonExpired, authorities);
+        accountNonExpired, creadentialNonExpired, accountNonLocked, authorities);
     }
     
 }
