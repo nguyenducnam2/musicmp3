@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import vn.aptech.musicstore.entity.Song;
 import vn.aptech.musicstore.service.SongService;
 
@@ -18,6 +19,7 @@ import vn.aptech.musicstore.service.SongService;
  * @author namng
  */
 @Controller
+@RequestMapping("/client/song")
 public class SongClientController {
     
     @Autowired

@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         http.authorizeHttpRequests()
-                .antMatchers("/admin/login","logout").permitAll();
+                .antMatchers("/admin/login","logout","/client/**").permitAll();
         http.authorizeHttpRequests()
                 .antMatchers("/admin/account/**").hasRole("ADMIN")
                 .antMatchers("/admin/**").hasAnyRole("ADMIN","USER")
@@ -66,7 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/admin",true)
                 .failureUrl("/admin/login?error=true")
                 //cau hinh Logout Page
-                .and().logout().logoutUrl("/logout")
+                .and().logout().logoutUrl("/admin/logout")
                 .logoutSuccessUrl("/admin/login")
                 .and()
                 .exceptionHandling()
