@@ -11,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import static org.springframework.security.authorization.AuthorityAuthorizationManager.hasRole;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -67,7 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/admin/login?error=true")
                 //cau hinh Logout Page
                 .and().logout().logoutUrl("/admin/logout")
-                .logoutSuccessUrl("/admin/login")
+                .logoutSuccessUrl("/admin/login?logout=true")
                 .and()
                 .exceptionHandling()
                 .accessDeniedPage("/error/403");
@@ -76,4 +77,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .tokenRepository("abc")
 //                .tokenValiditySeconds(24*60*60); //1 ngay
     }
+    @Override
+  public void configure(WebSecurity web) {
+    web.ignoring()
+        .antMatchers("/resources/**", "/static/**");
+  }
 }

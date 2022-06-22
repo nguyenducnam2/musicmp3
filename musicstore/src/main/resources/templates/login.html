@@ -18,13 +18,7 @@ and open the template in the editor.
                     <div th:if="${param.logout}">
                         You have been logged out.
                     </div>
-<!--                    <div th:if="${#request.getParameter('error') == true}">
-                        <h4>Invalid username or password</h4>
-                        <p>Reason<span
-                                th:if="${#session.getAttribute('SPRING_SERCURITY_LAST_EXCEPTION') !=null}"
-                                th:utext="${#session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION').message}">1</span>
-                        </p>
-                    </div>-->
+
                     <form th:action="@{/j_spring_security_check}" method="post">
                         <div>
                             <input name="username" placeholder="Username" type="text" required/>
