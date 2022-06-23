@@ -293,7 +293,7 @@ and open the template in the editor.
                                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Lyric</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" th:href="@{/client/song/video/{id}(id=${song.id})}">MV</a>
+                                    <a class="nav-link" id="mv">MV</a>
                                 </li>
                             </ul>
                             <div class="tab-content" id="myTabContent-2">
@@ -353,6 +353,7 @@ and open the template in the editor.
                 let present = document.querySelector('#present');
                 let total = document.querySelector('#total');
                 let artist = document.querySelector('#artist');
+                let mv = document.querySelector('#mv');
 
 
 
@@ -379,6 +380,7 @@ and open the template in the editor.
                     artist.innerHTML = All_song[index_no].artist.name;
                     logo.innerHTML=All_song[index_no].album.name;
                     lyric.innerHTML=All_song[index_no].lyric;
+                    mv.href="http://localhost:8080/client/song/video/"+All_song[index_no].id;
                     track.load();
                     
 
