@@ -1,20 +1,92 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout.html}">
-    <head>  
-         <title>Access Denied</title>
-    </head>
-    <body>
-
-        <div layout:fragment="content" id="content-page" class="content-page">
-                 <h2 class='ml-lg-5'>Opps! Sorry</h2>
-                 <h2 class='ml-lg-5'> You don't have permission to access this page</h2>
-        </div>
-    </body>
+<!doctype html>
+<html lang="en"
+      
+      >
+   <head>
+      <!-- Required meta tags -->
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title>Muzik - Error page</title>
+      <!-- Favicon -->
+         <link rel="shortcut icon" th:href="@{/admintemplate/images/favicon.ico}" />
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" th:href="@{/admintemplate/css/bootstrap.min.css}">
+        <!-- Typography CSS -->
+        <link rel="stylesheet" th:href="@{/admintemplate/css/typography.css}">
+        <!-- Style CSS -->
+        <link rel="stylesheet" th:href="@{/admintemplate/css/style.css}">
+        <!-- Responsive CSS -->
+        <link rel="stylesheet" th:href="@{/admintemplate/css/responsive.css}">
+   </head>
+   <body>
+      <!-- loader Start -->
+      <div id="loading">
+         <div id="loading-center">
+         </div>
+      </div>
+      <!-- loader END -->
+      <!-- Wrapper Start -->
+      <div class="wrapper">
+         <div class="container p-0">
+            <div class="row no-gutters height-self-center">
+               <div class="col-sm-12 text-center align-self-center">
+                  <div class="iq-error position-relative">
+                     <img src="images/error/404.png" class="img-fluid iq-error-img" alt="">
+                     <h2 class="mb-0 mt-4">Oops! This Page is Not Found.</h2>
+                     <p>The requested page dose not exist.</p>
+                     <a class="btn btn-primary mt-3" th:href="@{/admin/}"><i class="ri-home-4-line"></i>Back to Home</a>                            
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Wrapper END -->
+      <!-- color-customizer -->
+      
+      <!-- color-customizer END -->
+      <!-- Optional JavaScript -->
+      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+      <script th:src="@{/admintemplate/js/jquery.min.js}"></script>
+      <script th:src="@{/admintemplate/js/popper.min.js}"></script>
+      <script th:src="@{/admintemplate/js/bootstrap.min.js}"></script>
+      <!-- Appear JavaScript -->
+      <script th:src="@{/admintemplate/js/jquery.appear.js}"></script>
+      <!-- Countdown JavaScript -->
+      <script th:src="@{/admintemplate/js/countdown.min.js}"></script>
+      <!-- Counterup JavaScript -->
+      <script th:src="@{/admintemplate/js/waypoints.min.js}"></script>
+      <script th:src="@{/admintemplate/js/jquery.counterup.min.js}"></script>
+      <!-- Wow JavaScript -->
+      <script th:src="@{/admintemplate/js/wow.min.js}"></script>
+      <!-- Apexcharts JavaScript -->
+      <script th:src="@{/admintemplate/js/apexcharts.js}"></script>
+      <!-- Slick JavaScript -->
+      <script th:src="@{/admintemplate/js/slick.min.js}"></script>
+      <!-- Select2 JavaScript -->
+      <script th:src="@{/admintemplate/js/select2.min.js}"></script>
+      <!-- Owl Carousel JavaScript -->
+      <script th:src="@{/admintemplate/js/owl.carousel.min.js}"></script>
+      <!-- Magnific Popup JavaScript -->
+      <script th:src="@{/admintemplate/js/jquery.magnific-popup.min.js}"></script>
+      <!-- Smooth Scrollbar JavaScript -->
+      <script th:src="@{/admintemplate/js/smooth-scrollbar.js}"></script>
+     
+      <!-- am core JavaScript -->
+      <script th:src="@{/admintemplate/js/core.js}"></script>
+      <!-- am charts JavaScript -->
+      <script th:src="@{/admintemplate/js/charts.js}"></script>
+      <!-- am animated JavaScript -->
+      <script th:src="@{/admintemplate/js/animated.js}"></script>
+      <!-- am kelly JavaScript -->
+      <script th:src="@{/admintemplate/js/kelly.js}"></script>
+      <!-- am maps JavaScript -->
+      <script th:src="@{/admintemplate/js/maps.js}"></script>
+      <!-- am worldLow JavaScript -->
+      <script th:src="@{/admintemplate/js/worldLow.js}"></script>
+      <!-- Style Customizer -->
+      <script th:src="@{/admintemplate/js/style-customizer.js}"></script>
+      <script th:src="@{/admintemplate/js/chart-custom.js}"></script>
+      <!-- Custom JavaScript -->
+      <script th:src="@{/admintemplate/js/custom.js}"></script>
+   </body>
 </html>

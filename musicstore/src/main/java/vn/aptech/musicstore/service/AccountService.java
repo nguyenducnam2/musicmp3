@@ -13,7 +13,14 @@ import vn.aptech.musicstore.entity.Account;
  * @author Thanh Sang
  */
 public interface AccountService {
+
     List<Account> findAll();
+
     Optional<Account> findById(int id);
+
+    List<Account> findByUsername(String name);
+
     Account save(Account account);
+
+    void deleteById(int id);
 }
