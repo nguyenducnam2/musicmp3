@@ -25,7 +25,7 @@ public class HomeController {
     
     @GetMapping(value="/login")
     public String login(Model model){
-        return "login";
+        return "admin/login";
     }
     @GetMapping(value="/403")
     public String error403(Model model){

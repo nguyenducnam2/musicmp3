@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
 -->
-<html>
-    <head>
-        <title>Access Denied</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+    <head>  
+         <title>Access Denied</title>
     </head>
     <body>
-        <h2>Sorry, you don't have permission to access this page</h2>
+
+        <div layout:fragment="content" id="content-page" class="content-page">
+                 <h2 class='ml-lg-5'>Opps! Sorry</h2>
+                 <h2 class='ml-lg-5'> You don't have permission to access this page</h2>
+        </div>
     </body>
 </html>
