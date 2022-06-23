@@ -47,7 +47,7 @@ and open the template in the editor.
                                             <tr th:each="item:${list}">
                                                 <td th:text="${list.indexOf(item)+1}"></td>
                                                 <td>
-                                                    <img style="width: 160px;height: 150px;" th:src="@{'/artist/'+${item.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
+                                                    <img style="width: 160px;height: 150px;" th:src="@{'/webdata/artist/'+${item.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
                                                 </td>
                                                 <td th:text="${item.name}"></td>
                                                 <!--           <td th:text="${item.artist.name}"></td>

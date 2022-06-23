@@ -7,42 +7,276 @@ and open the template in the editor.
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{client/layout.html}">
+    <head>
+        <style>
+            .main {
+                position: relative;
+                height: 100%;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: linear-gradient(to right, #5d6d7e, #566573);
+            }
+            .main button {
+                padding: 10px 12px;
+                margin: 0 10px;
+            }
+            .main #logo {
+                position: absolute;
+                top: 10px;
+                left: 30px;
+                font-size: 25px;
+                color: #ccc;
+            }
+            .main #logo i {
+                margin-right: 15px;
+            }
+
+            /* left & right part */
+            .right,
+            .left {
+                position: relative;
+                height: 100%;
+                width: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+            }
+
+            /* song image */
+            .left img {
+                height: 300px;
+                width: 80%;
+                border-radius: 15px;
+                box-shadow: 1px 0px 20px 12px rgba(240, 240, 240, 0.2);
+            }
+
+            /* both range slider part */
+            input[type="range"] {
+                -webkit-appearance: none;
+                width: 50%;
+                outline: none;
+                height: 2px;
+                margin: 0 15px;
+            }
+            input[type="range"]::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                height: 20px;
+                width: 20px;
+                background: #ff8a65;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+            .right input[type="range"] {
+                width: 40%;
+            }
+
+            /* volume part */
+            .left .volume {
+                position: absolute;
+                bottom: 10%;
+                left: 0;
+                width: 100%;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
+            }
+            .left .volume p {
+                font-size: 15px;
+            }
+            .left .volume i {
+                cursor: pointer;
+                padding: 8px 12px;
+                background: #ff8a65;
+            }
+            .left .volume i:hover {
+                background: rgba(245, 245, 245, 0.1);
+            }
+            .volume #volume_show {
+                padding: 8px 12px;
+                margin: 0 5px 0 0;
+                background: rgba(245, 245, 245, 0.1);
+            }
+
+            /* right part */
+            .right .middle {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .right .middle button {
+                border: none;
+                height: 70px;
+                width: 70px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                outline: none;
+                transition: 0.5s;
+                background: rgba(255, 255, 255, 0.1);
+            }
+            .right #title {
+                position: absolute;
+                top: 60px;
+                left: 50%;
+                transform: translateX(-50%);
+                text-transform: capitalize;
+                color: #fff;
+                font-size: 35px;
+            }
+            .right #artist {
+                position: absolute;
+                top: 110px;
+                left: 50%;
+                transform: translateX(-50%);
+                text-transform: capitalize;
+                color: #fff;
+                font-size: 18px;
+            }
+            .right .duration {
+                position: absolute;
+                bottom: 20%;
+                left: 50%;
+                transform: translateX(-50%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: 20px;
+                margin-top: 40px;
+            }
+            .right .duration p {
+                color: #fff;
+                font-size: 15px;
+                margin-left: 20px;
+            }
+            .right #auto {
+                font-size: 18px;
+                cursor: pointer;
+                margin-top: 45px;
+                border: none;
+                padding: 10px 14px;
+                color: #fff;
+                background: rgba(255, 255, 255, 0.2);
+                outline: none;
+                border-radius: 10px;
+            }
+            .right #auto i {
+                margin-left: 8px;
+            }
+            #play {
+                background: #ff8a65;
+            }
+            .right button:hover {
+                background: #ff8a65;
+            }
+            .right i:before {
+                color: #fff;
+                font-size: 20px;
+            }
+
+            .right .show_song_no {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                width: 30px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 8px 12px;
+                color: #fff;
+                border-radius: 5px;
+               /* background: rgba(255, 255, 255, 0.2); */
+                margin: 1px 2px;
+            }
+            .right .show_song_no p:nth-child(2) {
+                
+            }
+        </style>
+    </head>
     <body>
         <div layout:fragment="content" id="content-page" class="content-page">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="iq-card">
-                            <div class="iq-card-body">
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <img style="width: 200px;height: 250px;" th:src="@{'/album/'+${song.album.image}}" class="img-fluid w-100"  alt="">
-                                    </div>
-                                    <div class="col-lg-8">
-                                        <div class="d-flex align-items-top justify-content-between iq-music-play-detail">
-                                            <div class="music-detail">
-                                                <h3 th:text="${song.name}"><i class="las la-headphones"> Views</h3>
-                                                <span th:text="${song.artist.name}"></span>
-                                                <p class="mb-0"><p class="las la-headphones" th:text="'    '+${song.view}">   </p>
-                                                <div class="d-flex align-items-center">                                       
-                                                    <!--  <a href="javascript:void(0);" class="btn btn-primary iq-play mr-2">Play music</a> -->
-                                                    <audio controls loop class="audiplay" nodownload style="width: 100%;">
-                                                        <source th:src="@{'/audio/'+${song.media}}"/>
-                                                    </audio> 
+                        <div class="iq-card" >
+                            <div class="iq-card-body" style="height: 550px;">
+                                <!--   <div class="row">
+                                        <div class="col-lg-4">
+                                            <img style="width: 200px;height: 250px;" th:src="@{'/webdata/album/'+${song.album.image}}" class="img-fluid w-100"  alt="">
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <div class="d-flex align-items-top justify-content-between iq-music-play-detail">
+                                                <div class="music-detail">
+                                                    <h3 th:text="${song.name}"><i class="las la-headphones"> Views</h3>
+                                                    <span th:text="${song.artist.name}"></span>
+                                                    <p class="mb-0"><p class="las la-headphones" th:text="'    '+${song.view}">   </p>
+                                                    <div class="d-flex align-items-center">                                       
+                                                         <a href="javascript:void(0);" class="btn btn-primary iq-play mr-2">Play music</a> 
+                                                        <audio controls loop class="audiplay" nodownload style="width: 100%;">
+                                                            <source th:src="@{'/webdata/audio/'+${song.media}}"/>
+                                                        </audio> 
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="music-right">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="iq-circle mr-2 share"><a href="javascript:void();"><i class="las la-share-alt-square text-primary"></i></a></div>
-                                                    <div class="iq-circle mr-2"><a href="javascript:void();"><i class="ri-heart-fill  text-primary"></i></a></div>                 
-                                                    <div class="iq-circle">
-                                                        <a href="javascript:void();"><i class="las la-download text-primary"></i></a>
+                                                <div class="music-right">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="iq-circle mr-2 share"><a href="javascript:void();"><i class="las la-share-alt-square text-primary"></i></a></div>
+                                                        <div class="iq-circle mr-2"><a href="javascript:void();"><i class="ri-heart-fill  text-primary"></i></a></div>                 
+                                                        <div class="iq-circle">
+                                                            <a href="javascript:void();"><i class="las la-download text-primary"></i></a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div> 
+                                    </div> -->
+
+
+                                <div class="main">
+                                    <p id="logo"><i class="fa fa-music"></i></p>
+                                    <!--- left part --->
+                                    <div class="left">
+                                        <!--- song img --->
+                                        <img id="track_image">
+                                        <div class="volume">
+                                            <p id="volume_show">90</p>
+                                            <i class="fa fa-volume-up" aria-hidden="true" onclick="mute_sound()" id="volume_icon"></i>
+                                            <input type="range" min="0" max="100" value="90" onchange="volume_change()" id="volume">  
                                         </div>
                                     </div>
+                                    <!--- right part --->
+                                    <div class="right">
+                                        <div class="show_song_no">
+                                            <p id="present">1</p>
+                                            <p>/</p>
+                                            <p id="total">5</p>
+                                        </div>
+                                        <!--- song title & artist name --->
+                                        <p id="title">title.mp3</p>
+                                        <p id="artist">Artist name</p>
+                                        <!--- middle part --->
+                                        <div class="middle">
+                                            <button onclick="previous_song()" id="pre"><i class="fa fa-step-backward" aria-hidden="true"></i></button>
+                                            <button onclick="justplay()" id="play"><i class="fa fa-play" aria-hidden="true"></i></button>
+                                            <button onclick="next_song()" id="next"><i class="fa fa-step-forward" aria-hidden="true"></i></button>
+                                        </div>
+                                        <!--- song duration part --->
+                                        <div class="duration">
+                                            <input type="range" min="0" max="100" value="0" id="duration_slider" onchange="change_duration()">
+                                        </div>
+                                        <button id="auto" onclick="autoplay_switch()">Auto play <i class="fa fa-circle-o-notch" aria-hidden="true"></i></button>
+                                    </div>
                                 </div>
+
+
                             </div>
                         </div>
                     </div>
@@ -53,13 +287,13 @@ and open the template in the editor.
                         <div class="iq-card-body">
                             <ul class="nav nav-tabs" id="myTab-1" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Other Songs</a>
+                                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">All Songs</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Lyric</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" th:href="@{/video/{id}(id=${song.id})}">MV</a>
+                                    <a class="nav-link" th:href="@{/client/song/video/{id}(id=${song.id})}">MV</a>
                                 </li>
                             </ul>
                             <div class="tab-content" id="myTabContent-2">
@@ -69,7 +303,7 @@ and open the template in the editor.
                                             <div class="d-flex justify-content-between align-items-center row">
                                                 <div class="media align-items-center col-10 col-md-5">
                                                     <div class="iq-realese-song ">
-                                                        <a th:href="@{/song/{id}(id=${item.id})}"><img th:src="@{'/album/'+${item.album.image}}" class="img-border-radius avatar-60 img-fluid" alt=""></a>
+                                                        <a th:href="@{/client/song/{id}(id=${item.id})}"><img th:src="@{'/webdata/album/'+${item.album.image}}" class="img-border-radius avatar-60 img-fluid" alt=""></a>
                                                     </div>
                                                     <div class="media-body ml-3">
                                                         <p class="mb-0" th:text="${item.name}"></p>
@@ -77,7 +311,7 @@ and open the template in the editor.
                                                     </div>
                                                 </div>
                                                 <p class="mb-0 col-md-2 col-md-2 iq-music-time" th:text="'4:34'">
-                                                <p class="mb-0 col-2 col-md-2 iq-music-play"><a th:href="@{/song/{id}(id=${item.id})}"><i class="las la-play-circle font-size-32"></i></a></p>
+                                                <p class="mb-0 col-2 col-md-2 iq-music-play"><a th:href="@{/client/song/{id}(id=${item.id})}"><i class="las la-play-circle font-size-32"></i></a></p>
                                                 <div class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1">
                                                     <div class="dropdown">
                                                         <span class="dropdown-toggle text-primary" id="dropdownMenuButton2" data-toggle="dropdown" aria-expanded="false" role="button">
@@ -95,16 +329,179 @@ and open the template in the editor.
                                     </ul>
                                 </div>
                                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                    <textarea th:text="${song.lyric}" disabled style="font-weight: bolder;background-color: white;font-family: unset;" class="form-control" rows="8"></textarea>
+                                    <textarea id="lyric" disabled style="font-weight: bolder;background-color: white;font-family: unset;" class="form-control" rows="8"></textarea>
                                 </div>
                                 <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                                    <p></p>
+                                    <p id="load_list"></p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <script th:inline="javascript">
+                let previous = document.querySelector('#pre');
+                let play = document.querySelector('#play');
+                let next = document.querySelector('#next');
+                let title = document.querySelector('#title');
+                let recent_volume = document.querySelector('#volume');
+                let volume_show = document.querySelector('#volume_show');
+                let slider = document.querySelector('#duration_slider');
+                let show_duration = document.querySelector('#show_duration');
+                let track_image = document.querySelector('#track_image');
+                let auto_play = document.querySelector('#auto');
+                let present = document.querySelector('#present');
+                let total = document.querySelector('#total');
+                let artist = document.querySelector('#artist');
+
+
+
+                let timer;
+                let autoplay = 0;
+
+                let index_no = 0;
+                let Playing_song = false;
+
+//create a audio Element
+                let track = document.createElement('audio');
+//All songs list
+                var All_song = /*[[${anotherlist}]]*/[];
+// All functions
+
+// function load the track
+                function load_track(index_no) {
+                    clearInterval(timer);
+                    reset_slider();
+
+                    track.src = "http://localhost:8080/webdata/audio/" + All_song[index_no].media;
+                    title.innerHTML = All_song[index_no].name;
+                    track_image.src = "http://localhost:8080/webdata/album/" + All_song[index_no].album.image;
+                    artist.innerHTML = All_song[index_no].artist.name;
+                    logo.innerHTML=All_song[index_no].album.name;
+                    lyric.innerHTML=All_song[index_no].lyric;
+                    track.load();
+                    
+
+                    timer = setInterval(range_slider, 1000);
+                    total.innerHTML = All_song.length;
+                    present.innerHTML = index_no + 1;
+                }
+
+                load_track(index_no);
+//mute sound function
+                function mute_sound() {
+                    track.volume = 0;
+                    volume.value = 0;
+                    volume_show.innerHTML = 0;
+                }
+
+
+// checking.. the song is playing or not
+                function justplay() {
+                    if (Playing_song == false) {
+                        playsong();
+
+                    } else {
+                        pausesong();
+                    }
+                }
+
+
+// reset song slider
+                function reset_slider() {
+                    slider.value = 0;
+                }
+
+// play song
+                function playsong() {
+                    track.play();
+                    Playing_song = true;
+                    play.innerHTML = '<i class="fa fa-pause" aria-hidden="true"></i>';
+                }
+
+//pause song
+                function pausesong() {
+                    track.pause();
+                    Playing_song = false;
+                    play.innerHTML = '<i class="fa fa-play" aria-hidden="true"></i>';
+                }
+
+
+// next song
+                function next_song() {
+                    if (index_no < All_song.length - 1) {
+                        index_no += 1;
+                        load_track(index_no);
+                        playsong();
+                    } else {
+                        index_no = 0;
+                        load_track(index_no);
+                        playsong();
+
+                    }
+                }
+
+
+// previous song
+                function previous_song() {
+                    if (index_no > 0) {
+                        index_no -= 1;
+                        load_track(index_no);
+                        playsong();
+
+                    } else {
+                        index_no = All_song.length;
+                        load_track(index_no);
+                        playsong();
+                    }
+                }
+
+
+// change volume
+                function volume_change() {
+                    volume_show.innerHTML = recent_volume.value;
+                    track.volume = recent_volume.value / 100;
+                }
+
+// change slider position 
+                function change_duration() {
+                    slider_position = track.duration * (slider.value / 100);
+                    track.currentTime = slider_position;
+                }
+
+// autoplay function
+                function autoplay_switch() {
+                    if (autoplay == 1) {
+                        autoplay = 0;
+                        auto_play.style.background = "rgba(255,255,255,0.2)";
+                    } else {
+                        autoplay = 1;
+                        auto_play.style.background = "#FF8A65";
+                    }
+                }
+
+
+                function range_slider() {
+                    let position = 0;
+
+                    // update slider position
+                    if (!isNaN(track.duration)) {
+                        position = track.currentTime * (100 / track.duration);
+                        slider.value = position;
+                    }
+
+
+                    // function will run when the song is over
+                    if (track.ended) {
+                        play.innerHTML = '<i class="fa fa-play" aria-hidden="true"></i>';
+                        if (autoplay == 1) {
+                            index_no += 1;
+                            load_track(index_no);
+                            playsong();
+                        }
+                    }
+                }
+            </script>
         </div>
     </body>
 </html>

@@ -45,11 +45,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         http.authorizeHttpRequests()
-                .antMatchers("/admin/login", "logout", "/client/**","/**/*.js", "/**/*.css", "/**/*.mp3", "/**/*.mp4", "/**/*.jpeg", "/**/*.html").permitAll();
+                .antMatchers("/admin/login", "logout", "/admintemplate/**","/client/**","/webdata/**").permitAll();
         http.authorizeHttpRequests()
                 //                .antMatchers("/").
-                .antMatchers("/admin/account/*").hasRole("ADMIN")
-                .antMatchers("/admin/*").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/admin/account/**").hasRole("ADMIN")
+                .antMatchers("/admin/**").hasAnyRole("ADMIN", "USER")
                 .anyRequest()
                 .authenticated();
 

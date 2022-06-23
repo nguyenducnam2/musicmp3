@@ -51,7 +51,7 @@
                                                     <div class="media align-items-center col-10 col-md-5">
                                                         <div class="iq-realese-song ">
                                                             <a th:href="music-player.html"><img
-                                                                    th:src="@{'/album/'+${item.album.image}}"
+                                                                    th:src="@{'/webdata/album/'+${item.album.image}}"
                                                                     class="img-border-radius avatar-60 img-fluid" alt=""></a>
                                                         </div>
                                                         <div class="media-body text-white ml-3">
@@ -105,7 +105,7 @@
                                                 <div class="iq-thumb" >
                                                     <div class="iq-music-overlay" ></div>
                                                     <a href="music-player.html">
-                                                        <img th:src="@{'/album/'+${item.image}}"
+                                                        <img th:src="@{'/webdata/album/'+${item.image}}"
                                                              class="img-border-radius img-fluid w-100" style="height: 130px;width: 130px;" alt="">
                                                     </a>
                                                     <div class="overlay-music-icon">
@@ -139,7 +139,7 @@
                                         <div class="iq-thumb-artist">
                                             <div class="iq-music-overlay"></div>
                                             <a href="music-player.html">
-                                                <img style="height: 120px;width: 150px;" th:src="@{'/artist/'+${item.image}}" class="w-100 img-fluid"
+                                                <img style="height: 120px;width: 150px;" th:src="@{'/webdata/artist/'+${item.image}}" class="w-100 img-fluid"
                                                      alt="">
                                             </a>
                                             <div class="overlay-music-icon">
@@ -175,11 +175,11 @@
                                                 <div class="iq-thumb">
                                                     <div class="iq-music-overlay"></div>
                                                     <a href="music-player.html">
-                                                        <img style="height: 130px;width: 130px;" th:src="@{'/album/'+${item.album.image}}"
+                                                        <img style="height: 130px;width: 130px;" th:src="@{'/webdata/album/'+${item.album.image}}"
                                                              class="img-border-radius img-fluid w-100" alt="">
                                                     </a>
                                                     <div class="overlay-music-icon">
-                                                        <a th:href="@{/song/{id}(id=${item.id})}">
+                                                        <a th:href="@{/client/song/{id}(id=${item.id})}">
                                                             <i class="las la-play-circle"></i>
                                                         </a>
                                                     </div>

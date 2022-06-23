@@ -56,7 +56,7 @@ public class ArtistController {
             artist.setImage(file.getOriginalFilename());
 //            String path_directory = "C:\\Users\\namng\\Documents\\NetBeansProjects\\musicstore\\src\\main\\resources\\static\\image";
 //        String path_directory = new ClassPathResource("static/image").getFile().getAbsolutePath();
-            Files.copy(file.getInputStream(), Paths.get(base_url+"\\artist" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(file.getInputStream(), Paths.get(base_url+"\\webdata\\artist" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
             service.save(artist);
         } else {
             artist.setImage(service.findById(artist.getId()).orElseThrow().getImage());

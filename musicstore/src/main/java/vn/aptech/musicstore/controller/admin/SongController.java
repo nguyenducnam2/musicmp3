@@ -78,7 +78,7 @@ public class SongController {
         s.setArtist(s.getAlbum().getArtist());
     //   String path_directory = "C:\\Users\\namng\\Documents\\NetBeansProjects\\musicstore\\src\\main\\resources\\static\\audio";
 //        String path_directory = new ClassPathResource("static/image").getFile().getAbsolutePath();
-      Files.copy(file.getInputStream(), Paths.get(base_url+"\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+      Files.copy(file.getInputStream(), Paths.get(base_url+"\\webdata\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
         service.save(s);
         }else{
         s.setMedia(service.findById(s.getId()).orElseThrow().getMedia());
@@ -94,7 +94,7 @@ public class SongController {
     
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id")int id) throws IOException{
-        Files.delete(Paths.get(base_url+"\\audio"+File.separator+service.findById(id).orElseThrow().getMedia()));
+        Files.delete(Paths.get(base_url+"\\webdata\\audio"+File.separator+service.findById(id).orElseThrow().getMedia()));
         service.deleteById(id);
         return "redirect:/admin/song";
     }

@@ -48,7 +48,7 @@ and open the template in the editor.
                                             <tr th:each="item:${list}">
                                                 <td th:text="${list.indexOf(item)+1}"></td>
                                                 <td>
-                                                    <img style="width: 200px;height: 150px;" th:src="@{'/album/'+${item.album.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
+                                                    <img style="width: 200px;height: 150px;" th:src="@{'/webdata/album/'+${item.album.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
                                                 </td>
                                                 <td th:text="${item.album.name}"></td>
                                                 <td th:text="${item.name}"></td>
@@ -57,7 +57,7 @@ and open the template in the editor.
                                                 <td>
                                                    
                                                     <audio  controls loop class="audiplay" nodownload>
-                                                        <source th:src="@{'/audio/'+${item.media}}"/>
+                                                        <source th:src="@{'/webdata/audio/'+${item.media}}"/>
                                                     </audio>
                                                    
                                                 </td>

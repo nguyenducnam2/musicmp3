@@ -38,7 +38,7 @@ and open the template in the editor.
                                     </div>
                                     <div class="col-lg-12">
                                         <video controls controlsList="nodownload" loop  style="width: 100%;">
-                                            <source th:src="@{'/audio/'+${song.media}}"/>
+                                            <source th:src="@{'/webdata/audio/'+${song.media}}"/>
                                         </video> 
                                     </div>
                                 </div>
@@ -58,7 +58,7 @@ and open the template in the editor.
                                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Lyric</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" th:href="@{/song/{id}(id=${song.id})}">Audio</a>
+                                    <a class="nav-link" th:href="@{/client/song/{id}(id=${song.id})}">Audio</a>
                                 </li>
                             </ul>
                             <div class="tab-content" id="myTabContent-2">
@@ -68,7 +68,7 @@ and open the template in the editor.
                                             <div class="d-flex justify-content-between align-items-center row">
                                                 <div class="media align-items-center col-10 col-md-5">
                                                     <div class="iq-realese-song ">
-                                                        <a th:href="@{/video/{id}(id=${item.id})}"><img th:src="@{'/album/'+${item.album.image}}" class="img-border-radius avatar-60 img-fluid" alt=""></a>
+                                                        <a th:href="@{/client/song/video/{id}(id=${item.id})}"><img th:src="@{'/webdata/album/'+${item.album.image}}" class="img-border-radius avatar-60 img-fluid" alt=""></a>
                                                     </div>
                                                     <div class="media-body ml-3">
                                                         <p class="mb-0" th:text="${item.name}"></p>
@@ -76,7 +76,7 @@ and open the template in the editor.
                                                     </div>
                                                 </div>
                                                 <p class="mb-0 col-md-2 col-md-2 iq-music-time" th:text="'4:34'">
-                                                <p class="mb-0 col-2 col-md-2 iq-music-play"><a th:href="@{/video/{id}(id=${item.id})}"><i class="las la-play-circle font-size-32"></i></a></p>
+                                                <p class="mb-0 col-2 col-md-2 iq-music-play"><a th:href="@{/client/song/video/{id}(id=${item.id})}"><i class="las la-play-circle font-size-32"></i></a></p>
                                                 <div class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1">
                                                     <div class="dropdown">
                                                         <span class="dropdown-toggle text-primary" id="dropdownMenuButton2" data-toggle="dropdown" aria-expanded="false" role="button">
