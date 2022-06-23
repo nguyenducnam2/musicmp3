@@ -20,7 +20,7 @@ import vn.aptech.musicstore.service.SongService;
  * @author namng
  */
 @Controller
-//@RequestMapping("/client/song")
+@RequestMapping("/song")
 public class SongClientController {
     
     @Autowired
