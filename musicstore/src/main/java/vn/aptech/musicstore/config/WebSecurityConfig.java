@@ -76,6 +76,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web
                 .ignoring()
-                .antMatchers("/client/**", "/admintemplate/**","/webdata/**");
+                .antMatchers("/","/client/**", "/admintemplate/**","/webdata/**");
     }
 }
