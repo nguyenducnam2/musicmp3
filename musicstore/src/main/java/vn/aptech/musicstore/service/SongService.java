@@ -22,4 +22,5 @@ public interface SongService {
     List<Song> findByAlbumId(int albumId);
     List<Song> findByName(String name);
     List<Song> findByOrderByViewDesc();
+    List<Song> findByLyricCustom(String lyric);
 }

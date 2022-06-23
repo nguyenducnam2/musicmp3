@@ -50,7 +50,11 @@ public class HomeClientController {
     
     @GetMapping("/result")
     public String result(Model model,@RequestParam("searchname")String searchname){
-        model.addAttribute("listsong", service_song.findByName(searchname));
+        List<Song> listsong=service_song.findByName(searchname);
+        if(service_song.findByLyricCustom(searchname).size()>0){
+            listsong.addAll(service_song.findByLyricCustom(searchname));
+        }
+        model.addAttribute("listsong",listsong );
         model.addAttribute("searchname", searchname);
         model.addAttribute("listalbum", service_album.findByNameCustom(searchname));
         model.addAttribute("listartist", service_artist.findByNameCustom(searchname));
