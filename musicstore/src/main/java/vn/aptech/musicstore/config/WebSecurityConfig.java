@@ -45,20 +45,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         http.authorizeHttpRequests()
-                .antMatchers("/admin/login", "logout", "/admintemplate/**","/client/**","/webdata/**").permitAll();
+                .antMatchers("/admin/login", "logout").permitAll();
         http.authorizeHttpRequests()
-                //                .antMatchers("/").
                 .antMatchers("/admin/account/**").hasRole("ADMIN")
                 .antMatchers("/admin/**").hasAnyRole("ADMIN", "USER")
                 .anyRequest()
                 .authenticated();
 
-        // muon vao account/create or save thi phai la role admin
-//        http.authorizeHttpRequests().antMatchers("/admin/account/create","/admin/account/save").hasRole("ADMIN");
-        //try cap route: /user =>y/c login
         http.authorizeHttpRequests()
-                //                .antMatchers("/admin/create","/admin/save")
-                //                .access("hasRole('ROLE_ADMIN')")
                 .and().formLogin()
                 .loginProcessingUrl("/j_spring_security_check")//submit url
                 .loginPage("/admin/login")
@@ -78,10 +72,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .tokenValiditySeconds(24*60*60); //1 ngay
     }
 
-//    @Override
-//    public void configure(WebSecurity web) throws Exception {
-//        web
-//                .ignoring()
-//                .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/img/**", "/icon/**");
-//    }
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web
+                .ignoring()
+                .antMatchers("/client/**", "/admintemplate/**","/webdata/**");
+    }
 }
