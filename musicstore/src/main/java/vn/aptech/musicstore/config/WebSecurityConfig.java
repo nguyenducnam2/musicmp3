@@ -65,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/admin/login?logout=true")
                 .and()
                 .exceptionHandling()
-                .accessDeniedPage("/error/403");
+                .accessDeniedPage("/admin/403");
         http.authorizeHttpRequests().and().rememberMe();
         //config remember
 //                .tokenRepository("abc")

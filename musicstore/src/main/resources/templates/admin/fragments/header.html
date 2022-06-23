@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
 <head>
 </head>
 <body>
@@ -195,9 +196,9 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
                         <div class="iq-sub-dropdown iq-user-dropdown">
                            <div class="iq-card shadow-none m-0">
                               <div class="iq-card-body p-0 ">
-                                 <div class="bg-primary p-3">
-                                    <h5 class="mb-0 text-white line-height">Hello Barry Tech</h5>
-                                    <span class="text-white font-size-12">Available</span>
+                                 <div sec:authorize="isAuthenticated()" class="bg-primary p-3">
+                                     <h5 class="mb-0 text-white line-height">Hello <span sec:authentication="name">Username</span></h5>
+                                    <span sec:authentication="principal.authorities" class="text-white font-size-12">Roles</span>
                                  </div>
                                  <a href="profile.html" class="iq-sub-card iq-bg-primary-hover">
                                     <div class="media align-items-center">
@@ -244,7 +245,7 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
                                     </div>
                                  </a>
                                  <div class="d-inline-block w-100 text-center p-3">
-                                    <a class="bg-primary iq-sign-btn" href="sign-in.html" role="button">Sign out<i class="ri-login-box-line ml-2"></i></a>
+                                    <a class="bg-primary iq-sign-btn" th:href="@{admin/logout}" role="button">Sign out<i class="ri-login-box-line ml-2"></i></a>
                                  </div>
                               </div>
                            </div>

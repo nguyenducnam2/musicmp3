@@ -27,5 +27,8 @@ public class HomeController {
     public String login(Model model){
         return "login";
     }
-    
+    @GetMapping(value="/403")
+    public String error403(Model model){
+        return "error/403";
+    }    
 }
