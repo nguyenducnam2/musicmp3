@@ -19,13 +19,10 @@ import vn.aptech.musicstore.service.AccountService;
  *
  * @author Thanh Sang
  */
-
 @Controller
 @RequestMapping("/admin/account")
 public class AccountController {
-    
-    
-    
+
     @Autowired
     private AccountService service;
 
@@ -34,27 +31,40 @@ public class AccountController {
         model.addAttribute("list", service.findAll());
         return "admin/account/index";
     }
-   
+
     @GetMapping("/create")
     public String create(Model model) {
         model.addAttribute("account", new Account());
         return "admin/account/create";
     }
-    
-     @GetMapping("/update/{id}")
+
+    @GetMapping("/update/{id}")
     public String update(@PathVariable("id") int id, Model model) {
         model.addAttribute("account", service.findById(id));
         return "admin/account/update";
     }
-    
+
     @PostMapping("/save")
-    public String save(Model model,@ModelAttribute Account acc){
+    public String save(Model model, @ModelAttribute Account acc) {
+        Account a = service.findByUsername(acc.getUsername());
+        if (a == null) {
+            service.save(acc);
+            return "redirect:/admin/account";
+        } else {
+//            model.addAttribute("", service)
+            return "redirect:/admin/account";
+
+        }
+    }
+
+    @PostMapping("/processUpdate")
+    public String processUpdate(Model model, @ModelAttribute Account acc) {
         service.save(acc);
         return "redirect:/admin/account";
     }
-    
+
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id")int id){
+    public String delete(@PathVariable("id") int id) {
         service.deleteById(id);
         return "redirect:/admin/account";
     }

@@ -19,7 +19,7 @@ and open the template in the editor.
                                 </div>
                             </div>
                             <div class="iq-card-body">
-                                <form th:action=${"/admin/account/save"} th:object="${account}" method="post">
+                                <form th:action=${"/admin/account/processUpdate"} th:object="${account}" method="post">
 
                                     <input type="hidden"  th:field="${account.id}" />
                                     <input type="hidden"  th:field="${account.password}" />
