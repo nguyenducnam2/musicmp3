@@ -194,11 +194,11 @@ and open the template in the editor.
                 padding: 8px 12px;
                 color: #fff;
                 border-radius: 5px;
-               /* background: rgba(255, 255, 255, 0.2); */
+                /* background: rgba(255, 255, 255, 0.2); */
                 margin: 1px 2px;
             }
             .right .show_song_no p:nth-child(2) {
-                
+
             }
         </style>
     </head>
@@ -378,11 +378,19 @@ and open the template in the editor.
                     title.innerHTML = All_song[index_no].name;
                     track_image.src = "http://localhost:8080/webdata/album/" + All_song[index_no].album.image;
                     artist.innerHTML = All_song[index_no].artist.name;
-                    logo.innerHTML=All_song[index_no].album.name;
-                    lyric.innerHTML=All_song[index_no].lyric;
-                    mv.href="http://localhost:8080/song/video/"+All_song[index_no].id;
+                    logo.innerHTML = All_song[index_no].album.name;
+                    lyric.innerHTML = All_song[index_no].lyric;
+                    let video=All_song[index_no].video;
+                    if (video!=null) {
+                        mv.hidden=false;
+                        mv.href = "http://localhost:8080/song/video/" + All_song[index_no].id;
+                    }else{
+                        mv.hidden=true;
+                    }
+
+
                     track.load();
-                    
+
 
                     timer = setInterval(range_slider, 1000);
                     total.innerHTML = All_song.length;

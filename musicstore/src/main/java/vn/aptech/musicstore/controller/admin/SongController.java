@@ -35,7 +35,7 @@ import vn.aptech.musicstore.service.SongService;
 @Controller
 @RequestMapping("/admin/song")
 public class SongController {
-    
+
     @Value("${static.base.url}")
     private String base_url;
 
@@ -68,48 +68,77 @@ public class SongController {
 
     @PostMapping("/save")
     public String save(@RequestParam("file") MultipartFile file,
+            @RequestParam("file2") MultipartFile file2,
             @ModelAttribute("song") Song s) throws IOException {
-        if(!(file.isEmpty())){
-        s.setMedia(file.getOriginalFilename());
-        s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
-        s.setAlbum(service_alb.findById(s.getAlbumId()).orElseThrow());
-        s.setView(0);
-        s.setArtistId(s.getAlbum().getArtistId());
-        s.setArtist(s.getAlbum().getArtist());
-    //   String path_directory = "C:\\Users\\namng\\Documents\\NetBeansProjects\\musicstore\\src\\main\\resources\\static\\audio";
+        if (!(file.isEmpty())) {
+            s.setMedia(file.getOriginalFilename());
+            if (!(file2.isEmpty())) {
+                s.setVideo(file2.getOriginalFilename());
+                Files.copy(file2.getInputStream(), Paths.get(base_url + "\\webdata\\video" + File.separator + file2.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+            }else{
+                try{
+                if(service.existsById(s.getId())==true){
+                s.setVideo(service.findById(s.getId()).orElseThrow().getVideo());
+                }
+                }catch(Exception e){
+                    
+                }        
+            }
+            s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
+            s.setAlbum(service_alb.findById(s.getAlbumId()).orElseThrow());
+            s.setView(0);
+            s.setArtistId(s.getAlbum().getArtistId());
+            s.setArtist(s.getAlbum().getArtist());
+            //   String path_directory = "C:\\Users\\namng\\Documents\\NetBeansProjects\\musicstore\\src\\main\\resources\\static\\audio";
 //        String path_directory = new ClassPathResource("static/image").getFile().getAbsolutePath();
-      Files.copy(file.getInputStream(), Paths.get(base_url+"\\webdata\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
-        service.save(s);
-        }else{
-        s.setMedia(service.findById(s.getId()).orElseThrow().getMedia());
-        s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
-        s.setAlbum(service_alb.findById(s.getAlbumId()).orElseThrow());
-        s.setView(0);
-        s.setArtistId(s.getAlbum().getArtistId());
-        s.setArtist(s.getAlbum().getArtist());
-        service.save(s);
+            Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+            service.save(s);
+        } else {
+            if (file2.isEmpty()) {
+                s.setMedia(service.findById(s.getId()).orElseThrow().getMedia());
+                s.setVideo(service.findById(s.getId()).orElseThrow().getVideo());
+                s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
+                s.setAlbum(service_alb.findById(s.getAlbumId()).orElseThrow());
+                s.setView(0);
+                s.setArtistId(s.getAlbum().getArtistId());
+                s.setArtist(s.getAlbum().getArtist());
+                service.save(s);
+            } else {
+                s.setMedia(service.findById(s.getId()).orElseThrow().getMedia());
+                s.setVideo(file2.getOriginalFilename());
+                s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
+                s.setAlbum(service_alb.findById(s.getAlbumId()).orElseThrow());
+                s.setView(0);
+                s.setArtistId(s.getAlbum().getArtistId());
+                s.setArtist(s.getAlbum().getArtist());
+                Files.copy(file2.getInputStream(), Paths.get(base_url + "\\webdata\\video" + File.separator + file2.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+                service.save(s);
+            }
         }
         return "redirect:/admin/song";
     }
-    
+
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id")int id) throws IOException{
-        Files.delete(Paths.get(base_url+"\\webdata\\audio"+File.separator+service.findById(id).orElseThrow().getMedia()));
+    public String delete(@PathVariable("id") int id) throws IOException {
+        Files.delete(Paths.get(base_url + "\\webdata\\audio" + File.separator + service.findById(id).orElseThrow().getMedia()));
+        if(service.findById(id).orElseThrow().getVideo()!=null){
+        Files.delete(Paths.get(base_url + "\\webdata\\video" + File.separator + service.findById(id).orElseThrow().getVideo()));
+        }
         service.deleteById(id);
         return "redirect:/admin/song";
     }
-    
+
     @GetMapping("/update/{id}")
-    public String update(@PathVariable("id")int id,Model model){
+    public String update(@PathVariable("id") int id, Model model) {
         model.addAttribute("song", service.findById(id).orElseThrow());
         model.addAttribute("listgenre", service_gen.findAll());
         model.addAttribute("listartist", service_art.findAll());
         model.addAttribute("listalbum", service_alb.findAll());
         return "admin/song/create";
     }
-    
+
     @GetMapping("/search")
-    public String search(Model model,@RequestParam("name")String name){
+    public String search(Model model, @RequestParam("name") String name) {
         model.addAttribute("list", service.findByName(name));
         return "admin/song/index";
     }

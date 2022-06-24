@@ -39,7 +39,7 @@ import vn.aptech.musicstore.service.SongService;
 @RestController
 @RequestMapping("/api/song")
 public class SongApiController {
-    
+
     @Value("${static.base.url}")
     private String base_url;
 
@@ -74,8 +74,8 @@ public class SongApiController {
     @PostMapping
     public void create(@RequestParam("name") String name,
             @RequestParam("file") MultipartFile file,
+            @RequestParam("file2") MultipartFile file2,
             @RequestParam("lyric") String lyric,
-            @RequestParam("price") int price,
             @RequestParam("albumId") int albumId,
             @RequestParam("artistId") int artistId,
             @RequestParam("genreId") int genreId) throws IOException {
@@ -83,7 +83,10 @@ public class SongApiController {
         s.setName(name);
         s.setMedia(file.getOriginalFilename());
         s.setLyric(lyric);
-        s.setPrice(price);
+        if (!(file2.isEmpty())) {
+            s.setVideo(file2.getOriginalFilename());
+            Files.copy(file2.getInputStream(), Paths.get(base_url + "\\webdata\\video" + File.separator + file2.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+        }
         s.setAlbumId(albumId);
         s.setArtistId(artistId);
         s.setGenreId(genreId);
@@ -93,7 +96,7 @@ public class SongApiController {
         s.setView(0);
 //        String path_directory = "C:\\Users\\namng\\Documents\\NetBeansProjects\\musicstore\\src\\main\\resources\\static\\image";
 //        String path_directory = new ClassPathResource("static/image").getFile().getAbsolutePath();
-        Files.copy(file.getInputStream(), Paths.get(base_url+"\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
         service.save(s);
     }
 
@@ -106,8 +109,8 @@ public class SongApiController {
     public void update(@RequestParam("id") int id,
             @RequestParam("name") String name,
             @RequestParam("file") MultipartFile file,
+            @RequestParam("file2") MultipartFile file2,
             @RequestParam("lyric") String lyric,
-            @RequestParam("price") int price,
             @RequestParam("albumId") int albumId,
             @RequestParam("artistId") int artistId,
             @RequestParam("genreId") int genreId) throws IOException {
@@ -116,7 +119,12 @@ public class SongApiController {
             s.setId(id);
             s.setName(name);
             s.setMedia(file.getOriginalFilename());
-            s.setPrice(price);
+            if (!(file2.isEmpty())) {
+                s.setVideo(file2.getOriginalFilename());
+                Files.copy(file2.getInputStream(), Paths.get(base_url + "\\webdata\\video" + File.separator + file2.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+            } else {
+                s.setVideo(service.findById(id).orElseThrow().getVideo());
+            }
             s.setLyric(lyric);
             s.setView(service.findById(id).orElseThrow().getView());
             s.setAlbumId(albumId);
@@ -127,23 +135,39 @@ public class SongApiController {
             s.setAlbum(service_alb.findById(albumId).orElseThrow());
 //            String path_directory = "C:\\Users\\namng\\Documents\\NetBeansProjects\\musicstore\\src\\main\\resources\\static\\image";
 //        String path_directory = new ClassPathResource("static/image").getFile().getAbsolutePath();
-            Files.copy(file.getInputStream(), Paths.get(base_url+"\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
             service.save(s);
         } else {
-            Song s = new Song();
-            s.setId(id);
-            s.setName(name);
-            s.setMedia(service.findById(id).orElseThrow().getMedia());
-            s.setPrice(price);
-            s.setLyric(lyric);
-            s.setView(service.findById(id).orElseThrow().getView());
-            s.setAlbumId(albumId);
-            s.setArtistId(artistId);
-            s.setGenreId(genreId);
-            s.setArtist(service_art.findById(artistId).orElseThrow());
-            s.setGenre(service_gen.findById(genreId).orElseThrow());
-            s.setAlbum(service_alb.findById(albumId).orElseThrow());
-            service.save(s);
+            if (file2.isEmpty()) {
+                Song s = new Song();
+                s.setId(id);
+                s.setName(name);
+                s.setMedia(service.findById(id).orElseThrow().getMedia());
+                s.setVideo(service.findById(id).orElseThrow().getVideo());
+                s.setView(service.findById(id).orElseThrow().getView());
+                s.setAlbumId(albumId);
+                s.setArtistId(artistId);
+                s.setGenreId(genreId);
+                s.setArtist(service_art.findById(artistId).orElseThrow());
+                s.setGenre(service_gen.findById(genreId).orElseThrow());
+                s.setAlbum(service_alb.findById(albumId).orElseThrow());
+                service.save(s);
+            } else {
+                Song s = new Song();
+                s.setId(id);
+                s.setName(name);
+                s.setMedia(service.findById(id).orElseThrow().getMedia());
+                s.setVideo(file2.getOriginalFilename());
+                Files.copy(file2.getInputStream(), Paths.get(base_url + "\\webdata\\video" + File.separator + file2.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+                s.setView(service.findById(id).orElseThrow().getView());
+                s.setAlbumId(albumId);
+                s.setArtistId(artistId);
+                s.setGenreId(genreId);
+                s.setArtist(service_art.findById(artistId).orElseThrow());
+                s.setGenre(service_gen.findById(genreId).orElseThrow());
+                s.setAlbum(service_alb.findById(albumId).orElseThrow());
+                service.save(s);
+            }
         }
     }
 }

@@ -23,4 +23,5 @@ public interface SongService {
     List<Song> findByName(String name);
     List<Song> findByOrderByViewDesc();
     List<Song> findByLyricCustom(String lyric);
+    boolean existsById(int id);
 }

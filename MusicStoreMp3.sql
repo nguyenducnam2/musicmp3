@@ -33,6 +33,6 @@ album_id int foreign key references album(id),
 artist_id int foreign key references artist(id),
 lyric ntext,
 genre_id int foreign key references genre(id),
-price int,
-[view] int
+[view] int,
+video varchar(500)
 )

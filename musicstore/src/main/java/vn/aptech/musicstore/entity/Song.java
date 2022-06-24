@@ -38,10 +38,10 @@ public class Song {
     private String media;
     @Column(name = "lyric")
     private String lyric;
-    @Column(name = "price")
-    private Integer price;
     @Column(name = "[view]")
     private Integer view;
+    @Column(name = "video")
+    private String video;
 
     @Column(name = "album_id",insertable = false,updatable = false)
     private Integer albumId;

@@ -62,5 +62,12 @@ public class SongServiceImpl implements SongService{
     public List<Song> findByLyricCustom(String lyric) {
         return repo.findByLyricCustom(lyric);
     }
+
+    @Override
+    public boolean existsById(int id) {
+        return repo.existsById(id);
+    }
+    
+    
     
 }
