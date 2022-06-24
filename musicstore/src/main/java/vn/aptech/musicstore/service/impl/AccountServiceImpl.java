@@ -51,14 +51,15 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     public Account save(Account account) {
         Account acc = repo.findByUsername(account.getUsername());
         if (acc == null) {
+            account.setPassword(encodePassword().encode(account.getPassword()));
+        return repo.save(account);
+        } else {
             acc.setUsername(account.getUsername());
-            acc.setPassword(encodePassword().encode(account.getPassword()));
+            acc.setPassword(account.getPassword());
             acc.setFullname(account.getFullname());
             acc.setRole(account.getRole());
-        } else {
-            acc.setPassword(account.getPassword());
+        return repo.save(acc);
         }
-        return repo.save(account);
     }
 
     @Override
@@ -90,7 +91,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
-    public List<Account> findByUsername(String name) {
+    public Account findByUsername(String name) {
         return repo.findByUsername(name);
     }
 
