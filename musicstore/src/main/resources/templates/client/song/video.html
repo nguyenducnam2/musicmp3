@@ -445,8 +445,7 @@ and open the template in the editor.
                                                 <video preload="metadata" id="main-video">
                                                     <source th:src="@{'/webdata/video/'+${song.video}}" type="video/mp4">
                                                     <source th:src="@{'/webdata/video/'+${song.video}}" type="video/mp4">
-                                                    <track id="track1" label="English" kind="subtitles" src="./How To Get Started With VSCode.vtt" srclang="en">
-                                                    <track id="track2" label="Urdu" kind="subtitles" src="./test.vtt" srclang="en">
+                                                    <track id="track1" label="Default" kind="subtitles" th:src="@{/webdata/lyrics/hellofuture.vtt}" srclang="en">
                                                 </video>
                                                 <p class="caption_text"></p>
                                                 <!-- <div class="thumbnail"></div> -->
