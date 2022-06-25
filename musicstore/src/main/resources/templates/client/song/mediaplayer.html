@@ -270,7 +270,9 @@ and open the template in the editor.
                                         </div>
                                         <!--- song duration part --->
                                         <div class="duration">
+                                            <span style="color: wheat;" id="current"></span>
                                             <input type="range" min="0" max="100" value="0" id="duration_slider" onchange="change_duration()">
+                                            <span style="color: wheat;" id="time"></span>
                                         </div>
                                         <button id="auto" onclick="autoplay_switch()">Auto play <i class="fa fa-circle-o-notch" aria-hidden="true"></i></button>
                                     </div>
@@ -310,7 +312,7 @@ and open the template in the editor.
                                                         <small th:text="${item.artist.name}"></small>
                                                     </div>
                                                 </div>
-                                                <p class="mb-0 col-md-2 col-md-2 iq-music-time" th:text="'4:34'">
+                                                <p class="mb-0 col-md-2 col-md-2 iq-music-time">
                                                 <p class="mb-0 col-2 col-md-2 iq-music-play"><a th:href="@{/song/{id}(id=${item.id})}"><i class="las la-play-circle font-size-32"></i></a></p>
                                                 <div class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1">
                                                     <div class="dropdown">
@@ -354,11 +356,14 @@ and open the template in the editor.
                 let total = document.querySelector('#total');
                 let artist = document.querySelector('#artist');
                 let mv = document.querySelector('#mv');
-
-
+                let time = document.querySelector('#time');
+                let current = document.querySelector('#current');
 
                 let timer;
                 let autoplay = 0;
+                
+                let seconds;
+                let minutes;
 
                 let index_no = 0;
                 let Playing_song = false;
@@ -380,12 +385,12 @@ and open the template in the editor.
                     artist.innerHTML = All_song[index_no].artist.name;
                     logo.innerHTML = All_song[index_no].album.name;
                     lyric.innerHTML = All_song[index_no].lyric;
-                    let video=All_song[index_no].video;
-                    if (video!=null) {
-                        mv.hidden=false;
+                    let video = All_song[index_no].video;
+                    if (video != null) {
+                        mv.hidden = false;
                         mv.href = "http://localhost:8080/song/video/" + All_song[index_no].id;
-                    }else{
-                        mv.hidden=true;
+                    } else {
+                        mv.hidden = true;
                     }
 
 
@@ -393,6 +398,16 @@ and open the template in the editor.
 
 
                     timer = setInterval(range_slider, 1000);
+                    var i = setInterval(function () {
+                        if (track.readyState > 0) {
+                            minutes = parseInt(track.duration / 60, 10);
+                            seconds = track.duration % 60;
+
+                            // (Put the minutes and seconds in the display)
+                            time.innerHTML = minutes + ":" + parseInt(seconds);
+                            clearInterval(i);
+                        }
+                    }, 200);
                     total.innerHTML = All_song.length;
                     present.innerHTML = index_no + 1;
                 }
@@ -476,7 +491,8 @@ and open the template in the editor.
 // change slider position 
                 function change_duration() {
                     slider_position = track.duration * (slider.value / 100);
-                    track.currentTime = slider_position;
+                    track.currentTime = slider_position;   
+                    current.innerHTML = Math.abs(minutes) + ":" +seconds ;
                 }
 
 // autoplay function
@@ -498,6 +514,18 @@ and open the template in the editor.
                     if (!isNaN(track.duration)) {
                         position = track.currentTime * (100 / track.duration);
                         slider.value = position;
+
+                        var i = setInterval(function () {
+                            if (track.readyState > 0) {
+                                minutes = parseInt(track.duration / 60, 10) - parseInt(track.currentTime / 60, 10) - parseInt(track.duration / 60, 10);
+                                seconds= parseInt(track.currentTime)%60;
+
+                                // (Put the minutes and seconds in the display)
+                                current.innerHTML = Math.abs(minutes) + ":" +seconds ;
+                                clearInterval(i);
+                            }
+                        }, 200);
+
                     }
 
 
