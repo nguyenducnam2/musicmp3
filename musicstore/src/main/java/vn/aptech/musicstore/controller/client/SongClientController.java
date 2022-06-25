@@ -5,6 +5,7 @@
  */
 package vn.aptech.musicstore.controller.client;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,7 +48,17 @@ public class SongClientController {
         s.setView(s.getView()+1);
         service.save(s);
         model.addAttribute("song", s);
-        model.addAttribute("anotherlist", service.findByAlbumId(s.getAlbumId()));
+        List<Song> anotherlist=new ArrayList<>();
+        try{
+            for(int i=0;i<service.findByAlbumId(s.getAlbumId()).size();i++){
+            if(!(service.findByAlbumId(s.getAlbumId()).get(i).getVideo().isEmpty())){
+                anotherlist.add(service.findByAlbumId(s.getAlbumId()).get(i));
+            }
+        }
+        }catch(Exception e){
+            
+        } 
+        model.addAttribute("anotherlist", anotherlist);
         return "client/song/video";
     }
 }

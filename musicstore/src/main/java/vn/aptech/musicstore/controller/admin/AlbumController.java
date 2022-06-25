@@ -101,7 +101,8 @@ public class AlbumController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") int id) {
+    public String delete(@PathVariable("id") int id) throws IOException {
+        Files.delete(Paths.get(base_url + "\\webdata\\album" + File.separator + service.findById(id).orElseThrow().getImage()));
         service.deleteById(id);
         return "redirect:/admin/album";
     }

@@ -7,6 +7,95 @@ and open the template in the editor.
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{admin/layout.html}">
+    <head>
+        <style>
+            @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+            :root {
+                --primary-color: #009e6c;
+                --border-color: #eee;
+            }
+            .dropdown {
+                position: relative;
+            }
+
+            .dropdown__selected {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                height: 40px;
+                padding: 0 20px 0 10px;
+                font-size: 14px;
+                border: 1px solid var(--border-color);
+                position: relative;
+                cursor: pointer;
+                transition: box-shadow .3s ease;
+            }
+
+            .dropdown__selected::after {
+                top: calc(50% - 2px);
+                right: 10px;
+                border: solid transparent;
+                content: '';
+                height: 0;
+                width: 0;
+                position: absolute;
+                border-top-color:#000;
+                border-width: 4px;
+                margin-left: -4px;
+            }
+
+            .dropdown__selected:hover {
+                box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            }
+
+            .dropdown__menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                border: 1px solid var(--border-color);
+                border-top: 0;
+                background-color: #fff;
+                z-index: 5;
+                display: none;
+            }
+
+            .dropdown__menu_items {
+                max-height: 210px;
+                overflow-y: auto;
+            }
+
+            .dropdown__menu_search {
+                display: block;
+                width: 100%;
+                border: 0;
+                border-bottom: 1px solid var(--border-color);
+                padding: 12px;
+                outline: 0;
+                background-color: #f9f9f9;
+            }
+
+            .dropdown__menu_item {
+                padding: 10px;
+                border-bottom: 1px solid var(--border-color);
+                font-size: 14px;
+                cursor: pointer;
+            }
+
+            .dropdown__menu_item:last-child {
+                border-bottom: 0;
+            }
+
+            .dropdown__menu_item:hover {
+
+            }
+
+            .dropdown__menu_item.selected,
+            .dropdown__menu_item.selected:hover {
+
+            }
+        </style>
+    </head>
     <body>
         <div layout:fragment="content" id="content-page" class="content-page">
             <div class="container-fluid">
@@ -19,7 +108,7 @@ and open the template in the editor.
                                 </div>
                             </div>
                             <div class="iq-card-body">
-                                <form th:action=${"/admin/album/save"} th:object="${album}" method="post" enctype="multipart/form-data">
+                                <form class="form" th:action=${"/admin/album/save"} th:object="${album}" method="post" enctype="multipart/form-data">
                                     <input type="hidden"  th:field="${album.id}" />
                                     <div class="form-group">
                                         <label>Album Name:</label>
@@ -33,14 +122,19 @@ and open the template in the editor.
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="exampleInputdate">Release Date:</label>
-                                        <input type="date" th:field="${album.releaseDate}" class="form-control" id="exampleInputdate" value="2019-12-18">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Artist:</label>
-                                        <select class="form-control" id="exampleFormControlSelect1" th:field="${album.artistId}">
+                                        <!--               <label>Artist:</label>
+                                                       <select class="form-control" id="exampleFormControlSelect1" th:field="${album.artistId}">
+                                                           <option th:each="item:${listartist}" th:value="${item.id}" th:text="${item.name}"></option>
+                                                       </select> -->
+                                        <label for="country">Artist:</label>
+                                        <select class="form-control" id="country" name="artistId" th:field="${album.artistId}" data-dropdown>
+                                            <option th:value=" '' "></option>
                                             <option th:each="item:${listartist}" th:value="${item.id}" th:text="${item.name}"></option>
                                         </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputdate">Release Date:</label>
+                                        <input type="date" th:field="${album.releaseDate}" class="form-control" id="exampleInputdate" value="2019-12-18">
                                     </div>
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                     <button type="reset" class="btn btn-danger">Reset</button>
@@ -50,6 +144,159 @@ and open the template in the editor.
                     </div>
                 </div>
             </div>
+            <script th:inline="javascript">
+                // Get dropdowns and form
+                const dropdowns = document.querySelectorAll('[data-dropdown]');
+                const form = document.querySelector('form');
+
+// Check if dropdowns exist on page
+                if (dropdowns.length > 0) {
+                    // Loop through dropdowns and create custom dropdown for each select element
+                    dropdowns.forEach(dropdown => {
+                        createCustomDropdown(dropdown);
+                    });
+                }
+
+// Check if form element exist on page
+                if (form !== null) {
+                    // When form is submitted console log the value of the select field
+                    form.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        console.log('Selected artist:', form.querySelector('[name="artistId"]').value);
+                    });
+                }
+
+// Create custom dropdown
+                function createCustomDropdown(dropdown) {
+                    // Get all options and convert them from nodelist to array
+                    const options = dropdown.querySelectorAll('option');
+                    const optionsArr = Array.prototype.slice.call(options);
+
+                    // Create custom dropdown element and add class dropdown to it
+                    // Insert it in the DOM after the select field
+                    const customDropdown = document.createElement('div');
+                    customDropdown.classList.add('dropdown');
+                    dropdown.insertAdjacentElement('afterend', customDropdown);
+
+                    // Create element for selected option
+                    // Add class to this element, text from the first option in select field and append it to custom dropdown
+                    const selected = document.createElement('div');
+                    selected.classList.add('dropdown__selected');
+                    selected.textContent = optionsArr[0].textContent;
+                    customDropdown.appendChild(selected);
+
+                    // Create element for dropdown menu, add class to it and append it to custom dropdown
+                    // Add click event to selected element to toggle dropdown menu
+                    const menu = document.createElement('div');
+                    menu.classList.add('dropdown__menu');
+                    customDropdown.appendChild(menu);
+                    selected.addEventListener('click', toggleDropdown.bind(menu));
+
+                    // Create serach input element
+                    // Add class, type and placeholder to this element and append it to menu element
+                    const search = document.createElement('input');
+                    search.placeholder = 'Search...';
+                    search.type = 'text';
+                    search.classList.add('dropdown__menu_search');
+                    menu.appendChild(search);
+
+                    // Create wrapper element for menu items, add class to it and append to menu element
+                    const menuItemsWrapper = document.createElement('div');
+                    menuItemsWrapper.classList.add('dropdown__menu_items');
+                    menu.appendChild(menuItemsWrapper);
+
+                    // Loop through all options and create custom option for each option and append it to items wrapper element
+                    // Add click event for each custom option to set clicked option as selected option
+                    optionsArr.forEach(option => {
+                        const item = document.createElement('div');
+                        item.classList.add('dropdown__menu_item');
+                        item.dataset.value = option.value;
+                        item.textContent = option.textContent;
+                        menuItemsWrapper.appendChild(item);
+
+                        item.addEventListener('click', setSelected.bind(item, selected, dropdown, menu));
+                    });
+
+                    // Add selected class to first custom option
+                    menuItemsWrapper.querySelector('div').classList.add('selected');
+
+                    // Add input event to search input element to filter items
+                    // Add click event to document element to close custom dropdown if clicked outside of it
+                    // Hide original dropdown(select)
+                    search.addEventListener('input', filterItems.bind(search, optionsArr, menu));
+                    document.addEventListener('click', closeIfClickedOutside.bind(customDropdown, menu));
+                    dropdown.style.display = 'none';
+                }
+
+// Toggle dropdown
+                function toggleDropdown() {
+                    // Check if dropdown is opened and if it is close it, otherwise open it and focus search input
+                    if (this.offsetParent !== null) {
+                        this.style.display = 'none';
+                    } else {
+                        this.style.display = 'block';
+                        this.querySelector('input').focus();
+                    }
+                }
+
+// Set selected option
+                function setSelected(selected, dropdown, menu) {
+                    // Get value and label from clicked custom option
+                    const value = this.dataset.value;
+                    const label = this.textContent;
+
+                    // Change the text on selected element
+                    // Change the value on select field
+                    selected.textContent = label;
+                    dropdown.value = value;
+
+                    // Close the menu
+                    // Reset search input value
+                    // Remove selected class from previously selected option and show all divs if they were filtered
+                    // Add selected class to clicked option
+                    menu.style.display = 'none';
+                    menu.querySelector('input').value = '';
+                    menu.querySelectorAll('div').forEach(div => {
+                        if (div.classList.contains('selected')) {
+                            div.classList.remove('selected');
+                        }
+                        if (div.offsetParent === null) {
+                            div.style.display = 'block';
+                        }
+                    });
+                    this.classList.add('selected');
+                }
+
+// Filter items
+                function filterItems(itemsArr, menu) {
+                    // Get all custom options
+                    // Get the value of search input and convert it to all lowercase characters
+                    // Get filtered items
+                    // Get the indexes of filtered items
+                    const customOptions = menu.querySelectorAll('.dropdown__menu_items div');
+                    const value = this.value.toLowerCase();
+                    const filteredItems = itemsArr.filter(item => item.textContent.toLowerCase().includes(value));
+                    const indexesArr = filteredItems.map(item => itemsArr.indexOf(item));
+
+                    // Check if option is not inside indexes array and hide it and if it is inside indexes array and it is hidden show it
+                    itemsArr.forEach(option => {
+                        if (!indexesArr.includes(itemsArr.indexOf(option))) {
+                            customOptions[itemsArr.indexOf(option)].style.display = 'none';
+                        } else {
+                            if (customOptions[itemsArr.indexOf(option)].offsetParent === null) {
+                                customOptions[itemsArr.indexOf(option)].style.display = 'block';
+                            }
+                        }
+                    });
+                }
+
+// Close dropdown if clicked outside dropdown element
+                function closeIfClickedOutside(menu, e) {
+                    if (e.target.closest('.dropdown') === null && e.target !== this && menu.offsetParent !== null) {
+                        menu.style.display = 'none';
+                    }
+                }
+            </script>
         </div>
     </body>
 </html>
