@@ -43,6 +43,14 @@ public class AccountController {
         model.addAttribute("account", service.findById(id));
         return "admin/account/update";
     }
+    @GetMapping("/update/{username}")
+    public String update(@PathVariable("username") String username, Model model) {
+        Account a = service.findByUsername(username);
+        if(a!=null){
+            model.addAttribute("account", service.findById(a.getId()));
+        }
+        return "admin/account/update";
+    }
 
     @PostMapping("/save")
     public String save(Model model, @ModelAttribute Account acc) {
