@@ -96,6 +96,8 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 //            authorities.add(au);
 //            System.out.println("Role Account: " + acc.get().getRole());
 //        }
+
+
 //        else {
 //            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 //        }
