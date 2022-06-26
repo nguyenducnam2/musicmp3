@@ -34,11 +34,16 @@ public class HomeController {
 //        return "admin/index";
 //    }
     
+//    @GetMapping
+//    public String index() {
+//        return "admin/index";
+//    }
+//    
     @GetMapping
-    public String index() {
-//        String username = principal.getName();
-//        Optional<Account> user = serviceAccount.findByUsername(username);
-//        model.addAttribute("user",user.get());
+    public String index(Principal principal, Model model) {
+        String username = principal.getName();
+        Optional<Account> user = serviceAccount.findByUsername(username);
+        model.addAttribute("user",user.get());
         return "admin/index";
     }
 

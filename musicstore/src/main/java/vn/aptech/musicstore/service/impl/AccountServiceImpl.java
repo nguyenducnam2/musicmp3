@@ -85,24 +85,22 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Account> acc = repo.findByUsername(username);
-        Set<GrantedAuthority> authorities = new HashSet<>();
         if (acc.isEmpty()) {
             throw new UsernameNotFoundException("User not found!");
-        } else {
-            GrantedAuthority au = new SimpleGrantedAuthority(acc.get().getRole());
-            authorities.add(au);
-            System.out.println("Role Account: " + acc.get().getRole());
         }
+//        Set<GrantedAuthority> authorities = new HashSet<>();
+//        if (acc.isEmpty()) {
+//            throw new UsernameNotFoundException("User not found!");
+//        } else {
+//            GrantedAuthority au = new SimpleGrantedAuthority(acc.get().getRole());
+//            authorities.add(au);
+//            System.out.println("Role Account: " + acc.get().getRole());
+//        }
 //        else {
 //            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 //        }
-        boolean enabled = true;
-        boolean accountNonExpired = true;
-        boolean creadentialNonExpired = true;
-        boolean accountNonLocked = true;
 
-        return new org.springframework.security.core.userdetails.User(acc.get().getUsername(), acc.get().getPassword(), enabled,
-                accountNonExpired, creadentialNonExpired, accountNonLocked, authorities);
+        return new AccountUserDetails(acc.get());
     }
 
     @Override

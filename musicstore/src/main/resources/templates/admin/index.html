@@ -12,7 +12,7 @@ and open the template in the editor.
     <body>
 
         <div layout:fragment="content" id="content-page" class="content-page">
-            dat boa
+            <span style="margin-left: 50px" th:object="${user}" th:inline="text" class="text-center text-justify text-success text-uppercase">Welcome [[${user.fullname}]]</span> 
         </div>
     </body>
 </html>
