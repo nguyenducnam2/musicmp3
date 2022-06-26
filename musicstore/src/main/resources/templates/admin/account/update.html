@@ -25,21 +25,23 @@ and open the template in the editor.
                                     <input type="hidden"  th:field="${account.password}" />
                                     <div class="form-group">
                                         <label>Username:</label>
-                                        <input type="text" th:field="${account.username}" class="form-control" readonly>
+                                        <input type="text" th:field="${account.username}" class="form-control" readonly />
                                     </div>
                                     <div>
-                                    <label>Full name:</label>
-                                    <input type="text" th:field="${account.fullname}" class="form-control">
+                                        <label>Full name:</label>
+                                        <input type="text" th:field="${account.fullname}" class="form-control">
                                     </div>
-                                    <div class="form-group">
-                                        <label>Role</label>
 
-                                        <select class="form-control" id="exampleFormControlSelect1" th:field="${account.role}">
+                                    <div  class="form-group">
+                                        <label>Role</label>
+                                        
+                                        <select  class="form-control" id="exampleFormControlSelect1" th:field="${account.role}">
                                             <option class="form-control" value="ROLE_USER" >User</option>
                                             <option class="form-control" value="ROLE_ADMIN">Admin</option>
-                                            <option class="form-control" value="ROLE_MODERATOR">MOD</option>
+                                            <option sec:authorize="hasRole('MODERATOR')" class="form-control" value="ROLE_MODERATOR">MOD</option>
                                         </select>
                                     </div>
+
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                     <button type="reset" class="btn btn-danger">Reset</button>
                                 </form>

@@ -18,7 +18,7 @@ public interface AccountService {
 
     Optional<Account> findById(int id);
 
-    Account findByUsername(String name);
+    Optional<Account> findByUsername(String name);
 
     Account save(Account account);
 

@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,6 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import vn.aptech.musicstore.entity.Account;
 import vn.aptech.musicstore.repository.AccountRepository;
 import vn.aptech.musicstore.service.AccountService;
@@ -49,17 +51,30 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     public Account save(Account account) {
-        Account acc = repo.findByUsername(account.getUsername());
-        if (acc == null) {
-            account.setPassword(encodePassword().encode(account.getPassword()));
-        return repo.save(account);
+        Optional<Account> accExist = repo.findByUsername(account.getUsername());
+
+//        if (acc.isEmpty()) {
+//            account.setPassword(encodePassword().encode(account.getPassword()));
+//        return repo.save(account);
+//        } else {
+//            Account entity = acc.get();
+//            entity.setUsername(account.getUsername());
+//            entity.setPassword(account.getPassword());
+//            entity.setFullname(account.getFullname());
+//            entity.setRole(account.getRole());
+//        return repo.save(entity);
+//        }
+        if (accExist.isPresent()) {
+            if (StringUtils.isEmpty(account.getPassword())) {
+                account.setPassword(accExist.get().getPassword());
+            } else {
+                account.setPassword(encodePassword().encode(account.getPassword()));
+            }
         } else {
-            acc.setUsername(account.getUsername());
-            acc.setPassword(account.getPassword());
-            acc.setFullname(account.getFullname());
-            acc.setRole(account.getRole());
-        return repo.save(acc);
+            account.setPassword(encodePassword().encode(account.getPassword()));
+
         }
+        return repo.save(account);
     }
 
     @Override
@@ -69,14 +84,14 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Account acc = repo.findByUsername(username);
+        Optional<Account> acc = repo.findByUsername(username);
         Set<GrantedAuthority> authorities = new HashSet<>();
-        if (acc == null) {
+        if (acc.isEmpty()) {
             throw new UsernameNotFoundException("User not found!");
         } else {
-            GrantedAuthority au = new SimpleGrantedAuthority(acc.getRole());
+            GrantedAuthority au = new SimpleGrantedAuthority(acc.get().getRole());
             authorities.add(au);
-            System.out.println("Role Account: " + acc.getRole());
+            System.out.println("Role Account: " + acc.get().getRole());
         }
 //        else {
 //            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
@@ -86,12 +101,12 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         boolean creadentialNonExpired = true;
         boolean accountNonLocked = true;
 
-        return new org.springframework.security.core.userdetails.User(acc.getUsername(), acc.getPassword(), enabled,
+        return new org.springframework.security.core.userdetails.User(acc.get().getUsername(), acc.get().getPassword(), enabled,
                 accountNonExpired, creadentialNonExpired, accountNonLocked, authorities);
     }
 
     @Override
-    public Account findByUsername(String name) {
+    public Optional<Account> findByUsername(String name) {
         return repo.findByUsername(name);
     }
 

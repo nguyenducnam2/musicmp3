@@ -5,10 +5,16 @@
  */
 package vn.aptech.musicstore.controller.admin;
 
+import java.security.Principal;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import vn.aptech.musicstore.entity.Account;
+import vn.aptech.musicstore.service.AccountService;
 
 /**
  *
@@ -17,18 +23,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/admin")
 public class HomeController {
+
+    @Autowired
+    private AccountService serviceAccount;
+
+//    @GetMapping("/{username}")
+//    public String index(@PathVariable("username") String username, Model model) {
+//        Optional<Account> a = serviceAccount.findByUsername(username);
+//        model.addAttribute("user", a.get());
+//        return "admin/index";
+//    }
     
     @GetMapping
-    public String index(){
+    public String index() {
+//        String username = principal.getName();
+//        Optional<Account> user = serviceAccount.findByUsername(username);
+//        model.addAttribute("user",user.get());
         return "admin/index";
     }
-    
-    @GetMapping(value="/login")
-    public String login(Model model){
+
+    @GetMapping(value = "/login")
+    public String login(Model model) {
         return "admin/login";
     }
-    @GetMapping(value="/403")
-    public String error403(Model model){
+
+    @GetMapping(value = "/403")
+    public String error403(Model model) {
         return "error/403";
-    }    
+    }
 }
