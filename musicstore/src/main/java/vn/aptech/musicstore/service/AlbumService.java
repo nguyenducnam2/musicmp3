@@ -22,4 +22,5 @@ public interface AlbumService {
     boolean existsById(int id);
     List<Album> findByNameCustom(String name);
     List<Album> findTop12();
+    List<Album> findByArtistid(int id);
 }

@@ -57,4 +57,9 @@ public class AlbumServiceImpl implements AlbumService {
     public List<Album> findTop12() {
         return repo.findTop12ByOrderByIdDesc();
     }
+
+    @Override
+    public List<Album> findByArtistid(int id) {
+       return repo.findByArtistid(id);
+    }
 }

@@ -19,5 +19,8 @@ public interface AlbumRepository extends JpaRepository<Album,Integer>{
     @Query("SELECT o FROM Album o WHERE o.name LIKE CONCAT('%',:name,'%')")
     List<Album> findByNameCustom(@Param("name") String name);
     
+    @Query("SELECT o FROM Album o WHERE o.artistId = :artistId")
+    List<Album> findByArtistid(@Param("artistId") int artistId);
+    
     List<Album> findTop12ByOrderByIdDesc();
 }
