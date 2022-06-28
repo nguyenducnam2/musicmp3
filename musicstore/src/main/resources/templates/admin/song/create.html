@@ -104,7 +104,7 @@ and open the template in the editor.
                         <div class="iq-card">
                             <div class="iq-card-header d-flex justify-content-between">
                                 <div class="iq-header-title">
-                                    <h4 class="card-title">Add Song</h4>
+                                    <h4 class="card-title" th:text="${status}"></h4>
                                 </div>
                             </div>
                             <div class="iq-card-body">
@@ -135,23 +135,29 @@ and open the template in the editor.
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="country">Artist:</label>
-                                        <select class="form-control" id="country" name="artistId" th:field="${song.artistId}" onchange="populate();" data-dropdown>
-                                            <option th:value=" '' ">Choose Artist</option>
-                                            <option th:each="item:${listartist}" th:value="${item.id}" th:text="${item.name}"></option>
-                                        </select>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <label for="country">Artist:</label>
+                                                <select class="form-control" id="country" name="artistId" th:field="${song.artistId}" data-dropdown>
+                                                    <option th:if="${status == 'update'}" th:value="${song.artistId}" th:text="${song.artist.name}"></option>
+                                                    <option th:if="${song.artist == null}" th:value=" '' ">Choose Artist</option>
+                                                    <option th:each="item:${listartist}" th:if="${item.id!=song.artistId}" th:value="${item.id}" th:text="${item.name}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="col-6">
+                                                <label>Album:</label>
+                                                <select class="form-control" id="country2" th:field="${song.albumId}">
+                                                    <option th:if="${song.album != null}" th:value="${song.albumId}" th:text="${song.album.name}"></option>
+                                                  <!--  <option th:each="item:${listalbum}" th:text="${item.name}+'-'+${item.artist.name}" th:value="${item.id}"></option> -->
+                                                </select>   
+                                            </div>
+                                        </div>
                                     </div>                
                                     <div class="form-group">
                                         <label>Lyric:</label>
                                         <textarea th:field="${song.lyric}" class="form-control" rows="4"></textarea>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Album:</label>
-                                        <select class="form-control" id="country2" th:field="${song.albumId}" data-dropdown>
-                                        <option th:value=" '' ">Choose Album</option>
-                                        <option th:each="item:${listalbum}" th:text="${item.name}+'-'+${item.artist.name}" th:value="${item.id}"></option> 
-                                        </select>                              
-                                    </div>          
+
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                     <button type="reset" class="btn btn-danger">Reset</button>
                                 </form>
@@ -164,13 +170,24 @@ and open the template in the editor.
                 // Get dropdowns and form
                 const dropdowns = document.querySelectorAll('[data-dropdown]');
                 const form = document.querySelector('form');
-                
-                function populate(){
-                    var country=document.getElementById(country);
-                    var country2=document.getElementById(country2);
-                    var artistid=parseInt(country.value);
-                    
-                  
+
+                function populate() {
+                    var country = document.getElementById('country');
+                    var artist_id=country.value;
+                    var list_album=/*[[${listalbum}]]*/[];
+                    var list_album2=[];
+                    var size=0;
+                    for(let i=0;i<list_album.length;i++){
+                        if(list_album[i].artistId==artist_id){
+                            list_album2[size++]=list_album[i];
+                        }
+                    }
+                    var country2=document.getElementById('country2');
+                    country2.innerHTML="";
+                    for(let i=0;i<list_album2.length;i++){
+                    country2.innerHTML+="<option value='"+list_album2[i].id+"'>"+list_album2[i].name+"</option>";
+                    }
+
                 }
 
 // Check if dropdowns exist on page
@@ -273,6 +290,7 @@ and open the template in the editor.
                     // Change the value on select field
                     selected.textContent = label;
                     dropdown.value = value;
+                    populate();
 
                     // Close the menu
                     // Reset search input value
@@ -313,8 +331,8 @@ and open the template in the editor.
                         }
                     });
                 }
-                
-                 function filterItems2(itemsArr, menu) {
+
+                function filterItems2(itemsArr, menu) {
                     // Get all custom options
                     // Get the value of search input and convert it to all lowercase characters
                     // Get filtered items

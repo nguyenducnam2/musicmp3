@@ -63,6 +63,7 @@ public class SongController {
         model.addAttribute("listgenre", service_gen.findAll());
         model.addAttribute("listartist", service_art.findAll());
         model.addAttribute("listalbum", service_alb.findAll());
+        model.addAttribute("status","Add Song");
         return "admin/song/create";
     }
 
@@ -134,6 +135,7 @@ public class SongController {
         model.addAttribute("listgenre", service_gen.findAll());
         model.addAttribute("listartist", service_art.findAll());
         model.addAttribute("listalbum", service_alb.findAll());
+        model.addAttribute("status","update");
         return "admin/song/create";
     }
 
