@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xlmns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+    <body>
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="iq-card">
+                            <div class="iq-card-header d-flex justify-content-between">
+                                <div class="iq-header-title">
+                                    <h4 class="card-title">MV Lists</h4>
+                                </div>
+                                <div class="iq-search-bar">   
+                                    <form th:action="@{/admin/song/search}" class="searchbox">
+                                        <input type="text" class="text search-input" name="name" placeholder="Search Here..">
+                                        <a class="search-link" href="#"><i class="ri-search-line text-black"></i></a>
+                                        <a class="search-audio" href="#"><i class="las la-microphone text-black"></i></a> 
+                                    </form>
+                                </div>
+                                <div class="iq-card-header-toolbar d-flex align-items-center">
+                                    <a style="display: none;"  th:href="@{/admin/song/create}" class="btn btn-primary">Add New Subt</a>
+                                </div>
+                            </div>
+                            <div class="iq-card-body">
+                                <div class="table-responsive">
+                                    <table class="data-tables table table-striped table-bordered" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 5%;">No</th>
+
+                                                <th style="width: 5%;">Video</th>
+                                                <th style="width: 5%;">Subtitle Languages</th> 
+                                                <th style="width: 5%;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="item:${listsong}">
+                                                <td th:text="${listsong.indexOf(item)+1}"></td>
+                                                <td>  
+                                                        <div>
+                                                            <video style="width: 300px;height:200px;" poster>
+                                                                <source th:src="@{'/webdata/video/'+${item.video}}"/>
+                                                            </video>
+                                                        </div>
+                                                        <div>
+                                                            <p th:text="${item.name}+'-'+${item.artist.name}"></p>
+                                                        </div>   
+                                                </td>
+                                                <td>
+                                                    <p th:text="${service_sub.findBySongId(item.id).size}"></p>
+                                                </td>
+                                                <td>
+                                                    <div class="flex align-items-center list-user-action">
+                                                        <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit Subtitles" th:href="@{/admin/subtitle/details/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

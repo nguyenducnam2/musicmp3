@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import vn.aptech.musicstore.entity.Song;
 import vn.aptech.musicstore.service.SongService;
+import vn.aptech.musicstore.service.SubtitleService;
 
 /**
  *
@@ -26,6 +27,9 @@ public class SongClientController {
     
     @Autowired
     private SongService service;
+    
+    @Autowired
+    private SubtitleService service_sub;
     
     @GetMapping("/{id}")
     public String mediaPlayer(@PathVariable("id")int id,Model model){
@@ -59,6 +63,7 @@ public class SongClientController {
             
         } 
         model.addAttribute("anotherlist", anotherlist);
+        model.addAttribute("listsub", service_sub.findBySongId(id));
         return "client/song/video";
     }
 }

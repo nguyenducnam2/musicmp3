@@ -36,3 +36,11 @@ genre_id int foreign key references genre(id),
 [view] int,
 video varchar(500)
 )
+
+Create table subtitle
+(
+id int primary key identity(1,1),
+name nvarchar(50),
+song_id int foreign key references song(id),
+vtt varchar(500)
+)

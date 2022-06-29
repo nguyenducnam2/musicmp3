@@ -445,7 +445,7 @@ and open the template in the editor.
                                                 <video preload="metadata" id="main-video">
                                                     <source th:src="@{'/webdata/video/'+${song.video}}" type="video/mp4">
                                                     <source th:src="@{'/webdata/video/'+${song.video}}" type="video/mp4">
-                                                    <track id="track1" label="Hello Future" kind="subtitles" th:src="@{/webdata/sub/hellofuture.vtt}" srclang="en">
+                                                    <track th:each="item:${listsub}" id="track1" th:label="${item.name}" kind="subtitles" th:src="@{'/webdata/sub/'+${item.vtt}}" srclang="en">
                                                 </video>
                                                 <p class="caption_text"></p>
                                                 <!-- <div class="thumbnail"></div> -->
