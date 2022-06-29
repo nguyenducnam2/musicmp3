@@ -95,7 +95,7 @@ public class SubtitleController {
     @GetMapping("/delete/{id}")
     public String delete(Model model,@PathVariable("id")int id) throws IOException{
         int songId=service.findById(id).orElseThrow().getSongId();
-        Files.delete(Paths.get(base_url + "\\webdata\\sub" + File.separator + service.findById(id).orElseThrow().getVtt()));
+      //  Files.delete(Paths.get(base_url + "\\webdata\\sub" + File.separator + service.findById(id).orElseThrow().getVtt()));
         service.deleteById(id);
         return "redirect:/admin/subtitle/details/"+String.valueOf(songId);
     }
