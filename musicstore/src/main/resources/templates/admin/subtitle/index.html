@@ -45,8 +45,8 @@ and open the template in the editor.
                                                 <td th:text="${listsong.indexOf(item)+1}"></td>
                                                 <td>  
                                                         <div>
-                                                            <video style="width: 300px;height:200px;" poster>
-                                                                <source th:src="@{'/webdata/video/'+${item.video}}"/>
+                                                            <video style="width: 300px;height:200px;">
+                                                                <source th:src="@{'/webdata/video/'+${item.video}+'#t=3.5'}"/>
                                                             </video>
                                                         </div>
                                                         <div>
