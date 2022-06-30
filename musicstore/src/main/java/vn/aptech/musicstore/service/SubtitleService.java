@@ -8,6 +8,7 @@ package vn.aptech.musicstore.service;
 import java.util.List;
 import java.util.Optional;
 import vn.aptech.musicstore.entity.Subtitle;
+import vn.aptech.musicstore.pagination.Paged;
 
 /**
  *
@@ -19,4 +20,5 @@ public interface SubtitleService {
     Subtitle save(Subtitle subtitle);
     void deleteById(int id);
     List<Subtitle> findBySongId(int songId);
+    Paged<Subtitle> getPage(int pageNumber, int size);
 }

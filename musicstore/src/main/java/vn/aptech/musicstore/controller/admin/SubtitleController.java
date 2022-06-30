@@ -46,7 +46,8 @@ public class SubtitleController {
     private SongService service_song;
 
     @GetMapping
-    public String index(Model model) {
+    public String index(Model model,@RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
         List<Song> listsong = new ArrayList<>();
         for (int i = 0; i < service_song.findAll().size(); i++) {
             try {
@@ -57,6 +58,7 @@ public class SubtitleController {
 
             }
         }
+        model.addAttribute("posts", service_song.getPage(pageNumber, size));
         model.addAttribute("listsong", listsong);
         model.addAttribute("service_sub", service);
         return "admin/subtitle/index";

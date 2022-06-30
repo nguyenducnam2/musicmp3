@@ -41,17 +41,17 @@ and open the template in the editor.
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr th:each="item:${listsong}">
-                                                <td th:text="${listsong.indexOf(item)+1}"></td>
+                                            <tr th:each="item:${posts.page}" th:if="${item.video}!=null">
+                                                <td th:text="${listsong.size-listsong.indexOf(item)}"></td>
                                                 <td>  
-                                                        <div>
-                                                            <video style="width: 300px;height:200px;">
-                                                                <source th:src="@{'/webdata/video/'+${item.video}+'#t=3.5'}"/>
-                                                            </video>
-                                                        </div>
-                                                        <div>
-                                                            <p th:text="${item.name}+'-'+${item.artist.name}"></p>
-                                                        </div>   
+                                                    <div>
+                                                        <video style="width: 300px;height:200px;">
+                                                            <source th:src="@{'/webdata/video/'+${item.video}+'#t=3.5'}"/>
+                                                        </video>
+                                                    </div>
+                                                    <div>
+                                                        <p th:text="${item.name}+'-'+${item.artist.name}"></p>
+                                                    </div>   
                                                 </td>
                                                 <td>
                                                     <p th:text="${service_sub.findBySongId(item.id).size}"></p>
@@ -70,6 +70,27 @@ and open the template in the editor.
                     </div>
                 </div>
             </div>
+            <nav aria-label="Page navigation" class="paging">
+                <ul class="pagination" th:if="${posts.page.totalPages > 1}">
+                    <li class="page-item" th:classappend="${!posts.paging.isPrevEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/admin/subtitle/?pageNumber=' + ${posts.paging.pageNumber - 1}}"
+                           tabindex="-1">Previous</a>
+                    </li>
+                    <th:block th:each="item : ${posts.paging.getItems()}">
+                        <li class="page-item" th:classappend="${item.index == posts.paging.pageNumber? 'active' : ''}"
+                            th:if="${item.pageItemType.name() == 'PAGE'}">
+                            <a class="page-link" th:href="@{'/admin/subtitle/?pageNumber=' + ${item.index}}"
+                               th:text="${item.index}"></a>
+                        </li>
+                        <li class="page-item disabled" th:if="${item.pageItemType.name() == 'DOTS'}">
+                            <a class="page-link" href="#">...</a>
+                        </li>
+                    </th:block>
+                    <li class="page-item" th:classappend="${!posts.paging.isNextEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/admin/subtitle/?pageNumber=' + ${posts.paging.pageNumber + 1}}">Next</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </body>
 </html>
