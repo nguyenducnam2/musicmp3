@@ -19,11 +19,17 @@ and open the template in the editor.
                                 </div>
                             </div>
                             <div class="iq-card-body">
-                                <form th:action=${"/admin/genre/save"} th:object="${genre}" method="post">
+                                <form th:action=${"/admin/genre/save"} th:object="${genre}" method="post" class="needs-validation" novalidate>
                                     <input type="hidden"  th:field="${genre.id}" />
                                     <div class="form-group">
-                                        <label>Genre Name:</label>
-                                        <input type="text" th:field="${genre.name}" class="form-control">
+                                        <label for="validationCustom01">Genre Name:</label>
+                                        <input type="text" th:field="${genre.name}" id="validationCustom01" class="form-control" required>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                        <div class="invalid-feedback">
+                                          Required
+                                        </div>
                                     </div>
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                     <button type="reset" class="btn btn-danger">Reset</button>
