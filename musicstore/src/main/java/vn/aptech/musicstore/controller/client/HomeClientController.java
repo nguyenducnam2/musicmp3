@@ -66,4 +66,15 @@ public class HomeClientController {
         return "client/contactUs/contact";
     }
 
+    
+    @GetMapping(value = "/muzikLogin")
+    public String login(Model model) {
+        return "client/login";
+    }
+
+    @GetMapping(value = "/403")
+    public String error403(Model model) {
+        return "error/403";
+    }
+    
 }
