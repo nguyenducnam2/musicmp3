@@ -52,7 +52,6 @@ and open the template in the editor.
                                                 </td>
                                                 <td th:text="${item.album.name}"></td>
                                                 <td th:text="${item.name}"></td>
-                                                <!--      <td>Edyta Gorniak</td> --> 
                                                 <td th:text="${item.artist.name}"></td>
                                                 <td>   
                                                     <audio  controls loop class="audiplay" nodownload>
@@ -68,8 +67,7 @@ and open the template in the editor.
                                             </tr>
                                             <!-- search case -->
                                             <tr th:if="${name!='null' && item.name.toLowerCase().contains(name.toLowerCase())}" th:each="item:${list.page}">
-                                      
-                                                <td th:with="${count}=${count+1}"><span th:text="${count}"></span></td>
+                                                <td th:text="${service.findAll().size-service.findAll().indexOf(item)}"></td>
                                             <td>
                                                 <img style="width: 200px;height: 150px;" th:src="@{'/webdata/album/'+${item.album.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
                                             </td>
@@ -98,7 +96,7 @@ and open the template in the editor.
                     </div>
                 </div>
             </div>        
-            <nav th:if="${name=='null'}" aria-label="Page navigation" class="paging">
+            <nav aria-label="Page navigation" class="paging">
                 <ul class="pagination" th:if="${list.page.totalPages > 1}">
                     <li class="page-item" th:classappend="${!list.paging.isPrevEnabled()? 'disabled' : ''}">
                         <a class="page-link" th:href="@{'/admin/song/?pageNumber=' + ${list.paging.pageNumber - 1}}"

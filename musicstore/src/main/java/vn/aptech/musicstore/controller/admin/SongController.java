@@ -143,17 +143,10 @@ public class SongController {
 
     @GetMapping("/search")
     public String search(Model model, @RequestParam("name") String name, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
-        List<Song> result=new ArrayList<>();
-        for(Song s:service.getPage(pageNumber, size).getPage().toList()){
-            if(s.getName().contains(name)){
-                result.add(s);
-            }
-        }
-       // service.getPage(pageNumber, size)
+            @RequestParam(value = "size", required = false, defaultValue = "1000") int size) {
         model.addAttribute("list",service.getPage(pageNumber, size));
         model.addAttribute("name", name);
-        model.addAttribute("count", 0);
+        model.addAttribute("service", service);
         return "admin/song/index";
     }
 }

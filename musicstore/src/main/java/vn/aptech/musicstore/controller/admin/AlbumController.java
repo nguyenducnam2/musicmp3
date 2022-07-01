@@ -52,6 +52,7 @@ public class AlbumController {
             @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
         model.addAttribute("list", service.getPage(pageNumber, size));
         model.addAttribute("service", service);
+        model.addAttribute("name", "null");
         return "admin/album/index";
     }
 
@@ -105,8 +106,11 @@ public class AlbumController {
     }
 
     @GetMapping("/search")
-    public String search(Model model, @RequestParam("name") String name) {
-        model.addAttribute("list", service.findByNameCustom(name));
+    public String search(Model model, @RequestParam("name") String name, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "1000") int size) {
+        model.addAttribute("list", service.getPage(pageNumber, size));
+        model.addAttribute("service", service);
+        model.addAttribute("name", name);
         return "admin/album/index";
     }
 

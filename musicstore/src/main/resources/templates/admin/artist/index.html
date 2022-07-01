@@ -44,20 +44,26 @@ and open the template in the editor.
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr th:each="item:${list.page}">
+                                            <tr th:if="${name=='null'}" th:each="item:${list.page}">
                                                 <td th:text="${service.findAll().size-service.findAll().indexOf(item)}"></td>
                                                 <td>
                                                     <img style="width: 160px;height: 150px;" th:src="@{'/webdata/artist/'+${item.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
                                                 </td>
                                                 <td th:text="${item.name}"></td>
-                                                <!--           <td th:text="${item.artist.name}"></td>
-                                                <!--      <td>Edyta Gorniak</td> 
-                                                <td th:text="${item.artist.name}"></td> 
                                                 <td>
-                                                    <audio controls loop>
-                                                        <source th:src="@{'/audio/'+${item.media}}"/>
-                                                    </audio>
-                                                </td> -->
+                                                    <div class="flex align-items-center list-user-action">
+                                                        <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" th:href="@{/admin/artist/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
+                                                        <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/admin/artist/delete/{id}(id=${item.id})}"><i class="ri-delete-bin-line"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <!-- search case -->
+                                            <tr th:if="${name!='null' && item.name.toLowerCase().contains(name.toLowerCase())}" th:each="item:${list.page}">
+                                                <td th:text="${service.findAll().size-service.findAll().indexOf(item)}"></td>
+                                                <td>
+                                                    <img style="width: 160px;height: 150px;" th:src="@{'/webdata/artist/'+${item.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
+                                                </td>
+                                                <td th:text="${item.name}"></td>
                                                 <td>
                                                     <div class="flex align-items-center list-user-action">
                                                         <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" th:href="@{/admin/artist/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
@@ -73,7 +79,7 @@ and open the template in the editor.
                     </div>
                 </div>
             </div>  
-            <nav aria-label="Page navigation" class="paging">
+            <nav th:if="${name=='null'}" aria-label="Page navigation" class="paging">
                 <ul class="pagination" th:if="${list.page.totalPages > 1}">
                     <li class="page-item" th:classappend="${!list.paging.isPrevEnabled()? 'disabled' : ''}">
                         <a class="page-link" th:href="@{'/admin/artist/?pageNumber=' + ${list.paging.pageNumber - 1}}"

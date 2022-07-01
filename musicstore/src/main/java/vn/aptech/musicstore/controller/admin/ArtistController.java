@@ -31,7 +31,7 @@ import vn.aptech.musicstore.service.ArtistService;
 @Controller
 @RequestMapping("/admin/artist")
 public class ArtistController {
-    
+
     @Value("${static.base.url}")
     private String base_url;
 
@@ -43,13 +43,14 @@ public class ArtistController {
             @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
         model.addAttribute("list", service.getPage(pageNumber, size));
         model.addAttribute("service", service);
+        model.addAttribute("name", "null");
         return "admin/artist/index";
     }
 
     @GetMapping("/create")
     public String create(Model model) {
         model.addAttribute("artist", new Artist());
-        model.addAttribute("action","create");
+        model.addAttribute("action", "create");
         return "admin/artist/create";
     }
 
@@ -57,7 +58,7 @@ public class ArtistController {
     public String save(Model model, @ModelAttribute("artist") Artist artist, @RequestParam("file") MultipartFile file) throws IOException {
         if (!(file.isEmpty())) {
             artist.setImage(file.getOriginalFilename());
-            Files.copy(file.getInputStream(), Paths.get(base_url+"\\webdata\\artist" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\artist" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
             service.save(artist);
         } else {
             artist.setImage(service.findById(artist.getId()).orElseThrow().getImage());
@@ -69,19 +70,22 @@ public class ArtistController {
     @GetMapping("/update/{id}")
     public String update(Model model, @PathVariable("id") int id) {
         model.addAttribute("artist", service.findById(id).orElseThrow());
-        model.addAttribute("action","update");
+        model.addAttribute("action", "update");
         return "admin/artist/create";
     }
-    
+
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id")int id){
+    public String delete(@PathVariable("id") int id) {
         service.deleteById(id);
         return "redirect:/admin/artist";
     }
-    
+
     @GetMapping("/search")
-    public String search(Model model,@RequestParam("name")String name){
-        model.addAttribute("list", service.findByNameCustom(name));
+    public String search(Model model, @RequestParam("name") String name, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "1000") int size) {
+        model.addAttribute("list", service.getPage(pageNumber, size));
+        model.addAttribute("service", service);
+        model.addAttribute("name", name);
         return "admin/artist/index";
     }
 }
