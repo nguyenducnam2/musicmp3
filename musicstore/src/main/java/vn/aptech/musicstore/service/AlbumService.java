@@ -7,8 +7,8 @@ package vn.aptech.musicstore.service;
 
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.repository.query.Param;
 import vn.aptech.musicstore.entity.Album;
+import vn.aptech.musicstore.pagination.Paged;
 
 /**
  *
@@ -23,4 +23,5 @@ public interface AlbumService {
     List<Album> findByNameCustom(String name);
     List<Album> findTop12();
     List<Album> findByArtistid(int id);
+    Paged<Album> getPage(int pageNumber, int size);
 }

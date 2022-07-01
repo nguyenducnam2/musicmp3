@@ -15,7 +15,8 @@ and open the template in the editor.
                         <div class="iq-card">
                             <div class="iq-card-header d-flex justify-content-between">
                                 <div class="iq-header-title">
-                                    <h4 class="card-title">Add Genre</h4>
+                                    <h4 th:if="${action=='create'}" class="card-title">Add Genre</h4>
+                                    <h4 th:if="${action=='update'}" class="card-title">Update Genre</h4>
                                 </div>
                             </div>
                             <div class="iq-card-body">

@@ -40,12 +40,12 @@ and open the template in the editor.
                                                 <!--<th style="width: 10%;">Price</th>
                                                 <th style="width: 10%;">Artist</th>
                                                     <th style="width: 30%;">Audio</th> -->
-                                                    <th style="width: 10%;">Action</th> 
+                                                <th style="width: 10%;">Action</th> 
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr th:each="item:${list}">
-                                                <td th:text="${list.indexOf(item)+1}"></td>
+                                            <tr th:each="item:${list.page}">
+                                                <td th:text="${service.findAll().size-service.findAll().indexOf(item)}"></td>
                                                 <td>
                                                     <img style="width: 160px;height: 150px;" th:src="@{'/webdata/album/'+${item.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
                                                 </td>
@@ -72,7 +72,28 @@ and open the template in the editor.
                         </div>
                     </div>
                 </div>
-            </div>        
+            </div> 
+            <nav aria-label="Page navigation" class="paging">
+                <ul class="pagination" th:if="${list.page.totalPages > 1}">
+                    <li class="page-item" th:classappend="${!list.paging.isPrevEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/admin/album/?pageNumber=' + ${list.paging.pageNumber - 1}}"
+                           tabindex="-1">Previous</a>
+                    </li>
+                    <th:block th:each="item : ${list.paging.getItems()}">
+                        <li class="page-item" th:classappend="${item.index == list.paging.pageNumber? 'active' : ''}"
+                            th:if="${item.pageItemType.name() == 'PAGE'}">
+                            <a class="page-link" th:href="@{'/admin/album/?pageNumber=' + ${item.index}}"
+                               th:text="${item.index}"></a>
+                        </li>
+                        <li class="page-item disabled" th:if="${item.pageItemType.name() == 'DOTS'}">
+                            <a class="page-link" href="#">...</a>
+                        </li>
+                    </th:block>
+                    <li class="page-item" th:classappend="${!list.paging.isNextEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/admin/album/?pageNumber=' + ${list.paging.pageNumber + 1}}">Next</a>
+                    </li>
+                </ul>
+            </nav>
         </div>                         
     </body>
 </html>

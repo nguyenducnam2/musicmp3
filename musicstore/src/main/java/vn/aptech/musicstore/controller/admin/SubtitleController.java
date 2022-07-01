@@ -46,7 +46,7 @@ public class SubtitleController {
     private SongService service_song;
 
     @GetMapping
-    public String index(Model model,@RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+    public String index(Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
         List<Song> listsong = new ArrayList<>();
         for (int i = 0; i < service_song.findAll().size(); i++) {
@@ -93,12 +93,12 @@ public class SubtitleController {
         }
         return details(model, subtitle.getSongId());
     }
-    
+
     @GetMapping("/delete/{id}")
-    public String delete(Model model,@PathVariable("id")int id) throws IOException{
-        int songId=service.findById(id).orElseThrow().getSongId();
-      //  Files.delete(Paths.get(base_url + "\\webdata\\sub" + File.separator + service.findById(id).orElseThrow().getVtt()));
+    public String delete(Model model, @PathVariable("id") int id) throws IOException {
+        int songId = service.findById(id).orElseThrow().getSongId();
+        //  Files.delete(Paths.get(base_url + "\\webdata\\sub" + File.separator + service.findById(id).orElseThrow().getVtt()));
         service.deleteById(id);
-        return "redirect:/admin/subtitle/details/"+String.valueOf(songId);
+        return "redirect:/admin/subtitle/details/" + String.valueOf(songId);
     }
 }

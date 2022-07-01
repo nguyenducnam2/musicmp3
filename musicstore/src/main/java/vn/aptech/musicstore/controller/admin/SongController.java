@@ -10,9 +10,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,8 +53,11 @@ public class SongController {
     private AlbumService service_alb;
 
     @GetMapping
-    public String index(Model model) {
-        model.addAttribute("list", service.findAll());
+    public String index(Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+        model.addAttribute("list", service.getPage(pageNumber, size));
+        model.addAttribute("service", service);
+        model.addAttribute("name", "null");
         return "admin/song/index";
     }
 
@@ -63,7 +67,7 @@ public class SongController {
         model.addAttribute("listgenre", service_gen.findAll());
         model.addAttribute("listartist", service_art.findAll());
         model.addAttribute("listalbum", service_alb.findAll());
-        model.addAttribute("status","Add Song");
+        model.addAttribute("status", "Add Song");
         return "admin/song/create";
     }
 
@@ -76,22 +80,20 @@ public class SongController {
             if (!(file2.isEmpty())) {
                 s.setVideo(file2.getOriginalFilename());
                 Files.copy(file2.getInputStream(), Paths.get(base_url + "\\webdata\\video" + File.separator + file2.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
-            }else{
-                try{
-                if(service.existsById(s.getId())==true){
-                s.setVideo(service.findById(s.getId()).orElseThrow().getVideo());
+            } else {
+                try {
+                    if (service.existsById(s.getId()) == true) {
+                        s.setVideo(service.findById(s.getId()).orElseThrow().getVideo());
+                    }
+                } catch (Exception e) {
+
                 }
-                }catch(Exception e){
-                    
-                }        
             }
             s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
             s.setAlbum(service_alb.findById(s.getAlbumId()).orElseThrow());
             s.setView(0);
             s.setArtistId(s.getAlbum().getArtistId());
             s.setArtist(s.getAlbum().getArtist());
-            //   String path_directory = "C:\\Users\\namng\\Documents\\NetBeansProjects\\musicstore\\src\\main\\resources\\static\\audio";
-//        String path_directory = new ClassPathResource("static/image").getFile().getAbsolutePath();
             Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
             service.save(s);
         } else {
@@ -122,8 +124,8 @@ public class SongController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") int id) throws IOException {
         Files.delete(Paths.get(base_url + "\\webdata\\audio" + File.separator + service.findById(id).orElseThrow().getMedia()));
-        if(service.findById(id).orElseThrow().getVideo()!=null){
-        Files.delete(Paths.get(base_url + "\\webdata\\video" + File.separator + service.findById(id).orElseThrow().getVideo()));
+        if (service.findById(id).orElseThrow().getVideo() != null) {
+            Files.delete(Paths.get(base_url + "\\webdata\\video" + File.separator + service.findById(id).orElseThrow().getVideo()));
         }
         service.deleteById(id);
         return "redirect:/admin/song";
@@ -135,13 +137,23 @@ public class SongController {
         model.addAttribute("listgenre", service_gen.findAll());
         model.addAttribute("listartist", service_art.findAll());
         model.addAttribute("listalbum", service_alb.findAll());
-        model.addAttribute("status","update");
+        model.addAttribute("status", "update");
         return "admin/song/create";
     }
 
     @GetMapping("/search")
-    public String search(Model model, @RequestParam("name") String name) {
-        model.addAttribute("list", service.findByName(name));
+    public String search(Model model, @RequestParam("name") String name, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+        List<Song> result=new ArrayList<>();
+        for(Song s:service.getPage(pageNumber, size).getPage().toList()){
+            if(s.getName().contains(name)){
+                result.add(s);
+            }
+        }
+       // service.getPage(pageNumber, size)
+        model.addAttribute("list",service.getPage(pageNumber, size));
+        model.addAttribute("name", name);
+        model.addAttribute("count", 0);
         return "admin/song/index";
     }
 }

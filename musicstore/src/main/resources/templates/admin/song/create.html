@@ -108,21 +108,37 @@ and open the template in the editor.
                                 </div>
                             </div>
                             <div class="iq-card-body">
-                                <form th:action=${"/admin/song/save"} th:object="${song}" method="post" enctype="multipart/form-data">
+                                <form th:action=${"/admin/song/save"} th:object="${song}" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                                     <input type="hidden"  th:field="${song.id}" />
                                     <div class="form-group">
-                                        <label>Song Name:</label>
-                                        <input type="text" th:field="${song.name}" class="form-control">
+                                        <label>Song Name(<span style="color: red;">*</span>):</label>
+                                        <input type="text" th:field="${song.name}" class="form-control" required>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Required
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label>File Audio:(<span style="color: red;">*</span>mp3,mp4):</label>
+                                    <div th:if="${status != 'update'}" class="form-group">
+                                        <label>File Audio(<span style="color: red;">*</span>)(.mp3,.mp4):</label>
                                         <div class="custom-file">
-                                            <input type="file" name="file" class="custom-file-input" id="customFile">
+                                            <input type="file" name="file" class="custom-file-input" id="customFile" required> 
+                                            <label class="custom-file-label" for="customFile">Choose file</label>
+                                            <div class="invalid-feedback">
+                                                Required
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div th:if="${status == 'update'}" class="form-group">
+                                        <label>File Audio:(<span style="color: red;">*</span>)(.mp3,.mp4):</label>
+                                        <div class="custom-file">
+                                            <input type="file" name="file" class="custom-file-input" id="customFile"> 
                                             <label class="custom-file-label" for="customFile">Choose file</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label>File MV:(not required)(<span style="color: red;">*</span>mp4):</label>
+                                        <label>File MV(.mp4):</label>
                                         <div class="custom-file">
                                             <input type="file" name="file2" class="custom-file-input" id="customFile">
                                             <label class="custom-file-label" for="customFile">Choose file</label>
@@ -137,18 +153,18 @@ and open the template in the editor.
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-6">
-                                                <label for="country">Artist:</label>
-                                                <select class="form-control" id="country" name="artistId" th:field="${song.artistId}" data-dropdown>
+                                                <label for="country">Artist(<span style="color: red;">*</span>):</label>
+                                                <select class="form-control" id="country" name="artistId" th:field="${song.artistId}" data-dropdown required>
                                                     <option th:if="${status == 'update'}" th:value="${song.artistId}" th:text="${song.artist.name}"></option>
                                                     <option th:if="${song.artist == null}" th:value=" '' ">Choose Artist</option>
                                                     <option th:each="item:${listartist}" th:if="${item.id!=song.artistId}" th:value="${item.id}" th:text="${item.name}"></option>
                                                 </select>
                                             </div>
                                             <div class="col-6">
-                                                <label>Album:</label>
-                                                <select class="form-control" id="country2" th:field="${song.albumId}">
+                                                <label>Album(<span style="color: red;">*</span>):</label>
+                                                <select class="form-control" id="country2" th:field="${song.albumId}" required>
                                                     <option th:if="${song.album != null}" th:value="${song.albumId}" th:text="${song.album.name}"></option>
-                                                  <!--  <option th:each="item:${listalbum}" th:text="${item.name}+'-'+${item.artist.name}" th:value="${item.id}"></option> -->
+                                                    <!--  <option th:each="item:${listalbum}" th:text="${item.name}+'-'+${item.artist.name}" th:value="${item.id}"></option> -->
                                                 </select>   
                                             </div>
                                         </div>
@@ -157,7 +173,6 @@ and open the template in the editor.
                                         <label>Lyric:</label>
                                         <textarea th:field="${song.lyric}" class="form-control" rows="4"></textarea>
                                     </div>
-
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                     <button type="reset" class="btn btn-danger">Reset</button>
                                 </form>
@@ -173,19 +188,19 @@ and open the template in the editor.
 
                 function populate() {
                     var country = document.getElementById('country');
-                    var artist_id=country.value;
-                    var list_album=/*[[${listalbum}]]*/[];
-                    var list_album2=[];
-                    var size=0;
-                    for(let i=0;i<list_album.length;i++){
-                        if(list_album[i].artistId==artist_id){
-                            list_album2[size++]=list_album[i];
+                    var artist_id = country.value;
+                    var list_album = /*[[${listalbum}]]*/[];
+                    var list_album2 = [];
+                    var size = 0;
+                    for (let i = 0; i < list_album.length; i++) {
+                        if (list_album[i].artistId == artist_id) {
+                            list_album2[size++] = list_album[i];
                         }
                     }
-                    var country2=document.getElementById('country2');
-                    country2.innerHTML="";
-                    for(let i=0;i<list_album2.length;i++){
-                    country2.innerHTML+="<option value='"+list_album2[i].id+"'>"+list_album2[i].name+"</option>";
+                    var country2 = document.getElementById('country2');
+                    country2.innerHTML = "";
+                    for (let i = 0; i < list_album2.length; i++) {
+                        country2.innerHTML += "<option value='" + list_album2[i].id + "'>" + list_album2[i].name + "</option>";
                     }
 
                 }

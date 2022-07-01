@@ -8,8 +8,13 @@ package vn.aptech.musicstore.service.impl;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.aptech.musicstore.entity.Album;
+import vn.aptech.musicstore.pagination.Paged;
+import vn.aptech.musicstore.pagination.Paging;
 import vn.aptech.musicstore.repository.AlbumRepository;
 import vn.aptech.musicstore.service.AlbumService;
 
@@ -61,5 +66,12 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public List<Album> findByArtistid(int id) {
        return repo.findByArtistid(id);
+    }
+
+    @Override
+    public Paged<Album> getPage(int pageNumber, int size) {
+        PageRequest request = PageRequest.of(pageNumber - 1, size, Sort.by(Sort.Direction.DESC,"id"));
+        Page<Album> postPage = repo.findAll(request);
+        return new Paged<>(postPage, Paging.of(postPage.getTotalPages(), pageNumber, size));
     }
 }

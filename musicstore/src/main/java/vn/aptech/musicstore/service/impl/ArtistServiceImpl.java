@@ -8,8 +8,13 @@ package vn.aptech.musicstore.service.impl;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import vn.aptech.musicstore.entity.Artist;
+import vn.aptech.musicstore.pagination.Paged;
+import vn.aptech.musicstore.pagination.Paging;
 import vn.aptech.musicstore.repository.ArtistRepository;
 import vn.aptech.musicstore.service.ArtistService;
 
@@ -51,6 +56,13 @@ public class ArtistServiceImpl implements ArtistService{
     @Override
     public List<Artist> findTop12ByOrderByIdDesc() {
         return repo.findTop12ByOrderByIdDesc();
+    }
+
+    @Override
+    public Paged<Artist> getPage(int pageNumber, int size) {
+        PageRequest request = PageRequest.of(pageNumber - 1, size, Sort.by(Sort.Direction.DESC,"id"));
+        Page<Artist> postPage = repo.findAll(request);
+        return new Paged<>(postPage, Paging.of(postPage.getTotalPages(), pageNumber, size));
     }
     
 }

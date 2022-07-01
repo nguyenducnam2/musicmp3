@@ -39,14 +39,17 @@ public class ArtistController {
     private ArtistService service;
 
     @GetMapping
-    public String index(Model model) {
-        model.addAttribute("list", service.findAll());
+    public String index(Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+        model.addAttribute("list", service.getPage(pageNumber, size));
+        model.addAttribute("service", service);
         return "admin/artist/index";
     }
 
     @GetMapping("/create")
     public String create(Model model) {
         model.addAttribute("artist", new Artist());
+        model.addAttribute("action","create");
         return "admin/artist/create";
     }
 
@@ -54,8 +57,6 @@ public class ArtistController {
     public String save(Model model, @ModelAttribute("artist") Artist artist, @RequestParam("file") MultipartFile file) throws IOException {
         if (!(file.isEmpty())) {
             artist.setImage(file.getOriginalFilename());
-//            String path_directory = "C:\\Users\\namng\\Documents\\NetBeansProjects\\musicstore\\src\\main\\resources\\static\\image";
-//        String path_directory = new ClassPathResource("static/image").getFile().getAbsolutePath();
             Files.copy(file.getInputStream(), Paths.get(base_url+"\\webdata\\artist" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
             service.save(artist);
         } else {
@@ -68,6 +69,7 @@ public class ArtistController {
     @GetMapping("/update/{id}")
     public String update(Model model, @PathVariable("id") int id) {
         model.addAttribute("artist", service.findById(id).orElseThrow());
+        model.addAttribute("action","update");
         return "admin/artist/create";
     }
     

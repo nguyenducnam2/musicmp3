@@ -8,9 +8,11 @@ package vn.aptech.musicstore.controller.client;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import vn.aptech.musicstore.entity.Song;
@@ -24,7 +26,7 @@ import vn.aptech.musicstore.service.SongService;
  */
 @Controller
 //@RequestMapping("/client")
-public class HomeClientController {
+public class HomeClientController implements ErrorController {
     
     @Autowired
     private SongService service_song;
@@ -74,6 +76,12 @@ public class HomeClientController {
 
     @GetMapping(value = "/403")
     public String error403(Model model) {
+        return "error/403";
+    }
+    
+    @GetMapping("/error")
+    public String handleError() {
+        //do something like logging
         return "error/403";
     }
     

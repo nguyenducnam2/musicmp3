@@ -5,6 +5,7 @@
  */
 package vn.aptech.musicstore.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +80,5 @@ public class SongServiceImpl implements SongService{
         Page<Song> postPage = repo.findAll(request);
         return new Paged<>(postPage, Paging.of(postPage.getTotalPages(), pageNumber, size));
     }
-    
-    
     
 }

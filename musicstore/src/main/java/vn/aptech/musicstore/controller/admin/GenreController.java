@@ -37,6 +37,7 @@ public class GenreController {
     @GetMapping("/create")
     public String create(Model model){
         model.addAttribute("genre", new Genre());
+        model.addAttribute("action","create");
         return "admin/genre/create";
     }
     
@@ -55,6 +56,7 @@ public class GenreController {
     @GetMapping("/update/{id}")
     public String update(@PathVariable("id")int id,Model model){
         model.addAttribute("genre", service.findById(id));
+        model.addAttribute("action","update");
         return "admin/genre/create";
     }
     

@@ -12,7 +12,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +34,7 @@ import vn.aptech.musicstore.service.SongService;
 @Controller
 @RequestMapping("/admin/album")
 public class AlbumController {
-    
+
     @Value("${static.base.url}")
     private String base_url;
 
@@ -49,8 +48,10 @@ public class AlbumController {
     private SongService service_song;
 
     @GetMapping
-    public String index(Model model) {
-        model.addAttribute("list", service.findAll());
+    public String index(Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+        model.addAttribute("list", service.getPage(pageNumber, size));
+        model.addAttribute("service", service);
         return "admin/album/index";
     }
 
@@ -72,9 +73,7 @@ public class AlbumController {
     public String save(@ModelAttribute("album") Album album, @RequestParam("file") MultipartFile file) throws IOException {
         album.setImage(file.getOriginalFilename());
         album.setArtist(service_art.findById(album.getArtistId()).orElseThrow());
-//        String path_directory = "C:\\Users\\namng\\Documents\\NetBeansProjects\\musicstore\\src\\main\\resources\\static\\image";
-//        String path_directory = new ClassPathResource("static/image").getFile().getAbsolutePath();
-        Files.copy(file.getInputStream(), Paths.get(base_url+"\\webdata\\album" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\album" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
         service.save(album);
         return "redirect:/admin/album";
     }
@@ -88,9 +87,7 @@ public class AlbumController {
         if (!(file.isEmpty())) {
             album.setImage(file.getOriginalFilename());
             album.setArtist(service_art.findById(album.getArtistId()).orElseThrow());
-            String path_directory = "C:\\Users\\namng\\Documents\\NetBeansProjects\\musicstore\\src\\main\\resources\\static\\image";
-//        String path_directory = new ClassPathResource("static/image").getFile().getAbsolutePath();
-            Files.copy(file.getInputStream(), Paths.get(base_url+"\\webdata\\album" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\album" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
             service.save(album);
         } else {
             album.setImage(service.findById(album.getId()).orElseThrow().getImage());
@@ -106,9 +103,9 @@ public class AlbumController {
         service.deleteById(id);
         return "redirect:/admin/album";
     }
-    
+
     @GetMapping("/search")
-    public String search(Model model,@RequestParam("name")String name){
+    public String search(Model model, @RequestParam("name") String name) {
         model.addAttribute("list", service.findByNameCustom(name));
         return "admin/album/index";
     }
