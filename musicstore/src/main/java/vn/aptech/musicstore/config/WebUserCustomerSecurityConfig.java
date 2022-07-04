@@ -28,10 +28,10 @@
 //public class WebUserCustomerSecurityConfig extends WebSecurityConfigurerAdapter {
 //
 //    @Autowired
-//    private AccountServiceImpl userService;
+//    private AccountServiceImpl accountService;
 //
 //    @Bean
-//    public static PasswordEncoder encodePassword() {
+//    public PasswordEncoder encodePassword() {
 //        return new BCryptPasswordEncoder();
 //    }
 ////    @Bean
@@ -40,7 +40,7 @@
 ////    }
 //
 //    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(userService).passwordEncoder(encodePassword());
+//        auth.userDetailsService(accountService).passwordEncoder(encodePassword());
 //    }
 //
 //    @Override

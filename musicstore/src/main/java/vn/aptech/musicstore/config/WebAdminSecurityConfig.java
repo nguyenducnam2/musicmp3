@@ -83,6 +83,6 @@ public class WebAdminSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web
                 .ignoring()
-                .antMatchers("/","/song/**","/result/**","/admintemplate/**","/webdata/**");
+                .antMatchers("/","/muzikLogin","/song/**","/result/**","/admintemplate/**","/webdata/**");
     }
 }
