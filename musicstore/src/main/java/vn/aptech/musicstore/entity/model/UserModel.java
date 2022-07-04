@@ -4,31 +4,23 @@
  */
 package vn.aptech.musicstore.entity.model;
 
-import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 
 /**
  *
  * @author Administrator
  */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountDto {
+public class UserModel {
 
-    private int id;
-    @NotEmpty
-    @Length(min = 6)
-    private String username;
-
-    @NotEmpty
-    @Length(min = 6)
+    private String firstName;
+    private String lastName;
+    private String email;
     private String password;
-
-    private String fullname;
-    private String role;
-    private Boolean isEdit = false;
+    private String matchingPassword;
 }

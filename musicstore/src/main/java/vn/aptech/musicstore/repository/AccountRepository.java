@@ -18,7 +18,7 @@ import vn.aptech.musicstore.entity.Account;
 
 
 @Repository
-public interface AccountRepository extends JpaRepository<Account, Integer>{
+public interface AccountRepository extends JpaRepository<Account, Long>{
     Optional<Account> findByUsername(String username);
     @Query("SELECT o FROM Account o WHERE o.username=:username")
     Account findRoleByUsername(@Param("username") String username);

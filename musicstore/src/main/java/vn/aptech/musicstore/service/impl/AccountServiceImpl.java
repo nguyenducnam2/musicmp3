@@ -22,7 +22,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import vn.aptech.musicstore.entity.Account;
+import vn.aptech.musicstore.entity.VerificationToken;
+import vn.aptech.musicstore.entity.model.UserModel;
 import vn.aptech.musicstore.repository.AccountRepository;
+import vn.aptech.musicstore.repository.VerificationTokenRepository;
 import vn.aptech.musicstore.service.AccountService;
 
 /**
@@ -39,13 +42,16 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         return new BCryptPasswordEncoder();
     }
 
+    @Autowired
+    private VerificationTokenRepository verificationTokenRepository;
+    
     @Override
     public List<Account> findAll() {
         return repo.findAll();
     }
 
     @Override
-    public Optional<Account> findById(int id) {
+    public Optional<Account> findById(Long id) {
         return repo.findById(id);
     }
 
@@ -78,7 +84,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         repo.deleteById(id);
     }
 
@@ -86,11 +92,11 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Account> acc = repo.findByUsername(username);
         if (acc.isEmpty()) {
-            throw new UsernameNotFoundException("User not found!");
+            throw new UsernameNotFoundException("Account not found!");
         }
 //        Set<GrantedAuthority> authorities = new HashSet<>();
 //        if (acc.isEmpty()) {
-//            throw new UsernameNotFoundException("User not found!");
+//            throw new UsernameNotFoundException("Account not found!");
 //        } else {
 //            GrantedAuthority au = new SimpleGrantedAuthority(acc.get().getRole());
 //            authorities.add(au);
@@ -108,6 +114,25 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     @Override
     public Optional<Account> findByUsername(String name) {
         return repo.findByUsername(name);
+    }
+
+    @Override
+    public Account registerUser(UserModel userModel) {
+          Account acc = new Account();
+        acc.setEmail(userModel.getEmail());
+        acc.setFirstName(userModel.getFirstName());
+        acc.setLastName(userModel.getLastName());
+        acc.setRole("USER");
+        acc.setPassword(encodePassword().encode(userModel.getPassword()));
+        repo.save(acc);
+        return acc;
+    }
+
+    @Override
+    public void saveVerificationTokenForUser(String token, Account acc) {
+         VerificationToken verificationToken = new VerificationToken(token,acc);
+        
+        verificationTokenRepository.save(verificationToken);
     }
 
 }

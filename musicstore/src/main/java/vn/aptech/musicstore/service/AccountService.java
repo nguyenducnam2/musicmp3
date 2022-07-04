@@ -7,6 +7,7 @@ package vn.aptech.musicstore.service;
 import java.util.List;
 import java.util.Optional;
 import vn.aptech.musicstore.entity.Account;
+import vn.aptech.musicstore.entity.model.UserModel;
 
 /**
  *
@@ -16,11 +17,15 @@ public interface AccountService {
 
     List<Account> findAll();
 
-    Optional<Account> findById(int id);
+    Optional<Account> findById(Long id);
 
     Optional<Account> findByUsername(String name);
 
     Account save(Account account);
 
-    void deleteById(int id);
+    void deleteById(Long id);
+    
+    public Account registerUser(UserModel userModel);
+
+    public void saveVerificationTokenForUser(String token, Account acc);
 }

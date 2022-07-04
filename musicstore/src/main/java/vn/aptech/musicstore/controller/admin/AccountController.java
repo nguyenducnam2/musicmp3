@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import vn.aptech.musicstore.entity.Account;
-import vn.aptech.musicstore.entity.model.AccountDto;
+import vn.aptech.musicstore.entity.model.AccountModel;
 import vn.aptech.musicstore.service.AccountService;
 
 /**
@@ -42,14 +42,14 @@ public class AccountController {
     }
 
     @GetMapping("/update/{id}")
-    public String update(@PathVariable("id") int id, Model model) {
+    public String update(@PathVariable("id") Long id, Model model) {
         model.addAttribute("account", serviceAccount.findById(id));
         return "admin/account/update";
     }
     @GetMapping("/updateProfile/{username}")
     public String updateProfile(@PathVariable("username") String username, Model model) {
         Optional<Account> a = serviceAccount.findByUsername(username);
-        AccountDto dto = new AccountDto();
+        AccountModel dto = new AccountModel();
         
         if(a.isPresent()){
             Account entity = a.get();
@@ -82,7 +82,7 @@ public class AccountController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") int id) {
+    public String delete(@PathVariable("id") Long id) {
         serviceAccount.deleteById(id);
         return "redirect:/admin/account";
     }

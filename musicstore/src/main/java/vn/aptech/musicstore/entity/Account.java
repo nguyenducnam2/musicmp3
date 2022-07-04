@@ -35,11 +35,17 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String username;
     private String password;
     private String fullname;
     private String role;
+    
+    private String firstName;
+    private String lastName;
+    private String email;
+    private boolean enabled = false;
+    private boolean isEdited = false;
 
     
    

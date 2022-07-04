@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import static org.springframework.security.authorization.AuthorityAuthorizationManager.hasRole;
+//import static org.springframework.security.authorization.AuthorityAuthorizationManager.hasRole;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -23,9 +23,9 @@ import vn.aptech.musicstore.service.impl.AccountServiceImpl;
  *
  * @author Thanh Sang
  */
+@EnableWebSecurity
 @Configuration
 @Order(1)
-@EnableWebSecurity
 public class WebAdminSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired

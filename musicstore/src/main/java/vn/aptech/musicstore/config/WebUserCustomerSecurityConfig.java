@@ -9,7 +9,6 @@
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
 //import org.springframework.core.annotation.Order;
-//import static org.springframework.security.authorization.AuthorityAuthorizationManager.hasRole;
 //import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 //import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 //import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -23,16 +22,16 @@
 // *
 // * @author Thanh Sang
 // */
+//@EnableWebSecurity
 //@Configuration
 //@Order(2)
-//@EnableWebSecurity
 //public class WebUserCustomerSecurityConfig extends WebSecurityConfigurerAdapter {
 //
 //    @Autowired
-//    private UserServiceImpl userService;
+//    private AccountServiceImpl userService;
 //
 //    @Bean
-//    public PasswordEncoder encodePassword() {
+//    public static PasswordEncoder encodePassword() {
 //        return new BCryptPasswordEncoder();
 //    }
 ////    @Bean
@@ -61,7 +60,7 @@
 //
 //        http.authorizeHttpRequests()
 //                .and().formLogin()
-//                .loginProcessingUrl("/j_spring_security_check")//submit url
+//                .loginProcessingUrl("/j_spring_security_check_muziklogin")//submit url
 //                .loginPage("/muziklogin")
 //                .usernameParameter("username")
 //                .passwordParameter("password")
