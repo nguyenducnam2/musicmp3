@@ -7,6 +7,7 @@ package vn.aptech.musicstore.service;
 import java.util.List;
 import java.util.Optional;
 import vn.aptech.musicstore.entity.Account;
+import vn.aptech.musicstore.entity.VerificationToken;
 import vn.aptech.musicstore.entity.model.UserModel;
 
 /**
@@ -25,7 +26,23 @@ public interface AccountService {
 
     void deleteById(Long id);
     
-    public Account registerUser(UserModel userModel);
+    Account registerUser(UserModel userModel);
 
-    public void saveVerificationTokenForUser(String token, Account acc);
+    void saveVerificationTokenForUser(String token, Account acc);
+
+    String validateVerificationToken(String token);
+
+    VerificationToken generateNewVerificationToken(String oldToken);
+
+    Account findAccountByEmail(String email);
+
+    void createPasswordResetTokenForUser(Account user, String token);
+
+    String validatePasswordResetToken(String token);
+
+    Optional<Account> getAccountByPasswordResetToken(String token);
+
+    void changePassword(Account get, String newPassword);
+
+    boolean checkIfValidOldPassword(Account user, String oldPassword);
 }

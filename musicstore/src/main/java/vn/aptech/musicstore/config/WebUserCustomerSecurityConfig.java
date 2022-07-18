@@ -27,6 +27,15 @@ import vn.aptech.musicstore.service.impl.AccountServiceImpl;
 @Order(2)
 public class WebUserCustomerSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private static final String[] WHITE_LIST_URLS = {
+        "/",
+        "/register",
+        "/verifyRegistration*",
+        "/resendVerifyToken*",
+        "/muziklogin",
+        "logout"
+    };
+
     @Autowired
     private AccountServiceImpl accountService;
 
@@ -51,7 +60,9 @@ public class WebUserCustomerSecurityConfig extends WebSecurityConfigurerAdapter 
         http.csrf().disable();
 
         http.authorizeHttpRequests()
-                .antMatchers("/muziklogin", "logout").permitAll();
+                .antMatchers(WHITE_LIST_URLS).permitAll()
+                .antMatchers("/api/**").authenticated();
+//                .antMatchers("/muziklogin", "logout").permitAll();
 //        http.authorizeHttpRequests()
 //                .antMatchers("/account/**").hasAnyRole("ADMIN","MODERATOR")
 //                .antMatchers("/**").hasAnyRole("ADMIN", "USER","MODERATOR")
@@ -82,6 +93,6 @@ public class WebUserCustomerSecurityConfig extends WebSecurityConfigurerAdapter 
     public void configure(WebSecurity web) throws Exception {
         web
                 .ignoring()
-                .antMatchers("/","/song/**","/result/**","admintemplate/**","/webdata/**");
+                .antMatchers("/", "/song/**", "/result/**", "admintemplate/**", "/webdata/**");
     }
 }

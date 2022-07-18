@@ -6,15 +6,15 @@ package vn.aptech.musicstore.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import vn.aptech.musicstore.entity.VerificationToken;
+import vn.aptech.musicstore.entity.PasswordResetToken;
 
 /**
  *
- * @author Administrator
+ * @author Thanh Sang
  */
 @Repository
-public interface VerificationTokenRepository extends JpaRepository<VerificationToken, Long>{
+public interface PasswordResetTokenRepository extends JpaRepository<PasswordResetToken, Long>{
 
-    public VerificationToken findByToken(String token);
+    public PasswordResetToken findByToken(String token);
     
 }

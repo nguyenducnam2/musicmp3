@@ -4,16 +4,11 @@
  */
 package vn.aptech.musicstore.service.impl;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import org.springframework.beans.BeanUtils;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,9 +17,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import vn.aptech.musicstore.entity.Account;
+import vn.aptech.musicstore.entity.PasswordResetToken;
 import vn.aptech.musicstore.entity.VerificationToken;
 import vn.aptech.musicstore.entity.model.UserModel;
 import vn.aptech.musicstore.repository.AccountRepository;
+import vn.aptech.musicstore.repository.PasswordResetTokenRepository;
 import vn.aptech.musicstore.repository.VerificationTokenRepository;
 import vn.aptech.musicstore.service.AccountService;
 
@@ -36,7 +33,7 @@ import vn.aptech.musicstore.service.AccountService;
 public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Autowired
-    private AccountRepository repo;
+    private AccountRepository repoAccount;
 
     public PasswordEncoder encodePassword() {
         return new BCryptPasswordEncoder();
@@ -45,30 +42,32 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     @Autowired
     private VerificationTokenRepository verificationTokenRepository;
     
+    @Autowired
+    private PasswordResetTokenRepository passwordResetTokenRepository;
     @Override
     public List<Account> findAll() {
-        return repo.findAll();
+        return repoAccount.findAll();
     }
 
     @Override
     public Optional<Account> findById(Long id) {
-        return repo.findById(id);
+        return repoAccount.findById(id);
     }
 
     @Override
     public Account save(Account account) {
-        Optional<Account> accExist = repo.findByUsername(account.getUsername());
+        Optional<Account> accExist = repoAccount.findByUsername(account.getUsername());
 
 //        if (acc.isEmpty()) {
 //            account.setPassword(encodePassword().encode(account.getPassword()));
-//        return repo.save(account);
+//        return repoAccount.save(account);
 //        } else {
 //            Account entity = acc.get();
 //            entity.setUsername(account.getUsername());
 //            entity.setPassword(account.getPassword());
 //            entity.setFullname(account.getFullname());
 //            entity.setRole(account.getRole());
-//        return repo.save(entity);
+//        return repoAccount.save(entity);
 //        }
         if (accExist.isPresent()) {
             if (StringUtils.isEmpty(account.getPassword())) {
@@ -80,17 +79,17 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
             account.setPassword(encodePassword().encode(account.getPassword()));
 
         }
-        return repo.save(account);
+        return repoAccount.save(account);
     }
 
     @Override
     public void deleteById(Long id) {
-        repo.deleteById(id);
+        repoAccount.deleteById(id);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Account> acc = repo.findByUsername(username);
+        Optional<Account> acc = repoAccount.findByUsername(username);
         if (acc.isEmpty()) {
             throw new UsernameNotFoundException("Account not found!");
         }
@@ -113,7 +112,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     public Optional<Account> findByUsername(String name) {
-        return repo.findByUsername(name);
+        return repoAccount.findByUsername(name);
     }
 
     @Override
@@ -124,7 +123,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         acc.setLastName(userModel.getLastName());
         acc.setRole("USER");
         acc.setPassword(encodePassword().encode(userModel.getPassword()));
-        repo.save(acc);
+        repoAccount.save(acc);
         return acc;
     }
 
@@ -133,6 +132,87 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
          VerificationToken verificationToken = new VerificationToken(token,acc);
         
         verificationTokenRepository.save(verificationToken);
+    }
+
+    @Override
+    public String validateVerificationToken(String token) {
+         VerificationToken verificationToken
+                = verificationTokenRepository.findByToken(token);
+
+        if (verificationToken == null) {
+            return "invalid";
+        }
+
+        Account user = verificationToken.getAcc();
+        Calendar cal = Calendar.getInstance();
+
+        if ((verificationToken.getExpirationTime().getTime()
+                - cal.getTime().getTime()) <= 0) {
+            verificationTokenRepository.delete(verificationToken);
+            return "expired";
+        }
+
+        user.setEnabled(true);
+        repoAccount.save(user);
+        return "valid";
+
+    }
+
+    @Override
+    public VerificationToken generateNewVerificationToken(String oldToken) {
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(oldToken);
+        verificationToken.setToken(UUID.randomUUID().toString());
+        verificationTokenRepository.save(verificationToken);
+        return verificationToken;
+    }
+
+    @Override
+    public Account findAccountByEmail(String email) {
+        return repoAccount.findByEmail(email);
+    }
+
+    @Override
+    public void createPasswordResetTokenForUser(Account user, String token) {
+        PasswordResetToken passwordResetToken = new PasswordResetToken(user, token);
+        passwordResetTokenRepository.save(passwordResetToken);
+    }
+
+    @Override
+    public String validatePasswordResetToken(String token) {
+         PasswordResetToken passwordResetToken
+                = passwordResetTokenRepository.findByToken(token);
+
+        if (passwordResetToken == null) {
+            return "invalid";
+        }
+
+        Account user = passwordResetToken.getUser();
+        Calendar cal = Calendar.getInstance();
+
+        if ((passwordResetToken.getExpirationTime().getTime()
+                - cal.getTime().getTime()) <= 0) {
+            passwordResetTokenRepository.delete(passwordResetToken);
+            return "expired";
+        }
+
+        return "valid";
+
+    }
+
+    @Override
+    public Optional<Account> getAccountByPasswordResetToken(String token) {
+        return Optional.ofNullable(passwordResetTokenRepository.findByToken(token).getUser()); 
+    }
+
+    @Override
+    public void changePassword(Account user, String newPassword) {
+        user.setPassword(encodePassword().encode(newPassword));
+        repoAccount.save(user);
+    }
+
+    @Override
+    public boolean checkIfValidOldPassword(Account user, String oldPassword) {
+        return encodePassword().matches(oldPassword, user.getPassword());
     }
 
 }

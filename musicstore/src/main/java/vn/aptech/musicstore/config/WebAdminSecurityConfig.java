@@ -52,7 +52,7 @@ public class WebAdminSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         http.authorizeHttpRequests()
-                .antMatchers("/admin/login", "logout").permitAll();
+                .antMatchers("/admin/login", "logout","/").permitAll();
         http.authorizeHttpRequests()
                 .antMatchers("/admin/account/**").hasAnyRole("ADMIN","MODERATOR")
                 .antMatchers("/admin/**").hasAnyRole("ADMIN", "USER","MODERATOR")
