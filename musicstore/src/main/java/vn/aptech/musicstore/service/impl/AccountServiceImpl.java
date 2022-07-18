@@ -119,6 +119,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     public Account registerUser(UserModel userModel) {
           Account acc = new Account();
         acc.setEmail(userModel.getEmail());
+        acc.setUsername(userModel.getEmail());
         acc.setFirstName(userModel.getFirstName());
         acc.setLastName(userModel.getLastName());
         acc.setRole("USER");

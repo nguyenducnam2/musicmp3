@@ -11,6 +11,9 @@
                     <div class="logo-title">
                         <span class="text-primary text-uppercase">Music</span> 
                     </div>
+                    <div sec:authorize="isAuthenticated()" class="logo-title">
+                        <span th:inline="text" class="text-primary text-uppercase">Welcome [[${#request.userPrincipal.principal.getFullName}]]</span> 
+                    </div>
                 </a>
                 <div class="iq-menu-bt-sidebar">
                     <div class="iq-menu-bt align-self-center">

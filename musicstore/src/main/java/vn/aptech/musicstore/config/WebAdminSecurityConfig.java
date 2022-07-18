@@ -49,19 +49,19 @@ public class WebAdminSecurityConfig extends WebSecurityConfigurerAdapter {
 
 //            http.authorizeRequests().anyRequest().authenticated().and().formLogin().loginPage("/admin/login").permitAll().defaultSuccessUrl("/admin").loginProcessingUrl("/j_spring_security_check");
 //        super.configure(http); //To change body of generated methods, choose Tools | Templates.
-        http.csrf().disable();
+        http.cors().and().csrf().disable();
 
         http.authorizeHttpRequests()
-                .antMatchers("/admin/login", "logout","/").permitAll();
+                .antMatchers("/admin/login", "logout","/","/contact").permitAll();
         http.authorizeHttpRequests()
                 .antMatchers("/admin/account/**").hasAnyRole("ADMIN","MODERATOR")
-                .antMatchers("/admin/**").hasAnyRole("ADMIN", "USER","MODERATOR")
+                .antMatchers("/admin/**").hasAnyRole("ADMIN", "EDITOR","MODERATOR")
                 .anyRequest()
                 .authenticated();
 
         http.authorizeHttpRequests()
                 .and().formLogin()
-                .loginProcessingUrl("/j_spring_security_check")//submit url
+                .loginProcessingUrl("/admin-login-process")//submit url
                 .loginPage("/admin/login")
                 .usernameParameter("username")
                 .passwordParameter("password")

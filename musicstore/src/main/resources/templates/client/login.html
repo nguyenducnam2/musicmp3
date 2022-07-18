@@ -45,7 +45,7 @@
                             <div th:if="${param.logout}" class="alert-heading">
                                 <h4>You have been logged out.</h4>
                             </div>
-                           <form class="mt-4" th:action="@{/j_spring_security_check_muziklogin}" method="post">
+                           <form class="mt-4" th:action="@{/user-login-process}" method="post">
                               <div class="form-group">
                                  <label for="exampleInputEmail2">Username</label>
                                  <input class="form-control mb-0" name="username" id="exampleInputEmail2" placeholder="Enter username" required>

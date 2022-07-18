@@ -43,10 +43,7 @@ public class WebUserCustomerSecurityConfig extends WebSecurityConfigurerAdapter 
     public PasswordEncoder encodePassword() {
         return new BCryptPasswordEncoder();
     }
-//    @Bean
-//    public BCryptPasswordEncoder passwordEncoder(){
-//        return new BCryptPasswordEncoder();
-//    }
+
 
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(accountService).passwordEncoder(encodePassword());
@@ -55,23 +52,20 @@ public class WebUserCustomerSecurityConfig extends WebSecurityConfigurerAdapter 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
 
-//           http.authorizeRequests().anyRequest().authenticated().and().formLogin().loginPage("/muziklogin").permitAll().defaultSuccessUrl("/").loginProcessingUrl("/j_spring_security_check");
-//        super.configure(http); //To change body of generated methods, choose Tools | Templates.
-        http.csrf().disable();
+        http.cors().and().csrf().disable();
 
         http.authorizeHttpRequests()
                 .antMatchers(WHITE_LIST_URLS).permitAll()
-                .antMatchers("/api/**").authenticated();
-//                .antMatchers("/muziklogin", "logout").permitAll();
-//        http.authorizeHttpRequests()
-//                .antMatchers("/account/**").hasAnyRole("ADMIN","MODERATOR")
-//                .antMatchers("/**").hasAnyRole("ADMIN", "USER","MODERATOR")
-//                .anyRequest()
-//                .authenticated();
+                .antMatchers("/api/**").authenticated()
+                .antMatchers("/user/**").hasAnyRole("USER")
+                .anyRequest()
+                .authenticated();
+                
+
 
         http.authorizeHttpRequests()
                 .and().formLogin()
-                .loginProcessingUrl("/j_spring_security_check_muziklogin")//submit url
+                .loginProcessingUrl("/user-login-process")//submit url
                 .loginPage("/muziklogin")
                 .usernameParameter("username")
                 .passwordParameter("password")
@@ -89,10 +83,5 @@ public class WebUserCustomerSecurityConfig extends WebSecurityConfigurerAdapter 
 //                .tokenValiditySeconds(24*60*60); //1 ngay
     }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web
-                .ignoring()
-                .antMatchers("/", "/song/**", "/result/**", "admintemplate/**", "/webdata/**");
-    }
+  
 }
