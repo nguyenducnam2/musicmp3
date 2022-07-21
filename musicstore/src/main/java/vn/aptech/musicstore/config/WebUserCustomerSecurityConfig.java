@@ -32,7 +32,7 @@ public class WebUserCustomerSecurityConfig extends WebSecurityConfigurerAdapter 
         "/register",
         "/verifyRegistration*",
         "/resendVerifyToken*",
-        "/muziklogin",
+        "/login",
         "logout"
     };
 
@@ -66,14 +66,14 @@ public class WebUserCustomerSecurityConfig extends WebSecurityConfigurerAdapter 
         http.authorizeHttpRequests()
                 .and().formLogin()
                 .loginProcessingUrl("/user-login-process")//submit url
-                .loginPage("/muziklogin")
+                .loginPage("/login")
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/", true)
-                .failureUrl("/muziklogin?error=true")
+                .failureUrl("/login?error=true")
                 //cau hinh Logout Page
                 .and().logout().logoutUrl("/logout")
-                .logoutSuccessUrl("/muziklogin?logout=true")
+                .logoutSuccessUrl("/login?logout=true")
                 .and()
                 .exceptionHandling()
                 .accessDeniedPage("/403");

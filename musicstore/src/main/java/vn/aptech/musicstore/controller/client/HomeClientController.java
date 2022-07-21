@@ -69,7 +69,7 @@ public class HomeClientController implements ErrorController {
     }
 
     
-    @GetMapping(value = "/muzikLogin")
+    @GetMapping(value = "/login")
     public String login(Model model) {
         return "client/login";
     }

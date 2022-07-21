@@ -7,6 +7,8 @@ package vn.aptech.musicstore.controller.admin;
 
 import java.security.Principal;
 import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,9 +42,14 @@ public class HomeController {
 //    }
 //    
     @GetMapping
-    public String index(Principal principal, Model model) {
+    public String index(Principal principal, Model model, HttpServletRequest request) {
         String username = principal.getName();
         Optional<Account> user = serviceAccount.findByUsername(username);
+        
+        HttpSession session =request.getSession();
+        session.setAttribute("user", user.get());
+//        System.out.println("session: " + session);
+//        session  = request.setAttribute("user", user.get().getId());
         model.addAttribute("user",user.get());
         return "admin/index";
     }

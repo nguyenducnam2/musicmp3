@@ -13,6 +13,14 @@ and open the template in the editor.
 
         <div layout:fragment="content" id="content-page" class="content-page">
             <span style="margin-left: 30rem" th:object="${user}" th:inline="text" class="text-center text-justify text-black text-uppercase">Welcome [[${user.fullname}]]</span> 
+            <div th:object="${session.user}">
+                <p>Name: <span th:text="*{firstName}">Sebastian</span>.</p>
+                <p>Surname: <span th:text="*{lastName}">Pepper</span>.</p>
+                <p>Id <span th:text="*{id}">Id</span>.</p>
+                <p>Username <span th:text="*{username}">Id</span>.</p>
+                <p>Email <span th:text="*{email}">Id</span>.</p>
+            </div>
+
         </div>
     </body>
 </html>
