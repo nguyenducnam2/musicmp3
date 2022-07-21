@@ -50,18 +50,22 @@
                                     <a class="search-audio" href="#"><i class="las la-microphone text-black"></i></a>
                                 </form>
                             </li>
-                            <!--                     <li class="nav-item nav-icon">
-                                                    <a href="#" class="search-toggle iq-waves-effect text-black rounded">
-                                                       <i class="las la-cog"></i>
-                                                       <span class=" dots"></span>
-                                                    </a>
-                                                 </li>-->
-                            <li class="mt-4 mb-0 p-0">
-                                <a th:href="@{/login}" class="btn-danger iq-waves-effect text-black rounded">
-                                    <span class="">Login</span>
-                                </a>
-                            </li>
-                       
+
+                            <div th:if="${session.user} == null">
+                                <li class="mt-4 mb-0 p-0">
+                                    <a th:href="@{/login}" class="btn-outline-danger iq-waves-effect text-black rounded">
+                                        <span class="">Login</span>
+                                    </a>
+                                </li>
+                            </div>
+                            <div th:if="${session.user} != null">
+                                <li class="mt-4 mb-0 p-0">
+                                    <a th:href="@{/admin/logout}" class="btn-outline-danger iq-waves-effect text-black rounded">
+                                        <span class="">Logout</span>
+                                    </a>
+                                </li>
+                            </div>
+
 
                             <!--                     <li class="nav-item nav-icon">
                                                     <a href="#" class="search-toggle iq-waves-effect text-black rounded">
