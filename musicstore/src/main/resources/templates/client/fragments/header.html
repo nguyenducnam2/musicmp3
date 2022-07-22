@@ -59,12 +59,40 @@
                                 </li>
                             </div>
                             <div th:if="${session.user} != null">
+
+
                                 <li class="mt-4 mb-0 p-0">
-                                    <a th:href="@{/admin/logout}" class="btn-outline-danger iq-waves-effect text-black rounded">
-                                        <span class="">Logout</span>
+                                    <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
+                                        <img th:src="@{/admintemplate/images/user/01.jpg}" class="img-fluid rounded-circle" alt="user">
                                     </a>
+                                    <div class="iq-sub-dropdown iq-user-dropdown">
+                                        <div class="iq-card shadow-none m-0">
+                                            <div th:object="${session.user}"  class="iq-card-body p-0 ">
+                                                <div class="bg-primary p-3"> 
+                                                    <h5 class="mb-0 text-white line-height">Hello <span th:text="*{lastName}">Pepper</span></h5>
+                                                </div>
+                                                <a th:href="@{/admin/account/updateProfile/{username}(username=*{username} )}"  class="iq-sub-card iq-bg-primary-hover">
+                                                    <div class="media align-items-center">
+                                                        <div class="rounded iq-card-icon iq-bg-primary">
+                                                            <i class="ri-file-user-line"></i>
+                                                        </div>
+                                                        <div class="media-body ml-3">
+                                                            <h6 class="mb-0 ">My Profile</h6>
+                                                            <p class="mb-0 font-size-12">View personal profile details.</p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <div class="d-inline-block w-100 text-center p-3">
+                                                    <a class="bg-primary iq-sign-btn" th:href="@{/admin/logout}" role="button">Sign out<i class="ri-login-box-line ml-2"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </li>
+
                             </div>
+
 
 
                             <!--                     <li class="nav-item nav-icon">

@@ -65,7 +65,7 @@ public class WebAdminSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/admin/login")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/admin", true)
+                .defaultSuccessUrl("/", true)
                 .failureUrl("/admin/login?error=true")
                 //cau hinh Logout Page
                 .and().logout().logoutUrl("/admin/logout")
