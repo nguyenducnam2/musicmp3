@@ -25,7 +25,7 @@ import vn.aptech.musicstore.service.AccountService;
  * @author Administrator
  */
 @Controller
-@RequestMapping("/user/**")
+@RequestMapping("/user")
 public class UserController {
     
      @Autowired
@@ -41,4 +41,10 @@ public class UserController {
             model.addAttribute("user", user.get());
         return "client/user/index";
     }
+    
+     @GetMapping("/profile")
+    public String profile() {
+        return "client/user/profile";
+    }
+    
 }

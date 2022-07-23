@@ -94,7 +94,9 @@
                                                     </a>
                                                 </div>
                                                 <div th:if="${session.user.role == 'ROLE_USER'}">
-                                                    <a href="#"  class="iq-sub-card iq-bg-primary-hover">
+                                                    <!--<a href="#"  class="iq-sub-card iq-bg-primary-hover">-->
+                                                    <!--<a th:href="@{/admin/account/updateProfile/{username}(username=*{username} )}"  class="iq-sub-card iq-bg-primary-hover">-->
+                                                    <a th:href="@{/user/profile}"  class="iq-sub-card iq-bg-primary-hover">
                                                         <div class="media align-items-center">
                                                             <div class="rounded iq-card-icon iq-bg-primary">
                                                                 <i class="ri-file-user-line"></i>
