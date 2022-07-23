@@ -59,6 +59,15 @@
                                 </li>
                             </div>
                             <div th:if="${session.user} != null">
+                                <li class="nav-item nav-icon mt-4">
+                                    <div th:if="${session.user.role == 'ROLE_ADMIN' || session.user.role == 'ROLE_MODERATOR' || session.user.role == 'ROLE_EDITOR'}">
+                                        <a th:href="@{/admin}" class="search-toggle iq-waves-effect text-black rounded">
+                                            <i class="las la-cog"></i>
+                                            <span class=" dots"></span>
+                                        </a>
+                                    </div>
+                                </li>
+
 
 
                                 <li class="mt-4 mb-0 p-0">
@@ -83,7 +92,7 @@
                                                     </div>
                                                 </a>
                                                 <div class="d-inline-block w-100 text-center p-3">
-                                                    <a class="bg-primary iq-sign-btn" th:href="@{/admin/logout}" role="button">Sign out<i class="ri-login-box-line ml-2"></i></a>
+                                                    <a class="bg-primary iq-sign-btn" th:href="@{/logout}" role="button">Sign out<i class="ri-login-box-line ml-2"></i></a>
                                                 </div>
                                             </div>
                                         </div>

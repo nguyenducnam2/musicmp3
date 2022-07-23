@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+    <body>
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="iq-card">
+                            <div class="iq-card-header d-flex justify-content-between">
+                                <div class="iq-header-title">
+                                    <h4 class="card-title">Profile Account</h4>
+                                </div>
+                            </div>
+                            <div class="iq-card-body">
+                                <form th:action=${"/user/processUpdate"} th:object="${user}" method="post">
+
+                                    <input type="hidden"  th:field="${user.id}" />
+                                    <!--<input type="hidden"  th:field="${user.password}" />-->
+                                    <div class="form-group">
+                                        <label>Username:</label>
+                                        <input type="text" th:field="${user.username}" class="form-control" readonly />
+                                    </div>
+                                     <div class="form-group">
+                                        <label>Password:</label>
+                                        <input type="password" th:field="${user.password}" class="form-control"/>
+                                    </div>
+                                    <div>
+                                        <label>Full name:</label>
+                                        <input type="text" th:field="${user.fullname}" class="form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Role</label>
+                                        <input type="text"  th:field="${user.role}" class="form-control" readonly /> 
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -28,7 +28,6 @@ import vn.aptech.musicstore.service.AccountService;
  */
 @RestController
 @Slf4j
-
 public class RegistrationController {
 
     @Autowired
