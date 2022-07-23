@@ -61,7 +61,7 @@
                             <div th:if="${session.user} != null">
                                 <li class="nav-item nav-icon mt-4">
                                     <div th:if="${session.user.role == 'ROLE_ADMIN' || session.user.role == 'ROLE_MODERATOR' || session.user.role == 'ROLE_EDITOR'}">
-                                        <a th:href="@{/admin}" class="search-toggle iq-waves-effect text-black rounded">
+                                        <a th:href="@{/admin}" class="ml-lg-5 font-size-32 text-black rounded">
                                             <i class="las la-cog"></i>
                                             <span class=" dots"></span>
                                         </a>
@@ -78,19 +78,34 @@
                                         <div class="iq-card shadow-none m-0">
                                             <div th:object="${session.user}"  class="iq-card-body p-0 ">
                                                 <div class="bg-primary p-3"> 
-                                                    <h5 class="mb-0 text-white line-height">Hello <span th:text="*{lastName}">Pepper</span></h5>
+                                                    <h5 class="mb-0 text-white line-height">Hello <span th:text="*{lastName}">Name</span></h5>
                                                 </div>
-                                                <a th:href="@{/admin/account/updateProfile/{username}(username=*{username} )}"  class="iq-sub-card iq-bg-primary-hover">
-                                                    <div class="media align-items-center">
-                                                        <div class="rounded iq-card-icon iq-bg-primary">
-                                                            <i class="ri-file-user-line"></i>
+                                                <div th:if="${session.user.role == 'ROLE_ADMIN' || session.user.role == 'ROLE_MODERATOR' || session.user.role == 'ROLE_EDITOR'}">
+                                                    <a th:href="@{/admin/account/updateProfile/{username}(username=*{username} )}"  class="iq-sub-card iq-bg-primary-hover">
+                                                        <div class="media align-items-center">
+                                                            <div class="rounded iq-card-icon iq-bg-primary">
+                                                                <i class="ri-file-user-line"></i>
+                                                            </div>
+                                                            <div class="media-body ml-3">
+                                                                <h6 class="mb-0 ">My Profile</h6>
+                                                                <p class="mb-0 font-size-12">View personal profile details.</p>
+                                                            </div>
                                                         </div>
-                                                        <div class="media-body ml-3">
-                                                            <h6 class="mb-0 ">My Profile</h6>
-                                                            <p class="mb-0 font-size-12">View personal profile details.</p>
+                                                    </a>
+                                                </div>
+                                                <div th:if="${session.user.role == 'ROLE_USER'}">
+                                                    <a href="#"  class="iq-sub-card iq-bg-primary-hover">
+                                                        <div class="media align-items-center">
+                                                            <div class="rounded iq-card-icon iq-bg-primary">
+                                                                <i class="ri-file-user-line"></i>
+                                                            </div>
+                                                            <div class="media-body ml-3">
+                                                                <h6 class="mb-0 ">My Profile</h6>
+                                                                <p class="mb-0 font-size-12">View personal profile details.</p>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </a>
+                                                    </a>
+                                                </div>
                                                 <div class="d-inline-block w-100 text-center p-3">
                                                     <a class="bg-primary iq-sign-btn" th:href="@{/logout}" role="button">Sign out<i class="ri-login-box-line ml-2"></i></a>
                                                 </div>
