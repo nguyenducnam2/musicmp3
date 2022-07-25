@@ -15,14 +15,16 @@ import vn.aptech.musicstore.entity.Account;
  *
  * @author Thanh Sang
  */
-
-
 @Repository
-public interface AccountRepository extends JpaRepository<Account, Long>{
+public interface AccountRepository extends JpaRepository<Account, Long> {
+
     Optional<Account> findByUsername(String username);
+
     @Query("SELECT o FROM Account o WHERE o.username=:username")
     Account findRoleByUsername(@Param("username") String username);
 
-    Account findByEmail(String email);
     
+
+    Account findByEmail(String email);
+
 }

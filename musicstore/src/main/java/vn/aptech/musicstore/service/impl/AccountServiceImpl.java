@@ -4,11 +4,16 @@
  */
 package vn.aptech.musicstore.service.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -41,9 +46,12 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Autowired
     private VerificationTokenRepository verificationTokenRepository;
-    
+
     @Autowired
     private PasswordResetTokenRepository passwordResetTokenRepository;
+
+    @Autowired
+    private JavaMailSender mailSender;
     
     @Override
     public List<Account> findAll() {
@@ -103,11 +111,9 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 //            System.out.println("Role Account: " + acc.get().getRole());
 //        }
 
-
 //        else {
 //            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 //        }
-
         return new AccountUserDetails(acc.get());
     }
 
@@ -118,7 +124,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     public Account registerUser(UserModel userModel) {
-          Account acc = new Account();
+        Account acc = new Account();
         acc.setEmail(userModel.getEmail());
         acc.setUsername(userModel.getEmail());
         acc.setFirstName(userModel.getFirstName());
@@ -131,14 +137,14 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     public void saveVerificationTokenForUser(String token, Account acc) {
-        VerificationToken verificationToken = new VerificationToken(acc,token);
-        
+        VerificationToken verificationToken = new VerificationToken(acc, token);
+
         verificationTokenRepository.save(verificationToken);
     }
 
     @Override
     public String validateVerificationToken(String token) {
-         VerificationToken verificationToken
+        VerificationToken verificationToken
                 = verificationTokenRepository.findByToken(token);
 
         if (verificationToken == null) {
@@ -153,7 +159,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
             verificationTokenRepository.delete(verificationToken);
             return "expired";
         }
-        
+
         user.setEnabled(true);
         repoAccount.save(user);
         return "valid";
@@ -181,7 +187,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     public String validatePasswordResetToken(String token) {
-         PasswordResetToken passwordResetToken
+        PasswordResetToken passwordResetToken
                 = passwordResetTokenRepository.findByToken(token);
 
         if (passwordResetToken == null) {
@@ -203,7 +209,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     public Optional<Account> getAccountByPasswordResetToken(String token) {
-        return Optional.ofNullable(passwordResetTokenRepository.findByToken(token).getUser()); 
+        return Optional.ofNullable(passwordResetTokenRepository.findByToken(token).getUser());
     }
 
     @Override
@@ -215,6 +221,37 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     @Override
     public boolean checkIfValidOldPassword(Account user, String oldPassword) {
         return encodePassword().matches(oldPassword, user.getPassword());
+    }
+
+    @Override
+    public void sendVerificationEmail(Account user, String verifyUrl)
+            throws MessagingException, UnsupportedEncodingException {
+        String toAddress = user.getEmail();
+        String fromAddress = "Your email address";
+        String senderName = "Your company name";
+        String subject = "Please verify your registration";
+        String content = "Dear [[name]],<br>"
+                + "Please click the link below to verify your registration:<br>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+                + "Thank you,<br>"
+                + "Your company name.";
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(fromAddress, senderName);
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+
+        content = content.replace("[[name]]", user.getFirstName()+" "+user.getLastName());
+//        String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
+
+        content = content.replace("[[URL]]", verifyUrl);
+
+        helper.setText(content, true);
+
+        mailSender.send(message);
+
     }
 
 }

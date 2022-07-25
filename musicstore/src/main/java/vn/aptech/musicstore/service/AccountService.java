@@ -4,8 +4,10 @@
  */
 package vn.aptech.musicstore.service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
+import javax.mail.MessagingException;
 import vn.aptech.musicstore.entity.Account;
 import vn.aptech.musicstore.entity.VerificationToken;
 import vn.aptech.musicstore.entity.model.UserModel;
@@ -45,4 +47,11 @@ public interface AccountService {
     void changePassword(Account get, String newPassword);
 
     boolean checkIfValidOldPassword(Account user, String oldPassword);
+    
+//      public void register(User user, String siteURL) {
+//     
+//    }
+     
+    void sendVerificationEmail(Account user, String siteURL)  throws MessagingException, UnsupportedEncodingException ;
+    
 }
