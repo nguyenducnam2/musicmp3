@@ -122,7 +122,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         acc.setUsername(userModel.getEmail());
         acc.setFirstName(userModel.getFirstName());
         acc.setLastName(userModel.getLastName());
-        acc.setRole("USER");
+        acc.setRole("ROLE_USER");
         acc.setPassword(encodePassword().encode(userModel.getPassword()));
         repoAccount.save(acc);
         return acc;
