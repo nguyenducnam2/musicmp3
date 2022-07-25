@@ -37,14 +37,14 @@ public class VerificationToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String token;
-    @Temporal(javax.persistence.TemporalType.DATE)
+//    @Temporal(javax.persistence.TemporalType.DATE)
     private Date expirationTime;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name="FK_USER_VERIFY_TOKEN"))
     private Account acc;
 
-    public VerificationToken(String token, Account acc) {
+    public VerificationToken(Account acc, String token) {
         super();
         this.token = token;
         this.acc = acc;
@@ -63,5 +63,4 @@ public class VerificationToken {
         calendar.add(Calendar.MINUTE, expirationTime);
         return new Date(calendar.getTime().getTime());
     }
-
 }

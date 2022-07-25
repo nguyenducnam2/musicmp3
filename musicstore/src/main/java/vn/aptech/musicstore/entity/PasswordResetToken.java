@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
+@Table(name = "passwordresettoken")
 public class PasswordResetToken {
     //Expiration time 10 miutes
     private static  final int EXPIRATION_TIME = 10;

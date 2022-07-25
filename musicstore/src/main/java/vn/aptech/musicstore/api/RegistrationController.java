@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import vn.aptech.musicstore.entity.Account;
+import vn.aptech.musicstore.entity.PasswordResetToken;
 import vn.aptech.musicstore.entity.VerificationToken;
 import vn.aptech.musicstore.entity.model.PasswordModel;
 import vn.aptech.musicstore.entity.model.UserModel;
 import vn.aptech.musicstore.event.RegistrationCompleteEvent;
+import vn.aptech.musicstore.repository.PasswordResetTokenRepository;
 import vn.aptech.musicstore.service.AccountService;
 
 /**
@@ -34,7 +36,9 @@ public class RegistrationController {
     @Autowired
     private AccountService userService;
 
-    
+    @Autowired
+    private PasswordResetTokenRepository passwordResetTokenRepository;
+
     @Value("${uri.local}")
     private String uri_local;
 
@@ -45,19 +49,19 @@ public class RegistrationController {
     public String registerUser(@RequestBody UserModel userModel, final HttpServletRequest request) {
         Account user = userService.registerUser(userModel);
         String token = UUID.randomUUID().toString();
-        System.out.println("token"+token );
-        
-        userService.saveVerificationTokenForUser(token,user);
+        System.out.println("token" + token);
+
+        userService.saveVerificationTokenForUser(token, user);
         // Send Mail to acc
         String url = uri_local
                 + "verifyRegistration?token="
                 + token;
-        
-                System.out.println("url"+url );
+
+        System.out.println("url" + url);
 
         //sendVerificationEmail();
-        log.info("Click the link to verify your account: {}",url);
-    
+        log.info("Click the link to verify your account: {}", url);
+
 //        publisher.publishEvent(new RegistrationCompleteEvent(
 //                user,
 //                applicationUrl(request)
@@ -116,18 +120,18 @@ public class RegistrationController {
         return url;
     }
 
-    
-    
     @PostMapping("/savePassword")
     public String savePassword(@RequestParam("token") String token,
-                               @RequestBody PasswordModel passwordModel) {
+            @RequestBody PasswordModel passwordModel) {
         String result = userService.validatePasswordResetToken(token);
-        if(!result.equalsIgnoreCase("valid")) {
+        if (!result.equalsIgnoreCase("valid")) {
             return "Invalid Token";
         }
         Optional<Account> user = userService.getAccountByPasswordResetToken(token);
-        if(user.isPresent()) {
+        if (user.isPresent()) {
             userService.changePassword(user.get(), passwordModel.getNewPassword());
+            PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token);
+            passwordResetTokenRepository.delete(passwordResetToken);
             return "Password Reset Successfully";
         } else {
             return "Invalid Token";
@@ -135,28 +139,26 @@ public class RegistrationController {
     }
 
     @PostMapping("/changePassword")
-    public String changePassword(@RequestBody PasswordModel passwordModel){
+    public String changePassword(@RequestBody PasswordModel passwordModel) {
         Account user = userService.findAccountByEmail(passwordModel.getEmail());
-        if(!userService.checkIfValidOldPassword(user,passwordModel.getOldPassword())) {
+        if (!userService.checkIfValidOldPassword(user, passwordModel.getOldPassword())) {
             return "Invalid Old Password";
         }
         //Save New Password
-        userService.changePassword(user,passwordModel.getNewPassword());
+        userService.changePassword(user, passwordModel.getNewPassword());
         return "Password Changed Successfully";
     }
 
     private String passwordResetTokenMail(Account user, String applicationUrl, String token) {
-        String url =
-                applicationUrl
-                        + "/savePassword?token="
-                        + token;
+        String url
+                = applicationUrl
+                + "/savePassword?token="
+                + token;
 
         //sendVerificationEmail()
         log.info("Click the link to Reset your Password: {}",
                 url);
         return url;
     }
-
-
 
 }

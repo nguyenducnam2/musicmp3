@@ -4,15 +4,6 @@
       layout:decorate="~{client/layout.html}">
     <body>
         <div layout:fragment="content" id="content-page" class="content-page">
-            <div th:if="${session.user} != null">
-                <div th:object="${session.user}">
-                    <p>Name: <span th:text="*{firstName}">Sebastian</span>.</p>
-                    <p>Surname: <span th:text="*{lastName}">Pepper</span>.</p>
-                    <p>Id <span th:text="*{id}">Id</span>.</p>
-                    <p>Username <span th:text="*{username}">Id</span>.</p>
-                    <p>Email <span th:text="*{email}">Id</span>.</p>
-                </div>
-            </div>
 
             <div class="container-fluid">
                 <div class="row">

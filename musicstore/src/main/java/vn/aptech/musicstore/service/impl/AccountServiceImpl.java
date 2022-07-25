@@ -44,6 +44,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     
     @Autowired
     private PasswordResetTokenRepository passwordResetTokenRepository;
+    
     @Override
     public List<Account> findAll() {
         return repoAccount.findAll();
@@ -130,7 +131,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     public void saveVerificationTokenForUser(String token, Account acc) {
-         VerificationToken verificationToken = new VerificationToken(token,acc);
+        VerificationToken verificationToken = new VerificationToken(acc,token);
         
         verificationTokenRepository.save(verificationToken);
     }
@@ -152,7 +153,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
             verificationTokenRepository.delete(verificationToken);
             return "expired";
         }
-
+        
         user.setEnabled(true);
         repoAccount.save(user);
         return "valid";
