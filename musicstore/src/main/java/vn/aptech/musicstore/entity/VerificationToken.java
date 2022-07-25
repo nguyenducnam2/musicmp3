@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "verification_token")
+@Table(name = "verificationtoken")
 public class VerificationToken {
 
     // Expiration time 10m

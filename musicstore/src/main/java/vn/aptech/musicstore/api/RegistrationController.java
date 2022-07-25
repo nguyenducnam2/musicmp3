@@ -9,6 +9,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,16 +34,34 @@ public class RegistrationController {
     @Autowired
     private AccountService userService;
 
+    
+    @Value("${uri.local}")
+    private String uri_local;
+
     @Autowired
     private ApplicationEventPublisher publisher;
 
     @PostMapping("/register")
     public String registerUser(@RequestBody UserModel userModel, final HttpServletRequest request) {
         Account user = userService.registerUser(userModel);
-        publisher.publishEvent(new RegistrationCompleteEvent(
-                user,
-                applicationUrl(request)
-        ));
+        String token = UUID.randomUUID().toString();
+        System.out.println("token"+token );
+        
+        userService.saveVerificationTokenForUser(token,user);
+        // Send Mail to acc
+        String url = uri_local
+                + "verifyRegistration?token="
+                + token;
+        
+                System.out.println("url"+url );
+
+        //sendVerificationEmail();
+        log.info("Click the link to verify your account: {}",url);
+    
+//        publisher.publishEvent(new RegistrationCompleteEvent(
+//                user,
+//                applicationUrl(request)
+//        ));
         return "Success";
     }
 
