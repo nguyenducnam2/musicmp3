@@ -103,7 +103,8 @@ public class WebSecurityConfig {
         private final String[] WHITE_LIST_URLS = {
             "/",
             "/contact",
-            "/register",
+            "/api/**",
+            "/register*",
             "/resetPassword",
             "/register",
             "/verifyRegistration*",
@@ -128,7 +129,7 @@ public class WebSecurityConfig {
 
             http.authorizeHttpRequests()
                     .antMatchers(WHITE_LIST_URLS).permitAll()
-                    .antMatchers("/api/**").authenticated()
+//                    .antMatchers("/api/**").authenticated()
                     .antMatchers("/user/**").hasAnyRole("ADMIN", "EDITOR", "MODERATOR", "USER")
                     .antMatchers("/admin/account/**").hasAnyRole("ADMIN", "MODERATOR")
                     .antMatchers("/admin/**").hasAnyRole("ADMIN", "EDITOR", "MODERATOR")
