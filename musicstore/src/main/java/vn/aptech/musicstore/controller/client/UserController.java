@@ -35,6 +35,9 @@ import vn.aptech.musicstore.entity.model.PasswordModel;
 import vn.aptech.musicstore.entity.model.UserModel;
 import vn.aptech.musicstore.repository.PasswordResetTokenRepository;
 import vn.aptech.musicstore.service.AccountService;
+import vn.aptech.musicstore.service.AlbumService;
+import vn.aptech.musicstore.service.ArtistService;
+import vn.aptech.musicstore.service.SongService;
 
 /**
  *
@@ -51,7 +54,14 @@ public class UserController {
     @Autowired
     private PasswordResetTokenRepository passwordResetTokenRepository;
 
-  
+    @Autowired
+    private SongService service_song;
+
+    @Autowired
+    private AlbumService service_album;
+
+    @Autowired
+    private ArtistService service_artist;
 
 //    @Autowired
 //    private ApplicationEventPublisher publisher;
@@ -63,6 +73,14 @@ public class UserController {
         HttpSession session = request.getSession();
         session.setAttribute("user", user.get());
         model.addAttribute("user", user.get());
+        List<Song> listsong = new ArrayList<>();
+        for (int i = service_song.findAll().size() - 1; i >= 0; i--) {
+            listsong.add(service_song.findAll().get(i));
+        }
+        model.addAttribute("listsong", listsong);
+        model.addAttribute("listsong_hot", service_song.findByOrderByViewDesc());
+        model.addAttribute("listalbum", service_album.findTop12());
+        model.addAttribute("listartist", service_artist.findTop12ByOrderByIdDesc());
         return "client/user/index";
     }
 
