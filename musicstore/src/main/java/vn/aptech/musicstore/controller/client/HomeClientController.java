@@ -35,6 +35,7 @@ import vn.aptech.musicstore.service.AccountService;
 import vn.aptech.musicstore.service.AlbumService;
 import vn.aptech.musicstore.service.ArtistService;
 import vn.aptech.musicstore.service.SongService;
+import vn.aptech.musicstore.service.NewsService;
 
 /**
  *
@@ -62,6 +63,9 @@ public class HomeClientController implements ErrorController {
     @Value("${uri.local}")
     private String uri_local;
 
+    @Autowired
+    private NewsService service_news;
+
     @GetMapping
     public String index(Model model) {
 
@@ -73,6 +77,7 @@ public class HomeClientController implements ErrorController {
         model.addAttribute("listsong_hot", service_song.findByOrderByViewDesc());
         model.addAttribute("listalbum", service_album.findTop12());
         model.addAttribute("listartist", service_artist.findTop12ByOrderByIdDesc());
+	model.addAttribute("listnews", service_news.findTop12ByOrderByIdDesc());
         return "client/index";
     }
 
@@ -86,6 +91,7 @@ public class HomeClientController implements ErrorController {
         model.addAttribute("searchname", searchname);
         model.addAttribute("listalbum", service_album.findByNameCustom(searchname));
         model.addAttribute("listartist", service_artist.findByNameCustom(searchname));
+	model.addAttribute("listnews", service_news.findByTitleCustom(searchname));
         return "client/result";
     }
 
