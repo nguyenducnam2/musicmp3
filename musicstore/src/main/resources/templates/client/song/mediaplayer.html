@@ -339,15 +339,15 @@ and open the template in the editor.
                                 <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                                     <p id="load_list"></p>
                                 </div>
-                                <div th:if="${listcomments.size}>0" class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
+                                <div th:if="${listcomments.size >0}" class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
                                     <div class="coment-bottom bg-white p-2 px-4">
-                                        <form th:action=${"/song/comment/add"}>
+                                        <form th:action=${"/song/comment/add"} th:if="${session.user} != null">
                                             <div class="d-flex flex-row add-comment-section mt-4 mb-4"><img style=" border-radius: 10px;
                                                                                                             padding-right: 5px;
                                                                                                             width: 60px;
                                                                                                             height: 55px" class="img-fluid img-responsive rounded-circle mr-2" src="https://i.imgur.com/qdiP4DB.jpg" width="38">
 
-                                                <input type="hidden" th:name="accountId" th:if="${session.user} != null" th:value="${session.user.id}"/>
+                                                <input type="hidden" th:name="accountId" th:value="${session.user.id}"/>
                                                 <input type="hidden" th:name="songId" th:value="${song.id}" />
                                                 <input name="content" class="form-control mr-3" placeholder="Add comment">
                                                 <button class="btn btn-primary" type="submit">Comment</button>
