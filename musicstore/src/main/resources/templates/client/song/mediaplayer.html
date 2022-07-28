@@ -347,7 +347,7 @@ and open the template in the editor.
                                                                                                             width: 60px;
                                                                                                             height: 55px" class="img-fluid img-responsive rounded-circle mr-2" src="https://i.imgur.com/qdiP4DB.jpg" width="38">
 
-                                                <input type="hidden" th:name="accountId" th:value="${session.user.id}"/>
+                                                <input type="hidden" th:name="accountId" th:if="${session.user} != null" th:value="${session.user.id}"/>
                                                 <input type="hidden" th:name="songId" th:value="${song.id}" />
                                                 <input name="content" class="form-control mr-3" placeholder="Add comment">
                                                 <button class="btn btn-primary" type="submit">Comment</button>
@@ -600,7 +600,7 @@ and open the template in the editor.
                         }
                     }
                 }
-
+            
             </script>
         </div>
     </body>

@@ -16,6 +16,7 @@ import vn.aptech.musicstore.entity.Comment;
  * @author namng
  */
 public interface CommentRepository extends JpaRepository<Comment,Integer>{
+    
     @Query("SELECT o FROM Comment o WHERE o.songId=:songId")
     List<Comment> findBySongId(@Param("songId") int songId);
 }

@@ -96,20 +96,6 @@ public class SongClientController {
         comment.setSong(service.findById(songId).orElseThrow());
         service_cmt.save(comment);
 
-        Song s = service.findById(songId).orElseThrow();
-        s.setView(s.getView() + 1);
-        service.save(s);
-        List<Song> anotherlist = service.findByAlbumId(s.getAlbumId());
-        Song swap = anotherlist.get(0);
-        int index_to_swap = anotherlist.indexOf(s);
-        anotherlist.set(0, s);
-        anotherlist.set(index_to_swap, swap);
-        model.addAttribute("song", s);
-        model.addAttribute("anotherlist", anotherlist);
-        model.addAttribute("listcomments", service_cmt.findBySongId(s.getId()));
-        HttpSession session = request.getSession();
-        session.setAttribute("user", session.getAttribute("user"));
-        model.addAttribute("user", session.getAttribute("user"));
-        return "client/song/mediaplayer";
+        return "redirect:/song/"+songId;
     }
 }
