@@ -35,6 +35,7 @@ import vn.aptech.musicstore.service.AccountService;
 import vn.aptech.musicstore.service.AlbumService;
 import vn.aptech.musicstore.service.ArtistService;
 import vn.aptech.musicstore.service.SongService;
+import vn.aptech.musicstore.service.NewsService;
 
 /**
  *
