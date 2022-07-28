@@ -6,6 +6,7 @@
 package vn.aptech.musicstore.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.aptech.musicstore.entity.Comment;
@@ -29,5 +30,20 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public List<Comment> findBySongId(int songId) {
         return repo.findBySongId(songId);
+    }
+
+    @Override
+    public Optional<Comment> findById(int id) {
+       return repo.findById(id);
+    }
+
+    @Override
+    public Comment save(Comment comment) {
+        return repo.save(comment);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        repo.deleteById(id);
     }
 }
