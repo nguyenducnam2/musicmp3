@@ -60,13 +60,11 @@ public class HomeClientController implements ErrorController {
     @Autowired
     private ArtistService service_artist;
 
-<<<<<<< HEAD
     @Value("${uri.local}")
     private String uri_local;
-=======
+
     @Autowired
     private NewsService service_news;
->>>>>>> Dung
 
     @GetMapping
     public String index(Model model) {
