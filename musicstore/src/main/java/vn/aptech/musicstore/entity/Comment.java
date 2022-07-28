@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "artist")
+@Table(name = "comment")
 public class Comment {
 
     @Id
