@@ -12,7 +12,7 @@
                             <div class="main-circle"><i class="las la-bars"></i></div>
                         </div>
                         <div class="iq-navbar-logo d-flex justify-content-between">
-                            <a href="index.html" class="header-logo">
+                            <a th:href="@{/}" class="header-logo">
                                 <img src="images/logo.png" class="img-fluid rounded-normal" alt="">
                                 <div class="pt-2 pl-2 logo-title">
                                     <span class="text-primary text-uppercase">Music</span>
@@ -72,7 +72,7 @@
 
                                 <li class="mt-4 mb-0 p-0">
                                     <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
-                                        <img th:src="@{/admintemplate/images/user/01.jpg}" class="img-fluid rounded-circle" alt="user">
+                                        <img th:src="@{'/webdata/user/'+${session.user.image}}" class="img-fluid rounded-circle" alt="user">
                                     </a>
                                     <div class="iq-sub-dropdown iq-user-dropdown">
                                         <div class="iq-card shadow-none m-0">
@@ -96,7 +96,7 @@
                                                 <div th:if="${session.user.role == 'ROLE_USER'}">
                                                     <!--<a href="#"  class="iq-sub-card iq-bg-primary-hover">-->
                                                     <!--<a th:href="@{/admin/account/updateProfile/{username}(username=*{username} )}"  class="iq-sub-card iq-bg-primary-hover">-->
-                                                    <a th:href="@{/user/profile}"  class="iq-sub-card iq-bg-primary-hover">
+                                                    <a th:href="@{/user/profile/{id} (id=*{id}) }"  class="iq-sub-card iq-bg-primary-hover">
                                                         <div class="media align-items-center">
                                                             <div class="rounded iq-card-icon iq-bg-primary">
                                                                 <i class="ri-file-user-line"></i>
