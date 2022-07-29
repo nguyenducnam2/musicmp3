@@ -52,12 +52,13 @@ and open the template in the editor.
                                                     <h4 class="card-title">Edit Profile</h4>
                                                 </div>
                                             </div>
-                                            <div class="iq-card-body">
-                                                <form>
+                                            <div  class="iq-card-body">
+                                                <form th:action=${"/user/processUpdate"} th:object="${session.user}" method="post" >
+                                                     <input type="hidden"  th:value="*{id}" />
 <!--                                                    <div class="form-group row align-items-center">
                                                         <div class="col-md-12">
                                                             <div class="profile-img-edit">
-                                                                <img class="profile-pic" src="images/user/11.png" alt="profile-pic">
+                                                                <img class="profile-pic" th:src="@{/admintemplate/images/user/11.png}" alt="profile-pic">
                                                                 <div class="p-image">
                                                                     <i class="ri-pencil-line upload-button"></i>
                                                                     <input class="file-upload" type="file" accept="image/*"/>
@@ -68,19 +69,19 @@ and open the template in the editor.
                                                     <div class=" row align-items-center">
                                                         <div class="form-group col-sm-6">
                                                             <label for="fname">First Name:</label>
-                                                            <input type="text" class="form-control" id="fname" value="Barry">
+                                                            <input th:value="*{firstName}" name="fname" class="form-control" id="fname" value="Barry">
                                                         </div>
                                                         <div class="form-group col-sm-6">
                                                             <label for="lname">Last Name:</label>
-                                                            <input type="text" class="form-control" id="lname" value="Tech">
+                                                            <input th:value="*{lastName}" name="lname" class="form-control" id="lname" value="Tech">
                                                         </div>
                                                         <div class="form-group col-sm-6">
                                                             <label for="uname">Username:</label>
-                                                            <input type="text" class="form-control" id="uname" value="Barry@01" readonly>
+                                                            <input th:value="*{username}" class="form-control" id="uname" value="Barry@01" readonly>
                                                         </div>
 <!--                                                        <div class="form-group col-sm-6">
                                                             <label for="cname">City:</label>
-                                                            <input type="text" class="form-control" id="cname" value="Atlanta">
+                                                            <input class="form-control" id="cname" value="Atlanta">
                                                         </div>
                                                         <div class="form-group col-sm-6">
                                                             <label class="d-block">Gender:</label>
@@ -136,8 +137,8 @@ and open the template in the editor.
                                                                 <option>Connecticut</option>
                                                                 <option>Louisiana</option>
                                                             </select>
-                                                        </div>-->
-<!--                                                        <div class="form-group col-sm-12">
+                                                        </div>
+                                                        <div class="form-group col-sm-12">
                                                             <label>Address:</label>
                                                             <textarea class="form-control" name="address" rows="5" style="line-height: 22px;">
 37 Cardinal Lane
@@ -150,6 +151,9 @@ Zip Code: 85001
                                                     <button type="submit" class="btn btn-primary mr-2">Submit</button>
                                                     <button type="reset" class="btn iq-bg-danger">Cancel</button>
                                                 </form>
+
+
+
                                             </div>
                                         </div>
                                     </div>
@@ -287,7 +291,7 @@ Zip Code: 85001
                                                                                 <input type="hidden"  th:field="*{password}" />
                                                                                 <div class="form-group">
                                                                                     <label>Username:</label>
-                                                                                    <input type="text" th:field="*{username}" class="form-control" readonly />
+                                                                                    <input th:field="*{username}" class="form-control" readonly />
                                                                                 </div>
                                                                                  <div class="form-group">
                                                                                     <label>Password:</label>
@@ -295,12 +299,12 @@ Zip Code: 85001
                                                                                 </div>
                                                                                 <div>
                                                                                     <label>Full name:</label>
-                                                                                    <input type="text" th:field="*{fullname}" class="form-control">
+                                                                                    <input th:field="*{fullname}" class="form-control">
                                                                                 </div>
                                             
                                                                                 <div class="form-group">
                                                                                     <label>Role</label>
-                                                                                    <input type="text"  th:field="*{role}" class="form-control" readonly /> 
+                                                                                    <input  th:field="*{role}" class="form-control" readonly /> 
                                                                                 </div>
                                             
                                                                                 <button type="submit" class="btn btn-primary">Submit</button>

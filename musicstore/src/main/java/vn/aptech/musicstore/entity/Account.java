@@ -7,6 +7,7 @@ package vn.aptech.musicstore.entity;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -46,6 +47,13 @@ public class Account {
     private String email;
     private boolean enabled = false;
     private boolean isEdited = false;
+    
+//    @Column(name = "gender")
+//    private boolean gender = false;
+    
+    private String address;
+    private String image;
+    private String phone;
 
     
    

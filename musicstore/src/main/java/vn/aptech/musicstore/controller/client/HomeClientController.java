@@ -122,16 +122,16 @@ public class HomeClientController implements ErrorController {
 //    }
     @GetMapping("/register")
     public String register(Model model) {
-        model.addAttribute("account", new Account());
+        model.addAttribute("account", new UserModel());
         return "client/register";
     }
 
     @PostMapping("/registerProcess")
-    public String registerProcess(Model model, @ModelAttribute UserModel userModel, HttpServletRequest request)
+    public String registerProcess(@ModelAttribute UserModel userModel, HttpServletRequest request)
             throws UnsupportedEncodingException, MessagingException {
         Account user = userService.registerUser(userModel);
         String token = UUID.randomUUID().toString();
-        System.out.println("token" + token);
+        System.out.println("token: " + token);
 
         userService.saveVerificationTokenForUser(token, user);
 
