@@ -341,37 +341,21 @@ and open the template in the editor.
                                 </div>
                                 <div th:if="${listcomments.size >0}" class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
                                     <div class="coment-bottom bg-white p-2 px-4">
-                                        <form th:action=${"/song/comment/add"} th:if="${session.user} != null">
+                                        <form id="the-form" action="/song/comment/add" th:if="${session.user} != null" method="post">
                                             <div class="d-flex flex-row add-comment-section mt-4 mb-4"><img style=" border-radius: 10px;
                                                                                                             padding-right: 5px;
                                                                                                             width: 60px;
                                                                                                             height: 55px" class="img-fluid img-responsive rounded-circle mr-2" src="https://i.imgur.com/qdiP4DB.jpg" width="38">
 
-                                                <input type="hidden" th:name="accountId" th:value="${session.user.id}"/>
-                                                <input type="hidden" th:name="songId" th:value="${song.id}" />
-                                                <input name="content" class="form-control mr-3" placeholder="Add comment">
+                                                <input type="hidden" id="accountId" th:name="accountId" th:value="${session.user.id}"/>
+                                                <input type="hidden" id="songId" name="songId" />
+                                                <input name="content" id="content" class="form-control mr-3" placeholder="Add comment">
                                                 <button class="btn btn-primary" type="submit">Comment</button>
 
                                             </div>
                                         </form>
-                                        <ul id="myList" class="list-unstyled" th:each="item:${listcomments}">
-                                            <li class="media"> <span class="round"><img style=" border-radius: 10px;
-                                                                                        padding-right: 5px;
-                                                                                        width: 60px;
-                                                                                        height: 55px" src="https://i.imgur.com/qdiP4DB.jpg" class="align-self-start mr-3"></span>
-                                                <div class="media-body">
-                                                    <div class="row d-flex">
-                                                        <h6 style=" color: #5C5C5C;
-                                                            font-size: 15px !important;
-                                                            padding-left: 15px !important;
-                                                            margin-bottom: 0; font-weight: bolder; " th:text="${item.account.username}">Leo Aminoff</h6>
-                                                        <div class="ml-auto">
-                                                            <p class="text">24h</p>
-                                                        </div>
-                                                    </div>
-                                                    <p th:text="${item.content}">Bought your "Palace of Versailles"</p>
-                                                </div>
-                                            </li>
+                                        <ul id="myList2">
+
                                         </ul>
                                     </div>
                                 </div>
@@ -418,6 +402,9 @@ and open the template in the editor.
                 let time = document.querySelector('#time');
                 let current = document.querySelector('#current');
                 let songId = document.querySelector('#songId');
+                let accountId = document.querySelector('#accountId');
+                let content = document.querySelector('#content');
+                let myList = document.querySelector('#myList2');
 
                 let timer;
                 let autoplay = 0;
@@ -432,9 +419,15 @@ and open the template in the editor.
                 let track = document.createElement('audio');
                 //All songs list
                 var All_song = /*[[${anotherlist}]]*/[];
+                var All_cmt = /*[[${listcmtall}]]*/[];
                 // All functions
 
+
                 // function load the track
+
+      
+
+
                 function load_track(index_no) {
                     clearInterval(timer);
                     reset_slider();
@@ -452,8 +445,29 @@ and open the template in the editor.
                     } else {
                         mv.hidden = true;
                     }
+                    songId.value = All_song[index_no].id;
+                    songId.display = false;
+
+                    var cmtsBySongId = [];
+                    let count = 0;
+
+                    for (let i = 0; i < All_cmt.length; i++) {
+                        if (All_cmt[i].songId == All_song[index_no].id) {
+                            cmtsBySongId[count++] = All_cmt[i];
+                        }
+                    }
+                    
 
 
+
+
+
+
+                    myList.innerHTML = "";
+                    for (let i = 0; i < cmtsBySongId.length; i++) {
+
+                        myList.innerHTML += "<li class='media'><span class='round'><img style=' border-radius: 10px;padding-right: 5px;width: 60px;height: 55px; src='https://i.imgur.com/qdiP4DB.jpg' class='align-self-start mr-3'></span><div class='media-body'><div class='row d-flex'><h6 style=' color: #5C5C5C;font-size: 15px !important;padding-left: 15px !important;margin-bottom: 0; font-weight: bolder; '>" + cmtsBySongId[i].account.username + "</h6><div class='ml-auto'><p class='text'>24h</p></div></div><p>" + cmtsBySongId[i].content + "</p></div><div th:if='${session.user} != null && ${session.user.id}==" + cmtsBySongId[i].account.id + "' class='iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1'><span class='table-remove'><a th:href='@{/song/comment/delete/{id}(id=${" + cmtsBySongId[i].id + "})}' type='button' class='btn iq-bg-danger btn-rounded btn-sm my-0'>Remove</a></span></div></li>";
+                    }
 
                     track.load();
 
@@ -600,7 +614,10 @@ and open the template in the editor.
                         }
                     }
                 }
-            
+
+
+
+
             </script>
         </div>
     </body>

@@ -71,38 +71,76 @@ public class AlbumController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute("album") Album album, @RequestParam("file") MultipartFile file) throws IOException {
-        album.setImage(file.getOriginalFilename());
-        album.setArtist(service_art.findById(album.getArtistId()).orElseThrow());
-        Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\album" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
-        service.save(album);
-        return "redirect:/admin/album";
-    }
-
-    @PostMapping("/processupdate")
-    public String processUpdate(@ModelAttribute("album") Album album, @RequestParam("file") MultipartFile file) throws IOException {
-        for (Song s : service_song.findByAlbumId(album.getId())) {
-            s.setArtistId(album.getArtistId());
-            s.setArtist(service_art.findById(s.getArtistId()).orElseThrow());
-        }
-        if (!(file.isEmpty())) {
+    public String save(Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size, @ModelAttribute("album") Album album, @RequestParam("file") MultipartFile file) throws IOException {
+        try {
             album.setImage(file.getOriginalFilename());
             album.setArtist(service_art.findById(album.getArtistId()).orElseThrow());
             Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\album" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
             service.save(album);
-        } else {
-            album.setImage(service.findById(album.getId()).orElseThrow().getImage());
-            album.setArtist(service_art.findById(album.getArtistId()).orElseThrow());
-            service.save(album);
+        } catch (Exception e) {
+            model.addAttribute("list", service.getPage(pageNumber, size));
+            model.addAttribute("service", service);
+            model.addAttribute("name", "null");
+            model.addAttribute("mess", "Failed");
+            return "admin/album/index";
         }
-        return "redirect:/admin/album";
+        model.addAttribute("list", service.getPage(pageNumber, size));
+        model.addAttribute("service", service);
+        model.addAttribute("name", "null");
+        model.addAttribute("mess", "Successfully");
+        return "admin/album/index";
+    }
+
+    @PostMapping("/processupdate")
+    public String processUpdate(Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size, @ModelAttribute("album") Album album, @RequestParam("file") MultipartFile file) throws IOException {
+        try {
+            for (Song s : service_song.findByAlbumId(album.getId())) {
+                s.setArtistId(album.getArtistId());
+                s.setArtist(service_art.findById(s.getArtistId()).orElseThrow());
+            }
+            if (!(file.isEmpty())) {
+                album.setImage(file.getOriginalFilename());
+                album.setArtist(service_art.findById(album.getArtistId()).orElseThrow());
+                Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\album" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+                service.save(album);
+            } else {
+                album.setImage(service.findById(album.getId()).orElseThrow().getImage());
+                album.setArtist(service_art.findById(album.getArtistId()).orElseThrow());
+                service.save(album);
+            }
+        } catch (Exception e) {
+            model.addAttribute("list", service.getPage(pageNumber, size));
+            model.addAttribute("service", service);
+            model.addAttribute("name", "null");
+            model.addAttribute("mess", "Failed");
+            return "admin/album/index";
+        }
+        model.addAttribute("list", service.getPage(pageNumber, size));
+        model.addAttribute("service", service);
+        model.addAttribute("name", "null");
+        model.addAttribute("mess", "Successfully");
+        return "admin/album/index";
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") int id) throws IOException {
-        Files.delete(Paths.get(base_url + "\\webdata\\album" + File.separator + service.findById(id).orElseThrow().getImage()));
-        service.deleteById(id);
-        return "redirect:/admin/album";
+    public String delete(Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size, @PathVariable("id") int id) throws IOException {
+        try {
+            service.deleteById(id);
+        } catch (Exception e) {
+            model.addAttribute("list", service.getPage(pageNumber, size));
+            model.addAttribute("service", service);
+            model.addAttribute("name", "null");
+            model.addAttribute("mess", "Failed");
+            return "admin/album/index";
+        }
+        model.addAttribute("list", service.getPage(pageNumber, size));
+        model.addAttribute("service", service);
+        model.addAttribute("name", "null");
+        model.addAttribute("mess", "Successfully");
+        return "admin/album/index";
     }
 
     @GetMapping("/search")

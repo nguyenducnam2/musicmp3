@@ -566,6 +566,9 @@ and open the template in the editor.
                                 <li class="nav-item">
                                     <a class="nav-link" th:href="@{/song/{id}(id=${song.id})}">Audio</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="comment-tab" data-toggle="tab" href="#comment" role="tab" aria-controls="comment" aria-selected="false">Comments</a>
+                                </li>
                             </ul>
                             <div class="tab-content" id="myTabContent-2">
                                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -605,6 +608,65 @@ and open the template in the editor.
                                 <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                                     <p></p>
                                 </div>
+                                <div th:if="${listcomments.size >0}" class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
+                                    <div class="coment-bottom bg-white p-2 px-4">
+                                        <form th:action=${"/song/comment/add02"} th:if="${session.user} != null">
+                                            <div class="d-flex flex-row add-comment-section mt-4 mb-4"><img style=" border-radius: 10px;
+                                                                                                            padding-right: 5px;
+                                                                                                            width: 60px;
+                                                                                                            height: 55px" class="img-fluid img-responsive rounded-circle mr-2" src="https://i.imgur.com/qdiP4DB.jpg" width="38">
+
+                                                <input type="hidden" th:name="accountId" th:value="${session.user.id}"/>
+                                                <input type="hidden" th:name="songId" th:value="${song.id}" />
+                                                <input name="content" class="form-control mr-3" placeholder="Add comment">
+                                                <button class="btn btn-primary" type="submit">Comment</button>
+                                            </div>
+                                        </form>
+                                        <ul id="myList" class="list-unstyled" th:each="item:${listcomments}">
+                                            <li class="media"> <span class="round"><img style=" border-radius: 10px;
+                                                                                        padding-right: 5px;
+                                                                                        width: 60px;
+                                                                                        height: 55px" src="https://i.imgur.com/qdiP4DB.jpg" class="align-self-start mr-3"></span>
+                                                <div class="media-body">
+                                                    <div class="row d-flex">
+                                                        <h6 style=" color: #5C5C5C;
+                                                            font-size: 15px !important;
+                                                            padding-left: 15px !important;
+                                                            margin-bottom: 0; font-weight: bolder; " th:text="${item.account.username}">Leo Aminoff</h6>
+                                                        <div class="ml-auto">
+                                                            <p class="text">24h</p>
+                                                        </div>
+                                                    </div>
+                                                    <p th:text="${item.content}">Bought your "Palace of Versailles"</p>
+                                                </div>
+                                                <div th:if="${session.user != null && session.user.id==item.account.id}" class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1">
+                                                    <span class="table-remove"><a th:href="@{/song/comment/delete02/{id}(id=${item.id})}" type="button"
+                                                                                  class="btn iq-bg-danger btn-rounded btn-sm my-0">Remove</a></span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div th:if="${listcomments.size==0 && session.user == null}" class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
+                                    <p style="text-align: center;">This song has no comments yet</p>
+                                </div>
+                                <div th:if="${listcomments.size==0 && session.user != null}" class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
+                                    <div class="coment-bottom bg-white p-2 px-4">
+                                        <form th:action=${"/song/comment/add02"}>
+                                            <div class="d-flex flex-row add-comment-section mt-4 mb-4"><img style=" border-radius: 10px;
+                                                                                                            padding-right: 5px;
+                                                                                                            width: 60px;
+                                                                                                            height: 55px" class="img-fluid img-responsive rounded-circle mr-2" src="https://i.imgur.com/qdiP4DB.jpg" width="38">
+
+                                                <input type="hidden" th:name="accountId" th:value="${session.user.id}"/>
+                                                <input type="hidden" th:name="songId" th:value="${song.id}" />
+                                                <input name="content" class="form-control mr-3" placeholder="Add comment">
+                                                <button class="btn btn-primary" type="submit">Comment</button>
+
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -625,8 +687,8 @@ and open the template in the editor.
                         volume = video_player.querySelector(".volume"),
                         volume_range = video_player.querySelector(".volume_range"),
                         current = video_player.querySelector(".current"),
-                        duration=video_player.querySelector(".duration");
-                        totalDuration = video_player.querySelector(".duration"),
+                        duration = video_player.querySelector(".duration");
+                totalDuration = video_player.querySelector(".duration"),
                         auto_play = video_player.querySelector(".auto-play"),
                         settingsBtn = video_player.querySelector(".settingsBtn"),
                         captionsBtn = video_player.querySelector(".captionsBtn"),
