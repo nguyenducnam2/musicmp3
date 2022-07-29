@@ -69,7 +69,6 @@ public class UserController {
     public String index(Principal principal, Model model, HttpServletRequest request) {
         String username = principal.getName();
         Optional<Account> user = userService.findByUsername(username);
-
         HttpSession session = request.getSession();
         session.setAttribute("user", user.get());
         model.addAttribute("user", user.get());

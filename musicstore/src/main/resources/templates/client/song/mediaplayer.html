@@ -297,6 +297,9 @@ and open the template in the editor.
                                 <li class="nav-item">
                                     <a class="nav-link" id="mv">MV</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="comment-tab" data-toggle="tab" href="#comment" role="tab" aria-controls="comment" aria-selected="false">Comments</a>
+                                </li>
                             </ul>
                             <div class="tab-content" id="myTabContent-2">
                                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -336,6 +339,46 @@ and open the template in the editor.
                                 <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                                     <p id="load_list"></p>
                                 </div>
+                                <div th:if="${listcomments.size >0}" class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
+                                    <div class="coment-bottom bg-white p-2 px-4">
+                                        <form id="the-form" action="/song/comment/add" th:if="${session.user} != null" method="post">
+                                            <div class="d-flex flex-row add-comment-section mt-4 mb-4"><img style=" border-radius: 10px;
+                                                                                                            padding-right: 5px;
+                                                                                                            width: 60px;
+                                                                                                            height: 55px" class="img-fluid img-responsive rounded-circle mr-2" src="https://i.imgur.com/qdiP4DB.jpg" width="38">
+
+                                                <input type="hidden" id="accountId" th:name="accountId" th:value="${session.user.id}"/>
+                                                <input type="hidden" id="songId" name="songId" />
+                                                <input name="content" id="content" class="form-control mr-3" placeholder="Add comment">
+                                                <button class="btn btn-primary" type="submit">Comment</button>
+
+                                            </div>
+                                        </form>
+                                        <ul id="myList2">
+
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div th:if="${listcomments.size==0 && session.user == null}" class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
+                                    <p style="text-align: center;">This song has no comments yet</p>
+                                </div>
+                                <div th:if="${listcomments.size==0 && session.user != null}" class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
+                                    <div class="coment-bottom bg-white p-2 px-4">
+                                        <form th:action=${"/song/comment/add"}>
+                                            <div class="d-flex flex-row add-comment-section mt-4 mb-4"><img style=" border-radius: 10px;
+                                                                                                            padding-right: 5px;
+                                                                                                            width: 60px;
+                                                                                                            height: 55px" class="img-fluid img-responsive rounded-circle mr-2" src="https://i.imgur.com/qdiP4DB.jpg" width="38">
+
+                                                <input type="hidden" th:name="accountId" th:value="${session.user.id}"/>
+                                                <input type="hidden" th:name="songId" th:value="${song.id}" />
+                                                <input name="content" class="form-control mr-3" placeholder="Add comment">
+                                                <button class="btn btn-primary" type="submit">Comment</button>
+
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -358,23 +401,33 @@ and open the template in the editor.
                 let mv = document.querySelector('#mv');
                 let time = document.querySelector('#time');
                 let current = document.querySelector('#current');
+                let songId = document.querySelector('#songId');
+                let accountId = document.querySelector('#accountId');
+                let content = document.querySelector('#content');
+                let myList = document.querySelector('#myList2');
 
                 let timer;
                 let autoplay = 0;
-                
+
                 let seconds;
                 let minutes;
 
                 let index_no = 0;
                 let Playing_song = false;
 
-//create a audio Element
+                //create a audio Element
                 let track = document.createElement('audio');
-//All songs list
+                //All songs list
                 var All_song = /*[[${anotherlist}]]*/[];
-// All functions
+                var All_cmt = /*[[${listcmtall}]]*/[];
+                // All functions
 
-// function load the track
+
+                // function load the track
+
+      
+
+
                 function load_track(index_no) {
                     clearInterval(timer);
                     reset_slider();
@@ -392,7 +445,29 @@ and open the template in the editor.
                     } else {
                         mv.hidden = true;
                     }
+                    songId.value = All_song[index_no].id;
+                    songId.display = false;
 
+                    var cmtsBySongId = [];
+                    let count = 0;
+
+                    for (let i = 0; i < All_cmt.length; i++) {
+                        if (All_cmt[i].songId == All_song[index_no].id) {
+                            cmtsBySongId[count++] = All_cmt[i];
+                        }
+                    }
+                    
+
+
+
+
+
+
+                    myList.innerHTML = "";
+                    for (let i = 0; i < cmtsBySongId.length; i++) {
+
+                        myList.innerHTML += "<li class='media'><span class='round'><img style=' border-radius: 10px;padding-right: 5px;width: 60px;height: 55px; src='https://i.imgur.com/qdiP4DB.jpg' class='align-self-start mr-3'></span><div class='media-body'><div class='row d-flex'><h6 style=' color: #5C5C5C;font-size: 15px !important;padding-left: 15px !important;margin-bottom: 0; font-weight: bolder; '>" + cmtsBySongId[i].account.username + "</h6><div class='ml-auto'><p class='text'>24h</p></div></div><p>" + cmtsBySongId[i].content + "</p></div><div th:if='${session.user} != null && ${session.user.id}==" + cmtsBySongId[i].account.id + "' class='iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1'><span class='table-remove'><a th:href='@{/song/comment/delete/{id}(id=${" + cmtsBySongId[i].id + "})}' type='button' class='btn iq-bg-danger btn-rounded btn-sm my-0'>Remove</a></span></div></li>";
+                    }
 
                     track.load();
 
@@ -413,7 +488,7 @@ and open the template in the editor.
                 }
 
                 load_track(index_no);
-//mute sound function
+                //mute sound function
                 function mute_sound() {
                     track.volume = 0;
                     volume.value = 0;
@@ -421,7 +496,7 @@ and open the template in the editor.
                 }
 
 
-// checking.. the song is playing or not
+                // checking.. the song is playing or not
                 function justplay() {
                     if (Playing_song == false) {
                         playsong();
@@ -432,19 +507,19 @@ and open the template in the editor.
                 }
 
 
-// reset song slider
+                // reset song slider
                 function reset_slider() {
                     slider.value = 0;
                 }
 
-// play song
+                // play song
                 function playsong() {
                     track.play();
                     Playing_song = true;
                     play.innerHTML = '<i class="fa fa-pause" aria-hidden="true"></i>';
                 }
 
-//pause song
+                //pause song
                 function pausesong() {
                     track.pause();
                     Playing_song = false;
@@ -452,7 +527,7 @@ and open the template in the editor.
                 }
 
 
-// next song
+                // next song
                 function next_song() {
                     if (index_no < All_song.length - 1) {
                         index_no += 1;
@@ -467,7 +542,7 @@ and open the template in the editor.
                 }
 
 
-// previous song
+                // previous song
                 function previous_song() {
                     if (index_no > 0) {
                         index_no -= 1;
@@ -482,20 +557,20 @@ and open the template in the editor.
                 }
 
 
-// change volume
+                // change volume
                 function volume_change() {
                     volume_show.innerHTML = recent_volume.value;
                     track.volume = recent_volume.value / 100;
                 }
 
-// change slider position 
+                // change slider position 
                 function change_duration() {
                     slider_position = track.duration * (slider.value / 100);
-                    track.currentTime = slider_position;   
-                    current.innerHTML = Math.abs(minutes) + ":" +seconds ;
+                    track.currentTime = slider_position;
+                    current.innerHTML = Math.abs(minutes) + ":" + seconds;
                 }
 
-// autoplay function
+                // autoplay function
                 function autoplay_switch() {
                     if (autoplay == 1) {
                         autoplay = 0;
@@ -518,10 +593,10 @@ and open the template in the editor.
                         var i = setInterval(function () {
                             if (track.readyState > 0) {
                                 minutes = parseInt(track.duration / 60, 10) - parseInt(track.currentTime / 60, 10) - parseInt(track.duration / 60, 10);
-                                seconds= parseInt(track.currentTime)%60;
+                                seconds = parseInt(track.currentTime) % 60;
 
                                 // (Put the minutes and seconds in the display)
-                                current.innerHTML = Math.abs(minutes) + ":" +seconds ;
+                                current.innerHTML = Math.abs(minutes) + ":" + seconds;
                                 clearInterval(i);
                             }
                         }, 200);
@@ -539,6 +614,10 @@ and open the template in the editor.
                         }
                     }
                 }
+
+
+
+
             </script>
         </div>
     </body>

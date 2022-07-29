@@ -74,61 +74,83 @@ public class SongController {
     @PostMapping("/save")
     public String save(@RequestParam("file") MultipartFile file,
             @RequestParam("file2") MultipartFile file2,
-            @ModelAttribute("song") Song s) throws IOException {
-        if (!(file.isEmpty())) {
-            s.setMedia(file.getOriginalFilename());
-            if (!(file2.isEmpty())) {
-                s.setVideo(file2.getOriginalFilename());
-                Files.copy(file2.getInputStream(), Paths.get(base_url + "\\webdata\\video" + File.separator + file2.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
-            } else {
-                try {
-                    if (service.existsById(s.getId()) == true) {
-                        s.setVideo(service.findById(s.getId()).orElseThrow().getVideo());
-                    }
-                } catch (Exception e) {
+            @ModelAttribute("song") Song s, Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) throws IOException {
+        try {
+            if (!(file.isEmpty())) {
+                s.setMedia(file.getOriginalFilename());
+                if (!(file2.isEmpty())) {
+                    s.setVideo(file2.getOriginalFilename());
+                    Files.copy(file2.getInputStream(), Paths.get(base_url + "\\webdata\\video" + File.separator + file2.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+                } else {
+                    try {
+                        if (service.existsById(s.getId()) == true) {
+                            s.setVideo(service.findById(s.getId()).orElseThrow().getVideo());
+                        }
+                    } catch (Exception e) {
 
+                    }
+                }
+                s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
+                s.setAlbum(service_alb.findById(s.getAlbumId()).orElseThrow());
+                s.setView(0);
+                s.setArtistId(s.getAlbum().getArtistId());
+                s.setArtist(s.getAlbum().getArtist());
+                Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+                service.save(s);
+            } else {
+                if (file2.isEmpty()) {
+                    s.setMedia(service.findById(s.getId()).orElseThrow().getMedia());
+                    s.setVideo(service.findById(s.getId()).orElseThrow().getVideo());
+                    s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
+                    s.setAlbum(service_alb.findById(s.getAlbumId()).orElseThrow());
+                    s.setView(0);
+                    s.setArtistId(s.getAlbum().getArtistId());
+                    s.setArtist(s.getAlbum().getArtist());
+                    service.save(s);
+                } else {
+                    s.setMedia(service.findById(s.getId()).orElseThrow().getMedia());
+                    s.setVideo(file2.getOriginalFilename());
+                    s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
+                    s.setAlbum(service_alb.findById(s.getAlbumId()).orElseThrow());
+                    s.setView(0);
+                    s.setArtistId(s.getAlbum().getArtistId());
+                    s.setArtist(s.getAlbum().getArtist());
+                    Files.copy(file2.getInputStream(), Paths.get(base_url + "\\webdata\\video" + File.separator + file2.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+                    service.save(s);
                 }
             }
-            s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
-            s.setAlbum(service_alb.findById(s.getAlbumId()).orElseThrow());
-            s.setView(0);
-            s.setArtistId(s.getAlbum().getArtistId());
-            s.setArtist(s.getAlbum().getArtist());
-            Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
-            service.save(s);
-        } else {
-            if (file2.isEmpty()) {
-                s.setMedia(service.findById(s.getId()).orElseThrow().getMedia());
-                s.setVideo(service.findById(s.getId()).orElseThrow().getVideo());
-                s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
-                s.setAlbum(service_alb.findById(s.getAlbumId()).orElseThrow());
-                s.setView(0);
-                s.setArtistId(s.getAlbum().getArtistId());
-                s.setArtist(s.getAlbum().getArtist());
-                service.save(s);
-            } else {
-                s.setMedia(service.findById(s.getId()).orElseThrow().getMedia());
-                s.setVideo(file2.getOriginalFilename());
-                s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
-                s.setAlbum(service_alb.findById(s.getAlbumId()).orElseThrow());
-                s.setView(0);
-                s.setArtistId(s.getAlbum().getArtistId());
-                s.setArtist(s.getAlbum().getArtist());
-                Files.copy(file2.getInputStream(), Paths.get(base_url + "\\webdata\\video" + File.separator + file2.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
-                service.save(s);
-            }
+        } catch (Exception e) {
+            model.addAttribute("list", service.getPage(pageNumber, size));
+            model.addAttribute("service", service);
+            model.addAttribute("name", "null");
+            model.addAttribute("mess", "Failed");
+            return "admin/song/index";
         }
-        return "redirect:/admin/song";
+        model.addAttribute("list", service.getPage(pageNumber, size));
+        model.addAttribute("service", service);
+        model.addAttribute("name", "null");
+        model.addAttribute("mess", "Successfully");
+        return "admin/song/index";
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") int id) throws IOException {
-        Files.delete(Paths.get(base_url + "\\webdata\\audio" + File.separator + service.findById(id).orElseThrow().getMedia()));
-        if (service.findById(id).orElseThrow().getVideo() != null) {
-            Files.delete(Paths.get(base_url + "\\webdata\\video" + File.separator + service.findById(id).orElseThrow().getVideo()));
+    public String delete(@PathVariable("id") int id, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size, Model model) throws IOException {
+        try {
+            service.deleteById(id);
+        } catch (Exception e) {
+            model.addAttribute("list", service.getPage(pageNumber, size));
+            model.addAttribute("service", service);
+            model.addAttribute("name", "null");
+            model.addAttribute("mess", "Failed");
+            return "admin/song/index";
         }
-        service.deleteById(id);
-        return "redirect:/admin/song";
+        model.addAttribute("list", service.getPage(pageNumber, size));
+        model.addAttribute("service", service);
+        model.addAttribute("name", "null");
+        model.addAttribute("mess", "Successfully");
+        return "admin/song/index";
     }
 
     @GetMapping("/update/{id}")
@@ -144,7 +166,7 @@ public class SongController {
     @GetMapping("/search")
     public String search(Model model, @RequestParam("name") String name, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam(value = "size", required = false, defaultValue = "1000") int size) {
-        model.addAttribute("list",service.getPage(pageNumber, size));
+        model.addAttribute("list", service.getPage(pageNumber, size));
         model.addAttribute("name", name);
         model.addAttribute("service", service);
         return "admin/song/index";

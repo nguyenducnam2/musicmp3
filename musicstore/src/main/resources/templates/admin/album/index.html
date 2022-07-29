@@ -9,6 +9,18 @@ and open the template in the editor.
       layout:decorate="~{admin/layout.html}">
     <body>
         <div layout:fragment="content" id="content-page" class="content-page">
+            <div th:if="${mess} != null" class="alert bg-secondary" role="alert">
+                <div th:if="${mess}=='Successfully'" class="iq-alert-icon">
+                    <i class="ri-pencil-line"></i>
+                </div>
+                <div th:if="${mess}=='Failed'" class="iq-alert-icon">
+                    <i class="ri-error-warning-line"></i>
+                </div>
+                <div class="iq-alert-text" th:text="${mess}">A simple <b>light</b> alert—check it out!</div>
+                <button type="button" class="close text-muted" data-dismiss="alert" aria-label="Close">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12">

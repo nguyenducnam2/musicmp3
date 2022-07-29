@@ -7,6 +7,8 @@ package vn.aptech.musicstore.repository;
 
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import vn.aptech.musicstore.entity.Comment;
 
 /**
@@ -14,5 +16,7 @@ import vn.aptech.musicstore.entity.Comment;
  * @author namng
  */
 public interface CommentRepository extends JpaRepository<Comment,Integer>{
-    List<Comment> findBySongId(int songId);
+    
+    @Query("SELECT o FROM Comment o WHERE o.songId=:songId")
+    List<Comment> findBySongId(@Param("songId") int songId);
 }

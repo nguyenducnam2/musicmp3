@@ -24,47 +24,62 @@ import vn.aptech.musicstore.service.GenreService;
 @Controller
 @RequestMapping("/admin/genre")
 public class GenreController {
-    
+
     @Autowired
     private GenreService service;
-    
+
     @GetMapping
-    public String index(Model model){
+    public String index(Model model) {
         model.addAttribute("list", service.findAll());
         return "admin/genre/index";
     }
-    
+
     @GetMapping("/create")
-    public String create(Model model){
+    public String create(Model model) {
         model.addAttribute("genre", new Genre());
-        model.addAttribute("action","create");
+        model.addAttribute("action", "create");
         return "admin/genre/create";
     }
-    
+
     @PostMapping("/save")
-    public String save(Model model,@ModelAttribute Genre genre){
-        service.save(genre);
-        return "redirect:/admin/genre";
+    public String save(Model model, @ModelAttribute Genre genre) {
+        try {
+            service.save(genre);
+        } catch (Exception e) {
+            model.addAttribute("mess", "Failed");
+            model.addAttribute("list", service.findAll());
+            return "admin/genre/index";
+        }
+        model.addAttribute("mess", "Successfully");
+        model.addAttribute("list", service.findAll());
+        return "admin/genre/index";
     }
-    
+
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id")int id){
-        service.deleteById(id);
-        return "redirect:/admin/genre";
+    public String delete(@PathVariable("id") int id, Model model) {
+        try {
+            service.deleteById(id);
+        } catch (Exception e) {
+            model.addAttribute("mess", "Failed");
+            model.addAttribute("list", service.findAll());
+            return "admin/genre/index";
+        }
+        model.addAttribute("mess", "Successfully");
+        model.addAttribute("list", service.findAll());
+        return "admin/genre/index";
     }
-    
+
     @GetMapping("/update/{id}")
-    public String update(@PathVariable("id")int id,Model model){
+    public String update(@PathVariable("id") int id, Model model) {
         model.addAttribute("genre", service.findById(id));
-        model.addAttribute("action","update");
+        model.addAttribute("action", "update");
         return "admin/genre/create";
     }
-    
+
     @GetMapping("/search")
-    public String search(Model model,@RequestParam("name")String name){
+    public String search(Model model, @RequestParam("name") String name) {
         model.addAttribute("list", service.findByNameCustom(name));
         return "admin/genre/index";
     }
-    
-    
+
 }
