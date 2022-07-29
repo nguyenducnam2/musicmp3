@@ -249,4 +249,15 @@ public class HomeClientController implements ErrorController {
         return url;
     }
 
+    
+      @PostMapping("/changePassword")
+    public String changePassword(@RequestBody PasswordModel passwordModel) {
+        Account user = userService.findAccountByEmail(passwordModel.getEmail());
+        if (!userService.checkIfValidOldPassword(user, passwordModel.getOldPassword())) {
+            return "Invalid Old Password";
+        }
+        //Save New Password
+        userService.changePassword(user, passwordModel.getNewPassword());
+        return "Password Changed Successfully";
+    }
 }

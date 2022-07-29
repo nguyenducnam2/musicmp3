@@ -191,20 +191,21 @@ and open the template in the editor.
                                             </div>
                                         </div>
                                         <div class="iq-card-body">
-                                            <form th:action="${/user/changePassword}">
+                                            <form th:action=${"/user/changePassword"} th:object="${passwordModel}" method="post">
+                                                <input type="hidden"  th:field="*{email}" />
                                                 <div class="form-group">
                                                     <label for="cpass">Current Password:</label>
-                                                    <a href="javascripe:void();" class="float-right">Forgot Password</a>
-                                                    <input type="Password" class="form-control" id="cpass" value="">
+                                                    <a th:href="@{/resetPassword}" class="float-right">Forgot Password</a>
+                                                    <input type="Password" th:field="*{oldPassword}" class="form-control" id="cpass" value="" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="npass">New Password:</label>
-                                                    <input type="Password" class="form-control" id="npass" value="">
+                                                    <input type="Password" th:field="*{newPassword}" class="form-control" id="npass" value="" required>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label for="vpass">Verify Password:</label>
-                                                    <input type="Password" class="form-control" id="vpass" value="">
-                                                </div>
+                                                <!--                                                <div class="form-group">
+                                                                                                    <label for="vpass">Verify Password:</label>
+                                                                                                    <input type="Password" class="form-control" id="vpass" value="" required>
+                                                                                                </div>-->
                                                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
                                                 <button type="reset" class="btn iq-bg-danger">Cancel</button>
                                             </form>

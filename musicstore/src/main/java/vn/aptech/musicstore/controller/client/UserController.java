@@ -92,17 +92,31 @@ public class UserController {
     @GetMapping("/profile/{id}")
     public String profile(@PathVariable("id") Long id, Model model) {
         Optional<Account> a = userService.findById(id);
-        UserModel dto = new UserModel();
-
+        UserModel userM = new UserModel();
         if (a.isPresent()) {
             Account entity = a.get();
-            BeanUtils.copyProperties(entity, dto);
-            dto.setEnabled(true);
-            dto.setPassword("");
-            model.addAttribute("account", dto);
+            BeanUtils.copyProperties(entity, userM);
+            userM.setEnabled(true);
+            userM.setPassword("");
+            model.addAttribute("account", userM);
         }
-        model.addAttribute("message", "Account is not exist");
+
+        PasswordModel passwordModel = new PasswordModel();
+        passwordModel.setEmail(a.get().getEmail());
+        model.addAttribute("passwordModel", passwordModel);
+
         return "client/user/profile";
+    }
+
+    @PostMapping("/changePassword")
+    public String changePassword(@ModelAttribute("passwordModel") PasswordModel passwordModel) {
+        Account user = userService.findAccountByEmail(passwordModel.getEmail());
+        if (!userService.checkIfValidOldPassword(user, passwordModel.getOldPassword())) {
+            return "redirect:/user";
+        }
+        //Save New Password
+        userService.changePassword(user, passwordModel.getNewPassword());
+        return "redirect:/login";
     }
 
     @PostMapping("/processUpdate")
@@ -124,14 +138,4 @@ public class UserController {
 
     }
 
-    @PostMapping("/changePassword")
-    public String changePassword(@RequestBody PasswordModel passwordModel) {
-        Account user = userService.findAccountByEmail(passwordModel.getEmail());
-        if (!userService.checkIfValidOldPassword(user, passwordModel.getOldPassword())) {
-            return "Invalid Old Password";
-        }
-        //Save New Password
-        userService.changePassword(user, passwordModel.getNewPassword());
-        return "Password Changed Successfully";
-    }
 }
