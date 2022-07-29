@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import vn.aptech.musicstore.entity.Account;
 import vn.aptech.musicstore.entity.Song;
 import vn.aptech.musicstore.entity.model.AccountModel;
+import vn.aptech.musicstore.entity.model.PasswordModel;
 import vn.aptech.musicstore.entity.model.UserModel;
 import vn.aptech.musicstore.repository.PasswordResetTokenRepository;
 import vn.aptech.musicstore.service.AccountService;
@@ -47,22 +49,19 @@ import vn.aptech.musicstore.service.SongService;
 @RequestMapping("/user")
 @Slf4j
 public class UserController {
-    
+
     @Autowired
     private AccountService userService;
-    
-    @Autowired
-    private PasswordResetTokenRepository passwordResetTokenRepository;
-    
+
     @Autowired
     private SongService service_song;
-    
+
     @Autowired
     private AlbumService service_album;
-    
+
     @Autowired
     private ArtistService service_artist;
-    
+
     @Value("${static.base.url}")
     private String base_url;
 
@@ -92,23 +91,23 @@ public class UserController {
 //    }
     @GetMapping("/profile/{id}")
     public String profile(@PathVariable("id") Long id, Model model) {
-         Optional<Account> a = userService.findById(id);
-         UserModel dto = new UserModel();
-        
-        if(a.isPresent()){
+        Optional<Account> a = userService.findById(id);
+        UserModel dto = new UserModel();
+
+        if (a.isPresent()) {
             Account entity = a.get();
             BeanUtils.copyProperties(entity, dto);
             dto.setEnabled(true);
             dto.setPassword("");
             model.addAttribute("account", dto);
         }
-        model.addAttribute("message","Account is not exist");
+        model.addAttribute("message", "Account is not exist");
         return "client/user/profile";
     }
-    
+
     @PostMapping("/processUpdate")
     public String processUpdate(@ModelAttribute("account") Account user, @RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
-        
+
         if (!(file.isEmpty())) {
             user.setImage(file.getOriginalFilename());
             Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\user" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
@@ -117,11 +116,22 @@ public class UserController {
             user.setImage(userService.findById(user.getId()).orElseThrow().getImage());
             userService.save(user);
         }
-        
+
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
-        
+
         return "redirect:/user";
-        
+
+    }
+
+    @PostMapping("/changePassword")
+    public String changePassword(@RequestBody PasswordModel passwordModel) {
+        Account user = userService.findAccountByEmail(passwordModel.getEmail());
+        if (!userService.checkIfValidOldPassword(user, passwordModel.getOldPassword())) {
+            return "Invalid Old Password";
+        }
+        //Save New Password
+        userService.changePassword(user, passwordModel.getNewPassword());
+        return "Password Changed Successfully";
     }
 }

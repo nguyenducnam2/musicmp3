@@ -33,7 +33,9 @@
                                                     <div class="sign-user_card ">
                                                         <div class="d-flex justify-content-center">
                                                             <div class="sign-user_logo">
-                                                                <img th:src="@{/admintemplate/images/login/user.png}" class=" img-fluid" alt="Logo">
+                                                                <a th:href="@{/}">
+                                                                    <img th:src="@{/admintemplate/images/logo.png}" class=" img-fluid" alt="Logo">
+                                                                </a>
                                                             </div>
                                                         </div>
                                                         <div class="sign-in-page-data">
@@ -69,10 +71,10 @@
                                                         </div>
                                                         <div class="mt-2">
                                                             <div class="d-flex justify-content-center links">
-                                                                Don't have an account? <a href="sign-up.html" class="ml-2">Sign Up</a>
+                                                                Don't have an account? <a th:href="@{/register}" class="ml-2">Sign Up</a>
                                                             </div>
                                                             <div class="d-flex justify-content-center links">
-                                                                <a href="pages-recoverpw.html">Forgot your password?</a>
+                                                                <a th:href="@{/resetPassword}">Forgot your password?</a>
                                                             </div>
                                                         </div>
                                                     </div>
