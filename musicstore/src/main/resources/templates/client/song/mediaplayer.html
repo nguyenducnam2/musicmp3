@@ -255,9 +255,8 @@ and open the template in the editor.
                                     <!--- right part --->
                                     <div class="right">
                                         <div class="show_song_no">
-                                            <p id="present">1</p>
-                                            <p>/</p>
-                                            <p id="total">5</p>
+                                            <button style="background: #ff8a65;" th:if="${session.user !=null}" class="las la-tasks" type="button" data-toggle="modal" data-target="#myModal"></button>
+                                            <button style="background: #ff8a65;" th:if="${session.user ==null}" class="las la-tasks" type="button" data-toggle="modal" data-target="#myModal-login"></button>
                                         </div>
                                         <!--- song title & artist name --->
                                         <p id="title">title.mp3</p>
@@ -354,7 +353,7 @@ and open the template in the editor.
 
                                             </div>
                                         </form>
-                                         <ul id="myList" class="list-unstyled" th:each="item:${listcomments}">
+                                        <ul id="myList" class="list-unstyled" th:each="item:${listcomments}">
                                             <li class="media"> <span class="round"><img style=" border-radius: 10px;
                                                                                         padding-right: 5px;
                                                                                         width: 60px;
@@ -366,7 +365,7 @@ and open the template in the editor.
                                                             padding-left: 15px !important;
                                                             margin-bottom: 0; font-weight: bolder; " th:text="${item.account.username}">Leo Aminoff</h6>
                                                         <div class="ml-auto">
-                                                            <p class="text">24h</p>
+                                                            <p class="text"></p>
                                                         </div>
                                                     </div>
                                                     <p th:text="${item.content}">Bought your "Palace of Versailles"</p>
@@ -404,6 +403,113 @@ and open the template in the editor.
                     </div>
                 </div>
             </div>
+            <div th:if="${session.user !=null}" id="myModal" class="modal fade" role="dialog">
+
+                <!--Modal-->
+                <div class="modal-dialog">
+
+                    <!--Modal Content-->
+                    <div class="modal-content">
+
+                        <!-- Modal Header-->
+                        <div class="modal-header">
+                            <h3>Add To ...</h3>
+
+                            <!--Close/Cross Button-->
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <form th:action=${"/song/playlist/add"}>
+
+                            <input type="hidden" th:name="songId" th:value="${song.id}"/>
+                            <input type="hidden" th:name="accountId" th:value="${session.user.id}"/>
+                            <!-- Radio Buttons for Rating-->
+                            <div class="form-check mb-4" th:each="item:${service_pl.findByAccountId(session.user.id)}">
+                                <input th:name="playlistId" type="checkbox" th:value="${item.id}">
+                                <label class="ml-3" th:text="${item.name}"></label>
+                            </div>
+
+                            <!--Text Message-->
+                            <div class="text-center">
+                                <h4>Create New Playlist</h4>
+                            </div>
+                            <input name="name" class="form-control mr-3" placeholder="Enter name"/>
+
+                            <!-- Modal Footer-->
+                            <div class="modal-footer">
+                                <button class="btn btn-primary">Add
+                                    <i class="fa fa-paper-plane"></i>
+                                </button>
+                                <a href="" class="btn btn-outline-primary" data-dismiss="modal">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div th:if="${session.user ==null}" id="myModal-login" class="modal fade" role="dialog">
+
+                <!--Modal-->
+                <div class="modal-dialog">
+
+                    <!--Modal Content-->
+                    <div class="modal-content">
+                        <section class="sign-in-page">
+                            <div class="sign-user_card ">
+                                <div class="d-flex justify-content-center">
+                                    <div class="sign-user_logo">
+                                        <a th:href="@{/}">
+                                            <img th:src="@{/admintemplate/images/logo.png}" class=" img-fluid" alt="Logo">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="sign-in-page-data">
+                                    <div class="sign-in-from w-100 pt-5 m-auto">
+                                        <h1 class="mb-3 text-center">Log in Muzik</h1>
+                                        <div th:if="${param.error}" class="alert-warning">
+                                            <h4>Invalid username and password.</h4>
+                                        </div>
+                                        <div th:if="${param.logout}" class="alert-heading">
+                                            <h4>You have been logged out.</h4>
+                                        </div>
+                                        <form class="mt-4" th:action="@{/user-login-process}" method="post">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail2">Username</label>
+                                                <input class="form-control mb-0" name="username" id="exampleInputEmail2" placeholder="Enter username" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputPassword2">Password</label>
+                                                <input type="password" class="form-control mb-0" name="password" id="exampleInputPassword2" placeholder="Password" required>
+                                            </div>
+                                            <div class="sign-info">
+                                                <button type="submit" class="btn btn-primary mb-2">Log in</button>
+                                                <span class="dark-color d-block line-height-2">Don't have an account? <a href="sign-up.html">Sign up</a></span>
+                                            </div>
+                                            <div class="d-inline-block w-100">
+                                                <div class="custom-control custom-checkbox d-inline-block mt-2 pt-1">
+                                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                                    <label class="custom-control-label" for="customCheck1">Remember Me</label>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="d-flex justify-content-center links">
+                                        Don't have an account? <a th:href="@{/register}" class="ml-2">Sign Up</a>
+                                    </div>
+                                    <div class="d-flex justify-content-center links">
+                                        <a th:href="@{/resetPassword}">Forgot your password?</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
             <script th:inline="javascript">
                 let previous = document.querySelector('#pre');
                 let play = document.querySelector('#play');
@@ -421,8 +527,8 @@ and open the template in the editor.
                 let mv = document.querySelector('#mv');
                 let time = document.querySelector('#time');
                 let current = document.querySelector('#current');
-                
-             
+
+
 
                 let timer;
                 let autoplay = 0;
@@ -437,13 +543,13 @@ and open the template in the editor.
                 let track = document.createElement('audio');
                 //All songs list
                 var All_song = /*[[${anotherlist}]]*/[];
-              
+
                 // All functions
 
 
                 // function load the track
 
-      
+
 
 
                 function load_track(index_no) {
@@ -463,8 +569,8 @@ and open the template in the editor.
                     } else {
                         mv.hidden = true;
                     }
-                    
-                    
+
+
                     track.load();
 
 
@@ -473,7 +579,6 @@ and open the template in the editor.
                         if (track.readyState > 0) {
                             minutes = parseInt(track.duration / 60, 10);
                             seconds = track.duration % 60;
-
                             // (Put the minutes and seconds in the display)
                             time.innerHTML = minutes + ":" + parseInt(seconds);
                             clearInterval(i);
