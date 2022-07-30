@@ -40,11 +40,11 @@ public class Account implements Serializable {
     private String firstName;
     private String lastName;
     private String email;
-    private boolean enabled = false;
-    private boolean isEdited = false;
+    private Boolean enabled = false;
+    private Boolean isEdited = false;
 
 //    @Column(name = "gender")
-//    private boolean gender = false;
+//    private Boolean gender = false;
     private String address;
     private String image;
     private String phone;

@@ -38,6 +38,7 @@ and open the template in the editor.
                                                 <th style="width: 25%;">Username</th>
                                                 <th style="width: 25%;">Fullname</th>
                                                 <th style="width: 15%;">Role</th>
+                                                <th style="width: 15%;">State</th>
                                                 <th style="width: 20%;">Action</th> 
                                             </tr>
                                         </thead>
@@ -48,19 +49,21 @@ and open the template in the editor.
                                                 <td th:text="${item.fullname}"></td>
                                                 <td th:switch="${item.role}"> 
                                                     <span th:case="'ROLE_ADMIN'">Admin</span>
+                                                    <span th:case="'ROLE_EDITOR'">Editor</span>
                                                     <span th:case="'ROLE_USER'">User</span>
                                                     <span th:case="'ROLE_MODERATOR'">MOD</span>
                                                     <span th:case="*">Other</span>
                                                 </td>
-                                            
+                                                <td th:text="${item.enabled ? 'Active':'Block'}">State</td>
+
                                                 <td>
                                                     <div th:if="${#httpServletRequest.getUserPrincipal().getName()} == ${item.username}" class="flex align-items-center list-user-action">
                                                         <!--<a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" th:href="@{/admin/account/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>-->
                                                         <!--<a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/admin/account/delete/{id}(id=${item.id})}"><i class="ri-delete-bin-line"></i></a>-->
                                                     </div>
-                                                     <div th:if="${#httpServletRequest.getUserPrincipal().getName()} != ${item.username}  " class="flex align-items-center list-user-action">
+                                                    <div th:if="${#httpServletRequest.getUserPrincipal().getName()} != ${item.username}  " class="flex align-items-center list-user-action">
                                                         <a th:if="${item.role} != 'ROLE_MODERATOR'" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" th:href="@{/admin/account/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
-                                                        <a sec:authorize="hasRole('MODERATOR')" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/admin/account/delete/{id}(id=${item.id})}"><i class="ri-delete-bin-line"></i></a>
+                                                        <!--<a sec:authorize="hasRole('MODERATOR')" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/admin/account/delete/{id}(id=${item.id})}"><i class="ri-delete-bin-line"></i></a>-->
                                                     </div>
                                                 </td>
                                             </tr>

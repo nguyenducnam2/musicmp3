@@ -31,4 +31,5 @@ public class AccountModel {
     private String fullname;
     private String role;
     private Boolean isEdit = false;
+    private Boolean enabled = false;
 }

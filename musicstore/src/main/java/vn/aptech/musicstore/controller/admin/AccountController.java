@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import vn.aptech.musicstore.entity.Account;
 import vn.aptech.musicstore.entity.model.AccountModel;
 import vn.aptech.musicstore.service.AccountService;
@@ -37,7 +38,9 @@ public class AccountController {
 
     @GetMapping("/create")
     public String create(Model model) {
-        model.addAttribute("account", new Account());
+        Account acc = new Account();
+//        acc.setEnabled(Boolean.TRUE);
+        model.addAttribute("account", acc);
         return "admin/account/create";
     }
 
@@ -46,19 +49,20 @@ public class AccountController {
         model.addAttribute("account", serviceAccount.findById(id));
         return "admin/account/update";
     }
+
     @GetMapping("/updateProfile/{username}")
     public String updateProfile(@PathVariable("username") String username, Model model) {
         Optional<Account> a = serviceAccount.findByUsername(username);
         AccountModel dto = new AccountModel();
-        
-        if(a.isPresent()){
+
+        if (a.isPresent()) {
             Account entity = a.get();
             BeanUtils.copyProperties(entity, dto);
             dto.setIsEdit(true);
             dto.setPassword("");
             model.addAttribute("account", dto);
         }
-        model.addAttribute("message","Account is not exist");
+        model.addAttribute("message", "Account is not exist");
         return "admin/profile";
     }
 
@@ -66,6 +70,7 @@ public class AccountController {
     public String save(Model model, @ModelAttribute Account acc) {
         Optional<Account> a = serviceAccount.findByUsername(acc.getUsername());
         if (a.isEmpty()) {
+            acc.setEnabled(Boolean.TRUE);
             serviceAccount.save(acc);
             return "redirect:/admin/account";
         } else {
@@ -85,5 +90,11 @@ public class AccountController {
     public String delete(@PathVariable("id") Long id) {
         serviceAccount.deleteById(id);
         return "redirect:/admin/account";
+    }
+    
+    @GetMapping("/search")
+    public String search(Model model, @RequestParam("name") String name) {
+        model.addAttribute("list", serviceAccount.findByUsername(name));
+        return "admin/genre/index";
     }
 }

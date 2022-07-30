@@ -63,7 +63,7 @@ public class AccountUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return acc.getEnabled();
     }
     
     public String getFullName(){
