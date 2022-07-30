@@ -37,6 +37,7 @@ public interface AccountService {
     VerificationToken generateNewVerificationToken(String oldToken);
 
     Account findAccountByEmail(String email);
+    String findByEmail(String email);
 
     void createPasswordResetTokenForUser(Account user, String token);
 
