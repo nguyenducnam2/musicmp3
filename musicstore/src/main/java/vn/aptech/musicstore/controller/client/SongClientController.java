@@ -9,11 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import vn.aptech.musicstore.entity.Comment;
@@ -56,6 +58,7 @@ public class SongClientController {
         model.addAttribute("song", s);
         model.addAttribute("anotherlist", anotherlist);
         model.addAttribute("listcomments", service_cmt.findBySongId(s.getId()));
+        model.addAttribute("listcmtall", service_cmt.findAll());
         HttpSession session = request.getSession();
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
@@ -63,7 +66,7 @@ public class SongClientController {
     }
 
     @GetMapping("/video/{id}")
-    public String videoPlayer(@PathVariable("id") int id, Model model) {
+    public String videoPlayer(@PathVariable("id") int id, Model model, HttpServletRequest request) {
         Song s = service.findById(id).orElseThrow();
         s.setView(s.getView() + 1);
         service.save(s);
@@ -80,14 +83,17 @@ public class SongClientController {
         }
         model.addAttribute("anotherlist", anotherlist);
         model.addAttribute("listsub", service_sub.findBySongId(id));
-        model.addAttribute("listcomments", service_sub.findBySongId(s.getId()));
+        model.addAttribute("listcomments", service_cmt.findBySongId(s.getId()));
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
         return "client/song/video";
     }
 
     @GetMapping("/comment/add")
     public String addComment(Model model, @RequestParam("content") String content,
             @RequestParam("accountId") String accountId,
-            @RequestParam("songId") Integer songId,HttpServletRequest request) {
+            @RequestParam("songId") Integer songId, HttpServletRequest request) {
         Comment comment = new Comment();
         comment.setContent(content);
         comment.setAccountId(Long.parseLong(accountId));
@@ -95,7 +101,34 @@ public class SongClientController {
         comment.setSongId(songId);
         comment.setSong(service.findById(songId).orElseThrow());
         service_cmt.save(comment);
+        return "redirect:/song/" + songId;
+    }
 
-        return "redirect:/song/"+songId;
+    @GetMapping("/comment/add02")
+    public String addComment02(Model model, @RequestParam("content") String content,
+            @RequestParam("accountId") String accountId,
+            @RequestParam("songId") Integer songId, HttpServletRequest request) {
+        Comment comment = new Comment();
+        comment.setContent(content);
+        comment.setAccountId(Long.parseLong(accountId));
+        comment.setAccount(serviceAccount.findById(Long.parseLong(accountId)).orElseThrow());
+        comment.setSongId(songId);
+        comment.setSong(service.findById(songId).orElseThrow());
+        service_cmt.save(comment);
+        return "redirect:/song/video/" + songId;
+    }
+
+    @GetMapping("/comment/delete/{id}")
+    public String deleteComment01(@PathVariable("id") int id) {
+        int songId = service_cmt.findById(id).orElseThrow().getSongId();
+        service_cmt.deleteById(id);
+        return "redirect:/song/" + songId;
+    }
+
+    @GetMapping("/comment/delete02/{id}")
+    public String deleteComment02(@PathVariable("id") int id) {
+        int songId = service_cmt.findById(id).orElseThrow().getSongId();
+        service_cmt.deleteById(id);
+        return "redirect:/song/video/" + songId;
     }
 }

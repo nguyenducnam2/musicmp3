@@ -31,7 +31,7 @@ public class AccountUserDetails implements UserDetails {
         if (acc!=null) {
             GrantedAuthority au = new SimpleGrantedAuthority(acc.getRole());
             authorities.add(au);
-            System.out.println("Role Account: " + acc.getRole());
+//            System.out.println("Role Account: " + acc.getRole());
         }
         return authorities;
     }

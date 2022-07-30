@@ -211,12 +211,12 @@
                                             <div class="iq-card-body p-0" >
                                                 <div class="iq-thumb" >
                                                     <div class="iq-music-overlay" ></div>
-                                                    <a href="music-player.html">
+                                                    <a th:href="@{/news/details/{id}(id=${item.id})}">
                                                         <img th:src="@{'/webdata/news/'+${item.image}}"
                                                              class="img-border-radius img-fluid w-100" style="height: 130px;width: 130px;" alt="">
                                                     </a>
                                                     <div class="overlay-music-icon">
-                                                        <a href="music-player.html">
+                                                        <a th:href="@{/news/details/{id}(id=${item.id})}">
                                                             <i class="las la-play-circle"></i>
                                                         </a>
                                                     </div>

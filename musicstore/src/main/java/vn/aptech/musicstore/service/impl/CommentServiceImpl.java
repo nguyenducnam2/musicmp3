@@ -46,4 +46,13 @@ public class CommentServiceImpl implements CommentService{
     public void deleteById(int id) {
         repo.deleteById(id);
     }
+
+    @Override
+    public void deleteBySongId(int songId) {
+        for (Comment cmt: repo.findAll()) {
+            if(cmt.getSongId()==songId){
+                repo.delete(cmt);
+            }
+        }
+    }
 }

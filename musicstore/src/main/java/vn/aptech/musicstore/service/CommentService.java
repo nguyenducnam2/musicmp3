@@ -20,5 +20,5 @@ public interface CommentService {
     List<Comment> findBySongId(int songId);
     Comment save(Comment comment);
     void deleteById(int id);
-    
+    void deleteBySongId(int songId);
 }

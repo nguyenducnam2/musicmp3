@@ -4,33 +4,35 @@
  */
 package vn.aptech.musicstore.controller.client;
 
-import java.io.UnsupportedEncodingException;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import vn.aptech.musicstore.entity.Account;
-import vn.aptech.musicstore.entity.PasswordResetToken;
 import vn.aptech.musicstore.entity.Song;
-import vn.aptech.musicstore.entity.VerificationToken;
+import vn.aptech.musicstore.entity.model.AccountModel;
 import vn.aptech.musicstore.entity.model.PasswordModel;
 import vn.aptech.musicstore.entity.model.UserModel;
 import vn.aptech.musicstore.repository.PasswordResetTokenRepository;
@@ -52,9 +54,6 @@ public class UserController {
     private AccountService userService;
 
     @Autowired
-    private PasswordResetTokenRepository passwordResetTokenRepository;
-
-    @Autowired
     private SongService service_song;
 
     @Autowired
@@ -62,6 +61,9 @@ public class UserController {
 
     @Autowired
     private ArtistService service_artist;
+
+    @Value("${static.base.url}")
+    private String base_url;
 
 //    @Autowired
 //    private ApplicationEventPublisher publisher;
@@ -83,9 +85,59 @@ public class UserController {
         return "client/user/index";
     }
 
-    @GetMapping("/profile")
-    public String profile() {
+//    @GetMapping("/profile")
+//    public String profile() {
+//        return "client/user/profile";
+//    }
+    @GetMapping("/profile/{id}")
+    public String profile(@PathVariable("id") Long id, Model model) {
+        Optional<Account> a = userService.findById(id);
+        UserModel userM = new UserModel();
+        if (a.isPresent()) {
+            Account entity = a.get();
+            BeanUtils.copyProperties(entity, userM);
+            userM.setEnabled(true);
+            userM.setPassword("");
+            model.addAttribute("account", userM);
+        }
+
+        PasswordModel passwordModel = new PasswordModel();
+        passwordModel.setEmail(a.get().getEmail());
+        model.addAttribute("passwordModel", passwordModel);
+
         return "client/user/profile";
+    }
+
+    @PostMapping("/changePassword")
+    public String changePassword(Model model ,@ModelAttribute("passwordModel") PasswordModel passwordModel,HttpServletRequest request) {
+        Account user = userService.findAccountByEmail(passwordModel.getEmail());
+
+        if (!userService.checkIfValidOldPassword(user, passwordModel.getOldPassword())) {
+            return "redirect:/login";
+            
+        }
+        //Save New Password
+        userService.changePassword(user, passwordModel.getNewPassword());
+        return "redirect:/user";
+    }
+
+    @PostMapping("/processUpdate")
+    public String processUpdate(@ModelAttribute("account") Account user, @RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
+
+        if (!(file.isEmpty())) {
+            user.setImage(file.getOriginalFilename());
+            Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\user" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+            userService.save(user);
+        } else {
+            user.setImage(userService.findById(user.getId()).orElseThrow().getImage());
+            userService.save(user);
+        }
+
+        HttpSession session = request.getSession();
+        session.setAttribute("user", user);
+
+        return "redirect:/user";
+
     }
 
 }

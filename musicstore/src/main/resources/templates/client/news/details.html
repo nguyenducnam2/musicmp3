@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xlmns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{client/layout.html}">
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="iq-card">
+                            <div class="iq-card-header d-flex justify-content-between">
+                                <div class="iq-header-title">
+                                    <h4 class="card-title">News details</h4>
+                                </div>
+                            </div>
+                            <div class="iq-card-body">
+                                <div id="table" class="table-editable">
+                                    <table th:each="item:${list}" class="table table-bordered table-responsive-md table-striped text-center">
+                                        <tr>
+                                            <td>Title</td>
+                                            <td>
+                                                <p th:text="${item.title}"></p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Image</td>
+                                            <td>
+                                                <img style="width: 160px;height: 150px;" th:src="@{'/webdata/news/'+${item.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Views</td>
+                                            <td>
+                                                <p th:text="${item.view}"></p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Release date</td>
+                                            <td>
+                                                <p th:text="${item.created_at}"></p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Description</td>
+                                            <td>
+                                                <p th:text="${item.description}"></p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,43 +1,27 @@
 <!DOCTYPE html>
 <!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
 -->
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout.html}">
+      layout:decorate="~{client/layout.html}">
     <body>
         <div layout:fragment="content" id="content-page" class="content-page">
-            <div th:if="${mess} != null" class="alert bg-secondary" role="alert">
-                <div th:if="${mess}=='Successfully'" class="iq-alert-icon">
-                    <i class="ri-pencil-line"></i>
-                </div>
-                <div th:if="${mess}=='Failed'" class="iq-alert-icon">
-                    <i class="ri-error-warning-line"></i>
-                </div>
-                <div class="iq-alert-text" th:text="${mess}">A simple <b>light</b> alert—check it out!</div>
-                <button type="button" class="close text-muted" data-dismiss="alert" aria-label="Close">
-                    <i class="ri-close-line"></i>
-                </button>
-            </div>
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="iq-card">
                             <div class="iq-card-header d-flex justify-content-between">
                                 <div class="iq-header-title">
-                                    <h4 class="card-title">Album Lists</h4>
+                                    <h4 class="card-title">News Lists</h4>
                                 </div>
                                 <div class="iq-search-bar">   
-                                    <form th:action="@{/admin/album/search}" class="searchbox">
+                                    <form th:action="@{/admin/news/search}" class="searchbox">
                                         <input type="text" class="text search-input" name="name" placeholder="Search Here..">
                                         <a class="search-link" href="#"><i class="ri-search-line text-black"></i></a>
                                         <a class="search-audio" href="#"><i class="las la-microphone text-black"></i></a> 
                                     </form>
-                                </div>
-                                <div class="iq-card-header-toolbar d-flex align-items-center">
-                                    <a th:href="@{/admin/album/create}" class="btn btn-primary">Add New Album</a>
                                 </div>
                             </div>
                             <div class="iq-card-body">
@@ -46,9 +30,9 @@ and open the template in the editor.
                                         <thead>
                                             <tr>
                                                 <th style="width: 5%;">No</th>
-                                                <th style="width: 12%;">Poster</th>
-                                                <th style="width: 15%;">Name</th>
-                                                <th style="width: 15%;">Artist</th>
+                                                <th style="width: 20%;">Picture</th>
+                                                <th style="width: 15%;">Title</th>
+                                                <!--  <th style="width: 15%;">Artist</th>
                                                 <!--<th style="width: 10%;">Price</th>
                                                 <th style="width: 10%;">Artist</th>
                                                     <th style="width: 30%;">Audio</th> -->
@@ -56,38 +40,28 @@ and open the template in the editor.
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr th:if="${name=='null'}" th:each="item:${list.page}">
+                                            <tr th:if="${title=='null'}" th:each="item:${list.page}">
                                                 <td th:text="${service.findAll().size-service.findAll().indexOf(item)}"></td>
                                                 <td>
-                                                    <img style="width: 160px;height: 150px;" th:src="@{'/webdata/album/'+${item.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
+                                                    <img style="width: 160px;height: 150px;" th:src="@{'/webdata/news/'+${item.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
                                                 </td>
-                                                <td th:text="${item.name}"></td>
-                                                <td th:text="${item.artist.name}"></td>
-                                                <!--      <td>Edyta Gorniak</td> 
-                                                <td th:text="${item.artist.name}"></td> 
-                                                <td>
-                                                    <audio controls loop>
-                                                        <source th:src="@{'/audio/'+${item.media}}"/>
-                                                    </audio>
-                                                </td> -->
+                                                <td th:text="${item.title}"></td>
                                                 <td>
                                                     <div class="flex align-items-center list-user-action">
-                                                        <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" th:href="@{/admin/album/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
-                                                        <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/admin/album/delete/{id}(id=${item.id})}"><i class="ri-delete-bin-line"></i></a>
+                                                        <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Details" th:href="@{/news/details/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr th:if="${name!='null' && item.name.toLowerCase().contains(name.toLowerCase())}" th:each="item:${list.page}">
+                                            <!-- search case -->
+                                            <tr th:if="${title!='null' && item.title.toLowerCase().contains(title.toLowerCase())}" th:each="item:${list.page}">
                                                 <td th:text="${service.findAll().size-service.findAll().indexOf(item)}"></td>
                                                 <td>
-                                                    <img style="width: 160px;height: 150px;" th:src="@{'/webdata/album/'+${item.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
+                                                    <img style="width: 160px;height: 150px;" th:src="@{'/webdata/news/'+${item.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
                                                 </td>
-                                                <td th:text="${item.name}"></td>
-                                                <td th:text="${item.artist.name}"></td>
+                                                <td th:text="${item.title}"></td>
                                                 <td>
                                                     <div class="flex align-items-center list-user-action">
-                                                        <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" th:href="@{/admin/album/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
-                                                        <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/admin/album/delete/{id}(id=${item.id})}"><i class="ri-delete-bin-line"></i></a>
+                                                        <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Details" th:href="@{/news/details/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -98,17 +72,17 @@ and open the template in the editor.
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>  
             <nav th:if="${name=='null'}" aria-label="Page navigation" class="paging">
                 <ul class="pagination" th:if="${list.page.totalPages > 1}">
                     <li class="page-item" th:classappend="${!list.paging.isPrevEnabled()? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{'/admin/album/?pageNumber=' + ${list.paging.pageNumber - 1}}"
+                        <a class="page-link" th:href="@{'/admin/news/?pageNumber=' + ${list.paging.pageNumber - 1}}"
                            tabindex="-1">Previous</a>
                     </li>
                     <th:block th:each="item : ${list.paging.getItems()}">
                         <li class="page-item" th:classappend="${item.index == list.paging.pageNumber? 'active' : ''}"
                             th:if="${item.pageItemType.name() == 'PAGE'}">
-                            <a class="page-link" th:href="@{'/admin/album/?pageNumber=' + ${item.index}}"
+                            <a class="page-link" th:href="@{'/admin/news/?pageNumber=' + ${item.index}}"
                                th:text="${item.index}"></a>
                         </li>
                         <li class="page-item disabled" th:if="${item.pageItemType.name() == 'DOTS'}">
@@ -116,10 +90,10 @@ and open the template in the editor.
                         </li>
                     </th:block>
                     <li class="page-item" th:classappend="${!list.paging.isNextEnabled()? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{'/admin/album/?pageNumber=' + ${list.paging.pageNumber + 1}}">Next</a>
+                        <a class="page-link" th:href="@{'/admin/news/?pageNumber=' + ${list.paging.pageNumber + 1}}">Next</a>
                     </li>
                 </ul>
             </nav>
-        </div>                         
+        </div>
     </body>
 </html>

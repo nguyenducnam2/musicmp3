@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import vn.aptech.musicstore.entity.Account;
 import vn.aptech.musicstore.entity.PasswordResetToken;
 import vn.aptech.musicstore.entity.Song;
@@ -77,7 +79,7 @@ public class HomeClientController implements ErrorController {
         model.addAttribute("listsong_hot", service_song.findByOrderByViewDesc());
         model.addAttribute("listalbum", service_album.findTop12());
         model.addAttribute("listartist", service_artist.findTop12ByOrderByIdDesc());
-	model.addAttribute("listnews", service_news.findTop12ByOrderByIdDesc());
+        model.addAttribute("listnews", service_news.findTop12ByOrderByIdDesc());
         return "client/index";
     }
 
@@ -91,7 +93,7 @@ public class HomeClientController implements ErrorController {
         model.addAttribute("searchname", searchname);
         model.addAttribute("listalbum", service_album.findByNameCustom(searchname));
         model.addAttribute("listartist", service_artist.findByNameCustom(searchname));
-	model.addAttribute("listnews", service_news.findByTitleCustom(searchname));
+        model.addAttribute("listnews", service_news.findByTitleCustom(searchname));
         return "client/result";
     }
 
@@ -127,21 +129,22 @@ public class HomeClientController implements ErrorController {
 //    }
     @GetMapping("/register")
     public String register(Model model) {
-        model.addAttribute("account", new Account());
+        model.addAttribute("account", new UserModel());
         return "client/register";
     }
 
     @PostMapping("/registerProcess")
-    public String registerProcess(Model model, @ModelAttribute UserModel userModel, HttpServletRequest request)
+    public String registerProcess(@ModelAttribute UserModel userModel, HttpServletRequest request)
             throws UnsupportedEncodingException, MessagingException {
         Account user = userService.registerUser(userModel);
         String token = UUID.randomUUID().toString();
-        System.out.println("token" + token);
+        System.out.println("token: " + token);
 
         userService.saveVerificationTokenForUser(token, user);
 
         // Send Mail to acc
-        String url = uri_local
+//        String url = uri_local
+        String url = applicationUrl(request)
                 + "verifyRegistration?token="
                 + token;
 
@@ -151,18 +154,9 @@ public class HomeClientController implements ErrorController {
         HttpSession session = request.getSession();
         session.setAttribute("createUserSuccess", "success");
         log.info("Click the link to verify your account: {}", url);
-        return "client/register_success";
+        return "client/pages-confirm-mail";
     }
 
-//    @GetMapping("/verify")
-//    public String verifyUser(@Param("token") String token) {
-//        if (userService.validateVerificationToken(token).equals("valid")) {
-//            return "client/verify_success";
-//        } else {
-//            return "client/verify_fail";
-//        }
-//    }
-    
     @GetMapping("/verifyRegistration")
     public String verifyRegistration(@RequestParam("token") String token) {
         String result = userService.validateVerificationToken(token);
@@ -172,6 +166,13 @@ public class HomeClientController implements ErrorController {
         return "client/verify_fail";
     }
 
+    @RequestMapping("/registerValidateEmail")
+    public @ResponseBody String checkEmailValidity(HttpServletRequest request, Model model){
+        String email = request.getParameter("email");
+        return userService.findByEmail(email);
+    }
+   
+    
     @GetMapping("/resendVerifyToken")
     public String resendVerificationToken(@RequestParam("token") String oldToken,
             HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
@@ -203,7 +204,13 @@ public class HomeClientController implements ErrorController {
 //        return url;
     }
 
-    @PostMapping("/resetPassword")
+    @GetMapping("/resetPassword")
+    public String resetPassword(Model model) {
+        model.addAttribute("account", new UserModel());
+        return "client/reset_pw";
+    }
+
+    @PostMapping("/resetPasswordProcess")
     public String resetPassword(@RequestBody PasswordModel passwordModel, HttpServletRequest request) {
         Account user = userService.findAccountByEmail(passwordModel.getEmail());
         String url = "";
@@ -212,7 +219,7 @@ public class HomeClientController implements ErrorController {
             userService.createPasswordResetTokenForUser(user, token);
             url = passwordResetTokenMail(user, applicationUrl(request), token);
         }
-        return url;
+        return "client/reset_pw";
     }
 
     @PostMapping("/savePassword")
@@ -233,17 +240,6 @@ public class HomeClientController implements ErrorController {
         }
     }
 
-    @PostMapping("/changePassword")
-    public String changePassword(@RequestBody PasswordModel passwordModel) {
-        Account user = userService.findAccountByEmail(passwordModel.getEmail());
-        if (!userService.checkIfValidOldPassword(user, passwordModel.getOldPassword())) {
-            return "Invalid Old Password";
-        }
-        //Save New Password
-        userService.changePassword(user, passwordModel.getNewPassword());
-        return "Password Changed Successfully";
-    }
-
     private String passwordResetTokenMail(Account user, String applicationUrl, String token) {
         String url
                 = applicationUrl
@@ -257,4 +253,14 @@ public class HomeClientController implements ErrorController {
         return url;
     }
 
+    @PostMapping("/changePassword")
+    public String changePassword(@RequestBody PasswordModel passwordModel) {
+        Account user = userService.findAccountByEmail(passwordModel.getEmail());
+        if (!userService.checkIfValidOldPassword(user, passwordModel.getOldPassword())) {
+            return "Invalid Old Password";
+        }
+        //Save New Password
+        userService.changePassword(user, passwordModel.getNewPassword());
+        return "Password Changed Successfully";
+    }
 }

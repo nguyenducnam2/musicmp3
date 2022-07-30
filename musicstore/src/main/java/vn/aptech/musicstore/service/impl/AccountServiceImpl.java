@@ -180,6 +180,12 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
+    public String findByEmail(String email) {
+        Account acc = repoAccount.findByEmail(email);
+        return (acc == null) ? "Unique" : "Duplicate";
+    }
+    
+    @Override
     public void createPasswordResetTokenForUser(Account user, String token) {
         PasswordResetToken passwordResetToken = new PasswordResetToken(user, token);
         passwordResetTokenRepository.save(passwordResetToken);
@@ -227,14 +233,14 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     public void sendVerificationEmail(Account user, String verifyUrl)
             throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
-        String fromAddress = "Your email address";
-        String senderName = "Your company name";
+        String fromAddress = "sluuthanh.demo.send.email@gmail.com";
+        String senderName = "Muzik";
         String subject = "Please verify your registration";
         String content = "Dear [[name]],<br>"
                 + "Please click the link below to verify your registration:<br>"
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
                 + "Thank you,<br>"
-                + "Your company name.";
+                + "Muzik.";
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -253,5 +259,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         mailSender.send(message);
 
     }
+
+    
 
 }

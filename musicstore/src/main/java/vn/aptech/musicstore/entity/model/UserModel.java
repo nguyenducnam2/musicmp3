@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
  *
  * @author Administrator
  */
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,7 +20,22 @@ public class UserModel {
     private String firstName;
     private String lastName;
     private String email;
-//    private String username;
     private String password;
     private String matchingPassword;
+    
+     private Long id;
+    private String username;
+//    private String fullname;
+    private String role;
+//    
+  
+    private boolean enabled = true;
+    private boolean isEdited = true;
+    
+//    @Column(name = "gender")
+//    private boolean gender = false;
+    
+    private String address;
+    private String image;
+    private String phone;
 }

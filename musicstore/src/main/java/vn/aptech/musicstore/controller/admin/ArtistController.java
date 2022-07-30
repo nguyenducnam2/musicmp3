@@ -55,16 +55,29 @@ public class ArtistController {
     }
 
     @PostMapping("/save")
-    public String save(Model model, @ModelAttribute("artist") Artist artist, @RequestParam("file") MultipartFile file) throws IOException {
-        if (!(file.isEmpty())) {
-            artist.setImage(file.getOriginalFilename());
-            Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\artist" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
-            service.save(artist);
-        } else {
-            artist.setImage(service.findById(artist.getId()).orElseThrow().getImage());
-            service.save(artist);
+    public String save(Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size, @ModelAttribute("artist") Artist artist, @RequestParam("file") MultipartFile file) throws IOException {
+        try {
+            if (!(file.isEmpty())) {
+                artist.setImage(file.getOriginalFilename());
+                Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\artist" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+                service.save(artist);
+            } else {
+                artist.setImage(service.findById(artist.getId()).orElseThrow().getImage());
+                service.save(artist);
+            }
+        } catch (Exception e) {
+            model.addAttribute("list", service.getPage(pageNumber, size));
+            model.addAttribute("service", service);
+            model.addAttribute("name", "null");
+            model.addAttribute("mess", "Failed");
+            return "admin/artist/index";
         }
-        return "redirect:/admin/artist";
+        model.addAttribute("list", service.getPage(pageNumber, size));
+        model.addAttribute("service", service);
+        model.addAttribute("name", "null");
+        model.addAttribute("mess", "Successfully");
+        return "admin/artist/index";
     }
 
     @GetMapping("/update/{id}")
@@ -75,9 +88,22 @@ public class ArtistController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") int id) {
-        service.deleteById(id);
-        return "redirect:/admin/artist";
+    public String delete(@PathVariable("id") int id, Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+        try {
+            service.deleteById(id);
+        } catch (Exception e) {
+            model.addAttribute("list", service.getPage(pageNumber, size));
+            model.addAttribute("service", service);
+            model.addAttribute("name", "null");
+            model.addAttribute("mess", "Failed");
+            return "admin/artist/index";
+        }
+        model.addAttribute("list", service.getPage(pageNumber, size));
+        model.addAttribute("service", service);
+        model.addAttribute("name", "null");
+        model.addAttribute("mess", "Successfully");
+        return "admin/artist/index";
     }
 
     @GetMapping("/search")

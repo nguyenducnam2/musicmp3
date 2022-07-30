@@ -349,12 +349,12 @@ and open the template in the editor.
 
                                                 <input type="hidden" th:name="accountId" th:value="${session.user.id}"/>
                                                 <input type="hidden" th:name="songId" th:value="${song.id}" />
-                                                <input name="content" class="form-control mr-3" placeholder="Add comment">
+                                                <input th:name="content" class="form-control mr-3" placeholder="Add comment">
                                                 <button class="btn btn-primary" type="submit">Comment</button>
 
                                             </div>
                                         </form>
-                                        <ul id="myList" class="list-unstyled" th:each="item:${listcomments}">
+                                         <ul id="myList" class="list-unstyled" th:each="item:${listcomments}">
                                             <li class="media"> <span class="round"><img style=" border-radius: 10px;
                                                                                         padding-right: 5px;
                                                                                         width: 60px;
@@ -370,6 +370,10 @@ and open the template in the editor.
                                                         </div>
                                                     </div>
                                                     <p th:text="${item.content}">Bought your "Palace of Versailles"</p>
+                                                </div>
+                                                <div th:if="${session.user != null && session.user.id==item.account.id}" class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1">
+                                                    <span class="table-remove"><a th:href="@{/song/comment/delete02/{id}(id=${item.id})}" type="button"
+                                                                                  class="btn iq-bg-danger btn-rounded btn-sm my-0">Remove</a></span>
                                                 </div>
                                             </li>
                                         </ul>
@@ -417,7 +421,8 @@ and open the template in the editor.
                 let mv = document.querySelector('#mv');
                 let time = document.querySelector('#time');
                 let current = document.querySelector('#current');
-                let songId = document.querySelector('#songId');
+                
+             
 
                 let timer;
                 let autoplay = 0;
@@ -432,9 +437,15 @@ and open the template in the editor.
                 let track = document.createElement('audio');
                 //All songs list
                 var All_song = /*[[${anotherlist}]]*/[];
+              
                 // All functions
 
+
                 // function load the track
+
+      
+
+
                 function load_track(index_no) {
                     clearInterval(timer);
                     reset_slider();
@@ -452,9 +463,8 @@ and open the template in the editor.
                     } else {
                         mv.hidden = true;
                     }
-
-
-
+                    
+                    
                     track.load();
 
 
@@ -600,7 +610,10 @@ and open the template in the editor.
                         }
                     }
                 }
-            
+
+
+
+
             </script>
         </div>
     </body>
