@@ -180,6 +180,12 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
+    public String findByEmail(String email) {
+        Account acc = repoAccount.findByEmail(email);
+        return (acc == null) ? "Unique" : "Duplicate";
+    }
+    
+    @Override
     public void createPasswordResetTokenForUser(Account user, String token) {
         PasswordResetToken passwordResetToken = new PasswordResetToken(user, token);
         passwordResetTokenRepository.save(passwordResetToken);
@@ -253,5 +259,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         mailSender.send(message);
 
     }
+
+    
 
 }
