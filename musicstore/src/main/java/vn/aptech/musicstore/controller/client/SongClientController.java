@@ -169,6 +169,7 @@ public class SongClientController {
             plitem.setPlaylist(service_pl.findById(playlistId).orElseThrow());
             service_plitem.save(plitem);
         }
+        model.addAttribute("mess", "sucessfully");
         return "redirect:/song/" + songId;
     }
 }
