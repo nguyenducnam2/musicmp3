@@ -38,6 +38,8 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
+    
+    @Column(nullable = false)
     private String password;
     private String fullname;
     private String role;
@@ -54,6 +56,13 @@ public class Account {
     private String address;
     private String image;
     private String phone;
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
 
     
    

@@ -196,11 +196,11 @@ and open the template in the editor.
                                                 <div class="form-group">
                                                     <label for="cpass">Current Password:</label>
                                                     <a th:href="@{/resetPassword}" class="float-right">Forgot Password</a>
-                                                    <input type="Password" th:field="*{oldPassword}" class="form-control" id="cpass" value="" required>
+                                                    <input type="password" name="cpass" th:field="*{oldPassword}" class="form-control" id="cpass" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="npass">New Password:</label>
-                                                    <input type="Password" th:field="*{newPassword}" class="form-control" id="npass" value="" required>
+                                                    <input type="password" name="npass" th:field="*{newPassword}" class="form-control" id="npass" required>
                                                 </div>
                                                 <!--                                                <div class="form-group">
                                                                                                     <label for="vpass">Verify Password:</label>

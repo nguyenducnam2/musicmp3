@@ -109,14 +109,15 @@ public class UserController {
     }
 
     @PostMapping("/changePassword")
-    public String changePassword(@ModelAttribute("passwordModel") PasswordModel passwordModel) {
+    public String changePassword(@ModelAttribute("passwordModel") PasswordModel passwordModel,HttpServletRequest request) {
         Account user = userService.findAccountByEmail(passwordModel.getEmail());
+
         if (!userService.checkIfValidOldPassword(user, passwordModel.getOldPassword())) {
-            return "redirect:/user";
+            return "redirect:/login";
         }
         //Save New Password
         userService.changePassword(user, passwordModel.getNewPassword());
-        return "redirect:/login";
+        return "redirect:/user";
     }
 
     @PostMapping("/processUpdate")
