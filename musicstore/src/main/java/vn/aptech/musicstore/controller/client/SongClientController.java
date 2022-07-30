@@ -90,7 +90,7 @@ public class SongClientController {
         return "client/song/video";
     }
 
-    @PostMapping("/comment/add")
+    @GetMapping("/comment/add")
     public String addComment(Model model, @RequestParam("content") String content,
             @RequestParam("accountId") String accountId,
             @RequestParam("songId") Integer songId, HttpServletRequest request) {

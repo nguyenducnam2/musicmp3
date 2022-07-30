@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import vn.aptech.musicstore.entity.Song;
 import vn.aptech.musicstore.service.AlbumService;
 import vn.aptech.musicstore.service.ArtistService;
+import vn.aptech.musicstore.service.CommentService;
 import vn.aptech.musicstore.service.GenreService;
 import vn.aptech.musicstore.service.SongService;
 
@@ -51,6 +52,9 @@ public class SongController {
 
     @Autowired
     private AlbumService service_alb;
+    
+    @Autowired
+    private CommentService service_cmt;
 
     @GetMapping
     public String index(Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
@@ -138,8 +142,10 @@ public class SongController {
     public String delete(@PathVariable("id") int id, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size, Model model) throws IOException {
         try {
+            service_cmt.deleteBySongId(id);
             service.deleteById(id);
         } catch (Exception e) {
+            e.printStackTrace();
             model.addAttribute("list", service.getPage(pageNumber, size));
             model.addAttribute("service", service);
             model.addAttribute("name", "null");
