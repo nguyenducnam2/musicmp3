@@ -82,7 +82,7 @@ public class UserController {
         model.addAttribute("listsong_hot", service_song.findByOrderByViewDesc());
         model.addAttribute("listalbum", service_album.findTop12());
         model.addAttribute("listartist", service_artist.findTop12ByOrderByIdDesc());
-        return "client/user/index";
+        return "client/index";
     }
 
 //    @GetMapping("/profile")
