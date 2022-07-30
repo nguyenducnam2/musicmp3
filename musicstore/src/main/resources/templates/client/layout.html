@@ -7,7 +7,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <title>Muzik- Responsive Bootstrap 4 Admin Dashboard Template</title>
+          <title>Muzik- Responsive Bootstrap 4 Admin Dashboard Template</title>
         <!-- Favicon -->
         <link rel="shortcut icon" th:href="@{/admintemplate/images/favicon.ico}" />
         <!-- Bootstrap CSS -->
@@ -18,7 +18,15 @@
         <link rel="stylesheet" th:href="@{/admintemplate/css/style.css}">
         <!-- Responsive CSS -->
         <link rel="stylesheet" th:href="@{/admintemplate/css/responsive.css}">
-      
+        <!-- Font Awesome -->
+        <!-- Libraries Stylesheet -->
+        <link  rel="stylesheet"  th:href="@{/clienttemplate/lib/animate/animate.min.css}">
+        <link  rel="stylesheet" th:href="@{/clienttemplate/lib/owlcarousel/assets/owl.carousel.min.css}">
+
+        <!-- Customized Bootstrap Stylesheet -->
+        <link   rel="stylesheet" th:href="@{/clienttemplate/css/style.css}">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
     </head>
     <body>
         <!-- <div id="loading">
@@ -33,10 +41,10 @@
 
         <div layout:fragment="content"></div>
 
-    <!--    <div th:replace="client/fragments/footer::footer"></div> -->
+        <!--    <div th:replace="client/fragments/footer::footer"></div> -->
 
 
-        <div class="iq-colorbox color-fix">
+<!--        <div class="iq-colorbox color-fix">
             <div class="buy-button"> <a class="color-full" href="#"><i class="fa fa-spinner fa-spin"></i></a> </div>
             <div id="right-sidebar-scrollbar" class="iq-colorbox-inner">
                 <div class="clearfix color-picker">
@@ -64,10 +72,10 @@
                         <li class="color-19" data-style="iq-color-19"></li>
                         <li class="color-20" data-style="iq-color-20"></li>
                     </ul>
-                   
+
                 </div>
             </div>
-        </div> 
+        </div> -->
 
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script th:src="@{/admintemplate/js/jquery.min.js}"></script>
@@ -127,6 +135,18 @@
         <!-- Custom JavaScript -->
         <script th:src="@{/admintemplate/js/custom.js}"></script>
         <script th:src="@{/admintemplate/js/audiplay.js}"></script>
-   
+        
+      <script th:src="@{/clienttemplate/lib/easing/easing.min.js}"></script>
+    <script th:src="@{/clienttemplate/lib/owlcarousel/owl.carousel.min.js}"></script>
+
+    <!-- Contact Javascript File -->
+    <script th:src="@{/clienttemplate/mail/jqBootstrapValidation.min.js}"></script>
+    <script th:src="@{/clienttemplate/mail/contact.js}"></script>
+
+    <!-- Template Javascript -->
+    <script th:src="@{/clienttemplate/js/main.js}"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

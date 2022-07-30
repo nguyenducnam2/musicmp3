@@ -99,6 +99,11 @@ public class HomeClientController implements ErrorController {
     public String contact() {
         return "client/contactUs/contact";
     }
+    
+     @GetMapping("/product")
+    public String product() {
+        return "client/product/index";
+    }
 
     @GetMapping(value = "/login")
     public String login(Model model) {
