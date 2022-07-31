@@ -151,11 +151,11 @@ public class HomeClientController implements ErrorController {
                     + "/verifyRegistration?token="
                     + token;
 
-            String resend_url=null;
+            String resend_url = null;
 //                    = applicationUrl(request)
 //                    + "/resendVerifyToken?token="
 //                    + token;
-                    
+
             // Send Mail to acc
             userService.sendVerificationEmail(user, url, resend_url);
 
@@ -170,16 +170,18 @@ public class HomeClientController implements ErrorController {
     }
 
     @GetMapping("/verifyRegistration")
-    public String verifyRegistration(Model model,@RequestParam("token") String token,HttpServletRequest request) {
+    public String verifyRegistration(Model model, @RequestParam("token") String token, HttpServletRequest request) {
         String result = userService.validateVerificationToken(token);
         if (result.equalsIgnoreCase("valid")) {
             verificationTokenRepository.delete(verificationTokenRepository.findByToken(token));
             return "client/verify_success";
         }
         if (result.equals("expired")) {
-            model.addAttribute("oldToken",token);
+            model.addAttribute("oldToken", token);
+            model.addAttribute("verify", "register");
             return "client/verify_fail";
         }
+        model.addAttribute("verify", "register");
         return "client/verify_fail";
     }
 
@@ -227,41 +229,24 @@ public class HomeClientController implements ErrorController {
 
     @GetMapping("/resetPassword")
     public String resetPassword(Model model) {
-        model.addAttribute("account", new UserModel());
-        return "client/reset_pw";
+        model.addAttribute("account", new PasswordModel());
+        return "client/reset_pw_email";
     }
 
     @PostMapping("/resetPasswordProcess")
-    public String resetPassword(@RequestBody PasswordModel passwordModel, HttpServletRequest request) {
-        Account user = userService.findAccountByEmail(passwordModel.getEmail());
+    public String resetPassword(Model model,@ModelAttribute("passwordModel") PasswordModel passwordModel, HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
+        String email = request.getParameter("emailReset");
+        Account user = userService.findAccountByEmail(email);
         String url = "";
         if (user != null) {
             String token = UUID.randomUUID().toString();
             userService.createPasswordResetTokenForUser(user, token);
             url = passwordResetTokenMail(user, applicationUrl(request), token);
         }
-        return "client/reset_pw";
+        return "client/reset_pw_email";
     }
 
-    @PostMapping("/savePassword")
-    public String savePassword(@RequestParam("token") String token,
-            @RequestBody PasswordModel passwordModel) {
-        String result = userService.validatePasswordResetToken(token);
-        if (!result.equalsIgnoreCase("valid")) {
-            return "Invalid Token";
-        }
-        Optional<Account> user = userService.getAccountByPasswordResetToken(token);
-        if (user.isPresent()) {
-            userService.changePassword(user.get(), passwordModel.getNewPassword());
-            PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token);
-            passwordResetTokenRepository.delete(passwordResetToken);
-            return "Password Reset Successfully";
-        } else {
-            return "Invalid Token";
-        }
-    }
-
-    private String passwordResetTokenMail(Account user, String applicationUrl, String token) {
+    private String passwordResetTokenMail(Account user, String applicationUrl, String token) throws MessagingException, UnsupportedEncodingException {
         String url
                 = applicationUrl
                 + "/savePassword?token="
@@ -270,18 +255,53 @@ public class HomeClientController implements ErrorController {
         //sendVerificationEmail()
         log.info("Click the link to Reset your Password: {}",
                 url);
-
-        return url;
+        userService.sendVerificationEmail(user, null, url);
+        return "client/pages-confirm-mail-reset-pw";
     }
 
-    @PostMapping("/changePassword")
-    public String changePassword(@RequestBody PasswordModel passwordModel) {
-        Account user = userService.findAccountByEmail(passwordModel.getEmail());
-        if (!userService.checkIfValidOldPassword(user, passwordModel.getOldPassword())) {
-            return "Invalid Old Password";
+    @PostMapping("/savePassword")
+    public String savePassword(Model model, @RequestParam("token") String token,
+            @RequestBody PasswordModel passwordModel) {
+        String result = userService.validatePasswordResetToken(token);
+        if (!result.equalsIgnoreCase("valid")) {
+            model.addAttribute("verify", "resetPassword");
+            return "client/verify_fail";
         }
-        //Save New Password
-        userService.changePassword(user, passwordModel.getNewPassword());
-        return "Password Changed Successfully";
+        Optional<Account> user = userService.getAccountByPasswordResetToken(token);
+        if (user.isPresent()) {
+
+            model.addAttribute("userId", user.get().getId());
+            model.addAttribute("passwordModel", new PasswordModel());
+            PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token);
+            passwordResetTokenRepository.delete(passwordResetToken);
+            return "client/reset_change_pass";
+        } else {
+            model.addAttribute("verify", "resetPassword");
+            return "client/verify_fail";
+        }
     }
+
+    @PostMapping("/resetChangePassword")
+    public String resetChangePassword(Model model, @RequestBody PasswordModel passwordModel, Long id) {
+        Optional<Account> user = userService.findById(id);
+        if (user.isPresent()) {
+            userService.changePassword(user.get(), passwordModel.getNewPassword());
+            model.addAttribute("success", "Change password successfully!!");
+
+        }
+        model.addAttribute("fail", "Change password fails!!");
+        return "client/reset_change_pass";
+    }
+
+//    test api
+//    @PostMapping("/changePassword")
+//    public String changePassword(@RequestBody PasswordModel passwordModel) {
+//        Account user = userService.findAccountByEmail(passwordModel.getEmail());
+//        if (!userService.checkIfValidOldPassword(user, passwordModel.getOldPassword())) {
+//            return "Invalid Old Password";
+//        }
+//        //Save New Password
+//        userService.changePassword(user, passwordModel.getNewPassword());
+//        return "Password Changed Successfully";
+//    }
 }

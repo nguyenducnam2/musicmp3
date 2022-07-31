@@ -105,7 +105,7 @@ public class WebSecurityConfig {
             "/contact",
             "/api/**",
             "/register*",
-            "/resetPassword",
+            "/resetPassword*",
             "/register",
             "/verify*",
             "/verifyRegistration*",
