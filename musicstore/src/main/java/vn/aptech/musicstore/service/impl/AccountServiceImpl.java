@@ -175,7 +175,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         verificationTokenRepository.save(verificationToken);
         return verificationToken;
     }
-    
+
     private Date calculateExpirationDate(int expirationTime) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(new Date().getTime());
@@ -239,17 +239,15 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
-    public void sendVerificationEmail(Account user, String verifyUrl,String resendUrl)
+    public void sendVerificationEmail(Account user, String verifyUrl, String resetPwUrl)
             throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
-        String fromAddress = "sluuthanh.demo.send.email@gmail.com";
+        String fromAddress = "sluuthanh.demo.send@gmail.com";
         String senderName = "Muzik";
-        String subject = "Please verify your registration";
+        String subject = "Please [[subject]]";
         String content = "Dear [[name]],<br>"
-                + "Please click the link below to verify your registration:<br>"
+                + "Please click the link below to [[content]]:<br>"
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
-//                + "Please click the link below to get new email verify your registration:<br>"
-//                + "<h3><a href=\"[[URL_RESEND]]\" target=\"_self\">RESEND EMAIL</a></h3>"
                 + "Thank you,<br>"
                 + "Muzik.";
 
@@ -258,14 +256,21 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
         helper.setFrom(fromAddress, senderName);
         helper.setTo(toAddress);
-        helper.setSubject(subject);
 
+        if (!verifyUrl.equals("")) {
+            subject = subject.replace("[[subject]]", "verify your registration");
+            content = content.replace("[[content]]", "verify your registration");
+            content = content.replace("[[URL]]", verifyUrl);
+        }
+        if (!resetPwUrl.equals("")) {
+            subject = subject.replace("[[subject]]", "verify reset password");
+            content = content.replace("[[content]]", "verify your email to reset password");
+            content = content.replace("[[URL]]", resetPwUrl);
+        }
+        helper.setSubject(subject);
         content = content.replace("[[name]]", user.getFirstName() + " " + user.getLastName());
 //        String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
-
-        content = content.replace("[[URL]]", verifyUrl);
 //        content = content.replace("[[URL_RESEND]]", resendUrl);
-
         helper.setText(content, true);
 
         mailSender.send(message);
