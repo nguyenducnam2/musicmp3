@@ -40,15 +40,20 @@
                             </div>
                             <div class="sign-in-page-data">
                                 <div class="sign-in-from w-100 m-auto pt-5">
-                                    <h1 class="mb-0">Reset Password</h1>
-                                    <p class="text-white">Enter your email address and we'll send you an email with instructions to reset your password.</p>
-                                    <form th:action="@{/resetPasswordProcess}" class="mt-4" method="post">
+                                    <h1 class="mb-0">Reset Your Password</h1>
+                                    <!--<p class="text-white">Enter your email address and we'll send you an email with instructions to reset your password.</p>-->
+                                    <form th:action="@{/resetChangePasswordProcess}" th:object="${passwordModel}" class="mt-4" method="post">
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Email address</label>
-                                            <input type="email" name="emailReset" class="form-control mb-0" id="exampleInputEmail1" placeholder="Enter email">
+                                            <input type="email" th:field="*{email}" name="emailReset" class="form-control mb-0" id="exampleInputEmail1" placeholder="Enter email" readonly>
+                                        </div>
+                                        <!--<input type="hidden" th:field="*{email}"/>-->
+                                         <div class="form-group">
+                                            <label for="newPassword">Password</label>
+                                            <input type="password" th:field="*{newPassword}" class="form-control mb-0"  id="newPassword" placeholder="New Password" required>
                                         </div>
                                         <div class="d-inline-block w-100">
-                                            <input class="btn btn-primary float-right" value="Reset Password"/>
+                                            <input class="btn btn-primary float-right" type="submit" value="Save"/>
                                             <!--<a href="sign-in.html" class="btn btn-primary float-right">Reset Password</a>-->
                                         </div>
                                     </form>

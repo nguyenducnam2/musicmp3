@@ -157,7 +157,7 @@ public class HomeClientController implements ErrorController {
 //                    + token;
 
             // Send Mail to acc
-            userService.sendVerificationEmail(user, url, resend_url);
+            userService.sendVerificationEmail(user, url, "");
 
             model.addAttribute("email", userModel.getEmail());
             HttpSession session = request.getSession();
@@ -216,14 +216,14 @@ public class HomeClientController implements ErrorController {
                 + "/verifyRegistration?token="
                 + verificationToken.getToken();
 
-        String resend_url
-                = applicationUrl
-                + "/resendVerifyToken?token="
-                + verificationToken.getToken();
+//        String resend_url
+//                = applicationUrl
+//                + "/resendVerifyToken?token="
+//                + verificationToken.getToken();
         //sendVerificationEmail()
         log.info("Click the link to verify your account: {}",
                 url);
-        userService.sendVerificationEmail(user, url, resend_url);
+        userService.sendVerificationEmail(user, url, "");
 //        return url;
     }
 
@@ -234,56 +234,69 @@ public class HomeClientController implements ErrorController {
     }
 
     @PostMapping("/resetPasswordProcess")
-    public String resetPassword(Model model,@ModelAttribute("passwordModel") PasswordModel passwordModel, HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
+    public String resetPassword(Model model, @ModelAttribute("passwordModel") PasswordModel passwordModel, HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
         String email = request.getParameter("emailReset");
         Account user = userService.findAccountByEmail(email);
-        String url = "";
+        String resetUrl = "";
         if (user != null) {
             String token = UUID.randomUUID().toString();
             userService.createPasswordResetTokenForUser(user, token);
-            url = passwordResetTokenMail(user, applicationUrl(request), token);
+//            url = passwordResetTokenMail(user, applicationUrl(request), token);
+            resetUrl = applicationUrl(request)
+                    + "/savePassword?token="
+                    + token;
+            userService.sendVerificationEmail(user, "", resetUrl);
+            return "client/pages-confirm-mail-reset-pw";
         }
         return "client/reset_pw_email";
     }
 
-    private String passwordResetTokenMail(Account user, String applicationUrl, String token) throws MessagingException, UnsupportedEncodingException {
-        String url
-                = applicationUrl
-                + "/savePassword?token="
-                + token;
-
-        //sendVerificationEmail()
-        log.info("Click the link to Reset your Password: {}",
-                url);
-        userService.sendVerificationEmail(user, null, url);
-        return "client/pages-confirm-mail-reset-pw";
-    }
-
-    @PostMapping("/savePassword")
+//    private String passwordResetTokenMail(Account user, String applicationUrl, String token) throws MessagingException, UnsupportedEncodingException {
+//        String url
+//                = applicationUrl
+//                + "/savePassword?token="
+//                + token;
+//
+//        //sendVerificationEmail()
+//        log.info("Click the link to Reset your Password: {}",
+//                url);
+//        userService.sendVerificationEmail(user, null, url);
+//        return "client/pages-confirm-mail-reset-pw";
+//    }
+    @GetMapping("/savePassword")
     public String savePassword(Model model, @RequestParam("token") String token,
-            @RequestBody PasswordModel passwordModel) {
+            @ModelAttribute PasswordModel passwordModel) {
         String result = userService.validatePasswordResetToken(token);
+        System.out.println("result: " + result);
         if (!result.equalsIgnoreCase("valid")) {
             model.addAttribute("verify", "resetPassword");
             return "client/verify_fail";
         }
-        Optional<Account> user = userService.getAccountByPasswordResetToken(token);
-        if (user.isPresent()) {
-
-            model.addAttribute("userId", user.get().getId());
-            model.addAttribute("passwordModel", new PasswordModel());
-            PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token);
-            passwordResetTokenRepository.delete(passwordResetToken);
-            return "client/reset_change_pass";
-        } else {
-            model.addAttribute("verify", "resetPassword");
-            return "client/verify_fail";
-        }
+//        Optional<Account> user = userService.getAccountByPasswordResetToken(token);
+//        model.addAttribute("email", user.get().getEmail());
+//        model.addAttribute("passwordModel", new PasswordModel());
+//        PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token);
+//        passwordResetTokenRepository.delete(passwordResetToken);
+        return "redirect:/resetChangePassword?token=" + token;
     }
 
-    @PostMapping("/resetChangePassword")
-    public String resetChangePassword(Model model, @RequestBody PasswordModel passwordModel, Long id) {
-        Optional<Account> user = userService.findById(id);
+    @GetMapping("/resetChangePassword")
+    public String resetChangePassword(Model model, @RequestParam("token") String token) {
+//        String result = userService.validatePasswordResetToken(token);
+        Optional<Account> user = userService.getAccountByPasswordResetToken(token);
+        model.addAttribute("email", user.get().getEmail());
+        PasswordModel passwordModel = new PasswordModel();
+        passwordModel.setEmail(user.get().getEmail());
+        model.addAttribute("passwordModel", passwordModel);
+
+        PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token);
+        passwordResetTokenRepository.delete(passwordResetToken);
+        return "client/reset_change_pass";
+    }
+
+    @PostMapping("/resetChangePasswordProcess")
+    public String resetChangePassword(Model model, @RequestBody PasswordModel passwordModel) {
+        Optional<Account> user = userService.findByUsername(passwordModel.getEmail());
         if (user.isPresent()) {
             userService.changePassword(user.get(), passwordModel.getNewPassword());
             model.addAttribute("success", "Change password successfully!!");

@@ -246,7 +246,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         String senderName = "Muzik";
         String subject = "Please [[subject]]";
         String content = "Dear [[name]],<br>"
-                + "Please click the link below to [[subject]]:<br>"
+                + "Please click the link below to [[content]]:<br>"
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
                 + "Thank you,<br>"
                 + "Muzik.";
@@ -256,16 +256,18 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
         helper.setFrom(fromAddress, senderName);
         helper.setTo(toAddress);
-        helper.setSubject(subject);
 
         if (!verifyUrl.equals("")) {
-            content = content.replace("[[subject]]", "verify your registration");
+            subject = subject.replace("[[subject]]", "verify your registration");
+            content = content.replace("[[content]]", "verify your registration");
             content = content.replace("[[URL]]", verifyUrl);
         }
         if (!resetPwUrl.equals("")) {
-            content = content.replace("[[subject]]", "verify your email to reset password");
+            subject = subject.replace("[[subject]]", "verify reset password");
+            content = content.replace("[[content]]", "verify your email to reset password");
             content = content.replace("[[URL]]", resetPwUrl);
         }
+        helper.setSubject(subject);
         content = content.replace("[[name]]", user.getFirstName() + " " + user.getLastName());
 //        String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
 //        content = content.replace("[[URL_RESEND]]", resendUrl);

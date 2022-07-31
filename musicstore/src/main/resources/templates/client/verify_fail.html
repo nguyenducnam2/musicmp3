@@ -37,11 +37,16 @@
                                                     </div>
                                                  </div>-->
                             <div class="sign-in-page-data">
-                                <div class="sign-in-from w-100 m-auto pt-5">
+                                <div th:if="${verify=='register'}" class="sign-in-from w-100 m-auto pt-5">
                                     <h1 class="mb-3 text-center">Oops Something wrong here!!!</h1>
                                     <h3 class="text-white">Sorry, we could not verify account. It maybe already verified,
                                         or verify email is expired.</h3>
                                         <h4 class="text-white"><a th:href="@{'/resendVerifyToken?token=' +${oldToken}}">Resend Verify Email</a></h4>
+                                </div>
+                                <div th:if="${verify=='resetPassword'}" class="sign-in-from w-100 m-auto pt-5">
+                                    <h1 class="mb-3 text-center">Oops Something wrong here!!!</h1>
+                                    <h3 class="text-white">Sorry,verify email is expired.</h3>
+                                        <h4 class="text-white"><a th:href="@{/login}">Back to login</a></h4>
                                 </div>
                             </div>
                         </div>
