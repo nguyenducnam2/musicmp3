@@ -218,6 +218,11 @@ and open the template in the editor.
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="iq-card" >
+                            <div class="iq-card-header d-flex justify-content-between" th:if="${playlistname!=null}">
+                                <div class="iq-header-title">
+                                    <h4 class="card-title" th:text="${playlistname}"></h4>
+                                </div>
+                            </div>
                             <div class="iq-card-body" style="height: 550px;">
                                 <!--   <div class="row">
                                         <div class="col-lg-4">
@@ -313,7 +318,7 @@ and open the template in the editor.
                             <div class="tab-content" id="myTabContent-2">
                                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                                     <ul class="list-unstyled iq-music-slide mb-0">
-                                        <li class="mb-3" th:each="item:${anotherlist}" th:if="${song.id}!=${item.id}">
+                                        <li class="mb-3" th:each="item:${anotherlist}">
                                             <div class="d-flex justify-content-between align-items-center row">
                                                 <div class="media align-items-center col-10 col-md-5">
                                                     <div class="iq-realese-song ">
@@ -423,14 +428,14 @@ and open the template in the editor.
                     <div class="modal-content">
 
                         <!-- Modal Header-->
-                        <div class="modal-header">
-                            <h3>Add To ...</h3>
+                        <div class="modal-header" style="background: #ff8a65;">
+                            <h3 style="color: white;">Add To ...</h3>
 
                             <!--Close/Cross Button-->
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
 
-                        <form th:action=${"/song/playlist/add"}>
+                        <form>
 
                             <input type="hidden" th:name="songId" th:value="${song.id}"/>
                             <input type="hidden" th:name="accountId" th:value="${session.user.id}"/>
@@ -448,7 +453,7 @@ and open the template in the editor.
 
                             <!-- Modal Footer-->
                             <div class="modal-footer">
-                                <button class="btn btn-primary">Add
+                                <button id="btn" class="btn btn-primary">Add
                                     <i class="fa fa-paper-plane"></i>
                                 </button>
                                 <a href="" class="btn btn-outline-primary" data-dismiss="modal">Cancel</a>
@@ -730,6 +735,31 @@ and open the template in the editor.
 
 
 
+            </script>
+
+            <script>
+                const btn = document.querySelector('#btn')
+
+                btn.addEventListener('click', () => {
+                    new Notify({
+                        status: 'success',
+                        title: 'Notify Title',
+                        text: 'Notify text lorem ipsum',
+                        effect: 'fade',
+                        speed: 300,
+                        customClass: '',
+                        customIcon: '',
+                        showIcon: true,
+                        showCloseButton: true,
+                        autoclose: false,
+                        autotimeout: 3000,
+                        gap: 20,
+                        distance: 20,
+                        type: 1,
+                        position: 'right top',
+                        customWrapper: '',
+                    })
+                })
             </script>
         </div>
     </body>

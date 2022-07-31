@@ -155,10 +155,10 @@ public class SongClientController {
             plitem.setSongId(songId);
             plitem.setSong(service.findById(songId).orElseThrow());
             plitem.setPlaylistId(playlist.getId());
-            for(Playlist pl:service_pl.findAll()){
-                if(pl.getName().equals(playlist.getName()) && (pl.getAccount()==playlist.getAccount())){
-                plitem.setPlaylist(pl);
-            }
+            for (Playlist pl : service_pl.findAll()) {
+                if (pl.getName().equals(playlist.getName()) && (pl.getAccount() == playlist.getAccount())) {
+                    plitem.setPlaylist(pl);
+                }
             }
             service_plitem.save(plitem);
         } else {
@@ -171,5 +171,42 @@ public class SongClientController {
         }
         model.addAttribute("mess", "sucessfully");
         return "redirect:/song/" + songId;
+    }
+
+    @GetMapping("/playlist")
+    public String myPlaylist(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
+        model.addAttribute("service_pl", service_pl);
+        model.addAttribute("service_plitem", service_plitem);
+        return "client/playlist/index";
+    }
+
+    @GetMapping("/playlist/{id}")
+    public String myPlaylistPlay(Model model, HttpServletRequest request,
+            @PathVariable("id") int playlistId) {
+        Song s = service.findById(service_plitem.findByPlaylistId(playlistId).get(0).getSong().getId()).orElseThrow();
+        s.setView(s.getView() + 1);
+        service.save(s);
+        List<Song> anotherlist = new ArrayList<>();
+        for(int i=0;i<service_plitem.findByPlaylistId(playlistId).size();i++){
+            anotherlist.add(service_plitem.findByPlaylistId(playlistId).get(i).getSong());
+        }
+        Song swap = anotherlist.get(0);
+        int index_to_swap = anotherlist.indexOf(s);
+        anotherlist.set(0, s);
+        anotherlist.set(index_to_swap, swap);
+        model.addAttribute("song", s);
+        model.addAttribute("anotherlist", anotherlist);
+        model.addAttribute("listcomments", service_cmt.findBySongId(s.getId()));
+        model.addAttribute("listcmtall", service_cmt.findAll());
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
+        model.addAttribute("service_pl", service_pl);
+        model.addAttribute("service_plitem", service_plitem);
+        model.addAttribute("playlistname", service_pl.findById(playlistId).orElseThrow().getName());
+        return "client/song/mediaplayer";
     }
 }

@@ -15,7 +15,8 @@ import vn.aptech.musicstore.entity.Playlistitem;
  *
  * @author namng
  */
-public interface PlaylistitemRepository extends JpaRepository<Playlistitem,Integer>{
+public interface PlaylistitemRepository extends JpaRepository<Playlistitem, Integer> {
+
     @Query("SELECT o FROM Playlistitem o WHERE o.playlistId=:playlistId")
-    List<Playlistitem> findByPlaylistId(@Param("playlistId")int playlistId);
+    List<Playlistitem> findByPlaylistId(@Param("playlistId") int playlistId);
 }
