@@ -174,6 +174,7 @@ public class HomeClientController implements ErrorController {
         String result = userService.validateVerificationToken(token);
         if (result.equalsIgnoreCase("valid")) {
             verificationTokenRepository.delete(verificationTokenRepository.findByToken(token));
+            model.addAttribute("verify", "register");
             return "client/verify_success";
         }
         if (result.equals("expired")) {
@@ -246,6 +247,7 @@ public class HomeClientController implements ErrorController {
                     + "/savePassword?token="
                     + token;
             userService.sendVerificationEmail(user, "", resetUrl);
+            model.addAttribute("email", email);
             return "client/pages-confirm-mail-reset-pw";
         }
         return "client/reset_pw_email";
@@ -272,11 +274,7 @@ public class HomeClientController implements ErrorController {
             model.addAttribute("verify", "resetPassword");
             return "client/verify_fail";
         }
-//        Optional<Account> user = userService.getAccountByPasswordResetToken(token);
-//        model.addAttribute("email", user.get().getEmail());
-//        model.addAttribute("passwordModel", new PasswordModel());
-//        PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token);
-//        passwordResetTokenRepository.delete(passwordResetToken);
+//      
         return "redirect:/resetChangePassword?token=" + token;
     }
 
@@ -284,23 +282,25 @@ public class HomeClientController implements ErrorController {
     public String resetChangePassword(Model model, @RequestParam("token") String token) {
 //        String result = userService.validatePasswordResetToken(token);
         Optional<Account> user = userService.getAccountByPasswordResetToken(token);
-        model.addAttribute("email", user.get().getEmail());
+        model.addAttribute("token", token);
         PasswordModel passwordModel = new PasswordModel();
         passwordModel.setEmail(user.get().getEmail());
         model.addAttribute("passwordModel", passwordModel);
 
-        PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token);
-        passwordResetTokenRepository.delete(passwordResetToken);
         return "client/reset_change_pass";
     }
 
     @PostMapping("/resetChangePasswordProcess")
-    public String resetChangePassword(Model model, @RequestBody PasswordModel passwordModel) {
+    public String resetChangePassword(Model model, @ModelAttribute("passwordModel") PasswordModel passwordModel, HttpServletRequest request) {
+        String token = request.getParameter("token");
         Optional<Account> user = userService.findByUsername(passwordModel.getEmail());
+        System.out.println("token-email : "+token+passwordModel.getEmail());
         if (user.isPresent()) {
             userService.changePassword(user.get(), passwordModel.getNewPassword());
-            model.addAttribute("success", "Change password successfully!!");
-
+            PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token);
+            passwordResetTokenRepository.delete(passwordResetToken);
+            model.addAttribute("verify", "resetPassword");
+            return "client/verify_success";
         }
         model.addAttribute("fail", "Change password fails!!");
         return "client/reset_change_pass";

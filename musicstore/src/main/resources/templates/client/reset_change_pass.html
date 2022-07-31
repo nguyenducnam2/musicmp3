@@ -47,7 +47,7 @@
                                             <label for="exampleInputEmail1">Email address</label>
                                             <input type="email" th:field="*{email}" name="emailReset" class="form-control mb-0" id="exampleInputEmail1" placeholder="Enter email" readonly>
                                         </div>
-                                        <!--<input type="hidden" th:field="*{email}"/>-->
+                                        <input type="hidden" name="token" th:value="${token}"/>
                                          <div class="form-group">
                                             <label for="newPassword">Password</label>
                                             <input type="password" th:field="*{newPassword}" class="form-control mb-0"  id="newPassword" placeholder="New Password" required>
