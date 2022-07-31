@@ -33,6 +33,7 @@ import vn.aptech.musicstore.entity.VerificationToken;
 import vn.aptech.musicstore.entity.model.PasswordModel;
 import vn.aptech.musicstore.entity.model.UserModel;
 import vn.aptech.musicstore.repository.PasswordResetTokenRepository;
+import vn.aptech.musicstore.repository.VerificationTokenRepository;
 import vn.aptech.musicstore.service.AccountService;
 import vn.aptech.musicstore.service.AlbumService;
 import vn.aptech.musicstore.service.ArtistService;
@@ -54,6 +55,9 @@ public class HomeClientController implements ErrorController {
     private PasswordResetTokenRepository passwordResetTokenRepository;
 
     @Autowired
+    private VerificationTokenRepository verificationTokenRepository;
+    
+    @Autowired
     private SongService service_song;
 
     @Autowired
@@ -62,9 +66,8 @@ public class HomeClientController implements ErrorController {
     @Autowired
     private ArtistService service_artist;
 
-    @Value("${uri.local}")
-    private String uri_local;
-
+//    @Value("${uri.local}")
+//    private String uri_local;
     @Autowired
     private NewsService service_news;
 
@@ -101,8 +104,8 @@ public class HomeClientController implements ErrorController {
     public String contact() {
         return "client/contactUs/contact";
     }
-    
-     @GetMapping("/product")
+
+    @GetMapping("/product")
     public String product() {
         return "client/product/index";
     }
@@ -134,45 +137,54 @@ public class HomeClientController implements ErrorController {
     }
 
     @PostMapping("/registerProcess")
-    public String registerProcess(@ModelAttribute UserModel userModel, HttpServletRequest request)
+    public String registerProcess(Model model,@ModelAttribute UserModel userModel, HttpServletRequest request)
             throws UnsupportedEncodingException, MessagingException {
-        Account user = userService.registerUser(userModel);
-        String token = UUID.randomUUID().toString();
-        System.out.println("token: " + token);
+        if (userService.findByEmail(userModel.getEmail()).equals("Unique")) {
+            Account user = userService.registerUser(userModel);
+            String token = UUID.randomUUID().toString();
+            System.out.println("token: " + token);
 
-        userService.saveVerificationTokenForUser(token, user);
+            userService.saveVerificationTokenForUser(token, user);
 
-        // Send Mail to acc
 //        String url = uri_local
-        String url = applicationUrl(request)
-                + "verifyRegistration?token="
+            String url = applicationUrl(request)
+                    + "/verifyRegistration?token="
+                    + token;
+
+            String resend_url
+                = applicationUrl(request)
+                + "/resendVerifyToken?token="
                 + token;
+            // Send Mail to acc
+            userService.sendVerificationEmail(user, url,resend_url);
 
-//        System.out.println("url" + url);
-        userService.sendVerificationEmail(user, url);
-
-        HttpSession session = request.getSession();
-        session.setAttribute("createUserSuccess", "success");
-        log.info("Click the link to verify your account: {}", url);
-        return "client/pages-confirm-mail";
+            model.addAttribute("email",userModel.getEmail());
+            HttpSession session = request.getSession();
+            session.setAttribute("createUserSuccess", "success");
+            log.info("Click the link to verify your account: {}", url);
+            return "client/pages-confirm-mail";
+        } else {
+            return "client/index";
+        }
     }
 
     @GetMapping("/verifyRegistration")
     public String verifyRegistration(@RequestParam("token") String token) {
         String result = userService.validateVerificationToken(token);
         if (result.equalsIgnoreCase("valid")) {
+            verificationTokenRepository.delete(verificationTokenRepository.findByToken(token));
             return "client/verify_success";
         }
         return "client/verify_fail";
     }
 
     @RequestMapping("/registerValidateEmail")
-    public @ResponseBody String checkEmailValidity(HttpServletRequest request, Model model){
+    public @ResponseBody
+    String checkEmailValidity(HttpServletRequest request, Model model) {
         String email = request.getParameter("email");
         return userService.findByEmail(email);
     }
-   
-    
+
     @GetMapping("/resendVerifyToken")
     public String resendVerificationToken(@RequestParam("token") String oldToken,
             HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
@@ -180,7 +192,7 @@ public class HomeClientController implements ErrorController {
                 = userService.generateNewVerificationToken(oldToken);
         Account user = verificationToken.getAcc();
         resendVerificationTokenMail(user, applicationUrl(request), verificationToken);
-        return "client/register_success";
+        return "client/pages-confirm-mail";
     }
 
     private String applicationUrl(HttpServletRequest request) {
@@ -197,10 +209,14 @@ public class HomeClientController implements ErrorController {
                 + "/verifyRegistration?token="
                 + verificationToken.getToken();
 
+        String resend_url
+                = applicationUrl
+                + "/resendVerifyToken?token="
+                + verificationToken.getToken();
         //sendVerificationEmail()
         log.info("Click the link to verify your account: {}",
                 url);
-        userService.sendVerificationEmail(user, url);
+        userService.sendVerificationEmail(user, url,resend_url);
 //        return url;
     }
 

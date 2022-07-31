@@ -52,7 +52,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Autowired
     private JavaMailSender mailSender;
-    
+
     @Override
     public List<Account> findAll() {
         return repoAccount.findAll();
@@ -184,7 +184,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         Account acc = repoAccount.findByEmail(email);
         return (acc == null) ? "Unique" : "Duplicate";
     }
-    
+
     @Override
     public void createPasswordResetTokenForUser(Account user, String token) {
         PasswordResetToken passwordResetToken = new PasswordResetToken(user, token);
@@ -230,7 +230,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
-    public void sendVerificationEmail(Account user, String verifyUrl)
+    public void sendVerificationEmail(Account user, String verifyUrl,String resendUrl)
             throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
         String fromAddress = "sluuthanh.demo.send.email@gmail.com";
@@ -239,6 +239,8 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         String content = "Dear [[name]],<br>"
                 + "Please click the link below to verify your registration:<br>"
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+                + "Please click the link below to get new email verify your registration:<br>"
+                + "<h3><a href=\"[[URL_RESEND]]\" target=\"_self\">RESEND EMAIL</a></h3>"
                 + "Thank you,<br>"
                 + "Muzik.";
 
@@ -249,17 +251,16 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         helper.setTo(toAddress);
         helper.setSubject(subject);
 
-        content = content.replace("[[name]]", user.getFirstName()+" "+user.getLastName());
+        content = content.replace("[[name]]", user.getFirstName() + " " + user.getLastName());
 //        String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
 
         content = content.replace("[[URL]]", verifyUrl);
+        content = content.replace("[[URL_RESEND]]", resendUrl);
 
         helper.setText(content, true);
 
         mailSender.send(message);
 
     }
-
-    
 
 }

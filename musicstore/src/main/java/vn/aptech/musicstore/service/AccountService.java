@@ -53,6 +53,6 @@ public interface AccountService {
 //     
 //    }
      
-    void sendVerificationEmail(Account user, String siteURL)  throws MessagingException, UnsupportedEncodingException ;
+    void sendVerificationEmail(Account user, String verifyUrl, String resendUrl)  throws MessagingException, UnsupportedEncodingException ;
     
 }
