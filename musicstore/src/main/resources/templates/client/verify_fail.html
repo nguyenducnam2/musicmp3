@@ -39,9 +39,9 @@
                             <div class="sign-in-page-data">
                                 <div class="sign-in-from w-100 m-auto pt-5">
                                     <h1 class="mb-3 text-center">Oops Something wrong here!!!</h1>
-                                    <h3>Sorry, we could not verify account. It maybe already verified,
+                                    <h3 class="text-white">Sorry, we could not verify account. It maybe already verified,
                                         or verify email is expired.</h3>
-                                        <h4><a th:href="@{/resendVerifyToken}">Resend Verify Email</a></h4>
+                                        <h4 class="text-white"><a th:href="@{'/resendVerifyToken?token=' +${oldToken}}">Resend Verify Email</a></h4>
                                 </div>
                             </div>
                         </div>

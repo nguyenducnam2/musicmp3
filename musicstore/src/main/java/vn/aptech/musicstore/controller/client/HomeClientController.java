@@ -56,7 +56,7 @@ public class HomeClientController implements ErrorController {
 
     @Autowired
     private VerificationTokenRepository verificationTokenRepository;
-    
+
     @Autowired
     private SongService service_song;
 
@@ -137,7 +137,7 @@ public class HomeClientController implements ErrorController {
     }
 
     @PostMapping("/registerProcess")
-    public String registerProcess(Model model,@ModelAttribute UserModel userModel, HttpServletRequest request)
+    public String registerProcess(Model model, @ModelAttribute UserModel userModel, HttpServletRequest request)
             throws UnsupportedEncodingException, MessagingException {
         if (userService.findByEmail(userModel.getEmail()).equals("Unique")) {
             Account user = userService.registerUser(userModel);
@@ -151,14 +151,15 @@ public class HomeClientController implements ErrorController {
                     + "/verifyRegistration?token="
                     + token;
 
-            String resend_url
-                = applicationUrl(request)
-                + "/resendVerifyToken?token="
-                + token;
+            String resend_url=null;
+//                    = applicationUrl(request)
+//                    + "/resendVerifyToken?token="
+//                    + token;
+                    
             // Send Mail to acc
-            userService.sendVerificationEmail(user, url,resend_url);
+            userService.sendVerificationEmail(user, url, resend_url);
 
-            model.addAttribute("email",userModel.getEmail());
+            model.addAttribute("email", userModel.getEmail());
             HttpSession session = request.getSession();
             session.setAttribute("createUserSuccess", "success");
             log.info("Click the link to verify your account: {}", url);
@@ -169,11 +170,15 @@ public class HomeClientController implements ErrorController {
     }
 
     @GetMapping("/verifyRegistration")
-    public String verifyRegistration(@RequestParam("token") String token) {
+    public String verifyRegistration(Model model,@RequestParam("token") String token,HttpServletRequest request) {
         String result = userService.validateVerificationToken(token);
         if (result.equalsIgnoreCase("valid")) {
             verificationTokenRepository.delete(verificationTokenRepository.findByToken(token));
             return "client/verify_success";
+        }
+        if (result.equals("expired")) {
+            model.addAttribute("oldToken",token);
+            return "client/verify_fail";
         }
         return "client/verify_fail";
     }
@@ -216,7 +221,7 @@ public class HomeClientController implements ErrorController {
         //sendVerificationEmail()
         log.info("Click the link to verify your account: {}",
                 url);
-        userService.sendVerificationEmail(user, url,resend_url);
+        userService.sendVerificationEmail(user, url, resend_url);
 //        return url;
     }
 

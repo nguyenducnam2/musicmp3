@@ -86,7 +86,12 @@ and open the template in the editor.
                                                 <div class="form-group row align-items-center">
                                                     <div class="col-md-12">
                                                         <div class="profile-img-edit">
-                                                            <img class="profile-pic" th:src="@{'/webdata/user/'+${session.user.image}}" alt="profile-pic">
+                                                            <div th:if="${session.user.image==null}">
+                                                                <img  class="profile-pic" th:src="@{/admintemplate/images/user/user-default2.png}" alt="profile-pic">
+                                                            </div>
+                                                            <div  th:if="${session.user.image!=null}">
+                                                                <img class="profile-pic" th:src="@{'/webdata/user/'+${session.user.image}}" alt="profile-pic">
+                                                            </div>
                                                             <div class="p-image">
                                                                 <i class="ri-pencil-line upload-button"></i>
                                                                 <input class="file-upload" type="file" name="file" accept="image/*"/>

@@ -6,6 +6,7 @@ package vn.aptech.musicstore.service.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -156,7 +157,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
         if ((verificationToken.getExpirationTime().getTime()
                 - cal.getTime().getTime()) <= 0) {
-            verificationTokenRepository.delete(verificationToken);
+//            verificationTokenRepository.delete(verificationToken);
             return "expired";
         }
 
@@ -170,8 +171,16 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     public VerificationToken generateNewVerificationToken(String oldToken) {
         VerificationToken verificationToken = verificationTokenRepository.findByToken(oldToken);
         verificationToken.setToken(UUID.randomUUID().toString());
+        verificationToken.setExpirationTime(calculateExpirationDate(10));
         verificationTokenRepository.save(verificationToken);
         return verificationToken;
+    }
+    
+    private Date calculateExpirationDate(int expirationTime) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(new Date().getTime());
+        calendar.add(Calendar.MINUTE, expirationTime);
+        return new Date(calendar.getTime().getTime());
     }
 
     @Override
@@ -239,8 +248,8 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         String content = "Dear [[name]],<br>"
                 + "Please click the link below to verify your registration:<br>"
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
-                + "Please click the link below to get new email verify your registration:<br>"
-                + "<h3><a href=\"[[URL_RESEND]]\" target=\"_self\">RESEND EMAIL</a></h3>"
+//                + "Please click the link below to get new email verify your registration:<br>"
+//                + "<h3><a href=\"[[URL_RESEND]]\" target=\"_self\">RESEND EMAIL</a></h3>"
                 + "Thank you,<br>"
                 + "Muzik.";
 
@@ -255,7 +264,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 //        String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
 
         content = content.replace("[[URL]]", verifyUrl);
-        content = content.replace("[[URL_RESEND]]", resendUrl);
+//        content = content.replace("[[URL_RESEND]]", resendUrl);
 
         helper.setText(content, true);
 
