@@ -54,17 +54,21 @@ public class NewsApiController {
 
     @PostMapping
     public String create(@RequestParam("title") String title,
+	    @RequestParam("content") String content,
             @RequestParam("create_at") String date,
             @RequestParam("des") String des,
+	    @RequestParam("img_title") String img,
             @RequestParam("file") MultipartFile file) throws IOException {
         News news = new News();
         news.setTitle(title);
+	news.setContent(content);
         news.setDescription(des);
+	news.setImg_title(img);
         news.setImage(file.getOriginalFilename());
 //        String path_directory = "C:\\Users\\namng\\Documents\\NetBeansProjects\\musicstore\\src\\main\\resources\\static\\image";
 //        String path_directory = new ClassPathResource("static/image").getFile().getAbsolutePath();
         Files.copy(file.getInputStream(), Paths.get(base_url + "\\news" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
-        news.setView(0);
+        //news.setView(0);
         news.setCreated_at(date);
         service.save(news);
         return "created";
@@ -80,15 +84,19 @@ public class NewsApiController {
     public String update(@RequestParam("id") int id,
             @RequestParam("create_at") String date,
             @RequestParam("title") String title,
+	    @RequestParam("content") String content,
             @RequestParam("des") String des,
+	    @RequestParam("img_title") String img,
             @RequestParam("file") MultipartFile file) throws IOException {
         if (!(file.isEmpty())) {
             News news = new News();
             news.setId(id);
             news.setTitle(title);
+	    news.setContent(content);
             news.setDescription(des);
+	    news.setImg_title(img);
             news.setImage(file.getOriginalFilename());
-            news.setView(0);
+            //news.setView(0);
             news.setCreated_at(date);
             service.save(news);
 //            String path_directory = "C:\\Users\\namng\\Documents\\NetBeansProjects\\musicstore\\src\\main\\resources\\static\\image";
@@ -99,9 +107,11 @@ public class NewsApiController {
             News news = new News();
             news.setId(id);
             news.setTitle(title);
+	    news.setContent(content);
             news.setDescription(des);
+	    news.setImg_title(img);
             news.setImage(news2.getImage());
-            news.setView(0);
+            //news.setView(0);
             news.setCreated_at(date);
             service.save(news);
         }

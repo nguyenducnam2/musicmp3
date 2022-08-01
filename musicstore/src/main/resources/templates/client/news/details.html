@@ -22,40 +22,59 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                     <h4 class="card-title">News details</h4>
                                 </div>
                             </div>
-                            <div class="iq-card-body">
-                                <div id="table" class="table-editable">
-                                    <table th:each="item:${list}" class="table table-bordered table-responsive-md table-striped text-center">
+                            <div class="article" th:each="item:${list}">
+
+
+                                <h1 class="article__title cms-title" th:text="${item.title}">
+                                    
+                                </h1>
+                                <div class="article__meta">
+
+
+                                    <time class="time" datetime="2022-07-26T10:17:07+0700" data-time="1658805427" data-gmt="true" th:text="${item.created_at}"></time>
+                                    <meta class="cms-date" itemprop="datePublished" content="2022-07-26T10:17:07+0700">
+                                </div>
+
+                                <div class="article__sapo cms-desc" th:text="${item.content}">
+                                    
+                                </div>
+
+                                <div id="adsWeb_AdsArticleAfterSapo" class="banner clearfix" data-platform="1" data-position="Web_AdsArticleAfterSapo" style="display: none;">
+                                    <script>
+                                        if (typeof Web_AdsArticleAfterSapo != 'undefined') {
+                                            window.CMS_BANNER.pushAds(Web_AdsArticleAfterSapo, 'adsWeb_AdsArticleAfterSapo');
+                                        } else {
+                                            document.getElementById('adsWeb_AdsArticleAfterSapo').style.display = "none";
+                                        }
+                                    </script>
+                                </div>
+
+
+
+                                <table class="picture ">
+                                    <tbody>
                                         <tr>
-                                            <td>Title</td>
-                                            <td>
-                                                <p th:text="${item.title}"></p>
+                                            <td class="pic">
+                                                <img class="cms-photo" th:src="@{'/webdata/news/'+${item.image}}">
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Image</td>
-                                            <td>
-                                                <img style="width: 160px;height: 150px;" th:src="@{'/webdata/news/'+${item.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
-                                            </td>
+                                            <td class="caption" th:text="${item.img_title}"></td>
                                         </tr>
-                                        <tr>
-                                            <td>Views</td>
-                                            <td>
-                                                <p th:text="${item.view}"></p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Release date</td>
-                                            <td>
-                                                <p th:text="${item.created_at}"></p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Description</td>
-                                            <td>
-                                                <p th:text="${item.description}"></p>
-                                            </td>
-                                        </tr>
-                                    </table>
+                                    </tbody>
+                                </table>
+
+                                <div id="adsWeb_AdsArticleAfterAvatar" class="banner clearfix" data-platform="1" data-position="Web_AdsArticleAfterAvatar" style="display: none;">
+                                    <script>
+                                        if (typeof Web_AdsArticleAfterAvatar != 'undefined') {
+                                            window.CMS_BANNER.pushAds(Web_AdsArticleAfterAvatar, 'adsWeb_AdsArticleAfterAvatar');
+                                        } else {
+                                            document.getElementById('adsWeb_AdsArticleAfterAvatar').style.display = "none";
+                                        }
+                                    </script>
+                                </div>
+                                <div class="article__body cms-body" itemprop="articleBody">
+                                    <p style="text-align: justify;" th:text="${item.description}"></p>
                                 </div>
                             </div>
                         </div>
