@@ -55,6 +55,27 @@ public class SongClientController {
 
     @GetMapping("/{id}")
     public String mediaPlayer(@PathVariable("id") int id, Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        if (!(session.getAttribute("mess")==null)) {
+            Song s = service.findById(id).orElseThrow();
+            s.setView(s.getView() + 1);
+            service.save(s);
+            List<Song> anotherlist = service.findByAlbumId(s.getAlbumId());
+            Song swap = anotherlist.get(0);
+            int index_to_swap = anotherlist.indexOf(s);
+            anotherlist.set(0, s);
+            anotherlist.set(index_to_swap, swap);
+            model.addAttribute("song", s);
+            model.addAttribute("anotherlist", anotherlist);
+            model.addAttribute("listcomments", service_cmt.findBySongId(s.getId()));
+            model.addAttribute("listcmtall", service_cmt.findAll());
+            session.setAttribute("user", session.getAttribute("user"));
+            model.addAttribute("user", session.getAttribute("user"));
+            model.addAttribute("service_pl", service_pl);
+            model.addAttribute("mess",session.getAttribute("mess").toString());
+            session.removeAttribute("mess");
+            return "client/song/mediaplayer";
+        }
         Song s = service.findById(id).orElseThrow();
         s.setView(s.getView() + 1);
         service.save(s);
@@ -67,7 +88,6 @@ public class SongClientController {
         model.addAttribute("anotherlist", anotherlist);
         model.addAttribute("listcomments", service_cmt.findBySongId(s.getId()));
         model.addAttribute("listcmtall", service_cmt.findAll());
-        HttpSession session = request.getSession();
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("service_pl", service_pl);
@@ -144,7 +164,7 @@ public class SongClientController {
     @GetMapping("/playlist/add")
     public String addPlaylist(Model model, @RequestParam(name = "playlistId", required = false, defaultValue = "0") int playlistId,
             @RequestParam("name") String name, @RequestParam("accountId") Long accountId,
-            @RequestParam("songId") Integer songId) {
+            @RequestParam("songId") Integer songId, HttpServletRequest request) {
         if (!name.isEmpty()) {
             Playlist playlist = new Playlist();
             playlist.setName(name);
@@ -161,6 +181,9 @@ public class SongClientController {
                 }
             }
             service_plitem.save(plitem);
+            HttpSession session = request.getSession();
+            session.setAttribute("mess", "Successfully");
+            return "redirect:/song/" + songId;
         } else {
             Playlistitem plitem = new Playlistitem();
             plitem.setSongId(songId);
@@ -168,9 +191,10 @@ public class SongClientController {
             plitem.setPlaylistId(playlistId);
             plitem.setPlaylist(service_pl.findById(playlistId).orElseThrow());
             service_plitem.save(plitem);
+            HttpSession session = request.getSession();
+            session.setAttribute("mess", "Successfully");
+            return "redirect:/song/" + songId;
         }
-        model.addAttribute("mess", "sucessfully");
-        return "redirect:/song/" + songId;
     }
 
     @GetMapping("/playlist")
@@ -190,7 +214,7 @@ public class SongClientController {
         s.setView(s.getView() + 1);
         service.save(s);
         List<Song> anotherlist = new ArrayList<>();
-        for(int i=0;i<service_plitem.findByPlaylistId(playlistId).size();i++){
+        for (int i = 0; i < service_plitem.findByPlaylistId(playlistId).size(); i++) {
             anotherlist.add(service_plitem.findByPlaylistId(playlistId).get(i).getSong());
         }
         Song swap = anotherlist.get(0);

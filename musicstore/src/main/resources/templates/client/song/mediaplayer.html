@@ -204,15 +204,17 @@ and open the template in the editor.
     </head>
     <body>
         <div layout:fragment="content" id="content-page" class="content-page">
-            <div th:if="${mess!=null}" class="toast" data-autohide="false">
-                <div class="toast-header">
-                    <strong class="mr-auto text-primary">Toast Header</strong>
-                    <small class="text-muted">5 mins ago</small>
-                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+            <div th:if="${mess} != null" class="alert btn-outline-primary" role="alert">
+                <div th:if="${mess}=='Successfully'" class="iq-alert-icon">
+                    <i class="ri-pencil-line"></i>
                 </div>
-                <div class="toast-body" th:text="${mess}">
-                    Some text inside the toast body
+                <div th:if="${mess}=='Failed'" class="iq-alert-icon">
+                    <i class="ri-error-warning-line"></i>
                 </div>
+                <div class="iq-alert-text" th:text="${mess}">A simple <b>light</b> alert—check it out!</div>
+                <button type="button" class="close text-muted" data-dismiss="alert" aria-label="Close">
+                    <i class="ri-close-line"></i>
+                </button>
             </div>
             <div class="container-fluid">
                 <div class="row">
@@ -355,41 +357,42 @@ and open the template in the editor.
                                 </div>
                                 <div th:if="${listcomments.size >0}" class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
                                     <div class="coment-bottom bg-white p-2 px-4">
-                                        <form th:action=${"/song/comment/add"} th:if="${session.user} != null">
+                                        <div th:if="${session.user} != null">
                                             <div class="d-flex flex-row add-comment-section mt-4 mb-4"><img style=" border-radius: 10px;
                                                                                                             padding-right: 5px;
                                                                                                             width: 60px;
-                                                                                                            height: 55px" class="img-fluid img-responsive rounded-circle mr-2" src="https://i.imgur.com/qdiP4DB.jpg" width="38">
+                                                                                                            height: 55px" class="img-fluid img-responsive rounded-circle mr-2" th:src="@{'/webdata/user/'+${session.user.image}}" width="38">
 
-                                                <input type="hidden" th:name="accountId" th:value="${session.user.id}"/>
-                                                <input type="hidden" th:name="songId" th:value="${song.id}" />
-                                                <input th:name="content" class="form-control mr-3" placeholder="Add comment">
-                                                <button class="btn btn-primary" type="submit">Comment</button>
+
+                                                <input type="hidden" id="accountId" th:name="accountId" th:value="${session.user.id}"/>
+                                                <input type="hidden" id="songId" th:name="songId" th:value="${song.id}" />
+                                                <input id="content" th:name="content" class="form-control mr-3" placeholder="Add comment">
+                                                <button onclick="addComment()" class="btn btn-primary" type="submit">Comment</button>
 
                                             </div>
-                                        </form>
-                                        <ul id="myList" class="list-unstyled" th:each="item:${listcomments}">
-                                            <li class="media"> <span class="round"><img style=" border-radius: 10px;
-                                                                                        padding-right: 5px;
-                                                                                        width: 60px;
-                                                                                        height: 55px" src="https://i.imgur.com/qdiP4DB.jpg" class="align-self-start mr-3"></span>
-                                                <div class="media-body">
-                                                    <div class="row d-flex">
-                                                        <h6 style=" color: #5C5C5C;
-                                                            font-size: 15px !important;
-                                                            padding-left: 15px !important;
-                                                            margin-bottom: 0; font-weight: bolder; " th:text="${item.account.username}">Leo Aminoff</h6>
-                                                        <div class="ml-auto">
-                                                            <p class="text"></p>
+                                        </div>
+                                        <ul id="myList" class="list-unstyled">
+                                            <!--    <li class="media"> <span class="round"><img style=" border-radius: 10px;
+                                                                                            padding-right: 5px;
+                                                                                            width: 60px;
+                                                                                            height: 55px" th:src="@{'/webdata/user/'+${item.account.image}}" class="align-self-start mr-3"></span>
+                                                    <div class="media-body">
+                                                        <div class="row d-flex">
+                                                            <h6 style=" color: #5C5C5C;
+                                                                font-size: 15px !important;
+                                                                padding-left: 15px !important;
+                                                                margin-bottom: 0; font-weight: bolder; " th:text="${item.account.username}">Leo Aminoff</h6>
+                                                            <div class="ml-auto">
+                                                                <p class="text"></p>
+                                                            </div>
                                                         </div>
+                                                        <p th:text="${item.content}">Bought your "Palace of Versailles"</p>
                                                     </div>
-                                                    <p th:text="${item.content}">Bought your "Palace of Versailles"</p>
-                                                </div>
-                                                <div th:if="${session.user != null && session.user.id==item.account.id}" class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1">
-                                                    <span class="table-remove"><a th:href="@{/song/comment/delete02/{id}(id=${item.id})}" type="button"
-                                                                                  class="btn iq-bg-danger btn-rounded btn-sm my-0">Remove</a></span>
-                                                </div>
-                                            </li>
+                                                    <div th:if="${session.user != null && session.user.id==item.account.id}" class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1">
+                                                        <span class="table-remove"><a th:href="@{/song/comment/delete/{id}(id=${item.id})}" type="button"
+                                                                                      class="btn iq-bg-danger btn-rounded btn-sm my-0"><i class="ri-delete-bin-6-fill"></i></a></span>
+                                                    </div>
+                                                </li> -->
                                         </ul>
                                     </div>
                                 </div>
@@ -398,19 +401,21 @@ and open the template in the editor.
                                 </div>
                                 <div th:if="${listcomments.size==0 && session.user != null}" class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
                                     <div class="coment-bottom bg-white p-2 px-4">
-                                        <form th:action=${"/song/comment/add"}>
+                                        <div>
                                             <div class="d-flex flex-row add-comment-section mt-4 mb-4"><img style=" border-radius: 10px;
                                                                                                             padding-right: 5px;
                                                                                                             width: 60px;
-                                                                                                            height: 55px" class="img-fluid img-responsive rounded-circle mr-2" src="https://i.imgur.com/qdiP4DB.jpg" width="38">
+                                                                                                            height: 55px" class="img-fluid img-responsive rounded-circle mr-2" th:src="@{'/webdata/user/'+${session.user.image}}" width="38">
 
-                                                <input type="hidden" th:name="accountId" th:value="${session.user.id}"/>
-                                                <input type="hidden" th:name="songId" th:value="${song.id}" />
-                                                <input name="content" class="form-control mr-3" placeholder="Add comment">
-                                                <button class="btn btn-primary" type="submit">Comment</button>
+
+                                                <input type="hidden" id="accountId" th:name="accountId" th:value="${session.user.id}"/>
+                                                <input type="hidden" id="songId" th:name="songId" th:value="${song.id}" />
+                                                <input id="content" th:name="content" class="form-control mr-3" placeholder="Add comment">
+                                                <button onclick="addComment()" class="btn btn-primary" type="submit">Comment</button>
 
                                             </div>
-                                        </form>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -419,7 +424,7 @@ and open the template in the editor.
                 </div>
             </div>
 
-            <div th:if="${session.user !=null}" id="myModal" class="modal fade" role="dialog">
+            <div th:if="${session.user !=null}" id="myModal" class="modal" role="dialog">
 
                 <!--Modal-->
                 <div class="modal-dialog">
@@ -435,9 +440,9 @@ and open the template in the editor.
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
 
-                        <form>
+                        <form id="html_form_id" th:action=${"/song/playlist/add"}>
 
-                            <input type="hidden" th:name="songId" th:value="${song.id}"/>
+                            <input type="hidden" id="songId2" th:name="songId" th:value="${song.id}"/>
                             <input type="hidden" th:name="accountId" th:value="${session.user.id}"/>
                             <!-- Radio Buttons for Rating-->
                             <div class="form-check mb-4" th:each="item:${service_pl.findByAccountId(session.user.id)}">
@@ -543,6 +548,15 @@ and open the template in the editor.
                 let mv = document.querySelector('#mv');
                 let time = document.querySelector('#time');
                 let current = document.querySelector('#current');
+                let songId = document.querySelector('#songId');
+                let songId2 = document.querySelector('#songId2');
+
+
+                let myList = document.querySelector('#myList');
+                let accountId = document.querySelector('#accountId');
+
+                let content = document.querySelector('#content');
+
 
 
 
@@ -564,6 +578,36 @@ and open the template in the editor.
 
 
                 // function load the track
+              
+                function loadComments() {
+                    fetch(`http://localhost:8080/api/comment/findBySongId?songId=` + songId.value, {})
+                            .then((response) => response.json())
+                            .then((response) => {
+                                var arr = response;
+                                myList.innerHTML = "";
+                                myList.innerHTML+="<p style='display:none;'>"+arr[0].content+"</p>";
+                                for (let i = 0; i < arr.length; i++) {
+                                    if (arr[i].account.id == accountId.value) {
+                                        myList.innerHTML += "<li class='media'><span class='round'><img style=' border-radius: 10px;padding-right: 5px;width: 60px;height: 55px;' src='http://localhost:8080/webdata/user/" + arr[i].account.image + " ' class='align-self-start mr-3'></span><div class='media-body'><div class='row d-flex'><h6 style=' color: #5C5C5C;font-size: 15px !important;padding-left: 15px !important;margin-bottom: 0; font-weight: bolder; '>" + arr[i].account.username + "</h6><div class='ml-auto'><p class='text'>24h</p></div></div><p>" + arr[i].content + "</p></div><div class='iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1'><span class='table-remove'><a href='http://localhost:8080/song/comment/delete/" + arr[i].id + "' type='button' class='btn iq-bg-danger btn-rounded btn-sm my-0'>Remove</a></span></div></li>";
+                                    } else {
+                                        myList.innerHTML += "<li class='media'><span class='round'><img style=' border-radius: 10px;padding-right: 5px;width: 60px;height: 55px;' src='http://localhost:8080/webdata/user/" + arr[i].account.image + " ' class='align-self-start mr-3'></span><div class='media-body'><div class='row d-flex'><h6 style=' color: #5C5C5C;font-size: 15px !important;padding-left: 15px !important;margin-bottom: 0; font-weight: bolder; '>" + arr[i].account.username + "</h6><div class='ml-auto'><p class='text'>24h</p></div></div><p>" + arr[i].content + "</p></div></li>";
+                                    }
+                                }
+
+                            });
+                }
+                loadComments();
+                function addComment() {
+                    fetch(`http://localhost:8080/api/comment/add?content=` + content.value + `&songId=` + songId.value + '&accountId=' + accountId.value, {method:"POST"})
+                            .then((response) => response.json())
+                            .then((response) => {
+                                var arr = response;
+                                loadComments();
+                            });
+                }
+
+
+
 
 
 
@@ -585,9 +629,11 @@ and open the template in the editor.
                     } else {
                         mv.hidden = true;
                     }
-
+                    songId.value = All_song[index_no].id;
+                    songId2.value = All_song[index_no].id;
 
                     track.load();
+                    loadComments();
 
 
                     timer = setInterval(range_slider, 1000);
@@ -737,30 +783,7 @@ and open the template in the editor.
 
             </script>
 
-            <script>
-                const btn = document.querySelector('#btn')
 
-                btn.addEventListener('click', () => {
-                    new Notify({
-                        status: 'success',
-                        title: 'Notify Title',
-                        text: 'Notify text lorem ipsum',
-                        effect: 'fade',
-                        speed: 300,
-                        customClass: '',
-                        customIcon: '',
-                        showIcon: true,
-                        showCloseButton: true,
-                        autoclose: false,
-                        autotimeout: 3000,
-                        gap: 20,
-                        distance: 20,
-                        type: 1,
-                        position: 'right top',
-                        customWrapper: '',
-                    })
-                })
-            </script>
         </div>
     </body>
-</html>
+</html> 

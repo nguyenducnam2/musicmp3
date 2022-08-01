@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -23,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import vn.aptech.musicstore.entity.Comment;
 import vn.aptech.musicstore.entity.Song;
 import vn.aptech.musicstore.service.AlbumService;
 import vn.aptech.musicstore.service.ArtistService;
@@ -52,7 +51,7 @@ public class SongController {
 
     @Autowired
     private AlbumService service_alb;
-    
+
     @Autowired
     private CommentService service_cmt;
 
@@ -142,7 +141,11 @@ public class SongController {
     public String delete(@PathVariable("id") int id, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size, Model model) throws IOException {
         try {
-            service_cmt.deleteBySongId(id);
+            for (Comment cmt : service_cmt.findAll()) {
+                if (cmt.getSong().getId() == id) {
+                    service_cmt.deleteBySongId(id);
+                }
+            }
             service.deleteById(id);
         } catch (Exception e) {
             e.printStackTrace();
