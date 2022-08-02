@@ -5,6 +5,8 @@
  */
 package vn.aptech.musicstore.entity;
 
+import java.util.Calendar;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,6 +40,8 @@ public class Comment {
     private Long accountId;
     @Column(name = "song_id", insertable = false, updatable = false)
     private Integer songId;
+    @Column(name = "datetime")
+    private Date datetime = calculateExpirationDate(0);
 
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     @ManyToOne
@@ -45,4 +49,11 @@ public class Comment {
     @JoinColumn(name = "song_id", referencedColumnName = "id")
     @ManyToOne
     private Song song;
+
+    private Date calculateExpirationDate(int expirationTime) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(new Date().getTime());
+        calendar.add(Calendar.MINUTE, expirationTime);
+        return new Date(calendar.getTime().getTime());
+    }
 }

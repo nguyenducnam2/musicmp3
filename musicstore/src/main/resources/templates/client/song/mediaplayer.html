@@ -319,34 +319,34 @@ and open the template in the editor.
                             </ul>
                             <div class="tab-content" id="myTabContent-2">
                                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                    <ul class="list-unstyled iq-music-slide mb-0">
-                                        <li class="mb-3" th:each="item:${anotherlist}">
-                                            <div class="d-flex justify-content-between align-items-center row">
-                                                <div class="media align-items-center col-10 col-md-5">
-                                                    <div class="iq-realese-song ">
-                                                        <a th:href="@{/song/{id}(id=${item.id})}"><img th:src="@{'/webdata/album/'+${item.album.image}}" class="img-border-radius avatar-60 img-fluid" alt=""></a>
-                                                    </div>
-                                                    <div class="media-body ml-3">
-                                                        <p class="mb-0" th:text="${item.name}"></p>
-                                                        <small th:text="${item.artist.name}"></small>
-                                                    </div>
-                                                </div>
-                                                <p class="mb-0 col-md-2 col-md-2 iq-music-time">
-                                                <p class="mb-0 col-2 col-md-2 iq-music-play"><a th:href="@{/song/{id}(id=${item.id})}"><i class="las la-play-circle font-size-32"></i></a></p>
-                                                <div class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1">
-                                                    <div class="dropdown">
-                                                        <span class="dropdown-toggle text-primary" id="dropdownMenuButton2" data-toggle="dropdown" aria-expanded="false" role="button">
-                                                            <i class="ri-more-2-fill text-primary"></i>
-                                                        </span>
-                                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton2" style="">
-                                                            <a class="dropdown-item" href="#"><i class="ri-eye-fill mr-2"></i>View</a>
-                                                            <a class="dropdown-item" href="#"><i class="ri-delete-bin-6-fill mr-2"></i>Delete</a>
-                                                            <a class="dropdown-item" href="#"><i class="ri-file-download-fill mr-2"></i>Download</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
+                                    <ul id="myListSong" class="list-unstyled iq-music-slide mb-0">
+                                        <!--          <li class="mb-3">
+                                                       <div class="d-flex justify-content-between align-items-center row">
+                                                           <div class="media align-items-center col-10 col-md-5">
+                                                               <div class="iq-realese-song ">
+                                                                   <a th:href="@{/song/{id}(id=${item.id})}"><img th:src="@{'/webdata/album/'+${item.album.image}}" class="img-border-radius avatar-60 img-fluid" alt=""></a>
+                                                               </div>
+                                                               <div class="media-body ml-3">
+                                                                   <p class="mb-0" th:text="${item.name}"></p>
+                                                                   <small th:text="${item.artist.name}"></small>
+                                                               </div>
+                                                           </div>
+                                                           <p class="mb-0 col-md-2 col-md-2 iq-music-time">
+                                                           <p class="mb-0 col-2 col-md-2 iq-music-play"><a th:href="@{/song/{id}(id=${item.id})}"><i class="las la-play-circle font-size-32"></i></a></p>
+                                                           <div class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1">
+                                                               <div class="dropdown">
+                                                                   <span class="dropdown-toggle text-primary" id="dropdownMenuButton2" data-toggle="dropdown" aria-expanded="false" role="button">
+                                                                       <i class="ri-more-2-fill text-primary"></i>
+                                                                   </span>
+                                                                   <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton2" style="">
+                                                                       <a class="dropdown-item" href="#"><i class="ri-eye-fill mr-2"></i>View</a>
+                                                                       <a class="dropdown-item" href="#"><i class="ri-delete-bin-6-fill mr-2"></i>Delete</a>
+                                                                       <a class="dropdown-item" href="#"><i class="ri-file-download-fill mr-2"></i>Download</a>
+                                                                   </div>
+                                                               </div>
+                                                           </div>
+                                                       </div>
+                                                   </li> -->
                                     </ul>
                                 </div>
                                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
@@ -371,7 +371,7 @@ and open the template in the editor.
 
                                             </div>
                                         </div>
-                                        <ul id="myList" class="list-unstyled">
+                                        <ul id="myList">
                                             <!--    <li class="media"> <span class="round"><img style=" border-radius: 10px;
                                                                                             padding-right: 5px;
                                                                                             width: 60px;
@@ -415,7 +415,7 @@ and open the template in the editor.
 
                                             </div>
                                         </div>
-
+                                        <ul id="myList" class="list-unstyled"></ul>
                                     </div>
                                 </div>
                             </div>
@@ -531,6 +531,9 @@ and open the template in the editor.
                 </div>
             </div>
 
+            <input type="hidden" id="albumId" th:value="${song.album.id}"/>
+            <input type="hidden" id="playlistId" th:value="${playlistId}"/>
+
             <script th:inline="javascript">
                 let previous = document.querySelector('#pre');
                 let play = document.querySelector('#play');
@@ -550,13 +553,14 @@ and open the template in the editor.
                 let current = document.querySelector('#current');
                 let songId = document.querySelector('#songId');
                 let songId2 = document.querySelector('#songId2');
-
+                let albumId = document.querySelector('#albumId');
+                let playlistId = document.querySelector('#playlistId');
 
                 let myList = document.querySelector('#myList');
+                let myListSong = document.querySelector('#myListSong');
                 let accountId = document.querySelector('#accountId');
 
                 let content = document.querySelector('#content');
-
 
 
 
@@ -573,42 +577,84 @@ and open the template in the editor.
                 let track = document.createElement('audio');
                 //All songs list
                 var All_song = /*[[${anotherlist}]]*/[];
-
                 // All functions
 
 
                 // function load the track
-              
+
                 function loadComments() {
-                    fetch(`http://localhost:8080/api/comment/findBySongId?songId=` + songId.value, {})
+                    fetch(`http://localhost:8080/api/comment/findBySongId?songId=` + songId.value, {method: "GET"})
                             .then((response) => response.json())
                             .then((response) => {
                                 var arr = response;
                                 myList.innerHTML = "";
-                                myList.innerHTML+="<p style='display:none;'>"+arr[0].content+"</p>";
-                                for (let i = 0; i < arr.length; i++) {
+                                for (let i = arr.length - 1; i >= 0; i--) {
                                     if (arr[i].account.id == accountId.value) {
-                                        myList.innerHTML += "<li class='media'><span class='round'><img style=' border-radius: 10px;padding-right: 5px;width: 60px;height: 55px;' src='http://localhost:8080/webdata/user/" + arr[i].account.image + " ' class='align-self-start mr-3'></span><div class='media-body'><div class='row d-flex'><h6 style=' color: #5C5C5C;font-size: 15px !important;padding-left: 15px !important;margin-bottom: 0; font-weight: bolder; '>" + arr[i].account.username + "</h6><div class='ml-auto'><p class='text'>24h</p></div></div><p>" + arr[i].content + "</p></div><div class='iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1'><span class='table-remove'><a href='http://localhost:8080/song/comment/delete/" + arr[i].id + "' type='button' class='btn iq-bg-danger btn-rounded btn-sm my-0'>Remove</a></span></div></li>";
+                                        myList.innerHTML += "<li class='media'><span class='round'><img style=' border-radius: 10px;padding-right: 5px;width: 60px;height: 55px;' src='http://localhost:8080/webdata/user/" + arr[i].account.image + " ' class='align-self-start mr-3'></span><div class='media-body'><div class='row d-flex'><h6 style=' color: #5C5C5C;font-size: 15px !important;padding-left: 15px !important;margin-bottom: 0; font-weight: bolder; '>" + arr[i].account.username + "</h6><div class='ml-auto'><p class='text'>" + new String(arr[i].datetime).substring(0, 10) + " " + new String(arr[i].datetime).substring(11, 16) + "</p></div></div><p>" + arr[i].content + "</p></div><div class='iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1'><span class='table-remove'><button onclick='deleteComment(" + arr[i].id + ")' type='submit' class='btn iq-bg-danger btn-rounded btn-sm my-0'><i class='ri-delete-bin-line'></i></button></span></div></li>";
                                     } else {
-                                        myList.innerHTML += "<li class='media'><span class='round'><img style=' border-radius: 10px;padding-right: 5px;width: 60px;height: 55px;' src='http://localhost:8080/webdata/user/" + arr[i].account.image + " ' class='align-self-start mr-3'></span><div class='media-body'><div class='row d-flex'><h6 style=' color: #5C5C5C;font-size: 15px !important;padding-left: 15px !important;margin-bottom: 0; font-weight: bolder; '>" + arr[i].account.username + "</h6><div class='ml-auto'><p class='text'>24h</p></div></div><p>" + arr[i].content + "</p></div></li>";
+                                        myList.innerHTML += "<li class='media'><span class='round'><img style=' border-radius: 10px;padding-right: 5px;width: 60px;height: 55px;' src='http://localhost:8080/webdata/user/" + arr[i].account.image + " ' class='align-self-start mr-3'></span><div class='media-body'><div class='row d-flex'><h6 style=' color: #5C5C5C;font-size: 15px !important;padding-left: 15px !important;margin-bottom: 0; font-weight: bolder; '>" + arr[i].account.username + "</h6><div class='ml-auto'><p class='text'>" + new String(arr[i].datetime).substring(0, 10) + " " + new String(arr[i].datetime).substring(11, 16) + "</p></div></div><p>" + arr[i].content + "</p></div><div class='iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1'></div></li>";
                                     }
                                 }
 
                             });
                 }
-                loadComments();
+
                 function addComment() {
-                    fetch(`http://localhost:8080/api/comment/add?content=` + content.value + `&songId=` + songId.value + '&accountId=' + accountId.value, {method:"POST"})
-                            .then((response) => response.json())
+                    if (content.value != "") {
+                        fetch(`http://localhost:8080/api/comment/add?content=` + content.value + `&songId=` + songId.value + '&accountId=' + accountId.value, {method: "POST"})
+                                .then((response) => response.json())
+                                .then((response) => {
+                                    content.value = "";
+                                    loadComments();
+                                });
+                    }
+                }
+
+
+                function deleteComment(cmtId) {
+                    fetch(`http://localhost:8080/api/comment/delete?cmtId=` + cmtId, {method: "DELETE"})
+                            .then((response) => response.text())
                             .then((response) => {
-                                var arr = response;
                                 loadComments();
                             });
                 }
 
+                function loadSongs(albumId, playlistId) {
+                    if (playlistId == "") {
+                        fetch(`http://localhost:8080/api/song/findByAlbumId?albumId=` + albumId , {method: "GET"})
+                                .then((response) => response.json())
+                                .then((response) => {
+                                    var arr = response;
+                                    myListSong.innerHTML = "";
+                                    for (let i = 0; i < arr.length; i++) {
+                                        if (arr[i].id == songId.value) {
+                                            myListSong.innerHTML += "<li style='background-color:wheat;' class='mb-3'><div class='d-flex justify-content-between align-items-center row'><div class='media align-items-center col-10 col-md-5'><div class='iq-realese-song '><a href='http://localhost:8080/song/" + arr[i].id + "'><img src='http://localhost:8080/webdata/album/" + arr[i].album.image + "' class='img-border-radius avatar-60 img-fluid' alt=''></a></div><div class='media-body ml-3'><p style='font-weight:bolder;' class='mb-0'>" + arr[i].name + "</p><small>" + arr[i].artist.name + "</small></div></div><p class='mb-0 col-md-2 col-md-2 iq-music-time'><p class='mb-0 col-2 col-md-2 iq-music-play'><a href='http://localhost:8080/song/" + arr[i].id + "'><i class='las la-pause-circle font-size-32' aria-hidden='true'></i></a></p><div class='iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1'><div class='dropdown'><span class='dropdown-toggle text-primary' id='dropdownMenuButton2' data-toggle='dropdown' aria-expanded='false' role='button'><i class='ri-more-2-fill text-primary'></i></span><div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuButton2' style=''><a class='dropdown-item' href='#'><i class='ri-eye-fill mr-2'></i>View</a><a class='dropdown-item' href='#'><i class='ri-delete-bin-6-fill mr-2'></i>Delete</a><a class='dropdown-item' href='#'><i class='ri-file-download-fill mr-2'></i>Download</a></div></div></div></div></li>";
+                                        } else {
+                                            myListSong.innerHTML += "<li class='mb-3'><div class='d-flex justify-content-between align-items-center row'><div class='media align-items-center col-10 col-md-5'><div class='iq-realese-song '><a href='http://localhost:8080/song/" + arr[i].id + "'><img src='http://localhost:8080/webdata/album/" + arr[i].album.image + "' class='img-border-radius avatar-60 img-fluid' alt=''></a></div><div class='media-body ml-3'><p class='mb-0'>" + arr[i].name + "</p><small>" + arr[i].artist.name + "</small></div></div><p class='mb-0 col-md-2 col-md-2 iq-music-time'><p class='mb-0 col-2 col-md-2 iq-music-play'><a href='http://localhost:8080/song/" + arr[i].id + "'><i class='las la-play-circle font-size-32'></i></a></p><div class='iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1'><div class='dropdown'><span class='dropdown-toggle text-primary' id='dropdownMenuButton2' data-toggle='dropdown' aria-expanded='false' role='button'><i class='ri-more-2-fill text-primary'></i></span><div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuButton2' style=''><a class='dropdown-item' href='#'><i class='ri-eye-fill mr-2'></i>View</a><a class='dropdown-item' href='#'><i class='ri-delete-bin-6-fill mr-2'></i>Delete</a><a class='dropdown-item' href='#'><i class='ri-file-download-fill mr-2'></i>Download</a></div></div></div></div></li>";
+                                        }
+                                    }
 
 
+                                });
+                    } else {
+                        fetch(`http://localhost:8080/api/song/findByPlaylistId?playlistId=` + playlistId , {method: "GET"})
+                                .then((response) => response.json())
+                                .then((response) => {
+                                    var arr = response;
+                                    myListSong.innerHTML = "";
+                                    for (let i = 0; i < arr.length; i++) {
+                                        if (arr[i].id == songId.value) {
+                                            myListSong.innerHTML += "<li style='background-color:wheat;' class='mb-3'><div class='d-flex justify-content-between align-items-center row'><div class='media align-items-center col-10 col-md-5'><div class='iq-realese-song '><a href='http://localhost:8080/song/" + arr[i].id + "'><img src='http://localhost:8080/webdata/album/" + arr[i].album.image + "' class='img-border-radius avatar-60 img-fluid' alt=''></a></div><div class='media-body ml-3'><p style='font-weight:bolder;' class='mb-0'>" + arr[i].name + "</p><small>" + arr[i].artist.name + "</small></div></div><p class='mb-0 col-md-2 col-md-2 iq-music-time'><p class='mb-0 col-2 col-md-2 iq-music-play'><a href='http://localhost:8080/song/" + arr[i].id + "'><i class='las la-pause-circle font-size-32' aria-hidden='true'></i></a></p><div class='iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1'><div class='dropdown'><span class='dropdown-toggle text-primary' id='dropdownMenuButton2' data-toggle='dropdown' aria-expanded='false' role='button'><i class='ri-more-2-fill text-primary'></i></span><div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuButton2' style=''><a class='dropdown-item' href='#'><i class='ri-eye-fill mr-2'></i>View</a><a class='dropdown-item' href='#'><i class='ri-delete-bin-6-fill mr-2'></i>Delete</a><a class='dropdown-item' href='#'><i class='ri-file-download-fill mr-2'></i>Download</a></div></div></div></div></li>";
+                                        } else {
+                                            myListSong.innerHTML += "<li class='mb-3'><div class='d-flex justify-content-between align-items-center row'><div class='media align-items-center col-10 col-md-5'><div class='iq-realese-song'><a href='http://localhost:8080/song/" + arr[i].id + "'><img src='http://localhost:8080/webdata/album/" + arr[i].album.image + "' class='img-border-radius avatar-60 img-fluid' alt=''></a></div><div class='media-body ml-3'><p class='mb-0'>" + arr[i].name + "</p><small>" + arr[i].artist.name + "</small></div></div><p class='mb-0 col-md-2 col-md-2 iq-music-time'><p class='mb-0 col-2 col-md-2 iq-music-play'><a href='http://localhost:8080/song/" + arr[i].id + "'><i class='las la-play-circle font-size-32'></i></a></p><div class='iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1'><div class='dropdown'><span class='dropdown-toggle text-primary' id='dropdownMenuButton2' data-toggle='dropdown' aria-expanded='false' role='button'><i class='ri-more-2-fill text-primary'></i></span><div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuButton2' style=''><a class='dropdown-item' href='#'><i class='ri-eye-fill mr-2'></i>View</a><a class='dropdown-item' href='#'><i class='ri-delete-bin-6-fill mr-2'></i>Delete</a><a class='dropdown-item' href='#'><i class='ri-file-download-fill mr-2'></i>Download</a></div></div></div></div></li>";
+                                        }
+                                    }
 
+
+                                });
+                    }
+
+                }
 
 
 
@@ -633,8 +679,9 @@ and open the template in the editor.
                     songId2.value = All_song[index_no].id;
 
                     track.load();
+                    playsong();
                     loadComments();
-
+                    loadSongs(albumId.value, playlistId.value);
 
                     timer = setInterval(range_slider, 1000);
                     var i = setInterval(function () {

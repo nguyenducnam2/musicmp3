@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import vn.aptech.musicstore.entity.Song;
 import vn.aptech.musicstore.service.AlbumService;
 import vn.aptech.musicstore.service.ArtistService;
 import vn.aptech.musicstore.service.GenreService;
+import vn.aptech.musicstore.service.PlaylistitemService;
 import vn.aptech.musicstore.service.SongService;
 
 /**
@@ -55,6 +57,9 @@ public class SongApiController {
     @Autowired
     private AlbumService service_alb;
 
+    @Autowired
+    private PlaylistitemService service_plitem;
+
     @GetMapping
     public List<Song> findAll() {
         return service.findAll();
@@ -64,12 +69,20 @@ public class SongApiController {
     public Optional<Song> findById(@PathVariable("id") int id) {
         return service.findById(id);
     }
-//    
-//    @PostMapping
-//    public void create(@RequestBody Song s){
-//        service.save(s);
-//    }
-//
+
+    @GetMapping("/findByAlbumId")
+    public List<Song> findByAlbumId(@RequestParam("albumId") int albumId) {
+        return service.findByAlbumId(albumId);
+    }
+
+    @GetMapping("/findByPlaylistId")
+    public List<Song> findByPlaylistId(@RequestParam("playlistId") int playlistId) {
+        List<Song> anotherlist = new ArrayList<>();
+        for (int i = 0; i < service_plitem.findByPlaylistId(playlistId).size(); i++) {
+            anotherlist.add(service_plitem.findByPlaylistId(playlistId).get(i).getSong());
+        }
+        return anotherlist;
+    }
 
     @PostMapping
     public void create(@RequestParam("name") String name,
