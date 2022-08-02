@@ -41,7 +41,7 @@ public class Comment {
     @Column(name = "song_id", insertable = false, updatable = false)
     private Integer songId;
     @Column(name = "datetime")
-    private Date datetime = calculateExpirationDate(0);
+    private Date datetime = calculateExpirationDate(420);
 
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     @ManyToOne
