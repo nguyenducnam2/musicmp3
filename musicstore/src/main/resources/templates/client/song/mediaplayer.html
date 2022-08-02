@@ -533,6 +533,8 @@ and open the template in the editor.
 
             <input type="hidden" id="albumId" th:value="${song.album.id}"/>
             <input type="hidden" id="playlistId" th:value="${playlistId}"/>
+            <input type="hidden" id="songId" th:value="${song.id}"/>
+            <input type="hidden" id="songId2" th:value="${song.id}"/>
 
             <script th:inline="javascript">
                 let previous = document.querySelector('#pre');
