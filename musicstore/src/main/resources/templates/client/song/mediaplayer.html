@@ -417,7 +417,7 @@ and open the template in the editor.
 
                                             </div>
                                         </div>
-                                         <ul id="myList" class="list-unstyled"></ul>
+                                        <ul id="myList" class="list-unstyled"></ul>
 
                                     </div>
                                 </div>
@@ -583,6 +583,12 @@ and open the template in the editor.
                 let track = document.createElement('audio');
                 //All songs list
                 var All_song = /*[[${anotherlist}]]*/[];
+
+                // Your document is loaded.
+
+                var run = setInterval(loadComments,15000);
+
+
                 // All functions
 
 
@@ -607,6 +613,7 @@ and open the template in the editor.
                                 }
                             });
                 }
+
 
                 function addComment() {
                     if (content.value != "") {
