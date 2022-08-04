@@ -710,7 +710,7 @@ and open the template in the editor.
                 }
 
 
-                loadPlaylists();
+
 
                 function deleteComment(cmtId) {
                     fetch(`http://localhost:8080/api/comment/delete?cmtId=` + cmtId, {method: "DELETE"})
@@ -791,6 +791,7 @@ and open the template in the editor.
                     playsong();
                     loadComments();
                     loadSongs(albumId.value, playlistId.value);
+                    loadPlaylists();
 
                     timer = setInterval(range_slider, 1000);
                     var i = setInterval(function () {
