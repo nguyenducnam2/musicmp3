@@ -45,7 +45,7 @@
                             </ul>
                         </li>  
                         <div>
-                            <li>
+                            <li sec:authorize="hasAnyRole('ADMIN','MODERATOR','EDITOR')">
                                 <a href="#shop" class="iq-waves-effect" data-toggle="collapse" aria-expanded="false"><span class="ripple rippleEffect"></span><i class="ri-admin-line iq-arrow-left"></i><span>Shop</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
                                 <ul id="shop" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                                     <li><a th:href="@{/admin/product}"><i class="las la-house-damage"></i>Product</a></li>

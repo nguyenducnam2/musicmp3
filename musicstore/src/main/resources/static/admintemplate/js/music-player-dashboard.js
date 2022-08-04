@@ -1,4 +1,4 @@
-let now_playing1 = document.querySelector(".now-playing1");
+/*let now_playing1 = document.querySelector(".now-playing1");
 let track_art1 = document.querySelector(".track-art1");
 let track_name1 = document.querySelector(".track-name1");
 let track_artist1 = document.querySelector(".track-artist1");
@@ -159,3 +159,4 @@ function seekUpdate1() {
 }
 
 
+*/

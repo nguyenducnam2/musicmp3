@@ -72,8 +72,14 @@ public class HomeClientController implements ErrorController {
     private NewsService service_news;
 
     @GetMapping
-    public String index(Model model) {
-
+    public String index(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        if (session != null) {
+            session.setAttribute("user", session.getAttribute("user"));
+            model.addAttribute("user", session.getAttribute("user"));
+        } else {
+            model.addAttribute("user", null);
+        }
         List<Song> listsong = new ArrayList<>();
         for (int i = service_song.findAll().size() - 1; i >= 0; i--) {
             listsong.add(service_song.findAll().get(i));
@@ -87,7 +93,14 @@ public class HomeClientController implements ErrorController {
     }
 
     @GetMapping("/result")
-    public String result(Model model, @RequestParam("searchname") String searchname) {
+    public String result(Model model, @RequestParam("searchname") String searchname,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        if (session != null) {
+            session.setAttribute("user", session.getAttribute("user"));
+            model.addAttribute("user", session.getAttribute("user"));
+        } else {
+            model.addAttribute("user", null);
+        }
         List<Song> listsong = service_song.findByName(searchname);
         if (service_song.findByLyricCustom(searchname).size() > 0) {
             listsong.addAll(service_song.findByLyricCustom(searchname));
@@ -101,12 +114,19 @@ public class HomeClientController implements ErrorController {
     }
 
     @GetMapping("/contact")
-    public String contact() {
+    public String contact(Model model,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        if (session != null) {
+            session.setAttribute("user", session.getAttribute("user"));
+            model.addAttribute("user", session.getAttribute("user"));
+        } else {
+            model.addAttribute("user", null);
+        }
         return "client/contactUs/contact";
     }
 
     @GetMapping("/product")
-    public String product() {
+    public String product(Model model,HttpServletRequest request) {
         return "client/product/index";
     }
 
@@ -294,7 +314,7 @@ public class HomeClientController implements ErrorController {
     public String resetChangePassword(Model model, @ModelAttribute("passwordModel") PasswordModel passwordModel, HttpServletRequest request) {
         String token = request.getParameter("token");
         Optional<Account> user = userService.findByUsername(passwordModel.getEmail());
-        System.out.println("token-email : "+token+passwordModel.getEmail());
+        System.out.println("token-email : " + token + passwordModel.getEmail());
         if (user.isPresent()) {
             userService.changePassword(user.get(), passwordModel.getNewPassword());
             PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token);

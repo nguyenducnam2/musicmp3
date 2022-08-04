@@ -14,7 +14,7 @@ and open the template in the editor.
     </head>
     <body>
         <div layout:fragment="content" id="content-page" class="content-page">
-            <div class="container-fluid">
+            <div class="container-fluid" th:if="${session.user !=null}">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="iq-card">
@@ -25,36 +25,36 @@ and open the template in the editor.
                                 <div id="feature-album-slick-arrow" class="slick-aerrow-block"></div>
                             </div>
                             <div class="iq-card-body">
-                                <ul class="list-unstyled row  feature-album iq-box-hover mb-0">
-                                    <li class="iq-music-box" th:if="${service_pl.findByAccountId(session.user.id).size > 0}" th:each="item:${service_pl.findByAccountId(session.user.id)}">
-                                        <div class="iq-card mb-0">
-                                            <div class="iq-card-body p-0">
-                                                <div class="iq-thumb">
-                                                    <div class="iq-music-overlay"></div>
-                                                    <a th:href="@{/song/playlist/{id}(id=${item.id})}">
-                                                        <img th:if="${service_plitem.findByPlaylistId(item.id).size>0}" th:src="@{'/webdata/album/'+${service_plitem.findByPlaylistId(item.id).get(0).song.album.image}}"  class="img-border-radius img-fluid w-100" alt="">
-                                                        <img th:if="${service_plitem.findByPlaylistId(item.id).size==0}" th:src="@{'lbum/'+${service_plitem.findByPlaylistId(item.id).get(0).song.album.image}}"  class="img-border-radius img-fluid w-100" alt="">
-                                                    </a>
-                                                    <div class="overlay-music-icon">
-                                                        <a th:href="@{/song/playlist/{id}(id=${item.id})}">
-                                                            <i class="las la-play-circle"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="feature-list text-center">
-                                                    <h6 class="font-weight-600 mb-0" th:if="${service_plitem.findByPlaylistId(item.id).size>0}" th:text="${item.name}">Doja Cat</h6>
-                                                    <h6 class="font-weight-600 mb-0" th:if="${service_plitem.findByPlaylistId(item.id).size==0}">No Songs</h6>
-                                                </div>
+                                <p th:if="${service_pl.findByAccountId(session.user.id).size == 0}">You Don't Have Playlists</p>
+                                <div class="people-nearby" th:if="${service_pl.findByAccountId(session.user.id).size > 0}" th:each="item:${service_pl.findByAccountId(session.user.id)}">
+                                    <div class="nearby-user">
+                                        <div class="row">
+                                            <div class="col-md-2 col-sm-2">
+                                                <a th:if="${service_plitem.findByPlaylistId(item.id).size>0}" th:href="@{/song/playlist/{id}(id=${item.id})}">
+                                                    <img th:src="@{'/webdata/album/'+${service_plitem.findByPlaylistId(item.id).get(service_plitem.findByPlaylistId(item.id).size-1).song.album.image}}"  class="img-border-radius img-fluid w-100" alt="">
+                                                </a>
+                                                <a th:if="${service_plitem.findByPlaylistId(item.id).size==0}" href="">
+                                                    <img src="http://localhost:8080/webdata/album/nothumbnail.jpg"  class="img-border-radius img-fluid w-100" alt="">
+                                                </a>
+                                            </div>
+                                            <div class="col-md-7 col-sm-7">
+                                                <h5 th:if="${service_plitem.findByPlaylistId(item.id).size>0}" th:text="${item.name}"><a href="#" class="profile-link">Sophia Page</a></h5>
+                                                <h5 th:if="${service_plitem.findByPlaylistId(item.id).size==0}" th:text="${item.name}"><a href="#" class="profile-link">Sophia Page</a></h5>
+                                                <!--   <p>Software Engineer</p> -->
+                                                <p class="text-muted" th:text="${service_plitem.findByPlaylistId(item.id).size+' songs'}">500m away</p>
+                                            </div>
+                                            <div class="col-md-3 col-sm-3">
+                                                <a th:if="${service_plitem.findByPlaylistId(item.id).size!=0}" th:href="@{/song/playlist/{id}(id=${item.id})}" class="btn btn-primary pull-right">Listen</a>
                                             </div>
                                         </div>
-                                    </li>
-                                </ul>
-                                <p th:if="${service_pl.findByAccountId(session.user.id).size == 0}">You Don't Have Playlists</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <p th:if="${session.user == null}" style="text-align: center;"><a th:href="@{/login}">You Must Login</a></p>
         </div>
     </body>
 </html>

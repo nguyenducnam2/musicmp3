@@ -119,48 +119,6 @@ public class SongClientController {
         return "client/song/video";
     }
 
-    @GetMapping("/comment/add")
-    public String addComment(Model model, @RequestParam("content") String content,
-            @RequestParam("accountId") String accountId,
-            @RequestParam("songId") Integer songId, HttpServletRequest request) {
-        Comment comment = new Comment();
-        comment.setContent(content);
-        comment.setAccountId(Long.parseLong(accountId));
-        comment.setAccount(serviceAccount.findById(Long.parseLong(accountId)).orElseThrow());
-        comment.setSongId(songId);
-        comment.setSong(service.findById(songId).orElseThrow());
-        service_cmt.save(comment);
-        return "redirect:/song/" + songId;
-    }
-
-    @GetMapping("/comment/add02")
-    public String addComment02(Model model, @RequestParam("content") String content,
-            @RequestParam("accountId") String accountId,
-            @RequestParam("songId") Integer songId, HttpServletRequest request) {
-        Comment comment = new Comment();
-        comment.setContent(content);
-        comment.setAccountId(Long.parseLong(accountId));
-        comment.setAccount(serviceAccount.findById(Long.parseLong(accountId)).orElseThrow());
-        comment.setSongId(songId);
-        comment.setSong(service.findById(songId).orElseThrow());
-        service_cmt.save(comment);
-        return "redirect:/song/video/" + songId;
-    }
-
-    @GetMapping("/comment/delete/{id}")
-    public String deleteComment01(@PathVariable("id") int id) {
-        int songId = service_cmt.findById(id).orElseThrow().getSongId();
-        service_cmt.deleteById(id);
-        return "redirect:/song/" + songId;
-    }
-
-    @GetMapping("/comment/delete02/{id}")
-    public String deleteComment02(@PathVariable("id") int id) {
-        int songId = service_cmt.findById(id).orElseThrow().getSongId();
-        service_cmt.deleteById(id);
-        return "redirect:/song/video/" + songId;
-    }
-
     @GetMapping("/playlist/add")
     public String addPlaylist(Model model, @RequestParam(name = "playlistId", required = false, defaultValue = "0") int playlistId,
             @RequestParam("name") String name, @RequestParam("accountId") Long accountId,
@@ -222,6 +180,7 @@ public class SongClientController {
         anotherlist.set(0, s);
         anotherlist.set(index_to_swap, swap);
         model.addAttribute("song", s);
+        model.addAttribute("playlistId", playlistId);
         model.addAttribute("anotherlist", anotherlist);
         model.addAttribute("listcomments", service_cmt.findBySongId(s.getId()));
         model.addAttribute("listcmtall", service_cmt.findAll());
