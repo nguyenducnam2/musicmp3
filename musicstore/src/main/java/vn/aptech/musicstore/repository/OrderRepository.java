@@ -6,12 +6,12 @@ package vn.aptech.musicstore.repository;
 
 import java.util.List;
 import javax.transaction.Transactional;
-import org.springframework.core.annotation.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import vn.aptech.musicstore.entity.Account;
+import vn.aptech.musicstore.entity.Order;
 import vn.aptech.musicstore.entity.OrderDetail;
 
 

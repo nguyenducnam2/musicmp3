@@ -5,9 +5,9 @@
 package vn.aptech.musicstore.repository;
 
 import java.util.List;
-import org.springframework.core.annotation.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import vn.aptech.musicstore.entity.Order;
 import vn.aptech.musicstore.entity.OrderDetail;
 
 
