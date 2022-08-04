@@ -14,8 +14,14 @@ import vn.aptech.musicstore.entity.Playlistitem;
  */
 public interface PlaylistitemService {
 
+    List<Playlistitem> findAll();
+    
     List<Playlistitem> findByPlaylistId(int playlistId);
     
     Playlistitem save(Playlistitem plt);
+    
+    void deleteBySongId(int id);
+    
+    void delete(Playlistitem plitem);
 
 }
