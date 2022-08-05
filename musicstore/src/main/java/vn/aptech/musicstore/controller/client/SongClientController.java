@@ -56,7 +56,7 @@ public class SongClientController {
     @GetMapping("/{id}")
     public String mediaPlayer(@PathVariable("id") int id, Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        if (!(session.getAttribute("mess")==null)) {
+        if (!(session.getAttribute("mess") == null)) {
             Song s = service.findById(id).orElseThrow();
             s.setView(s.getView() + 1);
             service.save(s);
@@ -72,7 +72,7 @@ public class SongClientController {
             session.setAttribute("user", session.getAttribute("user"));
             model.addAttribute("user", session.getAttribute("user"));
             model.addAttribute("service_pl", service_pl);
-            model.addAttribute("mess",session.getAttribute("mess").toString());
+            model.addAttribute("mess", session.getAttribute("mess").toString());
             session.removeAttribute("mess");
             return "client/song/mediaplayer";
         }
@@ -191,5 +191,16 @@ public class SongClientController {
         model.addAttribute("service_plitem", service_plitem);
         model.addAttribute("playlistname", service_pl.findById(playlistId).orElseThrow().getName());
         return "client/song/mediaplayer";
+    }
+
+    @GetMapping("playlist/delete/{id}")
+    public String deletePlaylist(@PathVariable("id") int id,Model model,HttpServletRequest request) {
+        for (Playlistitem item : service_plitem.findAll()) {
+            if (item.getPlaylistId() == id) {
+                service_plitem.delete(item);
+            }
+        }
+        service_pl.delete(service_pl.findById(id).get());
+        return "redirect:/song/playlist";
     }
 }

@@ -42,5 +42,10 @@ public class PlaylistServiceImpl implements PlaylistService{
     public Optional<Playlist> findById(int id) {
        return repo.findById(id);
     }
+
+    @Override
+    public void delete(Playlist pl) {
+       repo.delete(pl);
+    }
     
 }

@@ -44,7 +44,7 @@ and open the template in the editor.
                                                 <p class="text-muted" th:text="${service_plitem.findByPlaylistId(item.id).size+' songs'}">500m away</p>
                                             </div>
                                             <div class="col-md-3 col-sm-3">
-                                                <a th:if="${service_plitem.findByPlaylistId(item.id).size!=0}" th:href="@{/song/playlist/{id}(id=${item.id})}" class="btn btn-primary pull-right">Listen</a>
+                                                <a th:if="${service_plitem.findByPlaylistId(item.id).size!=0}" th:href="@{/song/playlist/delete/{id}(id=${item.id})}" class="btn btn-primary pull-right">Delete</a>
                                             </div>
                                         </div>
                                     </div>

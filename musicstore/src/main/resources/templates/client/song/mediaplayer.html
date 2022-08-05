@@ -404,10 +404,14 @@ and open the template in the editor.
                                 <div th:if="${listcomments.size==0 && session.user != null}" class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
                                     <div class="coment-bottom bg-white p-2 px-4">
                                         <div>
-                                            <div class="d-flex flex-row add-comment-section mt-4 mb-4"><img style=" border-radius: 10px;
+                                            <div class="d-flex flex-row add-comment-section mt-4 mb-4"><img th:if="${session.user.image != null}" style=" border-radius: 10px;
                                                                                                             padding-right: 5px;
                                                                                                             width: 60px;
                                                                                                             height: 55px" class="img-fluid img-responsive rounded-circle mr-2" th:src="@{'/webdata/user/'+${session.user.image}}" width="38">
+                                                <img th:if="${session.user.image == null}" style=" border-radius: 10px;
+                                                     padding-right: 5px;
+                                                     width: 60px;
+                                                     height: 55px" class="img-fluid img-responsive rounded-circle mr-2" src="http://localhost:8080/admintemplate/images/user/user-default2.png" width="38">
 
 
                                                 <input type="hidden" id="accountId" th:name="accountId" th:value="${session.user.id}"/>
