@@ -42,12 +42,14 @@ public class Song {
     private Integer view;
     @Column(name = "video")
     private String video;
+    @Column(name = "price")
+    private Integer price;
 
-    @Column(name = "album_id",insertable = false,updatable = false)
+    @Column(name = "album_id", insertable = false, updatable = false)
     private Integer albumId;
-    @Column(name = "artist_id",insertable = false,updatable = false)
+    @Column(name = "artist_id", insertable = false, updatable = false)
     private Integer artistId;
-    @Column(name = "genre_id",insertable = false,updatable = false)
+    @Column(name = "genre_id", insertable = false, updatable = false)
     private Integer genreId;
 
     @JoinColumn(name = "album_id", referencedColumnName = "id")
@@ -59,6 +61,5 @@ public class Song {
     @JoinColumn(name = "genre_id", referencedColumnName = "id")
     @ManyToOne
     private Genre genre;
- 
 
 }

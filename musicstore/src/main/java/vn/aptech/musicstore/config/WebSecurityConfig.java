@@ -30,67 +30,7 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Configuration
-    @Order(2)
-    public class WebAdminSecurityConfig extends WebSecurityConfigurerAdapter {
-
-        public WebAdminSecurityConfig() {
-            super();
-        }
-
-        @Autowired
-        private AccountServiceImpl accountService;
-
-//    @Bean
-//    public BCryptPasswordEncoder passwordEncoder(){
-//        return new BCryptPasswordEncoder();
-//    }
-        public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-            auth.userDetailsService(accountService).passwordEncoder(encodePassword());
-        }
-
-        @Override
-        protected void configure(final HttpSecurity http) throws Exception {
-
-//            http.authorizeRequests().anyRequest().authenticated().and().formLogin().loginPage("/admin/login").permitAll().defaultSuccessUrl("/admin").loginProcessingUrl("/j_spring_security_check");
-//        super.configure(http); //To change body of generated methods, choose Tools | Templates.
-            http.cors().and().csrf().disable();
-
-            http.authorizeHttpRequests()
-                    .antMatchers("/admin/login", "logout", "/", "/contact, /user-login-process").permitAll();
-            http.authorizeHttpRequests()
-                    .antMatchers("/admin/account/**").hasAnyRole("ADMIN", "MODERATOR")
-                    .antMatchers("/admin/**").hasAnyRole("ADMIN", "EDITOR", "MODERATOR", "USER")
-                    //                    .anyRequest().hasAnyRole("ADMIN", "EDITOR", "MODERATOR");
-                    .anyRequest().authenticated();
-
-            http.authorizeHttpRequests()
-                    .and().formLogin()
-                    .loginProcessingUrl("/admin-login-process")//submit url
-                    .loginPage("/admin/login")
-                    .usernameParameter("username")
-                    .passwordParameter("password")
-                    .defaultSuccessUrl("/", true)
-                    .failureUrl("/admin/login?error=true")
-                    //cau hinh Logout Page
-                    .and().logout().logoutUrl("/admin/logout")
-                    .logoutSuccessUrl("/admin/login?logout=true")
-                    .and()
-                    .exceptionHandling()
-                    .accessDeniedPage("/admin/403");
-            http.authorizeHttpRequests().and().rememberMe();
-            //config remember
-//                .tokenRepository("abc")
-//                .tokenValiditySeconds(24*60*60); //1 ngay
-        }
-
-        @Override
-        public void configure(WebSecurity web) throws Exception {
-            web
-                    .ignoring()
-                    .antMatchers("/", "/login", "/admin/login", "/song/**", "/result/**", "/admintemplate/**", "/webdata/**");
-        }
-    }
+   
 
     @Configuration
     @Order(1)
@@ -115,6 +55,7 @@ public class WebSecurityConfig {
             "/savePassword*",
             "/changePassword",
             "/login",
+            "/news",
             "logout"
         };
 
@@ -166,4 +107,65 @@ public class WebSecurityConfig {
         }
     }
 
+//     @Configuration
+//    @Order(2)
+//    public class WebAdminSecurityConfig extends WebSecurityConfigurerAdapter {
+//
+//        public WebAdminSecurityConfig() {
+//            super();
+//        }
+//
+//        @Autowired
+//        private AccountServiceImpl accountService;
+//
+////    @Bean
+////    public BCryptPasswordEncoder passwordEncoder(){
+////        return new BCryptPasswordEncoder();
+////    }
+//        public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//            auth.userDetailsService(accountService).passwordEncoder(encodePassword());
+//        }
+//
+//        @Override
+//        protected void configure(final HttpSecurity http) throws Exception {
+//
+////            http.authorizeRequests().anyRequest().authenticated().and().formLogin().loginPage("/admin/login").permitAll().defaultSuccessUrl("/admin").loginProcessingUrl("/j_spring_security_check");
+////        super.configure(http); //To change body of generated methods, choose Tools | Templates.
+//            http.cors().and().csrf().disable();
+//
+//            http.authorizeHttpRequests()
+//                    .antMatchers("/admin/login", "logout", "/", "/contact, /user-login-process").permitAll();
+//            http.authorizeHttpRequests()
+//                    .antMatchers("/admin/account/**").hasAnyRole("ADMIN", "MODERATOR")
+//                    .antMatchers("/admin/**").hasAnyRole("ADMIN", "EDITOR", "MODERATOR", "USER")
+//                    //                    .anyRequest().hasAnyRole("ADMIN", "EDITOR", "MODERATOR");
+//                    .anyRequest().authenticated();
+//
+//            http.authorizeHttpRequests()
+//                    .and().formLogin()
+//                    .loginProcessingUrl("/admin-login-process")//submit url
+//                    .loginPage("/admin/login")
+//                    .usernameParameter("username")
+//                    .passwordParameter("password")
+//                    .defaultSuccessUrl("/", true)
+//                    .failureUrl("/admin/login?error=true")
+//                    //cau hinh Logout Page
+//                    .and().logout().logoutUrl("/admin/logout")
+//                    .logoutSuccessUrl("/admin/login?logout=true")
+//                    .and()
+//                    .exceptionHandling()
+//                    .accessDeniedPage("/admin/403");
+//            http.authorizeHttpRequests().and().rememberMe();
+//            //config remember
+////                .tokenRepository("abc")
+////                .tokenValiditySeconds(24*60*60); //1 ngay
+//        }
+//
+//        @Override
+//        public void configure(WebSecurity web) throws Exception {
+//            web
+//                    .ignoring()
+//                    .antMatchers("/", "/login", "/admin/login", "/song/**", "/result/**", "/admintemplate/**", "/webdata/**");
+//        }
+//    }
 }

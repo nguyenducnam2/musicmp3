@@ -22,4 +22,6 @@ public interface PlaylistService {
     List<Playlist> findByAccountId(Long accountId);
     
     Playlist save(Playlist playlist);
+    
+    void delete(Playlist pl);
 }

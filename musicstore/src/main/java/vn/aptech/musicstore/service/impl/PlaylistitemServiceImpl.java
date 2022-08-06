@@ -32,4 +32,19 @@ public class PlaylistitemServiceImpl implements PlaylistitemService {
         return repo.save(plt);
     }
 
+    @Override
+    public void deleteBySongId(int id) {
+        
+    }
+
+    @Override
+    public void delete(Playlistitem plitem) {
+        repo.delete(plitem);
+    }
+
+    @Override
+    public List<Playlistitem> findAll() {
+        return repo.findAll();
+    }
+
 }
