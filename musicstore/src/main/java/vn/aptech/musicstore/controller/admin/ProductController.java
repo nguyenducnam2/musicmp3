@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import vn.aptech.musicstore.entity.Artist;
 import vn.aptech.musicstore.entity.Product;
 import vn.aptech.musicstore.service.BrandService;
 import vn.aptech.musicstore.service.CategoryService;
@@ -47,8 +46,12 @@ public class ProductController {
     private BrandService brand_service;
 
     @GetMapping
-    public String index(Model model) {
-        model.addAttribute("list", service.findAll());
+    public String index(Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+         model.addAttribute("list", service.getPage(pageNumber, size));
+        model.addAttribute("service", service);
+        model.addAttribute("name", "null");
+
         return "admin/product/index";
     }
 
@@ -56,7 +59,6 @@ public class ProductController {
     public String create(Model model) {
         model.addAttribute("product", new Product());
         model.addAttribute("cateproduct", cate_service.findAll());
-                model.addAttribute("cateproduct", cate_service.findAll());
         model.addAttribute("brandproduct", brand_service.findAll());
 
            model.addAttribute("action", "create");
@@ -64,9 +66,14 @@ public class ProductController {
         return "admin/product/create";
     }
  @PostMapping("/save")
-    public String save(Model model, @ModelAttribute("product") Product product, @RequestParam("file") MultipartFile file) throws IOException {
-        if (!(file.isEmpty())) {
+    public String save(Model model, @ModelAttribute("product") Product product, @RequestParam("file") MultipartFile file
+    , @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) throws IOException {
+       
+         try {
+              if (!(file.isEmpty())) {
             product.setImage(file.getOriginalFilename());
+            product.setCreated(java.time.LocalDate.now());
 //            String path_directory = "C:\\Users\\namng\\Documents\\NetBeansProjects\\musicstore\\src\\main\\resources\\static\\image";
 //        String path_directory = new ClassPathResource("static/image").getFile().getAbsolutePath();
             Files.copy(file.getInputStream(), Paths.get(base_url+"\\webdata\\product" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
@@ -75,12 +82,38 @@ public class ProductController {
             product.setImage(service.findById(product.getId()).orElseThrow().getImage());
             service.save(product);
         }
+          
+        } catch (Exception e) {
+            model.addAttribute("listpage", service.getPage(pageNumber, size));
+            model.addAttribute("service", service);
+            model.addAttribute("name", "null");
+            model.addAttribute("mess", "Failed");
+            return "redirect:admin/product";
+        }
+        model.addAttribute("listpage", service.getPage(pageNumber, size));
+        model.addAttribute("service", service);
+        model.addAttribute("name", "null");
+        model.addAttribute("mess", "Successfully");
         return "redirect:/admin/product";
     }
      @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id")int id){
-        service.deleteById(id);
-        return "redirect:/admin/product";
+    public String delete(@PathVariable("id")int id, Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size){
+         try {
+            service.deleteById(id);
+        } catch (Exception e) {
+            model.addAttribute("list", service.getPage(pageNumber, size));
+            model.addAttribute("service", service);
+            model.addAttribute("name", "null");
+            model.addAttribute("mess", "Failed");
+            return "admin/product/index";
+        }
+        model.addAttribute("list", service.getPage(pageNumber, size));
+        model.addAttribute("service", service);
+        model.addAttribute("name", "null");
+        model.addAttribute("mess", "Successfully");
+        
+        return "/admin/product/index";
     }
     
     @GetMapping("/update/{id}")
@@ -93,8 +126,11 @@ public class ProductController {
     }
       
      @GetMapping("/search")
-    public String search(Model model,@RequestParam("name")String name){
-        model.addAttribute("list", service.findByName(name));
+    public String search(Model model,@RequestParam("name")String name, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "1000") int size){
+       model.addAttribute("list", service.getPage(pageNumber, size));
+        model.addAttribute("name", name);
+        model.addAttribute("service", service);
         return "admin/product/index";
     }
 }

@@ -5,6 +5,8 @@
  */
 package vn.aptech.musicstore.entity;
 
+import java.time.LocalDate;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,20 +45,19 @@ public class Product {
     @Column(name = "image")
     private String image;
     
-    @Column(name = "quantity")
-    private Integer quantity;
-    
     @Column(name = "description")
     private String description;
     
      @JoinColumn(name = "brand_id", referencedColumnName = "id")
      @ManyToOne
-     private Brand brand;
-    
+     private Brand brandId;
      
      @JoinColumn(name = "category_id", referencedColumnName = "id")
      @ManyToOne
-     private Category category;
+     private Category categoryId;
+     
+      @Column(name = "created")
+    private LocalDate created;
      
 
 }

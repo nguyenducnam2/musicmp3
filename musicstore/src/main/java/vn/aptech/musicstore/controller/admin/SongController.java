@@ -65,7 +65,7 @@ public class SongController {
     }
 
     @GetMapping("/create")
-    public String create(Model model) {
+    public String create(Model model ) {
         model.addAttribute("song", new Song());
         model.addAttribute("listgenre", service_gen.findAll());
         model.addAttribute("listartist", service_art.findAll());

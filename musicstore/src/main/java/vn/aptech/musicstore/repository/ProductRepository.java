@@ -8,6 +8,8 @@ package vn.aptech.musicstore.repository;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import vn.aptech.musicstore.entity.Category;
 import vn.aptech.musicstore.entity.Product;
 
 /**
@@ -17,5 +19,13 @@ import vn.aptech.musicstore.entity.Product;
 public interface ProductRepository extends JpaRepository<Product,Integer> {
      @Query("SELECT o FROM Product o WHERE o.name LIKE CONCAT('%',:name,'%')")
             List<Product> findByName(String name);
+//             @Query("SELECT o FROM Product o WHERE o.categoryId=:categoryId")
+//            List<Product> findProductByCategory(@Param("categoryId") int categoryId);
+            
+//            @Query("SELECT o FROM Product o WHERE o.categoryId=:category")
+            
+            List<Product> findProductByCategoryId(Category categoryId);
+          
+         
 
 }

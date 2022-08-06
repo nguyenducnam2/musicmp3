@@ -16,6 +16,7 @@ import vn.aptech.musicstore.entity.Category;
 public interface CategoryService {
     List<Category> findAll();
     Optional<Category> findById(int id);
+    Category getCategoryById(int id);
     Category save(Category c);
         void deleteById(int id);
             List<Category> findByName(String name);

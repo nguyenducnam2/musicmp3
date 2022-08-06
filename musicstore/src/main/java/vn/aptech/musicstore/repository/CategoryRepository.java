@@ -18,4 +18,7 @@ import vn.aptech.musicstore.entity.Category;
 public interface CategoryRepository extends JpaRepository<Category,Integer> {
     @Query("SELECT o FROM Category o WHERE o.name LIKE CONCAT('%',:name,'%')")
     List<Category> findByName(@Param("name") String name);
+    Category findCategoryById(int id);
+    
+   
 }
