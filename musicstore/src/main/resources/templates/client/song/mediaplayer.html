@@ -274,6 +274,7 @@ and open the template in the editor.
                                         <div class="show_song_no">
                                             <input type="hidden" id="total"/>
                                             <input type="hidden" id="present"/>
+                                            <a id="download" download>Download</a>
                                             <button style="background: #ff8a65;" th:if="${session.user !=null}" class="las la-tasks" type="button" data-toggle="modal" data-target="#myModal"></button>
                                             <button style="background: #ff8a65;" th:if="${session.user ==null}" class="las la-tasks" type="button" data-toggle="modal" data-target="#myModal-login"></button>
                                         </div>
@@ -604,7 +605,7 @@ and open the template in the editor.
                 let content = document.querySelector('#content');
                 let myModal = document.querySelector('#myModal');
 
-
+                let download = document.querySelector('#download');
 
                 let timer;
                 let autoplay = 0;
@@ -713,7 +714,13 @@ and open the template in the editor.
                             });
                 }
 
-
+                function loadDownloadAllowedList() {
+                    return fetch(`http://localhost:8080/api/downloadallowed`, {method: "GET"})
+                            .then((response) => response.json())
+                            .then((response) => {
+                                return response;
+                            });
+                }
 
 
                 function deleteComment(cmtId) {
@@ -790,6 +797,24 @@ and open the template in the editor.
                     }
                     songId.value = All_song[index_no].id;
                     songId2.value = All_song[index_no].id;
+                    if (accountId.value > 0) {
+                        let check = false;
+                        loadDownloadAllowedList().then((response) => {
+                            for (let i = 0; i < response.length; i++) {
+                                if (response[i].songId == songId.value && response[i].accountId == accountId.value) {
+                                    check = true;
+                                }
+                            }
+                            if (check == true) {
+                                download.href = "http://localhost:8080/webdata/audio/" + All_song[index_no].media;
+                                download.innerHTML = "Download";
+                            }else{
+                                download.href = "";
+                                download.innerHTML = "Add To Cart";
+                            }
+                        }
+                        )
+                    }
 
                     track.load();
                     playsong();
