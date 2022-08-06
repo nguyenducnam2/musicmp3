@@ -125,9 +125,7 @@ public class HomeClientController implements ErrorController {
         return "client/contactUs/contact";
     }
 
-
-
-
+    @GetMapping(value = "/login")
     public String login(Model model) {
         return "client/login";
     }

@@ -797,24 +797,8 @@ and open the template in the editor.
                     }
                     songId.value = All_song[index_no].id;
                     songId2.value = All_song[index_no].id;
-                    if (accountId.value > 0) {
-                        let check = false;
-                        loadDownloadAllowedList().then((response) => {
-                            for (let i = 0; i < response.length; i++) {
-                                if (response[i].songId == songId.value && response[i].accountId == accountId.value) {
-                                    check = true;
-                                }
-                            }
-                            if (check == true) {
-                                download.href = "http://localhost:8080/webdata/audio/" + All_song[index_no].media;
-                                download.innerHTML = "Download";
-                            }else{
-                                download.href = "";
-                                download.innerHTML = "Add To Cart";
-                            }
-                        }
-                        )
-                    }
+
+                    checkDownload();
 
                     track.load();
                     playsong();
@@ -961,6 +945,27 @@ and open the template in the editor.
                             load_track(index_no);
                             playsong();
                         }
+                    }
+                }
+
+                function checkDownload() {
+                    if (accountId.value > 0) {
+                        let check = false;
+                        loadDownloadAllowedList().then((response) => {
+                            for (let i = 0; i < response.length; i++) {
+                                if (response[i].songId == songId.value && response[i].accountId == accountId.value) {
+                                    check = true;
+                                }
+                            }
+                            if (check == true) {
+                                download.href = "http://localhost:8080/webdata/audio/" + All_song[index_no].media;
+                                download.innerHTML = "Download";
+                            } else {
+                                download.href = "";
+                                download.innerHTML = "Add To Cart";
+                            }
+                        }
+                        )
                     }
                 }
 
