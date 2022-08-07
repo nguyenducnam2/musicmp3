@@ -44,7 +44,7 @@ public class Account implements Serializable {
     private Boolean isEdited = false;
 
 //    @Column(name = "gender")
-//    private Boolean gender = false;
+    private Boolean gender = false;
     private String address;
     private String image;
     private String phone;

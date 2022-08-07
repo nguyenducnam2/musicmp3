@@ -35,18 +35,18 @@ and open the template in the editor.
                                         <thead>
                                             <tr>
                                                 <th style="width: 5%;">No</th>
-                                                <th style="width: 25%;">Username</th>
-                                                <th style="width: 25%;">Fullname</th>
-                                                <th style="width: 15%;">Role</th>
-                                                <th style="width: 15%;">State</th>
-                                                <th style="width: 20%;">Action</th> 
+                                                <th style="width: 30%;">Username</th>
+                                                <!--<th style="width: 25%;">Fullname</th>-->
+                                                <th style="width: 20%;">Role</th>
+                                                <th style="width: 10%;">State</th>
+                                                <th style="width: 5%;">Action</th> 
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr th:each="item:${list}">
                                                 <td th:text="${list.indexOf(item)+1}"></td>
                                                 <td th:text="${item.username}"></td>
-                                                <td th:text="${item.fullname}"></td>
+                                                <!--<td th:text="${item.fullname}"></td>-->
                                                 <td th:switch="${item.role}"> 
                                                     <span th:case="'ROLE_ADMIN'">Admin</span>
                                                     <span th:case="'ROLE_EDITOR'">Editor</span>
