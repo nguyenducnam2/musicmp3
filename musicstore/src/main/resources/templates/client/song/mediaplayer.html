@@ -274,7 +274,8 @@ and open the template in the editor.
                                         <div class="show_song_no">
                                             <input type="hidden" id="total"/>
                                             <input type="hidden" id="present"/>
-                                            <a id="download" download>Download</a>
+                                            <div id="cart"></div>
+                                            <a id="download" download></a>
                                             <button style="background: #ff8a65;" th:if="${session.user !=null}" class="las la-tasks" type="button" data-toggle="modal" data-target="#myModal"></button>
                                             <button style="background: #ff8a65;" th:if="${session.user ==null}" class="las la-tasks" type="button" data-toggle="modal" data-target="#myModal-login"></button>
                                         </div>
@@ -606,6 +607,7 @@ and open the template in the editor.
                 let myModal = document.querySelector('#myModal');
 
                 let download = document.querySelector('#download');
+                let cart = document.querySelector('#cart');
 
                 let timer;
                 let autoplay = 0;
@@ -623,7 +625,7 @@ and open the template in the editor.
 
                 // Your document is loaded.
 
-                var run = setInterval(loadComments, 10000);
+               
 
 
                 // All functions
@@ -960,15 +962,66 @@ and open the template in the editor.
                             if (check == true) {
                                 download.href = "http://localhost:8080/webdata/audio/" + All_song[index_no].media;
                                 download.innerHTML = "Download";
+                                cart.innerHTML = "";
                             } else {
-                                download.href = "";
-                                download.innerHTML = "Add To Cart";
+
+                                findItemsofCartByAccountId().then((response) => {
+                                    if (response != null) {
+                                        let check = false;
+                                        for (let i = 0; i < response.length; i++) {
+                                            if (response[i].songId == songId.value) {
+                                                check = true;
+                                            }
+                                        }
+                                        if (check == true) {
+                                            download.innerHTML = "";
+                                            cart.innerHTML = "<button onclick='cancelSongToCart()'>Cancel Cart</button>";
+                                        } else {
+                                            download.innerHTML = "";
+                                            cart.innerHTML = "<button onclick='addSongToCart()'>Add To Cart</button>";
+                                        }
+                                    } else {
+                                        download.innerHTML = "";
+                                        cart.innerHTML = "<button onclick='addSongToCart()'>Add To Cart</button>";
+                                    }
+                                })
+
                             }
                         }
                         )
                     }
                 }
 
+                function addSongToCart() {
+                    fetch(`http://localhost:8080/api/cart/add?accountId=` + accountId.value + `&songId=` + songId.value, {method: "POST"})
+                            .then((response) => response.json())
+                            .then((response) => {
+                                checkDownload();
+                            });
+                }
+
+                function cancelSongToCart() {
+                    fetch(`http://localhost:8080/api/cart/deleteItem?accountId=` + accountId.value + `&songId=` + songId.value, {method: "DELETE"})
+                            .then((response) => response.json())
+                            .then((response) => {
+                                checkDownload();
+                            })
+                            .catch(e => {
+                                console.log(e);
+                                checkDownload();
+                            });
+                }
+
+                function findItemsofCartByAccountId() {
+                    return  fetch(`http://localhost:8080/api/cart/findItemsofCartByAccountId?accountId=` + accountId.value, {method: "GET"})
+                            .then((response) => response.json())
+                            .then((response) => {
+                                return response;
+                            })
+                            .catch(e => {
+                                return null;
+                            });
+                }
 
 
 
