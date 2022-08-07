@@ -277,4 +277,20 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     }
 
+    
+    // sau khi login bằng google account, 
+    // chúng ta sẽ tạo 1 tài khoản local tương ứng để lưu thông tin
+    public void processOAuthPostLogin(String username) {
+        Optional<Account> user = repoAccount.findByUsername(username);
+        // trường hợp chưa có tài khoản => tạo mới
+        if (user.isEmpty()) {
+            Account u = new Account();
+            // thiếu phần setId();
+            u.setUsername(username);
+//            u.setProvider("GOOGLE");
+            u.setEnabled(true);
+            
+            repoAccount.save(u);
+        }
+    }
 }

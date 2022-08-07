@@ -49,6 +49,9 @@ public class Account implements Serializable {
     private String image;
     private String phone;
 
+    
+//    private String provider;
+    
     /**
      * @return the password
      */
