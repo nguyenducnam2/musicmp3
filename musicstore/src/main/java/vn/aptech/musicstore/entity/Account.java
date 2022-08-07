@@ -41,7 +41,7 @@ public class Account implements Serializable {
     private String lastName;
     private String email;
     private Boolean enabled = false;
-    private Boolean isEdited = false;
+    private Boolean isUpgrade = false;
 
 //    @Column(name = "gender")
     private Boolean gender = false;
@@ -50,7 +50,7 @@ public class Account implements Serializable {
     private String phone;
 
     
-//    private String provider;
+    private String provider;
     
     /**
      * @return the password
