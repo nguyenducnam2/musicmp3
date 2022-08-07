@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import vn.aptech.musicstore.entity.Comment;
 import vn.aptech.musicstore.entity.Playlist;
 import vn.aptech.musicstore.entity.Playlistitem;
 import vn.aptech.musicstore.entity.Song;
@@ -193,8 +192,8 @@ public class SongClientController {
         return "client/song/mediaplayer";
     }
 
-    @GetMapping("playlist/delete/{id}")
-    public String deletePlaylist(@PathVariable("id") int id,Model model,HttpServletRequest request) {
+    @GetMapping("/playlist/delete/{id}")
+    public String deletePlaylist(@PathVariable("id") int id, Model model, HttpServletRequest request) {
         for (Playlistitem item : service_plitem.findAll()) {
             if (item.getPlaylistId() == id) {
                 service_plitem.delete(item);
@@ -203,4 +202,13 @@ public class SongClientController {
         service_pl.delete(service_pl.findById(id).get());
         return "redirect:/song/playlist";
     }
+
+    @GetMapping("/cart")
+    public String cart(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
+        return "client/song/cart";
+    }
+
 }

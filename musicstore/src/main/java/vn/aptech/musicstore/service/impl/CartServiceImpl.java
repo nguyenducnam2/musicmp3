@@ -26,6 +26,21 @@ public class CartServiceImpl implements CartService{
     public List<Cart> findAll() {
         return repo.findAll();
     }
+
+    @Override
+    public Cart save(Cart cart) {
+       return repo.save(cart);
+    }
+
+    @Override
+    public Cart findByAccountId(Long accountId) {
+       return repo.findByAccountId(accountId);
+    }
+
+    @Override
+    public void delete(Cart cart) {
+        repo.delete(cart);
+    }
     
     
 }

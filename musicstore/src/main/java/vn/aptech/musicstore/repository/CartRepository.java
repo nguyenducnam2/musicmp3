@@ -13,5 +13,5 @@ import vn.aptech.musicstore.entity.Cart;
  * @author namng
  */
 public interface CartRepository extends JpaRepository<Cart,Integer>{
-    
+    Cart findByAccountId(Long accountId);
 }

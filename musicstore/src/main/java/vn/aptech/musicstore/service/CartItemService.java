@@ -6,19 +6,19 @@
 package vn.aptech.musicstore.service;
 
 import java.util.List;
-import vn.aptech.musicstore.entity.Cart;
+import vn.aptech.musicstore.entity.CartItem;
 
 /**
  *
  * @author namng
  */
-public interface CartService {
+public interface CartItemService {
 
-    List<Cart> findAll();
+    List<CartItem> findAll();
 
-    Cart save(Cart cart);
+    List<CartItem> findByCartId(int cartId);
     
-    Cart findByAccountId(Long accountId);
+    CartItem save(CartItem cartItem);
     
-    void delete(Cart cart);
+    void delete(CartItem cartItem);
 }
