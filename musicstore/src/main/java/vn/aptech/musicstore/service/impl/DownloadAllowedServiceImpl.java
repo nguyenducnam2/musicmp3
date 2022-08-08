@@ -27,4 +27,9 @@ public class DownloadAllowedServiceImpl implements DownloadAllowedService {
         return repo.findAll();
     }
 
+    @Override
+    public DownloadAllowed save(DownloadAllowed obj) {
+       return repo.save(obj);
+    }
+
 }
