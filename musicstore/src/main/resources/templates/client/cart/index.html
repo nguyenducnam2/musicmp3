@@ -27,14 +27,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                     <div class="col-sm-3">
                                         <h4>
                                             <div th:text="${item.name}"></div>
-                                            <div th:text="${item.price}"></div>
+                                            <div th:text="${#numbers.formatCurrency(item.price)}"></div>
                                             <div>
                                                 <input type="hidden" th:value="${item.id}" name="id"/>
                                                 <input style="width: 55px" type="number" min="1" 
                                                        onkeydown="return false;" th:value="${item.quantity}" name="quantity"
                                                        onblur="this.form.submit()"/>
                                             </div>
-                                            <div th:text="${item.quantity*item.price}"></div>
+                                            <div th:text="${#numbers.formatCurrency(item.quantity*item.price)}"></div>
                                         </h4>
                                     </div>
                                     <div class="col-sm-1">
@@ -49,7 +49,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             <h3>Total: <div th:text="${count}"></div></h3>
                         </div>
                         <div>
-                            <h3>Total price: <div th:text="${amount}"></div></h3>
+                            <h3>Total price: <div th:text="${#numbers.formatCurrency(amount)}"></div></h3>
                         </div>
                         <div>
                             <a th:href="@{/cart/clear}" class="btn btn-primary">Clear</a>
