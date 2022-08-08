@@ -287,8 +287,9 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
             Account u = new Account();
             // thiếu phần setId();
             u.setUsername(username);
-//            u.setProvider("GOOGLE");
+            u.setProvider("GOOGLE");
             u.setEnabled(true);
+            u.setRole("ROlE_USER");
             
             repoAccount.save(u);
         }
