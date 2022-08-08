@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{client/layout.html}">
+    <body>
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <div class="container-fluid">
+                <div>
+                    <h2>Your shopping cart</h2>
+                    <br>
+                </div>
+                <div class="row" th:unless="${#lists.isEmpty(products)}")>
+                    <div class="col-sm-8">
+                        <th:block th:each="item, status : ${products}">
+                            <form th:action="@{/cart/update}" method="post">
+                                <div class="row border rounded">
+                                    <div class="col-sm-1">
+                                        <div th:text="${status.count}"></div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <img style="width: 160px;height: 150px;" th:src="@{'/webdata/product/'+${item.image}}" alt="author-profile">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <h4>
+                                            <div th:text="${item.name}"></div>
+                                            <div th:text="${item.price}"></div>
+                                            <div>
+                                                <input type="hidden" th:value="${item.id}" name="id"/>
+                                                <input style="width: 55px" type="number" min="1" 
+                                                       onkeydown="return false;" th:value="${item.quantity}" name="quantity"
+                                                       onblur="this.form.submit()"/>
+                                            </div>
+                                            <div th:text="${item.quantity*item.price}"></div>
+                                        </h4>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <a th:href="@{/cart/remove/{id}(id=${item.id})}" class="btn btn-primary">Remove</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </th:block>
+                    </div>
+                    <div class="col-sm-4" th:unless="${#lists.isEmpty(products)}")>
+                        <div>
+                            <h3>Total: <div th:text="${count}"></div></h3>
+                        </div>
+                        <div>
+                            <h3>Total price: <div th:text="${amount}"></div></h3>
+                        </div>
+                        <div>
+                            <a th:href="@{/cart/clear}" class="btn btn-primary">Clear</a>
+                        </div>
+                        <div>
+                            <a class="btn btn-primary">Purchase</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" th:if="${#lists.isEmpty(products)}")>
+                    <h3>Cart is empty</h3>
+                </div>
+            </div>        
+        </div>
+    </body>
+</html>
