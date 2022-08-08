@@ -6,11 +6,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 <html xlmns:th="https://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{client/layout.html}">
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
     <body>
         <div layout:fragment="content" id="content-page" class="content-page">
             <div class="container-fluid">
@@ -26,7 +21,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
 
                                 <h1 class="article__title cms-title" th:text="${item.title}">
-                                    
+
                                 </h1>
                                 <div class="article__meta">
 
@@ -34,11 +29,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                     <time class="time" datetime="2022-07-26T10:17:07+0700" data-time="1658805427" data-gmt="true" th:text="${item.created_at}"></time>
                                     <meta class="cms-date" itemprop="datePublished" content="2022-07-26T10:17:07+0700">
                                 </div>
-
+                                <br><br>
                                 <div class="article__sapo cms-desc" th:text="${item.content}">
-                                    
-                                </div>
 
+                                </div>
+                                <br><br>
                                 <div id="adsWeb_AdsArticleAfterSapo" class="banner clearfix" data-platform="1" data-position="Web_AdsArticleAfterSapo" style="display: none;">
                                     <script>
                                         if (typeof Web_AdsArticleAfterSapo != 'undefined') {
@@ -63,7 +58,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                         </tr>
                                     </tbody>
                                 </table>
-
+                                <br><br>
                                 <div id="adsWeb_AdsArticleAfterAvatar" class="banner clearfix" data-platform="1" data-position="Web_AdsArticleAfterAvatar" style="display: none;">
                                     <script>
                                         if (typeof Web_AdsArticleAfterAvatar != 'undefined') {
@@ -77,10 +72,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                     <p style="text-align: justify;" th:text="${item.description}"></p>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </body>
+    </div>
+</body>
 </html>
