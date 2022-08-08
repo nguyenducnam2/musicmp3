@@ -6,6 +6,7 @@
 package vn.aptech.musicstore.service;
 
 import java.util.List;
+import java.util.Optional;
 import vn.aptech.musicstore.entity.Cart;
 
 /**
@@ -15,6 +16,8 @@ import vn.aptech.musicstore.entity.Cart;
 public interface CartService {
 
     List<Cart> findAll();
+    
+    Optional<Cart> findById(int id);
 
     Cart save(Cart cart);
     

@@ -20,6 +20,8 @@ import vn.aptech.musicstore.entity.Playlist;
 import vn.aptech.musicstore.entity.Playlistitem;
 import vn.aptech.musicstore.entity.Song;
 import vn.aptech.musicstore.service.AccountService;
+import vn.aptech.musicstore.service.CartItemService;
+import vn.aptech.musicstore.service.CartService;
 import vn.aptech.musicstore.service.CommentService;
 import vn.aptech.musicstore.service.PlaylistService;
 import vn.aptech.musicstore.service.PlaylistitemService;
@@ -51,6 +53,12 @@ public class SongClientController {
 
     @Autowired
     private PlaylistitemService service_plitem;
+    
+    @Autowired
+    private CartService service_cart;
+    
+    @Autowired
+    private CartItemService service_ci;
 
     @GetMapping("/{id}")
     public String mediaPlayer(@PathVariable("id") int id, Model model, HttpServletRequest request) {
@@ -209,6 +217,17 @@ public class SongClientController {
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
         return "client/song/cart";
+    }
+
+    @GetMapping("/checkout")
+    public String checkout(Model model, HttpServletRequest request,@RequestParam("cartId")int cartId,@RequestParam("subTotal")int subTotal) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
+        model.addAttribute("cart", service_cart.findById(cartId).get());
+        model.addAttribute("items", service_ci.findByCartId(cartId));
+        model.addAttribute("subTotal", subTotal);
+        return "client/song/checkout";
     }
 
 }
