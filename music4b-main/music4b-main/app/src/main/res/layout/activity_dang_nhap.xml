@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#030507"
+    tools:context=".Activity.DangNhapActivity">
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="123dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="123dp"
+        android:fontFamily="@font/arimo_bold"
+        android:text="Đăng nhập"
+        android:textColor="@color/design_default_color_background"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbardangnhap" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="64dp"
+        android:fontFamily="@font/arimo_bold"
+        android:text="Tài khoản"
+        android:textColor="@color/design_default_color_background"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edttkdn"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="28dp"
+        android:background="@drawable/edt_all"
+        android:ems="10"
+        android:fontFamily="@font/arimo_bold"
+        android:inputType="textPersonName"
+        android:paddingLeft="10dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="36"
+        app:errorEnabled="true"
+        app:endIconMode="clear_text"
+        app:endIconTint="#FFFFFF"
+        android:textColor="@color/design_default_color_background"
+        android:textColorHint="@color/colorPrimary"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView12" >
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:hint="Nhập tài khoản" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="44dp"
+        android:fontFamily="@font/arimo_bold"
+        android:text="Mật khẩu"
+        android:textColor="@color/design_default_color_background"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edttkdn" />
+
+    <Button
+        android:id="@+id/btndn"
+        android:layout_width="276dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="78dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="78dp"
+        android:background="@drawable/shape_bgr_button"
+        android:fontFamily="@font/arimo_bold"
+        android:text="Đăng nhập"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtmkdn" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbardangnhap"
+        android:layout_width="432dp"
+        android:layout_height="41dp"
+        android:background="#00FFFFFF"
+        android:gravity="center_horizontal"
+        android:minHeight="?attr/actionBarSize"
+        android:textAlignment="center"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="20dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/back"
+        android:elevation="6dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewquenmatkhau"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="156dp"
+        android:layout_marginEnd="155dp"
+        android:text="Quên mật khẩu"
+        android:textColor="@color/design_default_color_background"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btndn" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edtmkdn"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/edt_all"
+        android:ems="10"
+        android:fontFamily="@font/arimo_bold"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="#FFFFFF"
+        android:paddingLeft="10dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="36"
+        app:errorEnabled="true"
+        android:textColor="@color/design_default_color_background"
+        android:textColorHint="@color/colorPrimary"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView13" >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:textColor="#FFFFFF"
+            android:hint="Nhập mật khẩu" />
+    </com.google.android.material.textfield.TextInputLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#000000">
+
+    <ImageView
+        android:id="@+id/imageClose"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="end"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/multiply_16px"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/arimo_bold"
+        android:text="Đăng ký"
+        android:textColor="@color/design_default_color_background"
+        android:textSize="32sp"/>
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/arimo_bold"
+        android:text="Tài khoản"
+        android:textColor="@color/design_default_color_background"
+        android:textSize="24sp"/>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edttaikhoan"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/edt_all"
+        android:fontFamily="@font/arimo_bold"
+        android:inputType="textPersonName"
+        android:textColor="@color/design_default_color_background"
+        android:textColorHint="@color/colorPrimary"
+        app:counterEnabled="true"
+        app:counterMaxLength="25"
+        app:endIconMode="clear_text"
+        app:endIconTint="#FFFFFF">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:hint="Nhập tài khoản"
+            android:textColor="#FFFFFF" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/arimo_bold"
+        android:text="Mật khẩu"
+        android:textColor="@color/design_default_color_background"
+        android:textSize="24sp" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edtmatkhau"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/edt_all"
+        android:fontFamily="@font/arimo_bold"
+        android:inputType="textPersonName"
+        android:textColor="@color/design_default_color_background"
+        android:textColorHint="@color/colorPrimary"
+        android:textSize="18sp"
+        app:counterEnabled="true"
+        app:counterMaxLength="36"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="#FFFFFF">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nhập mật khẩu"
+            android:layout_marginStart="15dp"
+            android:inputType="textPassword"
+            android:textColor="#FFFFFF" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/arimo_bold"
+        android:text="Email"
+        android:textColor="@color/design_default_color_background"
+        android:textSize="24sp"/>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emaildangky"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/edt_all"
+        android:fontFamily="@font/arimo_bold"
+        android:inputType="textPersonName"
+        android:textColor="@color/design_default_color_background"
+        android:textColorHint="@color/colorPrimary"
+        app:counterEnabled="true"
+        app:counterMaxLength="36"
+        app:endIconMode="clear_text"
+        app:endIconTint="#FFFFFF">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:hint="Nhập email"
+            android:textColor="#FFFFFF" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/arimo_bold"
+        android:text="Mã xác nhận"
+        android:textColor="@color/design_default_color_background"
+        android:textSize="24sp"/>
+
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:layout_width="match_parent"
+        android:layout_height="65dp">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edtmaxacnhandangky"
+            android:layout_weight="3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/edt_all"
+            android:fontFamily="@font/arimo_bold"
+            android:inputType="number"
+            android:gravity="center_vertical"
+            android:textColor="@color/design_default_color_background"
+            android:textColorHint="@color/colorPrimary"
+            app:counterEnabled="true"
+            app:counterMaxLength="5"
+            app:endIconMode="clear_text"
+            app:endIconTint="#FFFFFF"/>
+
+        <Button
+            android:id="@+id/btngetmadangky"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/edt_all"
+            android:text="Lấy mã"
+            android:textColor="#FFFFFF"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <Button
+            android:id="@+id/btndangKy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_bgr_button"
+            android:fontFamily="@font/arimo_bold"
+            android:text="Đăng ký"
+            android:textSize="18sp"/>
+    </LinearLayout>
+</LinearLayout>

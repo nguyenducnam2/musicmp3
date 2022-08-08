@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#001417"
+    android:fitsSystemWindows="true"
+    app:layout_collapseMode="pin"
+    tools:context=".Activity.DanhsachbaihatActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbardanhsachbaihat"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="#12000000"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        android:gravity="center_horizontal" />
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbarlayout"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:background="#00FFFFFF"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingtoolbar"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:background="#00100E0E"
+            android:fitsSystemWindows="false"
+            app:expandedTitleGravity="center|bottom"
+            app:expandedTitleMarginBottom="33dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_backgroud" />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:background="#FF001417"
+        android:elevation="6dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipedanhsachbaihat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="1000dp"
+            android:layout_marginTop="40dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerviewdanhsachbaihat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="1000dp">
+            </androidx.recyclerview.widget.RecyclerView>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingactionbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@drawable/iconfloatingactionbutton"
+        app:backgroundTint="#0cd637"
+        app:fabSize="normal"
+        app:elevation="6dp"
+        app:layout_anchor="@id/nested"
+        app:layout_anchorGravity="top|center"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/rl_toolbar"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="55dp">
+            <ImageView
+                android:background="@drawable/back"
+                android:elevation="6dp"
+                android:layout_marginStart="8dp"
+                android:layout_width="20dp"
+                android:layout_height="25dp"/>
+
+            <ImageView
+                android:id="@+id/btnthemnhacthuvien"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/plus_50px"
+                android:fontFamily="@font/arimo_bold"
+                android:text="+"
+                android:textColor="#ffffff"
+                android:textSize="24sp"
+                app:layout_anchorGravity="top|right" />
+
+        </RelativeLayout>
+        <ImageView
+            android:id="@+id/imageviewdanhsachcakhuc"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp"
+            android:elevation="0dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/imgitem" />
+        <TextView
+            android:id="@+id/textViewcollapsing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="350dp"
+            android:maxLines="2"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:elevation="0dp"
+            android:fontFamily="@font/arimo_bold"
+            android:text="TextView"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp" />
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

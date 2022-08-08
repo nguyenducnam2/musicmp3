@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="350dp"
+    android:layout_height="650dp"
+    android:layout_gravity="center_horizontal"
+    android:orientation="vertical">
+    <ImageView
+        android:id="@+id/bgr_top_update"
+        android:layout_width="350dp"
+        android:layout_height="200dp"
+        android:src="@drawable/bgr_update_profile"/>
+    <RelativeLayout
+        android:background="#1B1B1B"
+        android:paddingBottom="24dp"
+        android:layout_width="350dp"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_title_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:text="P R O F I L E"
+            android:textColor="#00E0FF"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_avt"
+            android:layout_width="115dp"
+            android:layout_height="115dp"
+            android:layout_below="@+id/tv_title_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="48dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/iconlogodialog"
+            app:civ_border_color="#C3C3C3"
+            app:civ_border_width="1dp" />
+        <ImageView
+            android:id="@+id/choose_img"
+            android:layout_alignBottom="@+id/img_avt"
+            android:layout_alignEnd="@+id/img_avt"
+            android:src="@drawable/ic_camera_alt_24"
+            android:background="@drawable/bgr_camera"
+            android:padding="8dp"
+            android:scaleType="fitXY"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edt_update_nameuser"
+            android:layout_below="@+id/img_avt"
+            android:gravity="center_horizontal"
+            app:counterMaxLength="15"
+            android:fontFamily="@font/arimo_bold"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txt_update_nameuser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textSize="32sp"
+                android:textColor="#CDDDDD" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/btn_send_update"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_below="@+id/edt_update_nameuser"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="32dp"
+            android:padding="8dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_send_update" />
+    </RelativeLayout>
+</LinearLayout>

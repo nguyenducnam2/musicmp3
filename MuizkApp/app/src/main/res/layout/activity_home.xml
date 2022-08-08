@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="#000"
+android:orientation="vertical"
+tools:context=".Activity.KhoiDongActivity">
+
+
+<androidx.viewpager.widget.ViewPager
+    android:id="@+id/myViewPager"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="10">
+    <View
+        android:background="#FFF"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"/>
+</androidx.viewpager.widget.ViewPager>
+
+
+<com.google.android.material.tabs.TabLayout
+    android:id="@+id/myTabLayout"
+    android:layout_width="match_parent"
+    android:layout_height="55dp"
+    android:background="@drawable/bgr_maintab"
+    app:tabIndicatorColor="#C3C3C3"
+    app:tabIndicatorHeight="1dp"
+    app:tabMode="fixed"
+    app:tabSelectedTextColor="#FFFFFF"
+    app:tabTextColor="#000">
+
+</com.google.android.material.tabs.TabLayout>
+</LinearLayout>
