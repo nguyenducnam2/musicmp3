@@ -14,4 +14,6 @@ import vn.aptech.musicstore.entity.DownloadAllowed;
  */
 public interface DownloadAllowedService {
     List<DownloadAllowed> findAll();
+    
+    DownloadAllowed save(DownloadAllowed obj);
 }
