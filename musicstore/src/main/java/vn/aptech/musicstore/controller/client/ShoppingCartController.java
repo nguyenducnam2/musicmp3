@@ -47,7 +47,7 @@ public class ShoppingCartController {
         Optional<Product> product = service.findById(id);
         Product products = product.get();
         if (products != null) {
-            products.setQuantity(1);
+//            products.setQuantity(1);
             cartService.add(products);
         }
         return "redirect:/cart/index";
