@@ -20,13 +20,13 @@
 
         <link rel="stylesheet" th:href="@{/admintemplate/css/responsive.css}">
 
-       
+
 
         <!-- Font Awesome -->
         <!-- Libraries Stylesheet -->
 
 
-        
+
 
     </head>
     <body>
@@ -135,7 +135,7 @@
         <script th:src="@{/admintemplate/js/music-player-dashboard.js}"></script>
         <!-- Custom JavaScript -->
         <script th:src="@{/admintemplate/js/custom.js}"></script>
-      
+
 
 
         <script th:src="@{/clienttemplate/lib/easing/easing.min.js}"></script>
@@ -150,7 +150,25 @@
 
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    
+        <input type="hidden" th:if="${session.user == null}" id="accountId" value="-1"/> 
+        <input type="hidden" th:if="${session.user != null}" id="accountId" th:value="${session.user.id}"/> 
+        <script>
+            let items = document.querySelector('#items');
+
+            function getSizeCart() {
+                fetch(`http://localhost:8080/api/cart/findItemsofCartByAccountId?accountId=` + accountId.value, {method: "GET"})
+                        .then((response) => response.json())
+                        .then((response) => {
+                            items.innerHTML=response.length;
+                        })
+                        .catch(e => {
+                            console.log(e);
+                        });
+            }
+            if (accountId.value != null && accountId.value > 0) {
+                getSizeCart();
+            }
+        </script>
 
     </body>
 

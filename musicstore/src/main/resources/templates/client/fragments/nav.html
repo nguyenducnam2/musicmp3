@@ -31,7 +31,7 @@
                         tu xet th:if xu li rieng ,cua tui la vi du cho viec user dang nhap moi thay dc cho nay -->
                         <li th:if="${user != null && user.role=='ROLE_USER'}">
                                 <a class="iq-icons-list" th:href="@{/song/playlist}"><div data-icon="p" class="icon"></div><span>Playlist</span></a>
-                                <a class="iq-icons-list" th:href="@{/song/cart}"><div data-icon="Q" class="icon"></div><span>Song Cart</span></a>
+                                <a class="iq-icons-list" th:href="@{/song/cart}"><div data-icon="Q" class="icon"></div><span>Song Cart</span><p id="items" style="color: tomato; "></p></a>
                                 <a class="iq-icons-list" th:href="@{/song/buyed}"><div data-icon=":" class="icon"></div><span>Song Buyed</span></a>
                                 <!--    <li><a href="admin-singer.html"><i class="las la-microphone-alt"></i>Singer</a></li>
                                     <li><a href="admin-song.html"><i class="las la-play-circle"></i>Music</a></li> -->
