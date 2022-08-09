@@ -5,11 +5,13 @@
  */
 package vn.aptech.musicstore.api;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import vn.aptech.musicstore.entity.DownloadAllowed;
 import vn.aptech.musicstore.service.DownloadAllowedService;
@@ -29,5 +31,16 @@ public class DownloadAllowedApiController {
     @GetMapping
     public List<DownloadAllowed> findAll(){
         return service.findAll();
+    }
+    
+    @GetMapping("/findByAccountId")
+    public List<DownloadAllowed> findByAccountId(@RequestParam("accountId")Long accountId){
+        List<DownloadAllowed> list=new ArrayList();
+        for(DownloadAllowed item:service.findAll()){
+            if(item.getAccountId()==accountId){
+                list.add(item);
+            }
+        }
+        return list;
     }
 }

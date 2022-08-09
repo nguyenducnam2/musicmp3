@@ -17,9 +17,13 @@ and open the template in the editor.
             <div class="container-fluid" th:if="${session.user !=null}">
                 <div class="row">
                     <div class="col-lg-12">
-                        Success <a th:href="@{/}">Back To Home</a>
+                        Success <a th:href="@{/}">Back To Home</a> <br>
+                      <a th:href="@{/song/buyed}">  Check My Song Buyed </a>
                     </div>
                 </div>
+            </div>
+            <div th:if="${session.user == null}">
+                <a th:href="@{/login}">You Must Login</a>
             </div>
         </div>
     </body>

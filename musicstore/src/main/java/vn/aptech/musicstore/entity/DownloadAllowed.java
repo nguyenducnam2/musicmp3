@@ -5,6 +5,8 @@
  */
 package vn.aptech.musicstore.entity;
 
+import java.util.Calendar;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,21 +29,30 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "download_allowed")
 public class DownloadAllowed {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "song_id",insertable = false,updatable = false)
+    @Column(name = "song_id", insertable = false, updatable = false)
     private Integer songId;
-    @Column(name = "account_id",insertable = false,updatable = false)
+    @Column(name = "account_id", insertable = false, updatable = false)
     private Long accountId;
-    
-    @JoinColumn(name = "song_id",referencedColumnName = "id")
+    @Column(name = "date")
+    private Date date = calculateExpirationDate(420);
+
+    @JoinColumn(name = "song_id", referencedColumnName = "id")
     @ManyToOne
     private Song song;
-    
-    @JoinColumn(name = "account_id",referencedColumnName = "id")
+
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
     @ManyToOne
     private Account account;
+
+    private Date calculateExpirationDate(int expirationTime) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(new Date().getTime());
+        calendar.add(Calendar.MINUTE, expirationTime);
+        return new Date(calendar.getTime().getTime());
+    }
 }

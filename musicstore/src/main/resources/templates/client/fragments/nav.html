@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-    <head>
-    </head>
     <body>
         <div th:fragment="nav" class="iq-sidebar">
             <div class="iq-sidebar-logo d-flex justify-content-between">
@@ -32,14 +30,11 @@
                         <!-- case phan trang nav page cua ai thi copy the <li>,
                         tu xet th:if xu li rieng ,cua tui la vi du cho viec user dang nhap moi thay dc cho nay -->
                         <li th:if="${user != null && user.role=='ROLE_USER'}">
-                            <a href="#admin" class="iq-waves-effect" data-toggle="collapse" aria-expanded="false"><span class="ripple rippleEffect"></span><i class="ri-admin-line iq-arrow-left"></i><span>My Dasbour</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
-                            <ul id="admin" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
-                                <li><a th:href="@{/song/playlist}"><i class="las la-house-damage"></i>Playlist</a></li>
-                                <li><a th:href="@{/song/cart}"><i class="ri-function-line"></i>My Cart</a></li>
-                                <!--    <li><a href="admin-writer.html"><i class="las la-user"></i>Writer</a></li>
-                                    <li><a href="admin-singer.html"><i class="las la-microphone-alt"></i>Singer</a></li>
+                                <a class="iq-icons-list" th:href="@{/song/playlist}"><div data-icon="p" class="icon"></div><span>Playlist</span></a>
+                                <a class="iq-icons-list" th:href="@{/song/cart}"><div data-icon="Q" class="icon"></div><span>Song Cart</span></a>
+                                <a class="iq-icons-list" th:href="@{/song/buyed}"><div data-icon=":" class="icon"></div><span>Song Buyed</span></a>
+                                <!--    <li><a href="admin-singer.html"><i class="las la-microphone-alt"></i>Singer</a></li>
                                     <li><a href="admin-song.html"><i class="las la-play-circle"></i>Music</a></li> -->
-                            </ul>
                         </li>
                         <!--      <li>
                                   <a href="calendar.html" class="iq-waves-effect"><i class="las la-calendar iq-arrow-left"></i><span>Calendar</span></a>

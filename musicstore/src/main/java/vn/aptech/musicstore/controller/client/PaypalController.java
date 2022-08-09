@@ -157,6 +157,7 @@ public class PaypalController {
                     cartItemService.delete(item);
                 }
                 cartService.delete(cartService.findById(cartId).get());
+                session.removeAttribute("cartId");
                 return "client/song/success";
             }
         } catch (PayPalRESTException e) {

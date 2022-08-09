@@ -43,7 +43,7 @@ public class Song {
     @Column(name = "video")
     private String video;
     @Column(name = "price")
-    private Integer price=2;
+    private Integer price;
 
     @Column(name = "album_id", insertable = false, updatable = false)
     private Integer albumId;

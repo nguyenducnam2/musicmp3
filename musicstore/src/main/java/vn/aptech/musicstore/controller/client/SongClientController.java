@@ -229,5 +229,13 @@ public class SongClientController {
         model.addAttribute("subTotal", subTotal);
         return "client/song/checkout";
     }
+    
+    @GetMapping("/buyed")
+    public String buyed(Model model,HttpServletRequest request){
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
+        return "client/song/buyed";
+    }
 
 }

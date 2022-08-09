@@ -121,6 +121,20 @@ and open the template in the editor.
                                         </div>
                                     </div>
                                     <div th:if="${status != 'update'}" class="form-group">
+                                        <label>Price(<span style="color: red;">*</span>) $:</label>
+                                        <input type="text" th:field="${song.price}" class="form-control" required>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Required
+                                        </div>
+                                    </div>
+                                       <div th:if="${status == 'update'}" class="form-group">
+                                        <label>Price $:</label>
+                                        <input type="text" th:field="${song.price}" class="form-control" required>
+                                    </div>
+                                    <div th:if="${status != 'update'}" class="form-group">
                                         <label>File Audio(<span style="color: red;">*</span>)(.mp3,.mp4):</label>
                                         <div class="custom-file">
                                             <input type="file" name="file" class="custom-file-input" id="customFile" required> 
