@@ -200,7 +200,7 @@
                                         <div class="iq-card-body p-0 ">
                                             <div sec:authorize="isAuthenticated()" class="bg-primary p-3">
                                                 <h5 class="mb-0 text-white line-height">Hello <span sec:authentication="name">Username</span></h5>
-                                                <span sec:authentication="principal.authorities" class="text-white font-size-12">Roles</span>
+                                                <!--<span sec:authentication="principal.authorities" class="text-white font-size-12">Roles</span>-->
                                             </div>
                                             <div>
                                                 <a sec:authorize="hasAnyRole('ADMIN','MODERATOR','EDITOR')" th:href="@{/admin/account/updateProfile/{username}(username=${#httpServletRequest.getUserPrincipal().getName()})}"  class="iq-sub-card iq-bg-primary-hover">

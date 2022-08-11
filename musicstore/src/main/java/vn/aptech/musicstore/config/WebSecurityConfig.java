@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import vn.aptech.musicstore.config.oauth2.ClientOauth2User;
 import vn.aptech.musicstore.config.oauth2.ClientOauth2UserService;
+import vn.aptech.musicstore.config.oauth2.Oauth2LoginSuccessHandle;
 import vn.aptech.musicstore.service.impl.AccountServiceImpl;
 
 /**
@@ -37,8 +39,6 @@ public class WebSecurityConfig {
     public PasswordEncoder encodePassword() {
         return new BCryptPasswordEncoder();
     }
-
-   
 
     @Configuration
     @Order(1)
@@ -55,7 +55,7 @@ public class WebSecurityConfig {
             "/register*",
             "/resetPassword*",
             "/resetChangePassword*",
-//            "/resetChangePassword",
+            //            "/resetChangePassword",
             "/register",
             "/verify*",
             "/verifyRegistration*",
@@ -72,6 +72,10 @@ public class WebSecurityConfig {
 
         @Autowired
         private ClientOauth2UserService oauth2UserService;
+
+        @Autowired
+        private Oauth2LoginSuccessHandle oauth2LoginSuccessHandle;
+
         public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
             auth.userDetailsService(accountService).passwordEncoder(encodePassword());
         }
@@ -83,7 +87,7 @@ public class WebSecurityConfig {
 
             http.authorizeHttpRequests()
                     .antMatchers(WHITE_LIST_URLS).permitAll()
-//                    .antMatchers("/api/**").authenticated()
+                    //                    .antMatchers("/api/**").authenticated()
                     .antMatchers("/user/**").hasAnyRole("ADMIN", "EDITOR", "MODERATOR", "USER")
 
                     .antMatchers("/admin/account/**").hasAnyRole("ADMIN", "MODERATOR")
@@ -104,17 +108,27 @@ public class WebSecurityConfig {
                     .userInfoEndpoint()
                     .userService(oauth2UserService)
                     .and()
-                    
-//                 xu ly cho login thanh cong
-                .successHandler(new AuthenticationSuccessHandler(){
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                        // nhan thong tin nguoi dung thong qua Priciple
-                        ClientOauth2User user = (ClientOauth2User) authentication.getPrincipal();
-                        accountService.processOAuthPostLogin(user.getName());
-                        response.sendRedirect("/user");
-                    }
-                })
+                    //                 xu ly cho login thanh cong
+                    //                    .successHandler(oauth2LoginSuccessHandle)
+                    .successHandler(new AuthenticationSuccessHandler() {
+                        @Override
+                        public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                            // nhan thong tin nguoi dung thong qua Priciple
+                            ClientOauth2User oauth2User = (ClientOauth2User) authentication.getPrincipal();
+                            String email = oauth2User.getEmail();
+                            String clientName = oauth2User.getClientName();
+                            String name = oauth2User.getName();
+                            String imageUrl = oauth2User.getImageUrl();
+                            System.out.println("imageUrl :" +imageUrl);
+                            
+                            HttpSession session = request.getSession();
+                            accountService.processOAuthPostLogin(email, name, clientName);
+                            accountService.findByUsername(email).get();
+                            session.setAttribute("user", accountService.findByUsername(email).get());
+                            session.setAttribute("imageUrlAvatar", imageUrl);
+                            response.sendRedirect("/");
+                        }
+                    })
                     //cau hinh Logout Page
                     .and().logout().logoutUrl("/logout")
                     .logoutSuccessUrl("/login?logout=true")

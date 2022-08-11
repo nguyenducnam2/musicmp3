@@ -15,12 +15,13 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
  */
 public class ClientOauth2User implements OAuth2User{
 
+    private String clientName;
     private OAuth2User oAuth2User;
 
-    public ClientOauth2User(OAuth2User oAuth2User) {
+    public ClientOauth2User(OAuth2User oAuth2User,String clientName) {
         this.oAuth2User = oAuth2User;
+        this.clientName = clientName;
     }
-    
     
     @Override
     public Map<String, Object> getAttributes() {
@@ -38,8 +39,19 @@ public class ClientOauth2User implements OAuth2User{
     }
     
     public String getFullName(){
-         return oAuth2User.<String>getAttribute("email");
-//        return oAuth2User.getAttribute("name");
+         return oAuth2User.<String>getAttribute("name");
     }
+    
+     public String getEmail(){
+         return oAuth2User.<String>getAttribute("email");
+    }
+    public String getClientName(){
+        return this.clientName;
+    }
+    
+    public String getImageUrl() {
+        return oAuth2User.getAttribute("picture");
+    }
+
     
 }
