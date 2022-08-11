@@ -226,9 +226,7 @@ public class UserController {
             @RequestParam("accountId")  Long accountId,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size) throws IOException {
         
-        HttpSession session = request.getSession();
-          session.setAttribute("user", session.getAttribute("user"));
-        model.addAttribute("user", session.getAttribute("user"));
+      
             if (!(file.isEmpty())) {
                 s.setMedia(file.getOriginalFilename());
                 s.setAccountId(accountId);
@@ -273,15 +271,14 @@ public class UserController {
     
      @GetMapping("/upload/update/{id}")
     public String update(@PathVariable("id") int id, Model model, HttpServletRequest request ) {
-         HttpSession session = request.getSession();
-         session.setAttribute("user", session.getAttribute("user"));
-        model.addAttribute("user", session.getAttribute("user"));
+      
         model.addAttribute("song", service_song.findById(id).orElseThrow());
         
         model.addAttribute("listgenre", service_gen.findAll());
         model.addAttribute("listartist", service_artist.findAll());
         model.addAttribute("listalbum", service_album.findAll());
         model.addAttribute("status", "update");
+        
         return "client/upload/createsong";
     }
     

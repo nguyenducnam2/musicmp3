@@ -21,14 +21,13 @@ and open the template in the editor.
                             <div class="iq-card-header d-flex justify-content-between">
                                 <div class="iq-header-title">
                                     <h4 class="card-title" th:text="${status}"></h4>
-                                </div>
+                                    
+                                      </div>
                             </div>
                             <div class="iq-card-body">
                                 <form th:action=${"/user/save"} th:object="${song}" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                                     <input type="hidden" name="accountId" th:value="${session.user.id}" />
-<!--                                    <div th:if="${status == 'update'}" >
-                                    <input type="hidden" th:field="${song.id}" />
-                                    </div>-->
+                                   
 
                                     <div class="form-group">
                                         <label>Song Name(<span style="color: red;">*</span>):</label>
@@ -85,10 +84,10 @@ and open the template in the editor.
                                             </div><!--
 -->                                        </div><!--
                                     </div>                -->
-                                    <div class="form-group">
+<!--                                    <div class="form-group">
                                         <label>Lyric:</label>
                                         <textarea th:field="${song.lyric}" class="form-control" rows="4"></textarea>
-                                    </div>
+                                    </div>-->
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                     <button type="reset" class="btn btn-danger">Reset</button>
                                 </form>
