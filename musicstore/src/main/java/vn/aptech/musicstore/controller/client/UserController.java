@@ -36,7 +36,14 @@ import vn.aptech.musicstore.entity.model.UserModel;
 import vn.aptech.musicstore.service.AccountService;
 import vn.aptech.musicstore.service.AlbumService;
 import vn.aptech.musicstore.service.ArtistService;
+import vn.aptech.musicstore.service.CartItemService;
+import vn.aptech.musicstore.service.CartService;
+import vn.aptech.musicstore.service.CommentService;
+import vn.aptech.musicstore.service.GenreService;
+import vn.aptech.musicstore.service.PlaylistService;
+import vn.aptech.musicstore.service.PlaylistitemService;
 import vn.aptech.musicstore.service.SongService;
+import vn.aptech.musicstore.service.SubtitleService;
 
 /**
  *
@@ -58,6 +65,31 @@ public class UserController {
 
     @Autowired
     private ArtistService service_artist;
+    
+     
+
+    @Autowired
+    private SubtitleService service_sub;
+
+    @Autowired
+    private GenreService service_gen;
+
+    @Autowired
+    private CommentService service_cmt;
+
+    @Autowired
+    private PlaylistService service_pl;
+
+    @Autowired
+    private PlaylistitemService service_plitem;
+
+    @Autowired
+    private CartService service_cart;
+
+    @Autowired
+    private CartItemService service_ci;
+
+    
 
     @Value("${static.base.url}")
     private String base_url;
@@ -135,6 +167,67 @@ public class UserController {
 
         return "redirect:/user";
 
+    }
+    
+    
+     @GetMapping("/create")
+    public String create(Model model, HttpServletRequest request ) {
+        model.addAttribute("song", new Song());
+        model.addAttribute("listgenre", service_gen.findAll());
+        model.addAttribute("listartist", service_artist.findAll());
+        model.addAttribute("listalbum", service_album.findAll());
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
+        
+        model.addAttribute("status", "Add Song");
+        return "client/upload/createsong";
+    }
+
+    @PostMapping("/save")
+    public String save(@RequestParam("file") MultipartFile file,
+            @ModelAttribute("song") Song s, Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam("accountId")  Long accountId,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) throws IOException {
+        try {
+            if (!(file.isEmpty())) {
+                s.setMedia(file.getOriginalFilename());
+                s.setAccountId(accountId);
+                s.setAccount(userService.findById(accountId).orElseThrow());
+                s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
+                s.setAlbum(service_album.findById(s.getAlbumId()).orElseThrow());
+                s.setView(0);
+                s.setArtistId(s.getAlbum().getArtistId());
+                s.setArtist(s.getAlbum().getArtist());
+                Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+                service_song.save(s);
+            } else {
+                if (!(file.isEmpty())) {
+                    s.setMedia( service_song.findById(s.getId()).orElseThrow().getMedia());
+                    s.setAccountId(userService.findById(s.getAccountId()).orElseThrow().getId());
+                    s.setAccount(userService.findById(accountId).orElseThrow());
+                    s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
+                    s.setAlbum(service_album.findById(s.getAlbumId()).orElseThrow());
+                    s.setView(0);
+                    s.setArtistId(s.getAlbum().getArtistId());
+                    s.setArtist(s.getAlbum().getArtist());
+                     service_song.save(s);
+                } else {
+                   
+                }
+            }
+        } catch (Exception e) {
+            model.addAttribute("list", service_song.getPage(pageNumber, size));
+            model.addAttribute("service", service_song);
+            model.addAttribute("name", "null");
+            model.addAttribute("mess", "Failed");
+            return "client/upload/index";
+        }
+        model.addAttribute("list", service_song.getPage(pageNumber, size));
+        model.addAttribute("service", service_song);
+        model.addAttribute("name", "null");
+        model.addAttribute("mess", "Successfully");
+        return "client/upload/index";
     }
 
 }

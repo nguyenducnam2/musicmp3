@@ -51,6 +51,8 @@ public class Song {
     private Integer artistId;
     @Column(name = "genre_id", insertable = false, updatable = false)
     private Integer genreId;
+    @Column(name = "account_id", insertable = false, updatable = false)
+    private Long accountId;
 
     @JoinColumn(name = "album_id", referencedColumnName = "id")
     @ManyToOne
@@ -61,5 +63,8 @@ public class Song {
     @JoinColumn(name = "genre_id", referencedColumnName = "id")
     @ManyToOne
     private Genre genre;
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
+    @ManyToOne
+    private Account account;
 
 }

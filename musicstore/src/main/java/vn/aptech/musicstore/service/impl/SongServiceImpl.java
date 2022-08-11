@@ -80,5 +80,10 @@ public class SongServiceImpl implements SongService{
         Page<Song> postPage = repo.findAll(request);
         return new Paged<>(postPage, Paging.of(postPage.getTotalPages(), pageNumber, size));
     }
+
+    @Override
+    public List<Song> findByAccountId(Long accountId) {
+        return repo.findByAccountId(accountId);
+    }
     
 }

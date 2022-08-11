@@ -5,28 +5,40 @@
  */
 package vn.aptech.musicstore.controller.client;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import vn.aptech.musicstore.entity.Playlist;
 import vn.aptech.musicstore.entity.Playlistitem;
 import vn.aptech.musicstore.entity.Song;
 import vn.aptech.musicstore.service.AccountService;
+import vn.aptech.musicstore.service.AlbumService;
 import vn.aptech.musicstore.service.CartItemService;
 import vn.aptech.musicstore.service.CartService;
 import vn.aptech.musicstore.service.CommentService;
+import vn.aptech.musicstore.service.GenreService;
 import vn.aptech.musicstore.service.PlaylistService;
 import vn.aptech.musicstore.service.PlaylistitemService;
 import vn.aptech.musicstore.service.SongService;
 import vn.aptech.musicstore.service.SubtitleService;
+import vn.aptech.musicstore.service.UploadService;
 
 /**
  *
@@ -36,11 +48,17 @@ import vn.aptech.musicstore.service.SubtitleService;
 @RequestMapping("/song")
 public class SongClientController {
 
+    @Value("${static.base.url}")
+    private String base_url;
+
     @Autowired
     private SongService service;
 
     @Autowired
     private SubtitleService service_sub;
+
+    @Autowired
+    private GenreService service_gen;
 
     @Autowired
     private CommentService service_cmt;
@@ -53,12 +71,15 @@ public class SongClientController {
 
     @Autowired
     private PlaylistitemService service_plitem;
-    
+
     @Autowired
     private CartService service_cart;
-    
+
     @Autowired
     private CartItemService service_ci;
+
+    @Autowired
+    private AlbumService service_alb;
 
     @GetMapping("/{id}")
     public String mediaPlayer(@PathVariable("id") int id, Model model, HttpServletRequest request) {
@@ -220,7 +241,7 @@ public class SongClientController {
     }
 
     @GetMapping("/checkout")
-    public String checkout(Model model, HttpServletRequest request,@RequestParam("cartId")int cartId,@RequestParam("subTotal")int subTotal) {
+    public String checkout(Model model, HttpServletRequest request, @RequestParam("cartId") int cartId, @RequestParam("subTotal") int subTotal) {
         HttpSession session = request.getSession();
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
@@ -237,5 +258,19 @@ public class SongClientController {
         model.addAttribute("user", session.getAttribute("user"));
         return "client/song/buyed";
     }
+
+    @GetMapping("/upload")
+    public String index(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
+        model.addAttribute("service", service);
+        return "client/upload/index";
+    }  
+
+    
+
+   
+   
 
 }

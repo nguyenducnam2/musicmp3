@@ -85,6 +85,7 @@ public class WebSecurityConfig {
                     .antMatchers(WHITE_LIST_URLS).permitAll()
 //                    .antMatchers("/api/**").authenticated()
                     .antMatchers("/user/**").hasAnyRole("ADMIN", "EDITOR", "MODERATOR", "USER")
+
                     .antMatchers("/admin/account/**").hasAnyRole("ADMIN", "MODERATOR")
                     .antMatchers("/admin/**").hasAnyRole("ADMIN", "EDITOR", "MODERATOR")
                     .anyRequest().authenticated();
