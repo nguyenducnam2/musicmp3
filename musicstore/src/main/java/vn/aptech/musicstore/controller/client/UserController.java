@@ -147,7 +147,7 @@ public class UserController {
         }
         //Save New Password
         userService.changePassword(user, passwordModel.getNewPassword());
-        return "redirect:/user";
+        return "client/index";
     }
 
     @PostMapping("/processUpdate")
@@ -165,8 +165,7 @@ public class UserController {
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
 
-        return "redirect:/user";
-
+        return "client/index";
     }
     @GetMapping("/upload")
     public String upload(Model model, HttpServletRequest request, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
@@ -179,6 +178,32 @@ public class UserController {
         model.addAttribute("service", service_song);
         return "client/upload/index";
     }  
+    
+     @GetMapping("/checkout")
+    public String checkout(Model model,HttpServletRequest request, @RequestParam("subTotal") int subTotal){
+        String duration = request.getParameter("duration");
+        String price = request.getParameter("price");
+       
+        model.addAttribute("subTotal", price);
+        return "client/song/checkout";
+    }
+    
+//    @GetMapping("/checkout")
+//    public String checkout(Model model, HttpServletRequest request, @RequestParam("cartId") int cartId, @RequestParam("subTotal") int subTotal) {
+//        HttpSession session = request.getSession();
+//        session.setAttribute("user", session.getAttribute("user"));
+//        model.addAttribute("user", session.getAttribute("user"));
+//        model.addAttribute("cart", service_cart.findById(cartId).get());
+//        model.addAttribute("items", service_ci.findByCartId(cartId));
+//        model.addAttribute("subTotal", subTotal);
+//        return "client/song/checkout";
+//    }
+    
+    
+    
+    
+    
+    
     
     
      @GetMapping("/create")
