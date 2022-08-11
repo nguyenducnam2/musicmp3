@@ -168,15 +168,26 @@ public class UserController {
         return "redirect:/user";
 
     }
+    @GetMapping("/upload")
+    public String upload(Model model, HttpServletRequest request, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "8") int size) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
+        model.addAttribute("list", service_song.getPage(pageNumber, size));
+
+        model.addAttribute("service", service_song);
+        return "client/upload/index";
+    }  
     
     
      @GetMapping("/create")
     public String create(Model model, HttpServletRequest request ) {
+        HttpSession session = request.getSession();
         model.addAttribute("song", new Song());
         model.addAttribute("listgenre", service_gen.findAll());
         model.addAttribute("listartist", service_artist.findAll());
-        model.addAttribute("listalbum", service_album.findAll());
-        HttpSession session = request.getSession();
+        model.addAttribute("listalbum", service_album.findAll());  
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
         
@@ -185,11 +196,14 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public String save(@RequestParam("file") MultipartFile file,
+    public String save(@RequestParam("file") MultipartFile file,HttpServletRequest request,
             @ModelAttribute("song") Song s, Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam("accountId")  Long accountId,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size) throws IOException {
-        try {
+        
+        HttpSession session = request.getSession();
+          session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
             if (!(file.isEmpty())) {
                 s.setMedia(file.getOriginalFilename());
                 s.setAccountId(accountId);
@@ -212,22 +226,56 @@ public class UserController {
                     s.setArtistId(s.getAlbum().getArtistId());
                     s.setArtist(s.getAlbum().getArtist());
                      service_song.save(s);
-                } else {
-                   
-                }
+                     
+      
+                } 
             }
-        } catch (Exception e) {
-            model.addAttribute("list", service_song.getPage(pageNumber, size));
-            model.addAttribute("service", service_song);
-            model.addAttribute("name", "null");
-            model.addAttribute("mess", "Failed");
-            return "client/upload/index";
-        }
         model.addAttribute("list", service_song.getPage(pageNumber, size));
         model.addAttribute("service", service_song);
         model.addAttribute("name", "null");
         model.addAttribute("mess", "Successfully");
         return "client/upload/index";
     }
+    
+     @GetMapping("/upload/search")
+    public String search(Model model, @RequestParam("name") String name, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "1000") int size) {
+        model.addAttribute("list", service_song.getPage(pageNumber, size));
+        model.addAttribute("name", name);
+        model.addAttribute("service", service_song);
+        return "client/upload/index";
+    }
+    
+     @GetMapping("/upload/update/{id}")
+    public String update(@PathVariable("id") int id, Model model, HttpServletRequest request ) {
+         HttpSession session = request.getSession();
+         session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
+        model.addAttribute("song", service_song.findById(id).orElseThrow());
+        
+        model.addAttribute("listgenre", service_gen.findAll());
+        model.addAttribute("listartist", service_artist.findAll());
+        model.addAttribute("listalbum", service_album.findAll());
+        model.addAttribute("status", "update");
+        return "client/upload/createsong";
+    }
+    
+    @GetMapping("/upload/delete/{id}")
+    public String delete(@PathVariable("id")int id, Model model,HttpServletRequest request, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size){
+         HttpSession session = request.getSession();
+         session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
+       
+            service_song.deleteById(id);
+       
+        model.addAttribute("list", service_song.getPage(pageNumber, size));
+        model.addAttribute("service", service_song);
+        model.addAttribute("name", "null");
+        model.addAttribute("mess", "Successfully");
+        
+        return "client/upload/index";
+    }
+
 
 }

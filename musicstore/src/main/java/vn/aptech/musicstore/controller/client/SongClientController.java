@@ -259,14 +259,7 @@ public class SongClientController {
         return "client/song/buyed";
     }
 
-    @GetMapping("/upload")
-    public String index(Model model, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        session.setAttribute("user", session.getAttribute("user"));
-        model.addAttribute("user", session.getAttribute("user"));
-        model.addAttribute("service", service);
-        return "client/upload/index";
-    }  
+    
 
     
 

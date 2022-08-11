@@ -26,6 +26,10 @@ and open the template in the editor.
                             <div class="iq-card-body">
                                 <form th:action=${"/user/save"} th:object="${song}" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                                     <input type="hidden" name="accountId" th:value="${session.user.id}" />
+<!--                                    <div th:if="${status == 'update'}" >
+                                    <input type="hidden" th:field="${song.id}" />
+                                    </div>-->
+
                                     <div class="form-group">
                                         <label>Song Name(<span style="color: red;">*</span>):</label>
                                         <input type="text" th:field="${song.name}" class="form-control" required>
@@ -62,7 +66,7 @@ and open the template in the editor.
                                             <option th:each="item:${listgenre}" th:text="${item.name}" th:value="${item.id}"></option>
                                         </select>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group"><!--
                                         <div class="row">
                                             <div class="col-6">
                                                 <label for="country">Artist(<span style="color: red;">*</span>):</label>
@@ -72,15 +76,15 @@ and open the template in the editor.
                                                     <option th:each="item:${listartist}" th:if="${item.id!=song.artistId}" th:value="${item.id}" th:text="${item.name}"></option>
                                                 </select>
                                             </div>
-                                            <div class="col-6">
+-->                                            <div class="col-6">
                                                 <label>Album(<span style="color: red;">*</span>):</label>
                                                 <select class="form-control" id="country2" th:field="${song.albumId}" required>
                                                     <option th:if="${song.album != null}" th:value="${song.albumId}" th:text="${song.album.name}"></option>
                                                       <option th:each="item:${listalbum}" th:text="${item.name}+'-'+${item.artist.name}" th:value="${item.id}"></option> 
                                                 </select>   
-                                            </div>
-                                        </div>
-                                    </div>                
+                                            </div><!--
+-->                                        </div><!--
+                                    </div>                -->
                                     <div class="form-group">
                                         <label>Lyric:</label>
                                         <textarea th:field="${song.lyric}" class="form-control" rows="4"></textarea>
