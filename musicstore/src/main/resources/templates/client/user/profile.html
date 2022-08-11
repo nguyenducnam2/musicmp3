@@ -16,26 +16,26 @@ and open the template in the editor.
                             <div class="iq-card-body p-0">
                                 <div class="iq-edit-list">
                                     <ul class="iq-edit-profile d-flex nav nav-pills">
-                                        <li class="col-md-4 p-0">
+                                        <li class="col-md-3 p-0">
                                             <a class="nav-link active" data-toggle="pill" href="#personal-information">
                                                 Personal Information
                                             </a>
                                         </li>
-                                        <li class="col-md-4 p-0">
+                                        <li class="col-md-3 p-0">
                                             <a class="nav-link" data-toggle="pill" href="#edit-profile">
                                                 Edit Profile
                                             </a>
                                         </li>
-                                        <li class="col-md-4 p-0">
+                                        <li class="col-md-3 p-0">
                                             <a class="nav-link" data-toggle="pill" href="#chang-pwd">
                                                 Change Password
                                             </a>
                                         </li>
-                                        <!--                                 <li class="col-md-3 p-0">
-                                                                            <a class="nav-link" data-toggle="pill" href="#emailandsms">
-                                                                            Email and SMS
-                                                                            </a>
-                                                                         </li>-->
+                                        <li class="col-md-3 p-0">
+                                            <a class="nav-link" data-toggle="pill" href="#upgrade-account">
+                                                Upgrade Account
+                                            </a>
+                                        </li>
 
                                     </ul>
                                 </div>
@@ -202,7 +202,7 @@ and open the template in the editor.
                                                 <input type="hidden"  th:field="*{email}" />
                                                 <div class="form-group">
                                                     <label for="cpass">Current Password:</label>
-<!--                                                    <a th:href="@{/resetPassword}" class="float-right">Forgot Password</a>-->
+                                                    <!--                                                    <a th:href="@{/resetPassword}" class="float-right">Forgot Password</a>-->
                                                     <input type="password" name="cpass" th:field="*{oldPassword}" class="form-control" id="cpass" required>
                                                 </div>
                                                 <div class="form-group">
@@ -219,69 +219,87 @@ and open the template in the editor.
                                         </div>
                                     </div>
                                 </div>
-                                <!--                                    <div class="tab-pane fade" id="emailandsms" role="tabpanel">
-                                                                        <div class="iq-card">
-                                                                            <div class="iq-card-header d-flex justify-content-between">
-                                                                                <div class="iq-header-title">
-                                                                                    <h4 class="card-title">Email and SMS</h4>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="iq-card-body">
-                                                                                <form>
-                                                                                    <div class="form-group row align-items-center">
-                                                                                        <label class="col-8 col-md-3" for="emailnotification">Email Notification:</label>
-                                                                                        <div class="col-4 col-md-9 custom-control custom-switch">
-                                                                                            <input type="checkbox" class="custom-control-input" id="emailnotification" checked="">
-                                                                                            <label class="custom-control-label" for="emailnotification"></label>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="form-group row align-items-center">
-                                                                                        <label class="col-8 col-md-3" for="smsnotification">SMS Notification:</label>
-                                                                                        <div class="col-4 col-md-9 custom-control custom-switch">
-                                                                                            <input type="checkbox" class="custom-control-input" id="smsnotification" checked="">
-                                                                                            <label class="custom-control-label" for="smsnotification"></label>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="form-group row align-items-center">
-                                                                                        <label class="col-md-3" for="npass">When To Email</label>
-                                                                                        <div class="col-md-9">
-                                                                                            <div class="custom-control custom-checkbox">
-                                                                                                <input type="checkbox" class="custom-control-input" id="email01">
-                                                                                                <label class="custom-control-label" for="email01">You have new notifications.</label>
-                                                                                            </div>
-                                                                                            <div class="custom-control custom-checkbox">
-                                                                                                <input type="checkbox" class="custom-control-input" id="email02">
-                                                                                                <label class="custom-control-label" for="email02">You're sent a direct message</label>
-                                                                                            </div>
-                                                                                            <div class="custom-control custom-checkbox">
-                                                                                                <input type="checkbox" class="custom-control-input" id="email03" checked="">
-                                                                                                <label class="custom-control-label" for="email03">Someone adds you as a connection</label>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="form-group row align-items-center">
-                                                                                        <label class="col-md-3" for="npass">When To Escalate Emails</label>
-                                                                                        <div class="col-md-9">
-                                                                                            <div class="custom-control custom-checkbox">
-                                                                                                <input type="checkbox" class="custom-control-input" id="email04">
-                                                                                                <label class="custom-control-label" for="email04"> Upon new order.</label>
-                                                                                            </div>
-                                                                                            <div class="custom-control custom-checkbox">
-                                                                                                <input type="checkbox" class="custom-control-input" id="email05">
-                                                                                                <label class="custom-control-label" for="email05"> New membership approval</label>
-                                                                                            </div>
-                                                                                            <div class="custom-control custom-checkbox">
-                                                                                                <input type="checkbox" class="custom-control-input" id="email06" checked="">
-                                                                                                <label class="custom-control-label" for="email06"> Member registration</label>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                                                                                    <button type="reset" class="btn iq-bg-danger">Cancel</button>
-                                                                                </form>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>-->
+
+                                <div class="tab-pane fade" id="upgrade-account" role="tabpanel">
+                                    <div class="iq-card">
+                                        <div class="iq-card-header d-flex justify-content-between">
+                                            <div class="iq-header-title">
+                                                <h4 class="card-title">Upgrade Account</h4>
+                                            </div>
+                                        </div>
+                                        <div class="iq-card-body">
+                                            <form action="" method="post">
+                                                <div class="form-group row align-items-center">
+                                                    <label class="col-8 col-md-3" for="activeVip">Upgrade to VIP</label>
+                                                    <div class="col-4 col-md-9 custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input" id="activeVip" required="">
+                                                        <label class="custom-control-label" for="activeVip"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row align-items-center">
+                                                    <label class="col-md-3" for="npass">Duration</label>
+                                                    <div class="col-md-3">
+                                                        <div class="custom-control custom-radio custom-radio-color-checked">
+                                                            <input type="radio" id="customRadio6" name="durationRadio" class="custom-control-input" value="3" checked=""/>
+                                                            <label class="custom-control-label" for="customRadio6"> 3 days </label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio">
+                                                            <input type="radio" id="customRadio7" name="durationRadio" class="custom-control-input" value="30"/>
+                                                            <label class="custom-control-label" for="customRadio7"> 1 month (30d) </label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio">
+                                                            <input type="radio" id="customRadio8" name="durationRadio" class="custom-control-input" value="90"/>
+                                                            <label class="custom-control-label" for="customRadio8"> 3 months (90d)</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio">
+                                                            <input type="radio" id="customRadio9" name="durationRadio" class="custom-control-input" value="180"/>
+                                                            <label class="custom-control-label" for="customRadio9"> 6 months (180d)</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio">
+                                                            <input type="radio" id="customRadio10" name="durationRadio" class="custom-control-input" value="360"/>
+                                                            <label class="custom-control-label" for="customRadio10"> 1 year (360d)</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-md-3" >
+                                                        <input type="radio" id="customRadio6" name="price" class="custom-control-input" value="2" />
+                                                        <label class="custom-control m-0" for="customRadio6"> $2 </label>
+                                                        <input type="radio" id="customRadio7" name="price" class="custom-control-input" value="10" />
+                                                        <label class="custom-control m-0" for="customRadio7"> $10 </label>
+                                                        <input type="radio" id="customRadio8" name="price" class="custom-control-input" value="25" />
+                                                        <label class="custom-control m-0" for="customRadio8"> $25 </label>
+                                                        <input type="radio" id="customRadio9" name="price" class="custom-control-input" value="40" />
+                                                        <label class="custom-control m-0" for="customRadio9"> $40 </label>
+                                                        <input type="radio" id="customRadio10" name="price" class="custom-control-input" value="60" />
+                                                        <label class="custom-control m-0" for="customRadio10"> $60 </label>
+                                                    </div>
+                                                </div>
+
+                                                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                                <button type="reset" class="btn iq-bg-danger">Cancel</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="iq-card">
+                                        <div class="iq-card-header d-flex justify-content-between">
+                                            <div class="iq-header-title">
+                                                <h4 class="card-title">VIP Account Privileges</h4>
+                                            </div>
+                                        </div>
+                                        <div class="iq-card-body">
+                                            <div class="form-group row align-items-center">
+                                                <label class="col-8 col-md-8">- VIP accounts can access many areas where other members are restricted.</label>
+                                            </div>
+                                            <div class="form-group row align-items-center">
+                                                <label class="col-8 col-md-8">- VIP accounts are not subject to H&R laws.</label>
+                                            </div> 
+                                            <div class="form-group row align-items-center">
+                                                <label class="col-8 col-md-8">- VIP accounts have a special color compared to other accounts.</label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
 
                             </div>
                         </div>
