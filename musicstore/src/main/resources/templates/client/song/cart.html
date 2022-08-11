@@ -40,7 +40,7 @@ and open the template in the editor.
                                     price += response[i].song.price;
                                     cart_root.innerHTML += "<div class='people-nearby'><div class='nearby-user'><div class='row'><div class='col-md-2 col-sm-2'><img src='http://localhost:8080/webdata/album/" + response[i].song.album.image + "' class='img-border-radius img-fluid w-100'></div><div class='col-md-7 col-sm-7'><h5><a href='#' class='profile-link'>" + response[i].song.name + "</a></h5><p>" + response[i].song.artist.name + "</p><p class='text-muted'>" + response[i].song.price + " $ </p></div><div class='col-md-3 col-sm-3'><button class='btn btn-primary pull-right' onclick='cancelSongToCart(" + response[i].song.id + ")'>Delete</a></div></div></div></div>";
                                 }
-                                cart_root.innerHTML += "<div class='row'><div class='col-md-2 col-sm-2'><p>" + response.length + " items</p><p>Total Price: " + price + " $</p></div><div class='col-md-3 col-sm-3'><a href='http://localhost:8080/song/checkout?cartId="+response[0].cart.id+"&subTotal="+price+"' class='btn btn-primary pull-right'>Check Out</a></div></div>";
+                                cart_root.innerHTML += "<div class='row'><div class='col-md-2 col-sm-2'><p>" + response.length + " items</p><p>Total Price: " + price + " $</p></div><div class='col-md-3 col-sm-3'><a href='http://localhost:8080/song/checkout?cartId=" + response[0].cart.id + "&subTotal=" + price + "' class='btn btn-primary pull-right'>Check Out</a></div></div>";
                             } else {
                                 cart_root.innerHTML = "";
                                 cart_root.innerHTML += "<p>Your Cart Is Empty</p>";
@@ -67,10 +67,12 @@ and open the template in the editor.
                                 .then((response) => response.json())
                                 .then((response) => {
                                     load_items();
+                                    getSizeCart();
                                 })
                                 .catch(e => {
                                     console.log(e);
                                     load_items();
+                                    getSizeCart();
                                 });
                     }
                 </script>

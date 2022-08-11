@@ -105,16 +105,16 @@ public class WebSecurityConfig {
                     .userService(oauth2UserService)
                     .and()
                     
-                // xu ly cho login thanh cong
-//                .successHandler(new AuthenticationSuccessHandler(){
-//                    @Override
-//                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-//                        // nhan thong tin nguoi dung thong qua Priciple
-//                        ClientOauth2User user = (ClientOauth2User) authentication.getPrincipal();
-////                        accountService.processOAuthPostLogin(user.getName());
-//                        response.sendRedirect("/home");
-//                    }
-//                })
+//                 xu ly cho login thanh cong
+                .successHandler(new AuthenticationSuccessHandler(){
+                    @Override
+                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                        // nhan thong tin nguoi dung thong qua Priciple
+                        ClientOauth2User user = (ClientOauth2User) authentication.getPrincipal();
+                        accountService.processOAuthPostLogin(user.getName());
+                        response.sendRedirect("/user");
+                    }
+                })
                     //cau hinh Logout Page
                     .and().logout().logoutUrl("/logout")
                     .logoutSuccessUrl("/login?logout=true")

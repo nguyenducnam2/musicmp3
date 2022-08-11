@@ -256,7 +256,7 @@ and open the template in the editor.
                                         </div> 
                                     </div> -->
 
-
+                                <div style="font-size: larger;" id="cart"></div>
                                 <div class="main">
                                     <p id="logo"><i class="fa fa-music"></i></p>
                                     <!--- left part --->
@@ -274,8 +274,6 @@ and open the template in the editor.
                                         <div class="show_song_no">
                                             <input type="hidden" id="total"/>
                                             <input type="hidden" id="present"/>
-                                            <div id="cart"></div>
-                                            <a id="download" download></a>
                                             <button style="background: #ff8a65;" th:if="${session.user !=null}" class="las la-tasks" type="button" data-toggle="modal" data-target="#myModal"></button>
                                             <button style="background: #ff8a65;" th:if="${session.user ==null}" class="las la-tasks" type="button" data-toggle="modal" data-target="#myModal-login"></button>
                                         </div>
@@ -297,9 +295,8 @@ and open the template in the editor.
                                         <button id="auto" onclick="autoplay_switch()">Auto play <i class="fa fa-circle-o-notch" aria-hidden="true"></i></button>
                                     </div>
                                 </div>
-
-
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -573,7 +570,7 @@ and open the template in the editor.
             <input type="hidden" id="playlistId" th:value="${playlistId}"/>
             <input type="hidden" id="songId" th:value="${song.id}"/>
             <input type="hidden" id="songId2" th:value="${song.id}"/>
-            <input type="hidden" th:if="${session.user == null}" id="accountId" value="-1"/>
+            <input type="hidden" th:if="${session.user == null}" id="accountId" value="-1"/> 
 
             <script th:inline="javascript">
                 let previous = document.querySelector('#pre');
@@ -606,7 +603,6 @@ and open the template in the editor.
                 let content = document.querySelector('#content');
                 let myModal = document.querySelector('#myModal');
 
-                let download = document.querySelector('#download');
                 let cart = document.querySelector('#cart');
 
                 let timer;
@@ -625,7 +621,7 @@ and open the template in the editor.
 
                 // Your document is loaded.
 
-               
+
 
 
                 // All functions
@@ -972,15 +968,12 @@ and open the template in the editor.
                                             }
                                         }
                                         if (check == true) {
-                                            download.innerHTML = "";
-                                            cart.innerHTML = "<button onclick='cancelSongToCart()'>Cancel Cart</button>";
+                                            cart.innerHTML = "<div data-icon='Q' class='icon'><button class='btn' onclick='cancelSongToCart()'>Cancel Cart</button></div>";
                                         } else {
-                                            download.innerHTML = "";
-                                            cart.innerHTML = "<button onclick='addSongToCart()'>Add To Cart</button>";
+                                            cart.innerHTML = "<div data-icon='Q' class='icon'><button class='btn' onclick='addSongToCart()'>Add To Cart</button></div>";
                                         }
                                     } else {
-                                        download.innerHTML = "";
-                                        cart.innerHTML = "<button onclick='addSongToCart()'>Add To Cart</button>";
+                                        cart.innerHTML = "<div data-icon='Q' class='icon'><button class='btn' onclick='addSongToCart()'>Add To Cart</button></div>";
                                     }
                                 })
 
@@ -995,6 +988,7 @@ and open the template in the editor.
                             .then((response) => response.json())
                             .then((response) => {
                                 checkDownload();
+                                getSizeCart();
                             });
                 }
 
@@ -1003,10 +997,12 @@ and open the template in the editor.
                             .then((response) => response.json())
                             .then((response) => {
                                 checkDownload();
+                                getSizeCart();
                             })
                             .catch(e => {
                                 console.log(e);
                                 checkDownload();
+                                getSizeCart();
                             });
                 }
 
