@@ -5,6 +5,7 @@
 package vn.aptech.musicstore.service;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import javax.mail.MessagingException;
@@ -55,4 +56,5 @@ public interface AccountService {
      
     void sendVerificationEmail(Account user, String verifyUrl, String resendUrl)  throws MessagingException, UnsupportedEncodingException ;
     
+    Date calculateExpirationDate(int expirationTime);
 }

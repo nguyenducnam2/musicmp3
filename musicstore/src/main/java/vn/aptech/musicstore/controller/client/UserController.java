@@ -181,9 +181,11 @@ public class UserController {
     
      @GetMapping("/checkout")
     public String checkout(Model model,HttpServletRequest request, @RequestParam("subTotal") int subTotal){
-        String duration = request.getParameter("duration");
-        String price = request.getParameter("price");
+        int duration = Integer.parseInt(request.getParameter("duration"));
+        int price = Integer.parseInt(request.getParameter("price"));
        
+        
+        userService.calculateExpirationDate(duration*24*60);
         model.addAttribute("subTotal", price);
         return "client/song/checkout";
     }
