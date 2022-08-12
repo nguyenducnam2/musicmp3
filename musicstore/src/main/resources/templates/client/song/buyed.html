@@ -15,7 +15,10 @@ and open the template in the editor.
                         <div class="iq-card">
                             <div class="iq-card-header d-flex justify-content-between">
                                 <div class="iq-header-title">
-                                    <h4 class="card-title">List Song Buyed</h4>
+                                    <h4 class="card-title">List Song Bought</h4>
+                                </div>
+                                <div>
+                                      <a class="btn btn-primary" th:href="@{'/song/order?accountId='+${session.user.id}}">Order History</a>
                                 </div>
                             </div>
                             <div class="iq-card-body">

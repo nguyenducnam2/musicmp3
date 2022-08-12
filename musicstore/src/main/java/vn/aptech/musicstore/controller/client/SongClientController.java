@@ -5,11 +5,6 @@
  */
 package vn.aptech.musicstore.controller.client;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -19,15 +14,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import vn.aptech.musicstore.entity.Playlist;
 import vn.aptech.musicstore.entity.Playlistitem;
 import vn.aptech.musicstore.entity.Song;
+import vn.aptech.musicstore.entity.SongOrder;
+import vn.aptech.musicstore.entity.SongOrderDetail;
 import vn.aptech.musicstore.service.AccountService;
 import vn.aptech.musicstore.service.AlbumService;
 import vn.aptech.musicstore.service.CartItemService;
@@ -36,9 +30,10 @@ import vn.aptech.musicstore.service.CommentService;
 import vn.aptech.musicstore.service.GenreService;
 import vn.aptech.musicstore.service.PlaylistService;
 import vn.aptech.musicstore.service.PlaylistitemService;
+import vn.aptech.musicstore.service.SongOrderDetailService;
+import vn.aptech.musicstore.service.SongOrderService;
 import vn.aptech.musicstore.service.SongService;
 import vn.aptech.musicstore.service.SubtitleService;
-import vn.aptech.musicstore.service.UploadService;
 
 /**
  *
@@ -80,6 +75,12 @@ public class SongClientController {
 
     @Autowired
     private AlbumService service_alb;
+
+    @Autowired
+    private SongOrderService service_song_order;
+
+    @Autowired
+    private SongOrderDetailService service_song_order_detail;
 
     @GetMapping("/{id}")
     public String mediaPlayer(@PathVariable("id") int id, Model model, HttpServletRequest request) {
@@ -250,20 +251,44 @@ public class SongClientController {
         model.addAttribute("subTotal", subTotal);
         return "client/song/checkout";
     }
-    
+
     @GetMapping("/buyed")
-    public String buyed(Model model,HttpServletRequest request){
+    public String buyed(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
         return "client/song/buyed";
     }
 
-    
+    @GetMapping("/order")
+    public String songOrder(Model model, HttpServletRequest request, @RequestParam("accountId") Long accountId) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
+        List<SongOrder> list = new ArrayList<>();
+        for (SongOrder item : service_song_order.findAll()) {
+            if (item.getAccountId() == accountId) {
+                list.add(item);
+            }
+        }
+        model.addAttribute("list", list);
+        return "client/song/order";
+    }
 
-    
-
-   
-   
+    @GetMapping("/order/{id}")
+    public String songOrderDetail(Model model, HttpServletRequest request, @PathVariable("id") int id) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
+        List<SongOrderDetail> list = new ArrayList<>();
+        for (SongOrderDetail item : service_song_order_detail.findAll()) {
+            if (item.getSongOrderId() == id) {
+                list.add(item);
+            }
+        }
+        model.addAttribute("list", list);
+        model.addAttribute("songorder", service_song_order.findById(id).get());
+        return "client/song/orderdetail";
+    }
 
 }
