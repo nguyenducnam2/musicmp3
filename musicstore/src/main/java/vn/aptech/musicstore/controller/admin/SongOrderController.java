@@ -69,6 +69,6 @@ public class SongOrderController {
         response.setHeader(headerKey, headerValue);
         List<SongOrder> list = service.findAll();
         SongOrderPDFExporter exporter = new SongOrderPDFExporter(list);
-        exporter.export(response);
+        exporter.export(response,currentDateTime);
     }
 }

@@ -63,11 +63,11 @@ public class SongOrderPDFExporter {
         }
     }
     
-    public void export(HttpServletResponse response) throws IOException {
+    public void export(HttpServletResponse response,String currenttime) throws IOException {
         Document document = new Document(PageSize.A4);
         PdfWriter.getInstance(document, response.getOutputStream());
         document.open();
-        document.add(new Paragraph("List Song Order"));
+        document.add(new Paragraph("List Song Order"+"                              "+currenttime.substring(0, 10)));
         PdfPTable table = new PdfPTable(5);
         table.setWidthPercentage(100);
         table.setSpacingBefore(15);
