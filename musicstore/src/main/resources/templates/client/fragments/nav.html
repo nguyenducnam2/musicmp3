@@ -29,7 +29,7 @@
                     <ul id="iq-sidebar-toggle" class="iq-menu">
                         <!-- case phan trang nav page cua ai thi copy the <li>,
                         tu xet th:if xu li rieng ,cua tui la vi du cho viec user dang nhap moi thay dc cho nay -->
-                        <li th:if="${user != null && user.role=='ROLE_USER'}">
+                        <li th:if="${(user != null) && (user.role=='ROLE_USER' || user.role=='ROLE_VIP')}">
 
                                 <a class="iq-icons-list" th:href="@{/song/playlist}"><div data-icon="p" class="icon"></div><span>Playlist</span></a>
                                 <a class="iq-icons-list" th:href="@{/song/cart}"><div data-icon="Q" class="icon"></div><span>Song Cart</span><p id="items" style="color: tomato; "></p></a>
