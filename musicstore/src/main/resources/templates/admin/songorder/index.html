@@ -12,10 +12,88 @@ and open the template in the editor.
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12">
-
+                        <div class="iq-card">
+                            <div class="iq-card-header d-flex justify-content-between">
+                                <div class="iq-header-title">
+                                    <h4 class="card-title">Song Order List</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="iq-card-body">
+                            <div class="table-responsive">
+                                <div class="row justify-content-between">
+                                    <div class="col-sm-12 col-md-6">
+                                        <div id="user_list_datatable_info" class="dataTables_filter">
+                                            <form class="mr-3 position-relative">
+                                                <div class="form-group mb-0">
+                                                    <input type="search" class="form-control" id="exampleInputSearch" placeholder="Search" aria-controls="user-list-table">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="user-list-files d-flex float-right">
+                                            <a class="iq-bg-primary" href="javascript:void();">
+                                                Excel
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <table id="user-list-table" class="table table-striped table-bordered mt-4" role="grid" aria-describedby="user-list-page-info">
+                                        <thead>
+                                            <tr>
+                                                <th>Avatar</th>
+                                                <th>Username</th>                              
+                                                <th>Status</th>
+                                                <th>Total</th>
+                                                <th>Date</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="item:${list.page}">
+                                                <td class="text-center"><img class="rounded img-fluid avatar-40" th:src="@{'/webdata/user/'+${item.account.image}}" alt="profile"></td>
+                                                <td>[[${item.account.username}]]</td>
+                                                <td>
+                                                    <span th:if="${item.status=='Success'}" class="badge iq-bg-success">[[${item.status}]]</span>
+                                                    <span th:if="${item.status=='Canceled'}" class="badge iq-bg-primary">user [[${item.status}]]</span>
+                                                </td>
+                                                <td>[[${item.total}]] $</td>
+                                                <td>[[${new String(item.date).substring(0,10)}]]</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center list-user-action">
+                                                        <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="View" href="#"><i class="ri-user-add-line"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <nav aria-label="Page navigation" class="paging">
+                <ul class="pagination" th:if="${list.page.totalPages > 1}">
+                    <li class="page-item" th:classappend="${!list.paging.isPrevEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/admin/songorder/?pageNumber=' + ${list.paging.pageNumber - 1}}"
+                           tabindex="-1">Previous</a>
+                    </li>
+                    <th:block th:each="item : ${list.paging.getItems()}">
+                        <li class="page-item" th:classappend="${item.index == list.paging.pageNumber? 'active' : ''}"
+                            th:if="${item.pageItemType.name() == 'PAGE'}">
+                            <a class="page-link" th:href="@{'/admin/songorder/?pageNumber=' + ${item.index}}"
+                               th:text="${item.index}"></a>
+                        </li>
+                        <li class="page-item disabled" th:if="${item.pageItemType.name() == 'DOTS'}">
+                            <a class="page-link" href="#">...</a>
+                        </li>
+                    </th:block>
+                    <li class="page-item" th:classappend="${!list.paging.isNextEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/admin/songorder/?pageNumber=' + ${list.paging.pageNumber + 1}}">Next</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </body>
 </html>

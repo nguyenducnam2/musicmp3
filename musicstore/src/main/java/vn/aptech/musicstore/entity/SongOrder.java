@@ -38,7 +38,7 @@ public class SongOrder {
     @Column(name = "id")
     private Integer id;
     @Column(name = "date")
-    private Date date = calculateExpirationDate(420);
+    private Date date = calculateExpirationDate(0);
     @Column(name = "payment")
     private String payment;
     @Column(name = "status")
