@@ -176,7 +176,8 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         return verificationToken;
     }
 
-    private Date calculateExpirationDate(int expirationTime) {
+    @Override
+    public Date calculateExpirationDate(int expirationTime) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(new Date().getTime());
         calendar.add(Calendar.MINUTE, expirationTime);
@@ -277,11 +278,10 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     }
 
-    
     // sau khi login bằng google account, 
     // chúng ta sẽ tạo 1 tài khoản local tương ứng để lưu thông tin
-    public void processOAuthPostLogin(String email,String name,String clientName) {
-      Optional<Account> user = repoAccount.findByUsername(email);
+    public void processOAuthPostLogin(String email, String name, String clientName) {
+        Optional<Account> user = repoAccount.findByUsername(email);
         // trường hợp chưa có tài khoản => tạo mới
         if (user.isEmpty()) {
             Account u = new Account();
