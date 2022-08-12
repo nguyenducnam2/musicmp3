@@ -45,6 +45,7 @@ and open the template in the editor.
                                                 <th>Username</th>                              
                                                 <th>Status</th>
                                                 <th>Total</th>
+                                                <th>Payment</th>
                                                 <th>Date</th>
                                                 <th>Action</th>
                                             </tr>
@@ -58,10 +59,11 @@ and open the template in the editor.
                                                     <span th:if="${item.status=='Canceled'}" class="badge iq-bg-primary">user [[${item.status}]]</span>
                                                 </td>
                                                 <td>[[${item.total}]] $</td>
+                                                <td>[[${item.payment}]]</td>
                                                 <td>[[${new String(item.date).substring(0,10)}]]</td>
                                                 <td>
                                                     <div class="d-flex align-items-center list-user-action">
-                                                        <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="View" href="#"><i class="ri-user-add-line"></i></a>
+                                                        <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="View" th:href="@{/admin/songorder/{id}(id=${item.id})}"><i class="ri-user-add-line"></i></a>
                                                     </div>
                                                 </td>
                                             </tr>
