@@ -105,9 +105,12 @@ public class UserController {
             HttpSession session = request.getSession();
             session.setAttribute("user", user.get());
 
-            String token = userService.getVipTokenByUserId(user.get().getId()).getToken();
-            System.out.println("tokenVip" + token);
-            userService.validateVipToken(token);
+            String token = "";
+            if (!token.equals("")) {
+                token = userService.getVipTokenByUserId(user.get().getId()).getToken();
+                System.out.println("tokenVip" + token);
+                userService.validateVipToken(token);
+            }
             model.addAttribute("user", user.get());
         } catch (Exception e) {
             String username = principal.getName();
