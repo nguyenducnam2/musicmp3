@@ -6,6 +6,7 @@ package vn.aptech.musicstore.entity;
 
 import java.util.Calendar;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -13,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
@@ -37,22 +39,21 @@ public class VipToken {
     private String token;
 //    @Temporal(javax.persistence.TemporalType.DATE)
     private Date expirationTime;
+    
+    @Column(name = "user_id",insertable = false,updatable = false)
+    private Long userId;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name="FK_USER_VERIFY_TOKEN"))
+    
+   // @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Account acc;
 
-    public VipToken(Account acc, String token) {
+    public VipToken(Account acc, String token,int duration) {
         super();
         this.token = token;
         this.acc = acc;
-        this.expirationTime = calculateExpirationDate(EXPIRATION_TIME);
-    }
-
-    public VipToken(String token) {
-        super();
-        this.token = token;
-        this.expirationTime = calculateExpirationDate(EXPIRATION_TIME);
+        this.expirationTime = calculateExpirationDate(duration);
     }
 
     private Date calculateExpirationDate(int expirationTime) {

@@ -107,7 +107,7 @@
                                                         </div>
                                                     </a>
                                                 </div>
-                                                <div th:if="${session.user.role == 'ROLE_USER'}">
+                                                <div th:if="${session.user.role == 'ROLE_USER' || session.user.role == 'ROLE_VIP'}">
                                                     <!--<a href="#"  class="iq-sub-card iq-bg-primary-hover">-->
                                                     <!--<a th:href="@{/admin/account/updateProfile/{username}(username=*{username} )}"  class="iq-sub-card iq-bg-primary-hover">-->
                                                     <a th:href="@{/user/profile/{id} (id=*{id}) }"  class="iq-sub-card iq-bg-primary-hover">

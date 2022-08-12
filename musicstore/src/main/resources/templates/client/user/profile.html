@@ -228,7 +228,7 @@ and open the template in the editor.
                                             </div>
                                         </div>
                                         <div class="iq-card-body">
-                                            <form action="" method="post">
+                                            <form th:action="@{/user/checkout}" >
                                                 <div class="form-group row align-items-center">
                                                     <label class="col-8 col-md-3" for="activeVip">Upgrade to VIP</label>
                                                     <div class="col-4 col-md-9 custom-control custom-switch">
@@ -240,23 +240,23 @@ and open the template in the editor.
                                                     <label class="col-md-3" for="npass">Duration</label>
                                                     <div class="col-md-3">
                                                         <div class="custom-control custom-radio custom-radio-color-checked">
-                                                            <input type="radio" id="customRadio6" name="durationRadio" class="custom-control-input" value="3" checked=""/>
+                                                            <input type="radio" id="customRadio6" name="duration" class="custom-control-input" value="3" checked=""/>
                                                             <label class="custom-control-label" for="customRadio6"> 3 days </label>
                                                         </div>
                                                         <div class="custom-control custom-radio">
-                                                            <input type="radio" id="customRadio7" name="durationRadio" class="custom-control-input" value="30"/>
+                                                            <input type="radio" id="customRadio7" name="duration" class="custom-control-input" value="30"/>
                                                             <label class="custom-control-label" for="customRadio7"> 1 month (30d) </label>
                                                         </div>
                                                         <div class="custom-control custom-radio">
-                                                            <input type="radio" id="customRadio8" name="durationRadio" class="custom-control-input" value="90"/>
+                                                            <input type="radio" id="customRadio8" name="duration" class="custom-control-input" value="90"/>
                                                             <label class="custom-control-label" for="customRadio8"> 3 months (90d)</label>
                                                         </div>
                                                         <div class="custom-control custom-radio">
-                                                            <input type="radio" id="customRadio9" name="durationRadio" class="custom-control-input" value="180"/>
+                                                            <input type="radio" id="customRadio9" name="duration" class="custom-control-input" value="180"/>
                                                             <label class="custom-control-label" for="customRadio9"> 6 months (180d)</label>
                                                         </div>
                                                         <div class="custom-control custom-radio">
-                                                            <input type="radio" id="customRadio10" name="durationRadio" class="custom-control-input" value="360"/>
+                                                            <input type="radio" id="customRadio10" name="duration" class="custom-control-input" value="360"/>
                                                             <label class="custom-control-label" for="customRadio10"> 1 year (360d)</label>
                                                         </div>
 

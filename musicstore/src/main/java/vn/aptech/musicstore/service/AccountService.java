@@ -11,6 +11,7 @@ import java.util.Optional;
 import javax.mail.MessagingException;
 import vn.aptech.musicstore.entity.Account;
 import vn.aptech.musicstore.entity.VerificationToken;
+import vn.aptech.musicstore.entity.VipToken;
 import vn.aptech.musicstore.entity.model.UserModel;
 
 /**
@@ -35,6 +36,10 @@ public interface AccountService {
 
     String validateVerificationToken(String token);
 
+    String validateVipToken(String token);
+
+    VipToken getVipTokenByUserId(Long id);
+    
     VerificationToken generateNewVerificationToken(String oldToken);
 
     Account findAccountByEmail(String email);
@@ -42,6 +47,8 @@ public interface AccountService {
 
     void createPasswordResetTokenForUser(Account user, String token);
 
+    void createVipTokenForUser(Account user, String token,int duration);
+    
     String validatePasswordResetToken(String token);
 
     Optional<Account> getAccountByPasswordResetToken(String token);
@@ -56,5 +63,5 @@ public interface AccountService {
      
     void sendVerificationEmail(Account user, String verifyUrl, String resendUrl)  throws MessagingException, UnsupportedEncodingException ;
     
-    Date calculateExpirationDate(int expirationTime);
+//    Date calculateExpirationDate(int expirationTime);
 }

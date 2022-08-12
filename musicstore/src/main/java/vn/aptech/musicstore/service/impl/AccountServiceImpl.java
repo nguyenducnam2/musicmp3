@@ -25,10 +25,12 @@ import org.springframework.util.StringUtils;
 import vn.aptech.musicstore.entity.Account;
 import vn.aptech.musicstore.entity.PasswordResetToken;
 import vn.aptech.musicstore.entity.VerificationToken;
+import vn.aptech.musicstore.entity.VipToken;
 import vn.aptech.musicstore.entity.model.UserModel;
 import vn.aptech.musicstore.repository.AccountRepository;
 import vn.aptech.musicstore.repository.PasswordResetTokenRepository;
 import vn.aptech.musicstore.repository.VerificationTokenRepository;
+import vn.aptech.musicstore.repository.VipTokenRepository;
 import vn.aptech.musicstore.service.AccountService;
 
 /**
@@ -47,6 +49,9 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Autowired
     private VerificationTokenRepository verificationTokenRepository;
+
+    @Autowired
+    private VipTokenRepository vipTokenRepository;
 
     @Autowired
     private PasswordResetTokenRepository passwordResetTokenRepository;
@@ -157,7 +162,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
         if ((verificationToken.getExpirationTime().getTime()
                 - cal.getTime().getTime()) <= 0) {
-//            verificationTokenRepository.delete(verificationToken);
+//            verificationTokenRepository.delete(vipToken);
             return "expired";
         }
 
@@ -176,8 +181,8 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         return verificationToken;
     }
 
-    @Override
-    public Date calculateExpirationDate(int expirationTime) {
+//    @Override
+    private Date calculateExpirationDate(int expirationTime) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(new Date().getTime());
         calendar.add(Calendar.MINUTE, expirationTime);
@@ -294,5 +299,42 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
             u.setRole("ROLE_USER");
             repoAccount.save(u);
         }
+    }
+
+    @Override
+    public String validateVipToken(String token) {
+        VipToken vipToken
+                = vipTokenRepository.findByToken(token);
+
+        if (vipToken == null) {
+            return "invalid";
+        }
+
+        Account user = vipToken.getAcc();
+        Calendar cal = Calendar.getInstance();
+
+        if ((vipToken.getExpirationTime().getTime()
+                - cal.getTime().getTime()) <= 0) {
+            user.setRole("ROLE_USER");
+            repoAccount.save(user);
+            vipTokenRepository.delete(vipToken);
+            return "expired";
+        }
+        return "valid";
+
+    }
+
+    @Override
+    public void createVipTokenForUser(Account user, String token, int duration) {
+        VipToken vipToken = new VipToken(user, token, duration);
+        vipTokenRepository.save(vipToken);
+        user.setRole("ROLE_VIP");
+        repoAccount.save(user);
+        
+    }
+
+    @Override
+    public VipToken getVipTokenByUserId(Long id) {
+        return vipTokenRepository.findByUserId(id);
     }
 }

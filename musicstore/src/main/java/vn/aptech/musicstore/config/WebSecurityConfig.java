@@ -5,6 +5,7 @@
 package vn.aptech.musicstore.config;
 
 import java.io.IOException;
+import java.util.Optional;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +26,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import vn.aptech.musicstore.config.oauth2.ClientOauth2User;
 import vn.aptech.musicstore.config.oauth2.ClientOauth2UserService;
 import vn.aptech.musicstore.config.oauth2.Oauth2LoginSuccessHandle;
+import vn.aptech.musicstore.entity.Account;
 import vn.aptech.musicstore.service.impl.AccountServiceImpl;
 
 /**
@@ -69,7 +71,7 @@ public class WebSecurityConfig {
 
         @Autowired
         private AccountServiceImpl accountService;
-
+        
         @Autowired
         private ClientOauth2UserService oauth2UserService;
 
@@ -88,7 +90,7 @@ public class WebSecurityConfig {
             http.authorizeHttpRequests()
                     .antMatchers(WHITE_LIST_URLS).permitAll()
                     //                    .antMatchers("/api/**").authenticated()
-                    .antMatchers("/user/**").hasAnyRole("ADMIN", "EDITOR", "MODERATOR", "USER")
+                    .antMatchers("/user/**").hasAnyRole("ADMIN", "EDITOR", "MODERATOR", "USER","VIP")
 
                     .antMatchers("/admin/account/**").hasAnyRole("ADMIN", "MODERATOR")
                     .antMatchers("/admin/**").hasAnyRole("ADMIN", "EDITOR", "MODERATOR")
@@ -123,10 +125,13 @@ public class WebSecurityConfig {
                             
                             HttpSession session = request.getSession();
                             accountService.processOAuthPostLogin(email, name, clientName);
-                            accountService.findByUsername(email).get();
-                            session.setAttribute("user", accountService.findByUsername(email).get());
+                            Optional<Account>  user =accountService.findByUsername(email);
+                            session.setAttribute("user", user.get());
                             session.setAttribute("imageUrlAvatar", imageUrl);
-                            response.sendRedirect("/");
+                            System.out.println("image"+imageUrl);
+                            //check token Vip after login
+//                            accountService.validateVipToken(accountService.getVipTokenByUserId(user.get().getId()).getToken());
+                            response.sendRedirect("/user");
                         }
                     })
                     //cau hinh Logout Page

@@ -16,6 +16,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import static org.apache.tomcat.jni.User.username;
 import vn.aptech.musicstore.entity.Account;
 import vn.aptech.musicstore.entity.CartItem;
 import vn.aptech.musicstore.entity.DownloadAllowed;
@@ -32,6 +35,7 @@ import vn.aptech.musicstore.service.OrderService;
 import vn.aptech.musicstore.service.PaypalService;
 import vn.aptech.musicstore.service.SongOrderDetailService;
 import vn.aptech.musicstore.service.SongOrderService;
+import vn.aptech.musicstore.service.impl.AccountServiceImpl;
 
 /**
  *
@@ -39,34 +43,34 @@ import vn.aptech.musicstore.service.SongOrderService;
  */
 @Controller
 public class PaypalController {
-    
+
     @Autowired
     PaypalService service;
-    
+
     public static final String SUCCESS_URL = "pay/success";
     public static final String CANCEL_URL = "pay/cancel";
-    
+
     @Autowired
     OrderService orderService;
-    
+
     @Autowired
     OrderDetailService orderDetailService;
-    
+
     @Autowired
     private CartService cartService;
-    
+
     @Autowired
     private CartItemService cartItemService;
-    
+
     @Autowired
     private DownloadAllowedService downService;
-    
+
     @Autowired
     private SongOrderService songOrderService;
-    
+
     @Autowired
     private SongOrderDetailService songOrderDetailService;
-    
+
     @GetMapping("/payment/{orderId}")
     public ModelAndView home(@PathVariable int orderId) {
         ModelAndView mv = new ModelAndView("public/payment");
@@ -76,7 +80,7 @@ public class PaypalController {
         mv.addObject("orderItems", listOrderItem);
         return mv;
     }
-    
+
     @GetMapping("/pay/{orderId}")
     public String payment(@ModelAttribute("order") OrderOnline order, HttpServletRequest request, @PathVariable Double orderId) {
         try {
@@ -91,19 +95,19 @@ public class PaypalController {
                     return "redirect:" + link.getHref();
                 }
             }
-            
+
         } catch (PayPalRESTException e) {
             System.out.println("exceeeg" + orderId);
             e.printStackTrace();
         }
         return "redirect:/";
     }
-    
+
     @GetMapping(value = CANCEL_URL)
     public String cancelPay() {
         return "redirect:/";
     }
-    
+
     @GetMapping(value = SUCCESS_URL)
     public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, HttpServletRequest request, RedirectAttributes rd) {
         try {
@@ -120,7 +124,7 @@ public class PaypalController {
         }
         return "redirect:/";
     }
-    
+
     private String applicationUrl(HttpServletRequest request) {
         return "http://"
                 + request.getServerName()
@@ -149,7 +153,27 @@ public class PaypalController {
         }
         return "redirect:/";
     }
-    
+
+    @GetMapping("/user/pay")
+    public String paymentUpgradeToVip(HttpServletRequest request, @RequestParam("total") Double total, @RequestParam("duration") int duration) {
+        try {
+            Payment payment = service.createPayment(total, "USD", "paypal",
+                    "sale", null, "http://localhost:8080/user/cancel",
+                    "http://localhost:8080/user/success");
+            for (Links link : payment.getLinks()) {
+                if (link.getRel().equals("approval_url")) {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("duration", duration);
+                    session.setAttribute("total2", total);
+                    return "redirect:" + link.getHref();
+                }
+            }
+        } catch (PayPalRESTException e) {
+            e.printStackTrace();
+        }
+        return "redirect:/";
+    }
+
     @GetMapping("/song/success")
     public String successPaySong(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, HttpServletRequest request, RedirectAttributes rd) {
         try {
@@ -190,7 +214,7 @@ public class PaypalController {
         }
         return "redirect:/";
     }
-    
+
     @GetMapping("/song/cancel")
     public String cancelSongPay(HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -213,4 +237,24 @@ public class PaypalController {
         }
         return "redirect:/";
     }
+
+    @GetMapping("/user/success")
+    public String successPayVip(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, HttpServletRequest request, RedirectAttributes rd) {
+        HttpSession session = request.getSession();
+        Account acc = (Account) session.getAttribute("user");
+        int duration = (int) session.getAttribute("duration");
+        
+        String token = UUID.randomUUID().toString();
+        Optional<Account> user = userService.findByUsername(acc.getUsername());
+        userService.createVipTokenForUser(user.get(), token, duration*24*60);
+        return "redirect:/song/playlist";
+    }
+
+    @GetMapping("/user/cancel")
+    public String cancelPayVip(HttpServletRequest request) {
+        return "redirect:/";
+    }
+    
+    @Autowired
+    private AccountServiceImpl userService;
 }

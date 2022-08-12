@@ -35,7 +35,7 @@ public class ClientOauth2User implements OAuth2User{
 
     @Override
     public String getName() {
-        return oAuth2User.getAttribute("name");
+        return oAuth2User.getAttribute("email");
     }
     
     public String getFullName(){

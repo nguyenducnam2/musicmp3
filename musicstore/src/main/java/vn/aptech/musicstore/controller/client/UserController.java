@@ -13,6 +13,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -65,8 +66,6 @@ public class UserController {
 
     @Autowired
     private ArtistService service_artist;
-    
-     
 
     @Autowired
     private SubtitleService service_sub;
@@ -89,8 +88,6 @@ public class UserController {
     @Autowired
     private CartItemService service_ci;
 
-    
-
     @Value("${static.base.url}")
     private String base_url;
 
@@ -98,11 +95,28 @@ public class UserController {
 //    private ApplicationEventPublisher publisher;
     @RequestMapping(method = RequestMethod.GET)
     public String index(Principal principal, Model model, HttpServletRequest request) {
-        String username = principal.getName();
-        Optional<Account> user = userService.findByUsername(username);
-        HttpSession session = request.getSession();
-        session.setAttribute("user", user.get());
-        model.addAttribute("user", user.get());
+
+        try {
+            String username = principal.getName();
+            System.out.println("usernameTest" + username);
+
+            Optional<Account> user = userService.findByUsername(username);
+
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user.get());
+
+            String token = userService.getVipTokenByUserId(user.get().getId()).getToken();
+            System.out.println("tokenVip" + token);
+            userService.validateVipToken(token);
+            model.addAttribute("user", user.get());
+        } catch (Exception e) {
+            String username = principal.getName();
+            System.out.println("usernameTest" + username);
+
+            e.printStackTrace();
+        }
+        //check token vip after login
+
         List<Song> listsong = new ArrayList<>();
         for (int i = service_song.findAll().size() - 1; i >= 0; i--) {
             listsong.add(service_song.findAll().get(i));
@@ -138,12 +152,12 @@ public class UserController {
     }
 
     @PostMapping("/changePassword")
-    public String changePassword(Model model ,@ModelAttribute("passwordModel") PasswordModel passwordModel,HttpServletRequest request) {
+    public String changePassword(Model model, @ModelAttribute("passwordModel") PasswordModel passwordModel, HttpServletRequest request) {
         Account user = userService.findAccountByEmail(passwordModel.getEmail());
 
         if (!userService.checkIfValidOldPassword(user, passwordModel.getOldPassword())) {
             return "redirect:/login";
-            
+
         }
         //Save New Password
         userService.changePassword(user, passwordModel.getNewPassword());
@@ -167,6 +181,7 @@ public class UserController {
 
         return "client/index";
     }
+
     @GetMapping("/upload")
     public String upload(Model model, HttpServletRequest request, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam(value = "size", required = false, defaultValue = "8") int size) {
@@ -177,19 +192,43 @@ public class UserController {
 
         model.addAttribute("service", service_song);
         return "client/upload/index";
-    }  
-    
-     @GetMapping("/checkout")
-    public String checkout(Model model,HttpServletRequest request, @RequestParam("subTotal") int subTotal){
-        int duration = Integer.parseInt(request.getParameter("duration"));
-        int price = Integer.parseInt(request.getParameter("price"));
-       
-        
-        userService.calculateExpirationDate(duration*24*60);
-        model.addAttribute("subTotal", price);
-        return "client/song/checkout";
     }
-    
+
+    @GetMapping("/checkout")
+    public String checkout(Model model, HttpServletRequest request, @RequestParam("duration") int duration) {
+        HttpSession session = request.getSession();
+        Account acc = (Account) session.getAttribute("user");
+        String username = acc.getUsername();
+        int price = 0;
+        switch (duration) {
+            case 3:
+                price = 2;
+                break;
+            case 30:
+                price = 10;
+                break;
+            case 90:
+                price = 25;
+                break;
+            case 180:
+                price = 40;
+                break;
+            case 360:
+                price = 60;
+                break;
+            default:
+                break;
+        }
+
+        session.setAttribute("user", acc);
+        session.setAttribute("duration", duration);
+
+        model.addAttribute("user", acc);
+        model.addAttribute("subTotal", price);
+        model.addAttribute("duration", duration);
+        return "client/user/checkout";
+    }
+
 //    @GetMapping("/checkout")
 //    public String checkout(Model model, HttpServletRequest request, @RequestParam("cartId") int cartId, @RequestParam("subTotal") int subTotal) {
 //        HttpSession session = request.getSession();
@@ -200,69 +239,59 @@ public class UserController {
 //        model.addAttribute("subTotal", subTotal);
 //        return "client/song/checkout";
 //    }
-    
-    
-    
-    
-    
-    
-    
-    
-     @GetMapping("/create")
-    public String create(Model model, HttpServletRequest request ) {
+    @GetMapping("/create")
+    public String create(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
         model.addAttribute("song", new Song());
         model.addAttribute("listgenre", service_gen.findAll());
         model.addAttribute("listartist", service_artist.findAll());
-        model.addAttribute("listalbum", service_album.findAll());  
+        model.addAttribute("listalbum", service_album.findAll());
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
-        
+
         model.addAttribute("status", "Add Song");
         return "client/upload/createsong";
     }
 
     @PostMapping("/save")
-    public String save(@RequestParam("file") MultipartFile file,HttpServletRequest request,
+    public String save(@RequestParam("file") MultipartFile file, HttpServletRequest request,
             @ModelAttribute("song") Song s, Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
-            @RequestParam("accountId")  Long accountId,
+            @RequestParam("accountId") Long accountId,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size) throws IOException {
-        
-      
+
+        if (!(file.isEmpty())) {
+            s.setMedia(file.getOriginalFilename());
+            s.setAccountId(accountId);
+            s.setAccount(userService.findById(accountId).orElseThrow());
+            s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
+            s.setAlbum(service_album.findById(s.getAlbumId()).orElseThrow());
+            s.setView(0);
+            s.setArtistId(s.getAlbum().getArtistId());
+            s.setArtist(s.getAlbum().getArtist());
+            Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+            service_song.save(s);
+        } else {
             if (!(file.isEmpty())) {
-                s.setMedia(file.getOriginalFilename());
-                s.setAccountId(accountId);
+                s.setMedia(service_song.findById(s.getId()).orElseThrow().getMedia());
+                s.setAccountId(userService.findById(s.getAccountId()).orElseThrow().getId());
                 s.setAccount(userService.findById(accountId).orElseThrow());
                 s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
                 s.setAlbum(service_album.findById(s.getAlbumId()).orElseThrow());
                 s.setView(0);
                 s.setArtistId(s.getAlbum().getArtistId());
                 s.setArtist(s.getAlbum().getArtist());
-                Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
                 service_song.save(s);
-            } else {
-                if (!(file.isEmpty())) {
-                    s.setMedia( service_song.findById(s.getId()).orElseThrow().getMedia());
-                    s.setAccountId(userService.findById(s.getAccountId()).orElseThrow().getId());
-                    s.setAccount(userService.findById(accountId).orElseThrow());
-                    s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
-                    s.setAlbum(service_album.findById(s.getAlbumId()).orElseThrow());
-                    s.setView(0);
-                    s.setArtistId(s.getAlbum().getArtistId());
-                    s.setArtist(s.getAlbum().getArtist());
-                     service_song.save(s);
-                     
-      
-                } 
+
             }
+        }
         model.addAttribute("list", service_song.getPage(pageNumber, size));
         model.addAttribute("service", service_song);
         model.addAttribute("name", "null");
         model.addAttribute("mess", "Successfully");
         return "client/upload/index";
     }
-    
-     @GetMapping("/upload/search")
+
+    @GetMapping("/upload/search")
     public String search(Model model, @RequestParam("name") String name, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam(value = "size", required = false, defaultValue = "1000") int size) {
         model.addAttribute("list", service_song.getPage(pageNumber, size));
@@ -270,36 +299,35 @@ public class UserController {
         model.addAttribute("service", service_song);
         return "client/upload/index";
     }
-    
-     @GetMapping("/upload/update/{id}")
-    public String update(@PathVariable("id") int id, Model model, HttpServletRequest request ) {
-      
+
+    @GetMapping("/upload/update/{id}")
+    public String update(@PathVariable("id") int id, Model model, HttpServletRequest request) {
+
         model.addAttribute("song", service_song.findById(id).orElseThrow());
-        
+
         model.addAttribute("listgenre", service_gen.findAll());
         model.addAttribute("listartist", service_artist.findAll());
         model.addAttribute("listalbum", service_album.findAll());
         model.addAttribute("status", "update");
-        
+
         return "client/upload/createsong";
     }
-    
+
     @GetMapping("/upload/delete/{id}")
-    public String delete(@PathVariable("id")int id, Model model,HttpServletRequest request, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size){
-         HttpSession session = request.getSession();
-         session.setAttribute("user", session.getAttribute("user"));
+    public String delete(@PathVariable("id") int id, Model model, HttpServletRequest request, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
-       
-            service_song.deleteById(id);
-       
+
+        service_song.deleteById(id);
+
         model.addAttribute("list", service_song.getPage(pageNumber, size));
         model.addAttribute("service", service_song);
         model.addAttribute("name", "null");
         model.addAttribute("mess", "Successfully");
-        
+
         return "client/upload/index";
     }
-
 
 }
