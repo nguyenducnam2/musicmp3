@@ -113,9 +113,24 @@ public class CartApiController {
         cart.setAmount(service_ci.findByCartId(cart.getId()).size());
         if (cart.getAmount() > 0) {
             service.save(cart);
-        }else{
+        } else {
             service.delete(cart);
         }
         return null;
+    }
+
+    @DeleteMapping
+    public List<CartItem> deleteCartByAccountId(@RequestParam("accountId") Long accountId) {
+        try {
+            List<CartItem> list = service_ci.findByCartId(service.findByAccountId(accountId).getId());
+            for (CartItem item : list) {
+                if (item.getCartId() == service.findByAccountId(accountId).getId()) {
+                    service_ci.delete(item);
+                }
+            }
+            service.delete(service.findByAccountId(accountId));
+        } catch (Exception e) {
+        }
+        return service_ci.findAll();
     }
 }

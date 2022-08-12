@@ -21,6 +21,8 @@ import vn.aptech.musicstore.entity.CartItem;
 import vn.aptech.musicstore.entity.DownloadAllowed;
 import vn.aptech.musicstore.entity.Order;
 import vn.aptech.musicstore.entity.OrderDetail;
+import vn.aptech.musicstore.entity.SongOrder;
+import vn.aptech.musicstore.entity.SongOrderDetail;
 import vn.aptech.musicstore.entity.model.OrderOnline;
 import vn.aptech.musicstore.service.CartItemService;
 import vn.aptech.musicstore.service.CartService;
@@ -28,6 +30,8 @@ import vn.aptech.musicstore.service.DownloadAllowedService;
 import vn.aptech.musicstore.service.OrderDetailService;
 import vn.aptech.musicstore.service.OrderService;
 import vn.aptech.musicstore.service.PaypalService;
+import vn.aptech.musicstore.service.SongOrderDetailService;
+import vn.aptech.musicstore.service.SongOrderService;
 
 /**
  *
@@ -35,28 +39,34 @@ import vn.aptech.musicstore.service.PaypalService;
  */
 @Controller
 public class PaypalController {
-
+    
     @Autowired
     PaypalService service;
-
+    
     public static final String SUCCESS_URL = "pay/success";
     public static final String CANCEL_URL = "pay/cancel";
-
+    
     @Autowired
     OrderService orderService;
-
+    
     @Autowired
     OrderDetailService orderDetailService;
-
+    
     @Autowired
     private CartService cartService;
-
+    
     @Autowired
     private CartItemService cartItemService;
-
+    
     @Autowired
     private DownloadAllowedService downService;
-
+    
+    @Autowired
+    private SongOrderService songOrderService;
+    
+    @Autowired
+    private SongOrderDetailService songOrderDetailService;
+    
     @GetMapping("/payment/{orderId}")
     public ModelAndView home(@PathVariable int orderId) {
         ModelAndView mv = new ModelAndView("public/payment");
@@ -66,7 +76,7 @@ public class PaypalController {
         mv.addObject("orderItems", listOrderItem);
         return mv;
     }
-
+    
     @GetMapping("/pay/{orderId}")
     public String payment(@ModelAttribute("order") OrderOnline order, HttpServletRequest request, @PathVariable Double orderId) {
         try {
@@ -81,19 +91,19 @@ public class PaypalController {
                     return "redirect:" + link.getHref();
                 }
             }
-
+            
         } catch (PayPalRESTException e) {
             System.out.println("exceeeg" + orderId);
             e.printStackTrace();
         }
         return "redirect:/";
     }
-
+    
     @GetMapping(value = CANCEL_URL)
     public String cancelPay() {
         return "redirect:/";
     }
-
+    
     @GetMapping(value = SUCCESS_URL)
     public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, HttpServletRequest request, RedirectAttributes rd) {
         try {
@@ -110,7 +120,7 @@ public class PaypalController {
         }
         return "redirect:/";
     }
-
+    
     private String applicationUrl(HttpServletRequest request) {
         return "http://"
                 + request.getServerName()
@@ -124,12 +134,13 @@ public class PaypalController {
     public String paymentSong(HttpServletRequest request, @RequestParam("total") Double total, @RequestParam("cartId") int cartId) {
         try {
             Payment payment = service.createPayment(total, "USD", "paypal",
-                    "sale", null, "http://localhost:8080/" + CANCEL_URL,
+                    "sale", null, "http://localhost:8080/song/cancel",
                     "http://localhost:8080/song/success");
             for (Links link : payment.getLinks()) {
                 if (link.getRel().equals("approval_url")) {
                     HttpSession session = request.getSession();
                     session.setAttribute("cartId", cartId);
+                    session.setAttribute("total", total);
                     return "redirect:" + link.getHref();
                 }
             }
@@ -138,7 +149,7 @@ public class PaypalController {
         }
         return "redirect:/";
     }
-
+    
     @GetMapping("/song/success")
     public String successPaySong(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, HttpServletRequest request, RedirectAttributes rd) {
         try {
@@ -147,21 +158,58 @@ public class PaypalController {
                 HttpSession session = request.getSession();
                 int cartId = (int) session.getAttribute("cartId");
                 Account acc = (Account) session.getAttribute("user");
+                SongOrder order = new SongOrder();
+                order.setPayment("Paypal");
+                order.setStatus("Success");
+                order.setTotal((Double) session.getAttribute("total"));
+                order.setAccountId(acc.getId());
+                order.setAccount(acc);
+                order = songOrderService.save(order);
                 for (CartItem item : cartItemService.findByCartId(cartId)) {
                     DownloadAllowed obj = new DownloadAllowed();
+                    SongOrderDetail orderdetail = new SongOrderDetail();
+                    orderdetail.setSongId(item.getSongId());
+                    orderdetail.setSong(item.getSong());
+                    orderdetail.setSongOrderId(order.getId());
+                    orderdetail.setSongOrder(order);
                     obj.setAccountId(acc.getId());
                     obj.setAccount(acc);
                     obj.setSongId(item.getSong().getId());
                     obj.setSong(item.getSong());
+                    songOrderDetailService.save(orderdetail);
                     downService.save(obj);
                     cartItemService.delete(item);
                 }
                 cartService.delete(cartService.findById(cartId).get());
                 session.removeAttribute("cartId");
+                session.removeAttribute("total");
                 return "client/song/success";
             }
         } catch (PayPalRESTException e) {
             System.out.println(e.getMessage());
+        }
+        return "redirect:/";
+    }
+    
+    @GetMapping("/song/cancel")
+    public String cancelSongPay(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        int cartId = (int) session.getAttribute("cartId");
+        Account acc = (Account) session.getAttribute("user");
+        SongOrder order = new SongOrder();
+        order.setPayment("Paypal");
+        order.setStatus("Canceled");
+        order.setTotal((Double) session.getAttribute("total"));
+        order.setAccountId(acc.getId());
+        order.setAccount(acc);
+        order = songOrderService.save(order);
+        for (CartItem item : cartItemService.findByCartId(cartId)) {
+            SongOrderDetail orderdetail = new SongOrderDetail();
+            orderdetail.setSongId(item.getSongId());
+            orderdetail.setSong(item.getSong());
+            orderdetail.setSongOrderId(order.getId());
+            orderdetail.setSongOrder(order);
+            songOrderDetailService.save(orderdetail);
         }
         return "redirect:/";
     }
