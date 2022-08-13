@@ -224,7 +224,7 @@ and open the template in the editor.
                                     <div class="iq-card">
                                         <div class="iq-card-header d-flex justify-content-between">
                                             <div class="iq-header-title">
-                                                <h4 class="card-title">Upgrade Account</h4>
+                                                <h4 class="card-title" th:text="${session.user.role=='ROLE_VIP' ? 'Your account is activated' : 'Upgrade Account' }">a</h4>
                                             </div>
                                         </div>
                                         <div class="iq-card-body">
@@ -232,7 +232,7 @@ and open the template in the editor.
                                                 <div class="form-group row align-items-center">
                                                     <label class="col-8 col-md-3" for="activeVip">Upgrade to VIP</label>
                                                     <div class="col-4 col-md-9 custom-control custom-switch">
-                                                        <input type="checkbox" class="custom-control-input" id="activeVip" required="">
+                                                        <input type="checkbox" class="custom-control-input" id="activeVip" required=""  />
                                                         <label class="custom-control-label" for="activeVip"></label>
                                                     </div>
                                                 </div>
@@ -275,7 +275,7 @@ and open the template in the editor.
                                                     </div>
                                                 </div>
 
-                                                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                                <button type="submit" class="btn btn-primary mr-2" th:disabled="${session.user.role=='ROLE_VIP'}">Submit</button>
                                                 <button type="reset" class="btn iq-bg-danger">Cancel</button>
                                             </form>
                                         </div>
