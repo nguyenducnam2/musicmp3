@@ -61,17 +61,17 @@
                             </div>
                             <div class="iq-card-body" >
                                 <ul class="list-unstyled row  feature-album iq-box-hover mb-0">
-                                    <li class="col-lg-8  iq-music-box" th:each="item:${listalbum}">
+                                    <li class="col-lg-8  iq-music-box" th:if="${item.listsong.size()>0}" th:each="item:${listalbum}">
                                         <div class="iq-card mb-0">
                                             <div class="iq-card-body p-0" >
                                                 <div class="iq-thumb" >
                                                     <div class="iq-music-overlay" ></div>
-                                                    <a href="music-player.html">
+                                                    <a th:href="@{'/song/'+${item.listsong.get(0).id}}">
                                                         <img th:src="@{'/webdata/album/'+${item.image}}"
                                                              class="img-border-radius img-fluid w-100" style="height: 130px;width: 130px;" alt="">
                                                     </a>
                                                     <div class="overlay-music-icon">
-                                                        <a href="music-player.html">
+                                                        <a th:href="@{'/song/'+${item.listsong.get(0).id}}">
                                                             <i class="las la-play-circle"></i>
                                                         </a>
                                                     </div>
@@ -100,12 +100,12 @@
                                     <li class="col-lg-8  iq-music-box" th:each="item:${listartist}">
                                         <div class="iq-thumb-artist">
                                             <div class="iq-music-overlay"></div>
-                                            <a href="music-player.html">
+                                            <a th:href="@{'/artist/'+${item.id}}">
                                                 <img style="height: 120px;width: 150px;" th:src="@{'/webdata/artist/'+${item.image}}" class="w-100 img-fluid"
                                                      alt="">
                                             </a>
                                             <div class="overlay-music-icon">
-                                                <a href="music-player.html">
+                                                <a th:href="@{'/artist/'+${item.id}}">
                                                     <i class="las la-play-circle"></i>
                                                 </a>
                                             </div>

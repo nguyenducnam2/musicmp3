@@ -5,6 +5,7 @@
  */
 package vn.aptech.musicstore.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,11 +41,14 @@ public class Album {
     private String releaseDate;
     @Column(name = "image")
     private String image;
-    @Column(name = "artist_id",insertable = false,updatable = false)
+    @Column(name = "artist_id", insertable = false, updatable = false)
     private Integer artistId;
-//    @OneToMany(mappedBy = "albumId")
-//    private List<Song> list_song;
+
     @JoinColumn(name = "artist_id", referencedColumnName = "id")
     @ManyToOne
     private Artist artist;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "albumId")
+    private List<Song> listsong;
 }

@@ -22,9 +22,9 @@ and open the template in the editor.
                                         <div class="d-flex align-items-top justify-content-between iq-music-play-detail">
                                             <div class="music-detail">
                                                 <h3>[[${artist.name}]]</h3>
-                                                <p>Debut: [[${artist.debut}]]</p>
-                                                <p>Country: [[${artist.country}]]</p>
-                                                <span>Biography: [[${artist.description}]]</span>
+                                                <p><span style="font-weight: bold">Debut</span>: [[${artist.debut}]]</p>
+                                                <p><span style="font-weight: bold">Country</span>: [[${artist.country}]]</p>
+                                                <p><span style="font-weight: bold">Biography</span>: [[${artist.description}]]</p>
                                             </div>
                                             <!--        <div class="music-right">
                                                         <div class="d-flex align-items-center">
@@ -57,21 +57,8 @@ and open the template in the editor.
                                                 <small>[[${item.artist.name}]]</small>
                                             </div>
                                         </div>
-                                        <p class="mb-0 col-md-2 col-md-2 iq-music-time">9:52</p>
-                                        <p class="mb-0 col-md-2 col-md-2 iq-musc-icone"><i class="lar la-star font-size-20"></i></p>
-                                        <p class="mb-0 col-2 col-md-2 iq-music-play"><i class="las la-play-circle font-size-32"></i></p>
-                                        <div class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1">
-                                            <div class="dropdown">
-                                                <span class="dropdown-toggle text-primary" id="dropdownMenuButton2" data-toggle="dropdown" aria-expanded="false" role="button">
-                                                    <i class="ri-more-2-fill text-primary"></i>
-                                                </span>
-                                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton2" style="">
-                                                    <a class="dropdown-item" href="#"><i class="ri-eye-fill mr-2"></i>View</a>
-                                                    <a class="dropdown-item" href="#"><i class="ri-delete-bin-6-fill mr-2"></i>Delete</a>
-                                                    <a class="dropdown-item" href="#"><i class="ri-file-download-fill mr-2"></i>Download</a>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p class="mb-0 col-md-2 col-md-2 iq-music-time"><div data-icon="&#xe003;" class="icon">  [[${item.view}]]</div></p>
+                                        <p class="mb-0 col-2 col-md-2 iq-music-play"><a th:href="@{'/song/'+${item.id}}"><i class="las la-play-circle font-size-32"></i></a></p>
                                     </div>
                                 </li>
                             </ul>
@@ -88,16 +75,16 @@ and open the template in the editor.
                         </div>
                         <div class="iq-card-body">
                             <ul class="list-unstyled row iq-box-hover mb-0">
-                                <li class="col-lg-2  iq-music-box" th:each="item:${listalbum}">
+                                <li class="col-lg-2  iq-music-box" th:if="${item.listsong.size()>0}" th:each="item:${listalbum}">
                                     <div class="iq-card mb-0">
                                         <div class="iq-card-body p-0">
                                             <div class="iq-thumb">
                                                 <div class="iq-music-overlay"></div>
-                                                <a href="music-player.html">
-                                                    <img th:src="@{'/webdata/album/'+${item.image}}" class="img-border-radius img-fluid w-100" alt="">
+                                                <a th:href="@{'/song/'+${item.listsong.get(0).id}}">
+                                                    <img style="height: 110px;width: 110px;" th:src="@{'/webdata/album/'+${item.image}}" class="img-border-radius img-fluid w-100" alt="">
                                                 </a>
                                                 <div class="overlay-music-icon">
-                                                    <a href="music-player.html">
+                                                    <a th:href="@{'/song/'+${item.listsong.get(0).id}}">
                                                         <i class="las la-play-circle"></i>
                                                     </a>
                                                 </div>
