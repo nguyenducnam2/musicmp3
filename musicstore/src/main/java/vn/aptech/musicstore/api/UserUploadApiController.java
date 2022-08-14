@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import vn.aptech.musicstore.entity.Playlist;
 import vn.aptech.musicstore.entity.Song;
 import vn.aptech.musicstore.service.AlbumService;
 import vn.aptech.musicstore.service.ArtistService;
@@ -35,14 +35,13 @@ import vn.aptech.musicstore.service.SongService;
 
 /**
  *
- * @author namng
+ * @author pc
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/song")
-public class SongApiController {
-
-    @Value("${static.base.url}")
+@RequestMapping("/api/upload")
+public class UserUploadApiController {
+     @Value("${static.base.url}")
     private String base_url;
 
     @Autowired
@@ -81,6 +80,7 @@ public class SongApiController {
         
     }
 
+
     @GetMapping("/findByPlaylistId")
     public List<Song> findByPlaylistId(@RequestParam("playlistId") int playlistId) {
         List<Song> anotherlist = new ArrayList<>();
@@ -89,7 +89,7 @@ public class SongApiController {
         }
         return anotherlist;
     }
-
+ 
     @PostMapping
     public void create(@RequestParam("name") String name,
             @RequestParam("file") MultipartFile file,
@@ -103,8 +103,8 @@ public class SongApiController {
         s.setMedia(file.getOriginalFilename());
         s.setLyric(lyric);
         if (!(file2.isEmpty())) {
-            s.setVideo(file2.getOriginalFilename());
-            Files.copy(file2.getInputStream(), Paths.get(base_url + "\\webdata\\video" + File.separator + file2.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+            s.setImage(file2.getOriginalFilename());
+            Files.copy(file2.getInputStream(), Paths.get(base_url + "\\webdata\\user" + File.separator + file2.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
         }
         s.setAlbumId(albumId);
         s.setArtistId(artistId);
@@ -189,4 +189,5 @@ public class SongApiController {
             }
         }
     }
+    
 }

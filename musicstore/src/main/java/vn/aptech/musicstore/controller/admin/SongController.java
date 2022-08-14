@@ -80,6 +80,8 @@ public class SongController {
             @ModelAttribute("song") Song s, Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size) throws IOException {
         try {
+            
+            
             if (!(file.isEmpty())) {
                 s.setMedia(file.getOriginalFilename());
                 if (!(file2.isEmpty())) {

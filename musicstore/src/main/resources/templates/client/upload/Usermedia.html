@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{client/layout.html}">
+    <head>
+        <style>
+            .main {
+                position: relative;
+                height: 100%;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: linear-gradient(to right, #5d6d7e, #566573);
+            }
+            .main button {
+                padding: 10px 12px;
+                margin: 0 10px;
+            }
+            .main #logo {
+                position: absolute;
+                top: 10px;
+                left: 30px;
+                font-size: 25px;
+                color: #ccc;
+            }
+            .main #logo i {
+                margin-right: 15px;
+            }
+
+            /* left & right part */
+            .right,
+            .left {
+                position: relative;
+                height: 100%;
+                width: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+            }
+
+            /* song image */
+            .left img {
+                height: 300px;
+                width: 80%;
+                border-radius: 15px;
+                box-shadow: 1px 0px 20px 12px rgba(240, 240, 240, 0.2);
+            }
+
+            /* both range slider part */
+            input[type="range"] {
+                -webkit-appearance: none;
+                width: 50%;
+                outline: none;
+                height: 2px;
+                margin: 0 15px;
+            }
+            input[type="range"]::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                height: 20px;
+                width: 20px;
+                background: #ff8a65;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+            .right input[type="range"] {
+                width: 40%;
+            }
+
+            /* volume part */
+            .left .volume {
+                position: absolute;
+                bottom: 10%;
+                left: 0;
+                width: 100%;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
+            }
+            .left .volume p {
+                font-size: 15px;
+            }
+            .left .volume i {
+                cursor: pointer;
+                padding: 8px 12px;
+                background: #ff8a65;
+            }
+            .left .volume i:hover {
+                background: rgba(245, 245, 245, 0.1);
+            }
+            .volume #volume_show {
+                padding: 8px 12px;
+                margin: 0 5px 0 0;
+                background: rgba(245, 245, 245, 0.1);
+            }
+
+            /* right part */
+            .right .middle {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .right .middle button {
+                border: none;
+                height: 70px;
+                width: 70px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                outline: none;
+                transition: 0.5s;
+                background: rgba(255, 255, 255, 0.1);
+            }
+            .right #title {
+                position: absolute;
+                top: 60px;
+                left: 50%;
+                transform: translateX(-50%);
+                text-transform: capitalize;
+                color: #fff;
+                font-size: 35px;
+            }
+            .right #artist {
+                position: absolute;
+                top: 110px;
+                left: 50%;
+                transform: translateX(-50%);
+                text-transform: capitalize;
+                color: #fff;
+                font-size: 18px;
+            }
+            .right .duration {
+                position: absolute;
+                bottom: 20%;
+                left: 50%;
+                transform: translateX(-50%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: 20px;
+                margin-top: 40px;
+            }
+            .right .duration p {
+                color: #fff;
+                font-size: 15px;
+                margin-left: 20px;
+            }
+            .right #auto {
+                font-size: 18px;
+                cursor: pointer;
+                margin-top: 45px;
+                border: none;
+                padding: 10px 14px;
+                color: #fff;
+                background: rgba(255, 255, 255, 0.2);
+                outline: none;
+                border-radius: 10px;
+            }
+            .right #auto i {
+                margin-left: 8px;
+            }
+            #play {
+                background: #ff8a65;
+            }
+            .right button:hover {
+                background: #ff8a65;
+            }
+            .right i:before {
+                color: #fff;
+                font-size: 20px;
+            }
+
+            .right .show_song_no {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                width: 30px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 8px 12px;
+                color: #fff;
+                border-radius: 5px;
+                /* background: rgba(255, 255, 255, 0.2); */
+                margin: 1px 2px;
+            }
+            .right .show_song_no p:nth-child(2) {
+
+            }
+        </style>
+    </head>
+    <body>
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <div th:if="${mess} != null" class="alert btn-outline-primary" role="alert">
+                <div th:if="${mess}=='Successfully'" class="iq-alert-icon">
+                    <i class="ri-pencil-line"></i>
+                </div>
+                <div th:if="${mess}=='Failed'" class="iq-alert-icon">
+                    <i class="ri-error-warning-line"></i>
+                </div>
+                <div class="iq-alert-text" th:text="${mess}">A simple <b>light</b> alert—check it out!</div>
+                <button type="button" class="close text-muted" data-dismiss="alert" aria-label="Close">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="iq-card" >
+                            <div class="iq-card-header d-flex justify-content-between" th:if="${playlistname!=null}">
+                                <div class="iq-header-title">
+                                    <h4 class="card-title" th:text="${playlistname}"></h4>
+                                </div>
+                            </div>
+                            <div class="iq-card-body" style="height: 550px;">
+                                <!--   <div class="row">
+                                        <div class="col-lg-4">
+                                            <img style="width: 200px;height: 250px;" th:src="@{'/webdata/album/'+${song.album.image}}" class="img-fluid w-100"  alt="">
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <div class="d-flex align-items-top justify-content-between iq-music-play-detail">
+                                                <div class="music-detail">
+                                                    <h3 th:text="${song.name}"><i class="las la-headphones"> Views</h3>
+                                                    <span th:text="${song.artist.name}"></span>
+                                                    <p class="mb-0"><p class="las la-headphones" th:text="'    '+${song.view}">   </p>
+                                                    <div class="d-flex align-items-center">                                       
+                                                         <a href="javascript:void(0);" class="btn btn-primary iq-play mr-2">Play music</a> 
+                                                        <audio controls loop class="audiplay" nodownload style="width: 100%;">
+                                                            <source th:src="@{'/webdata/audio/'+${song.media}}"/>
+                                                        </audio> 
+                                                    </div>
+                                                </div>
+                                                <div class="music-right">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="iq-circle mr-2 share"><a href="javascript:void();"><i class="las la-share-alt-square text-primary"></i></a></div>
+                                                        <div class="iq-circle mr-2"><a href="javascript:void();"><i class="ri-heart-fill  text-primary"></i></a></div>                 
+                                                        <div class="iq-circle">
+                                                            <a href="javascript:void();"><i class="las la-download text-primary"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                    </div> -->
+
+                                <div style="font-size: larger;" id="cart"></div>
+                                <div class="main">
+                                    <p id="logo"><i class="fa fa-music"></i></p>
+                                    <!--- left part --->
+                                    <div class="left">
+                                        <!--- song img --->
+                                        <img id="track_image">
+                                        <div class="volume">
+                                            <p id="volume_show">90</p>
+                                            <i class="fa fa-volume-up" aria-hidden="true" onclick="mute_sound()" id="volume_icon"></i>
+                                            <input type="range" min="0" max="100" value="90" onchange="volume_change()" id="volume">  
+                                        </div>
+                                    </div>
+                                    <!--- right part --->
+                                    <div class="right">
+                                        <div class="show_song_no">
+                                            <input type="hidden" id="total"/>
+                                            <input type="hidden" id="present"/>
+                                            <button style="background: #ff8a65;" th:if="${session.user !=null}" class="las la-tasks" type="button" data-toggle="modal" data-target="#myModal"></button>
+                                            <button style="background: #ff8a65;" th:if="${session.user ==null}" class="las la-tasks" type="button" data-toggle="modal" data-target="#myModal-login"></button>
+                                        </div>
+                                        <!--- song title & artist name --->
+                                        <p id="title">title.mp3</p>
+                                        
+                                        <!--- middle part --->
+                                        <div class="middle">
+                                            <button onclick="previous_song()" id="pre"><i class="fa fa-step-backward" aria-hidden="true"></i></button>
+                                            <button onclick="justplay()" id="play"><i class="fa fa-play" aria-hidden="true"></i></button>
+                                            <button onclick="next_song()" id="next"><i class="fa fa-step-forward" aria-hidden="true"></i></button>
+                                        </div>
+                                        <!--- song duration part --->
+                                        <div class="duration">
+                                            <span style="color: wheat;" id="current"></span>
+                                            <input type="range" min="0" max="100" value="0" id="duration_slider" onchange="change_duration()">
+                                            <span style="color: wheat;" id="time"></span>
+                                        </div>
+                                        <button id="auto" onclick="autoplay_switch()">Auto play <i class="fa fa-circle-o-notch" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="iq-card">
+                        <div class="iq-card-body">
+                            <ul class="nav nav-tabs" id="myTab-1" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">All Songs</a>
+                                </li>
+                                
+                                
+                                <li class="nav-item">
+                                    <a class="nav-link" id="comment-tab" data-toggle="tab" href="#comment" role="tab" aria-controls="comment" aria-selected="false">Comments</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent-2">
+                                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                    <ul id="myListSong" class="list-unstyled iq-music-slide mb-0">
+                                        <!--          <li class="mb-3">
+                                                       <div class="d-flex justify-content-between align-items-center row">
+                                                           <div class="media align-items-center col-10 col-md-5">
+                                                               <div class="iq-realese-song ">
+                                                                   <a th:href="@{/song/{id}(id=${item.id})}"><img th:src="@{'/webdata/album/'+${item.album.image}}" class="img-border-radius avatar-60 img-fluid" alt=""></a>
+                                                               </div>
+                                                               <div class="media-body ml-3">
+                                                                   <p class="mb-0" th:text="${item.name}"></p>
+                                                                   <small th:text="${item.artist.name}"></small>
+                                                               </div>
+                                                           </div>
+                                                           <p class="mb-0 col-md-2 col-md-2 iq-music-time">
+                                                           <p class="mb-0 col-2 col-md-2 iq-music-play"><a th:href="@{/song/{id}(id=${item.id})}"><i class="las la-play-circle font-size-32"></i></a></p>
+                                                           <div class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1">
+                                                               <div class="dropdown">
+                                                                   <span class="dropdown-toggle text-primary" id="dropdownMenuButton2" data-toggle="dropdown" aria-expanded="false" role="button">
+                                                                       <i class="ri-more-2-fill text-primary"></i>
+                                                                   </span>
+                                                                   <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton2" style="">
+                                                                       <a class="dropdown-item" href="#"><i class="ri-eye-fill mr-2"></i>View</a>
+                                                                       <a class="dropdown-item" href="#"><i class="ri-delete-bin-6-fill mr-2"></i>Delete</a>
+                                                                       <a class="dropdown-item" href="#"><i class="ri-file-download-fill mr-2"></i>Download</a>
+                                                                   </div>
+                                                               </div>
+                                                           </div>
+                                                       </div>
+                                                   </li> -->
+                                    </ul>
+                                </div>
+                                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                    <textarea id="lyric" disabled style="font-weight: bolder;background-color: white;font-family: unset;" class="form-control" rows="8"></textarea>
+                                </div>
+                                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                                    <p id="load_list"></p>
+                                </div>
+                                <div th:if="${listcomments.size >0}" class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
+                                    <div class="coment-bottom bg-white p-2 px-4">
+                                        <div th:if="${session.user} != null">
+                                            <div class="d-flex flex-row add-comment-section mt-4 mb-4"><img style=" border-radius: 10px;
+                                                                                                            padding-right: 5px;
+                                                                                                            width: 60px;
+                                                                                                            height: 55px" class="img-fluid img-responsive rounded-circle mr-2" th:src="@{'/webdata/user/'+${session.user.image}}" width="38">
+
+
+                                                <input type="hidden" id="accountId" th:name="accountId" th:value="${session.user.id}"/>
+                                                <input type="hidden" id="songId" th:name="songId" th:value="${song.id}" />
+                                                <input id="content" th:name="content" class="form-control mr-3" placeholder="Add comment">
+                                                <button onclick="addComment()" class="btn btn-primary" type="submit">Comment</button>
+
+                                            </div>
+                                        </div>
+                                        <ul id="myList">
+                                            <!--    <li class="media"> <span class="round"><img style=" border-radius: 10px;
+                                                                                            padding-right: 5px;
+                                                                                            width: 60px;
+                                                                                            height: 55px" th:src="@{'/webdata/user/'+${item.account.image}}" class="align-self-start mr-3"></span>
+                                                    <div class="media-body">
+                                                        <div class="row d-flex">
+                                                            <h6 style=" color: #5C5C5C;
+                                                                font-size: 15px !important;
+                                                                padding-left: 15px !important;
+                                                                margin-bottom: 0; font-weight: bolder; " th:text="${item.account.username}">Leo Aminoff</h6>
+                                                            <div class="ml-auto">
+                                                                <p class="text"></p>
+                                                            </div>
+                                                        </div>
+                                                        <p th:text="${item.content}">Bought your "Palace of Versailles"</p>
+                                                    </div>
+                                                    <div th:if="${session.user != null && session.user.id==item.account.id}" class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1">
+                                                        <span class="table-remove"><a th:href="@{/song/comment/delete/{id}(id=${item.id})}" type="button"
+                                                                                      class="btn iq-bg-danger btn-rounded btn-sm my-0"><i class="ri-delete-bin-6-fill"></i></a></span>
+                                                    </div>
+                                                </li> -->
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div th:if="${listcomments.size==0 && session.user == null}" class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
+                                    <ul id="myList" class="list-unstyled"></ul>
+                                </div>
+                                <div th:if="${listcomments.size==0 && session.user != null}" class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
+                                    <div class="coment-bottom bg-white p-2 px-4">
+                                        <div>
+                                            <div class="d-flex flex-row add-comment-section mt-4 mb-4"><img th:if="${session.user.image != null}" style=" border-radius: 10px;
+                                                                                                            padding-right: 5px;
+                                                                                                            width: 60px;
+                                                                                                            height: 55px" class="img-fluid img-responsive rounded-circle mr-2" th:src="@{'/webdata/user/'+${session.user.image}}" width="38">
+                                                <img th:if="${session.user.image == null}" style=" border-radius: 10px;
+                                                     padding-right: 5px;
+                                                     width: 60px;
+                                                     height: 55px" class="img-fluid img-responsive rounded-circle mr-2" src="http://localhost:8080/admintemplate/images/user/user-default2.png" width="38">
+
+
+                                                <input type="hidden" id="accountId" th:name="accountId" th:value="${session.user.id}"/>
+                                                <input type="hidden" id="songId" th:name="songId" th:value="${song.id}" />
+                                                <input id="content" th:name="content" class="form-control mr-3" placeholder="Add comment">
+                                                <button onclick="addComment()" class="btn btn-primary" type="submit">Comment</button>
+
+                                            </div>
+                                        </div>
+                                        <ul id="myList" class="list-unstyled"></ul>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--   <div th:if="${session.user !=null}" id="myModal" class="modal" role="dialog">
+   
+                 
+                   <div class="modal-dialog">
+   
+                     
+                       <div class="modal-content">
+   
+                          
+                           <div class="modal-header" style="background: #ff8a65;">
+                               <h3 style="color: white;">Add To ...</h3>
+   
+                           
+                               <button type="button" class="close" data-dismiss="modal">&times;</button>
+                           </div>
+   
+                           <form id="html_form_id" th:action=${"/song/playlist/add"}>
+   
+                               <input type="hidden" id="songId2" th:name="songId" th:value="${song.id}"/>
+                               <input type="hidden" th:name="accountId" th:value="${session.user.id}"/>
+                             
+                               <div class="form-check mb-4" th:each="item:${service_pl.findByAccountId(session.user.id)}">
+                                   <input th:name="playlistId" type="checkbox" th:value="${item.id}">
+                                   <label class="ml-3" th:text="${item.name}"></label>
+                               </div>
+   
+                              
+                               <div class="text-center">
+                                   <h4>Create New Playlist</h4>
+                               </div>
+                               <input name="name" class="form-control mr-3" placeholder="Enter name"/>
+   
+                             
+                               <div class="modal-footer">
+                                   <button id="btn" class="btn btn-primary">Add
+                                       <i class="fa fa-paper-plane"></i>
+                                   </button>
+                                   <a href="" class="btn btn-outline-primary" data-dismiss="modal">Cancel</a>
+                               </div>
+                           </form>
+                       </div>
+   
+                   </div>
+   
+               </div> -->
+
+            <div th:if="${session.user != null}" id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenteredScrollableTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalCenteredScrollableTitle"><strong>Add To Playlist</strong></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="songId2" th:name="songId" th:value="${song.id}"/>
+                            <input type="hidden" id="accountId" th:name="accountId" th:value="${session.user.id}"/>
+
+                            <div id="myListPl">
+
+                            </div>
+                            <div class="text-center">
+                                <h4>Add New Playlist</h4>
+                            </div>
+                            <input id="name" name="name" class="form-control mr-3" placeholder="Enter name"/>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="myModal-close" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" onclick="addPlaylistitem(-1)">Save changes</button>
+                        </div>                                                
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${session.user ==null}" id="myModal-login" class="modal fade" role="dialog">
+
+                <!--Modal-->
+                <div class="modal-dialog">
+
+                    <!--Modal Content-->
+                    <div class="modal-content">
+                        <section class="sign-in-page">
+                            <div class="sign-user_card ">
+                                <div class="d-flex justify-content-center">
+                                    <div class="sign-user_logo">
+                                        <a th:href="@{/}">
+                                            <img th:src="@{/admintemplate/images/logo.png}" class=" img-fluid" alt="Logo">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="sign-in-page-data">
+                                    <div class="sign-in-from w-100 pt-5 m-auto">
+                                        <h1 class="mb-3 text-center">Log in Muzik</h1>
+                                        <div th:if="${param.error}" class="alert-warning">
+                                            <h4>Invalid username and password.</h4>
+                                        </div>
+                                        <div th:if="${param.logout}" class="alert-heading">
+                                            <h4>You have been logged out.</h4>
+                                        </div>
+                                        <form class="mt-4" th:action="@{/user-login-process}" method="post">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail2">Username</label>
+                                                <input class="form-control mb-0" name="username" id="exampleInputEmail2" placeholder="Enter username" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputPassword2">Password</label>
+                                                <input type="password" class="form-control mb-0" name="password" id="exampleInputPassword2" placeholder="Password" required>
+                                            </div>
+                                            <div class="sign-info">
+                                                <button type="submit" class="btn btn-primary mb-2">Log in</button>
+                                                <span class="dark-color d-block line-height-2">Don't have an account? <a href="sign-up.html">Sign up</a></span>
+                                            </div>
+                                            <div class="d-inline-block w-100">
+                                                <div class="custom-control custom-checkbox d-inline-block mt-2 pt-1">
+                                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                                    <label class="custom-control-label" for="customCheck1">Remember Me</label>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="d-flex justify-content-center links">
+                                        Don't have an account? <a th:href="@{/register}" class="ml-2">Sign Up</a>
+                                    </div>
+                                    <div class="d-flex justify-content-center links">
+                                        <a th:href="@{/resetPassword}">Forgot your password?</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+<!--            <input type="hidden" id="playlistId" th:value="${playlistId}"/>-->
+            <input type="hidden" id="songId" th:value="${song.id}"/>
+            <input type="hidden" id="songId2" th:value="${song.id}"/>
+            <input type="hidden" th:if="${session.user == null}" id="accountId" value="-1"/> 
+        <input type="hidden" th:if="${session.user != null}" id="accountId" th:value="${session.user.id}"/> 
+
+
+            <script th:inline="javascript">
+                let previous = document.querySelector('#pre');
+                let play = document.querySelector('#play');
+                let next = document.querySelector('#next');
+                let title = document.querySelector('#title');
+                let recent_volume = document.querySelector('#volume');
+                let volume_show = document.querySelector('#volume_show');
+                let slider = document.querySelector('#duration_slider');
+                let show_duration = document.querySelector('#show_duration');
+                let track_image = document.querySelector('#track_image');
+                let auto_play = document.querySelector('#auto');
+                let present = document.querySelector('#present');
+                let total = document.querySelector('#total');
+                let artist = document.querySelector('#artist');
+                let mv = document.querySelector('#mv');
+                let time = document.querySelector('#time');
+                let current = document.querySelector('#current');
+                let songId = document.querySelector('#songId');
+                let songId2 = document.querySelector('#songId2');
+                let albumId = document.querySelector('#albumId');
+                let playlistId = document.querySelector('#playlistId');
+                let name = document.querySelector('#name');
+                let playlistId99 = document.querySelector('#playlistId99');
+                let myList = document.querySelector('#myList');
+                let myListPl = document.querySelector('#myListPl');
+                let myListSong = document.querySelector('#myListSong');
+                let accountId = document.querySelector('#accountId');
+
+                let content = document.querySelector('#content');
+                let myModal = document.querySelector('#myModal');
+
+                let cart = document.querySelector('#cart');
+
+                let timer;
+                let autoplay = 0;
+
+                let seconds;
+                let minutes;
+
+                let index_no = 0;
+                let Playing_song = false;
+
+                //create a audio Element
+                let track = document.createElement('audio');
+                //All songs list
+                var All_song = /*[[${anotherlist}]]*/[];
+
+                // Your document is loaded.
+
+
+
+
+                // All functions
+
+
+                // function load the track
+
+                function loadComments() {
+                    fetch(`http://localhost:8080/api/comment/findBySongId?songId=` + songId.value, {method: "GET"})
+                            .then((response) => response.json())
+                            .then((response) => {
+                                var arr = response;
+                                if (arr.length > 0) {
+                                    myList.innerHTML = "";
+                                    for (let i = arr.length - 1; i >= 0; i--) {
+                                        if (arr[i].account.id == accountId.value) {
+                                            myList.innerHTML += "<li class='media'><span class='round'><img style=' border-radius: 10px;padding-right: 5px;width: 60px;height: 55px;' src='http://localhost:8080/webdata/user/" + arr[i].account.image + " ' class='align-self-start mr-3'></span><div class='media-body'><div class='row d-flex'><h6 style=' color: #5C5C5C;font-size: 15px !important;padding-left: 15px !important;margin-bottom: 0; font-weight: bolder; '>" + arr[i].account.username + "</h6><div class='ml-auto'><p class='text'>" + new String(arr[i].datetime).substring(0, 10) + " " + new String(arr[i].datetime).substring(11, 16) + "</p></div></div><p>" + arr[i].content + "</p></div><div class='iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1'><span class='table-remove'><button onclick='deleteComment(" + arr[i].id + ")' type='submit' class='btn iq-bg-danger btn-rounded btn-sm my-0'><i class='ri-delete-bin-line'></i></button></span></div></li>";
+                                        } else {
+                                            myList.innerHTML += "<li class='media'><span class='round'><img style=' border-radius: 10px;padding-right: 5px;width: 60px;height: 55px;' src='http://localhost:8080/webdata/user/" + arr[i].account.image + " ' class='align-self-start mr-3'></span><div class='media-body'><div class='row d-flex'><h6 style=' color: #5C5C5C;font-size: 15px !important;padding-left: 15px !important;margin-bottom: 0; font-weight: bolder; '>" + arr[i].account.username + "</h6><div class='ml-auto'><p class='text'>" + new String(arr[i].datetime).substring(0, 10) + " " + new String(arr[i].datetime).substring(11, 16) + "</p></div></div><p>" + arr[i].content + "</p></div><div class='iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1'></div></li>";
+                                        }
+                                    }
+                                } else {
+                                    myList.innerHTML = "<p style='text-align:center;'>This song no has comment yet</p>";
+                                }
+                            });
+                }
+
+
+                function addComment() {
+                    if (content.value != "") {
+                        fetch(`http://localhost:8080/api/comment/add?content=` + content.value + `&songId=` + songId.value + '&accountId=' + accountId.value, {method: "POST"})
+                                .then((response) => response.json())
+                                .then((response) => {
+                                    content.value = "";
+                                    loadComments();
+                                });
+                    }
+                }
+
+                function addPlaylistitem(id) {
+                    fetch(`http://localhost:8080/api/playlist/addItem?name=` + name.value + `&songId=` + songId.value + '&accountId=' + accountId.value + '&playlistId=' + id, {method: "POST"})
+                            .then((response) => response.json())
+                            .then((response) => {
+                                name.value = "";
+                                loadPlaylists();
+                            });
+                }
+
+                function loadPlaylists() {
+                    if (accountId.value > 0) {
+                        let playlistitemId = -1;
+                        fetch(`http://localhost:8080/api/playlist/findByAccountId?accountId=` + accountId.value, {method: "GET"})
+                                .then((response) => response.json())
+                                .then((response) => {
+                                    var arr = response;
+                                    myListPl.innerHTML = "";
+                                    if (arr.length > 0) {
+                                        for (let i = 0; i < arr.length; i++) {
+                                            findItemsOfPlaylistByPlaylistId(arr[i].id)
+                                                    .then((response) => {
+                                                        let check = false;
+                                                        for (let i = 0; i < response.length; i++) {
+                                                            if (response[i].song.id == songId.value) {
+                                                                playlistitemId = response[i].id;
+                                                                check = true;
+                                                                break;
+                                                            }
+                                                        }
+                                                        if (check == true) {
+                                                            myListPl.innerHTML += "<div class='form-check mb-4'><input id='playlistId99' type='checkbox' onclick=' removePlaylistitemById(" + playlistitemId + ")' checked><label class='ml-3''>" + arr[i].name + "</label></div>";
+                                                        } else {
+                                                            myListPl.innerHTML += "<div class='form-check mb-4'><input id='playlistId99' type='checkbox' onclick='addPlaylistitem(" + arr[i].id + ")'><label class='ml-3''>" + arr[i].name + "</label></div>";
+                                                        }
+                                                    });
+                                        }
+                                    } else {
+                                        myListPl.innerHTML = "No Playlists";
+                                    }
+                                });
+                    }
+                }
+                
+
+                function findItemsOfPlaylistByPlaylistId(playlistId) {
+                    return fetch(`http://localhost:8080/api/playlist/findItemsOfPlaylistByPlaylistId?playlistId=` + playlistId, {method: "GET"})
+                            .then((response) => response.json())
+                            .then((response) => {
+                                return response;
+                            });
+                }
+
+                function loadDownloadAllowedList() {
+                    return fetch(`http://localhost:8080/api/downloadallowed`, {method: "GET"})
+                            .then((response) => response.json())
+                            .then((response) => {
+                                return response;
+                            });
+                }
+
+
+                function deleteComment(cmtId) {
+                    fetch(`http://localhost:8080/api/comment/delete?cmtId=` + cmtId, {method: "DELETE"})
+                            .then((response) => response.text())
+                            .then((response) => {
+                                loadComments();
+                            });
+                }
+
+                function removePlaylistitemById(playlistitemId) {
+                    fetch(`http://localhost:8080/api/playlist/removePlaylistitemById?playlistitemId=` + playlistitemId + `&songId=` + songId.value, {method: "GET"})
+                            .then((response) => response.json())
+                            .then((response) => {
+                                loadPlaylists();
+                            });
+                }
+
+                function loadSongs() {
+                     
+                        fetch(`http://localhost:8080/api/upload/findById?id=` + songId.value, {method: "GET"})
+                                .then((response) => response.json())
+                                .then((response) => {
+                                    var arr = response;
+                                    myListSong.innerHTML = "";
+                                    for (let i = 0; i < arr.length; i++) {
+                                        if (arr[i].id == songId.value) {
+                                            myListSong.innerHTML += "<li style='background-color:wheat;' class='mb-3'><div class='d-flex justify-content-between align-items-center row'><div class='media align-items-center col-10 col-md-5'><div class='iq-realese-song '><a href='http://localhost:8080/user/upload/" + arr[i].id + "'><img src='http://localhost:8080/webdata/user/" + arr[i].image + "' class='img-border-radius avatar-60 img-fluid' alt=''></a></div><div class='media-body ml-3'><p style='font-weight:bolder;' class='mb-0'>" + arr[i].name + "</p><small></div></div><p class='mb-0 col-md-2 col-md-2 iq-music-time'><p class='mb-0 col-2 col-md-2 iq-music-play'><a href='http://localhost:8080/user/upload/" + arr[i].id + "'><i class='las la-pause-circle font-size-32' aria-hidden='true'></i></a></p><div class='iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1'><div class='dropdown'><span class='dropdown-toggle text-primary' id='dropdownMenuButton2' data-toggle='dropdown' aria-expanded='false' role='button'><i class='ri-more-2-fill text-primary'></i></span><div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuButton2' style=''><a class='dropdown-item' href='#'><i class='ri-eye-fill mr-2'></i>View</a><a class='dropdown-item' href='#'><i class='ri-delete-bin-6-fill mr-2'></i>Delete</a></div></div></div></div></li>";
+                                        } else {
+                                            myListSong.innerHTML += "<li class='mb-3'><div class='d-flex justify-content-between align-items-center row'><div class='media align-items-center col-10 col-md-5'><div class='iq-realese-song '><a href='http://localhost:8080/user/upload/" + arr[i].id + "'><img src='http://localhost:8080/webdata/user/" + arr[i].image + "' class='img-border-radius avatar-60 img-fluid' alt=''></a></div><div class='media-body ml-3'><p class='mb-0'>" + arr[i].name + "</p></div></div><p class='mb-0 col-md-2 col-md-2 iq-music-time'><p class='mb-0 col-2 col-md-2 iq-music-play'><a href='http://localhost:8080/user/upload/" + arr[i].id + "'><i class='las la-play-circle font-size-32'></i></a></p><div class='iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1'><div class='dropdown'><span class='dropdown-toggle text-primary' id='dropdownMenuButton2' data-toggle='dropdown' aria-expanded='false' role='button'><i class='ri-more-2-fill text-primary'></i></span><div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuButton2' style=''><a class='dropdown-item' href='#'><i class='ri-eye-fill mr-2'></i>View</a><a class='dropdown-item' href='#'><i class='ri-delete-bin-6-fill mr-2'></i>Delete</a></div></div></div></div></li>";
+                                        }
+                                    }
+
+
+                                });
+                    
+                }
+
+
+
+                function load_track(index_no) {
+                    clearInterval(timer);
+                    reset_slider();
+                    
+                    track.src = "http://localhost:8080/webdata/audio/" + All_song[index_no].media;
+                    title.innerHTML = All_song[index_no].name;
+                    
+                    track_image.src = "http://localhost:8080/webdata/user/" + All_song[index_no].image;
+                   
+            
+   
+                   
+                    songId.value = All_song[index_no].id;
+                    songId2.value = All_song[index_no].id;
+
+                    track.load();
+                    playsong();
+                    loadComments();
+                    loadSongs(songId);
+                    loadPlaylists();
+
+                    timer = setInterval(range_slider, 1000);
+                    var i = setInterval(function () {
+                        if (track.readyState > 0) {
+                            minutes = parseInt(track.duration / 60, 10);
+                            seconds = track.duration % 60;
+                            // (Put the minutes and seconds in the display)
+                            time.innerHTML = minutes + ":" + parseInt(seconds);
+                            clearInterval(i);
+                        }
+                    }, 200);
+                    total.innerHTML = All_song.length;
+                    present.innerHTML = index_no + 1;
+                }
+
+                load_track(index_no);
+                //mute sound function
+                function mute_sound() {
+                    track.volume = 0;
+                    volume.value = 0;
+                    volume_show.innerHTML = 0;
+                }
+
+
+                // checking.. the song is playing or not
+                function justplay() {
+                    if (Playing_song == false) {
+                        playsong();
+
+                    } else {
+                        pausesong();
+                    }
+                }
+
+
+                // reset song slider
+                function reset_slider() {
+                    slider.value = 0;
+                }
+
+                // play song
+                function playsong() {
+                    track.play();
+                    Playing_song = true;
+                    play.innerHTML = '<i class="fa fa-pause" aria-hidden="true"></i>';
+                }
+
+                //pause song
+                function pausesong() {
+                    track.pause();
+                    Playing_song = false;
+                    play.innerHTML = '<i class="fa fa-play" aria-hidden="true"></i>';
+                }
+
+
+                // next song
+                function next_song() {
+                    if (index_no < All_song.length - 1) {
+                        index_no += 1;
+                        load_track(index_no);
+                        playsong();
+                    } else {
+                        index_no = 0;
+                        load_track(index_no);
+                        playsong();
+
+                    }
+                }
+
+
+                // previous song
+                function previous_song() {
+                    if (index_no > 0) {
+                        index_no -= 1;
+                        load_track(index_no);
+                        playsong();
+
+                    } else {
+                        index_no = All_song.length;
+                        load_track(index_no);
+                        playsong();
+                    }
+                }
+
+
+                // change volume
+                function volume_change() {
+                    volume_show.innerHTML = recent_volume.value;
+                    track.volume = recent_volume.value / 100;
+                }
+
+                // change slider position 
+                function change_duration() {
+                    slider_position = track.duration * (slider.value / 100);
+                    track.currentTime = slider_position;
+                    current.innerHTML = Math.abs(minutes) + ":" + seconds;
+                }
+
+                // autoplay function
+                function autoplay_switch() {
+                    if (autoplay == 1) {
+                        autoplay = 0;
+                        auto_play.style.background = "rgba(255,255,255,0.2)";
+                    } else {
+                        autoplay = 1;
+                        auto_play.style.background = "#FF8A65";
+                    }
+                }
+
+
+                function range_slider() {
+                    let position = 0;
+
+                    // update slider position
+                    if (!isNaN(track.duration)) {
+                        position = track.currentTime * (100 / track.duration);
+                        slider.value = position;
+
+                        var i = setInterval(function () {
+                            if (track.readyState > 0) {
+                                minutes = parseInt(track.duration / 60, 10) - parseInt(track.currentTime / 60, 10) - parseInt(track.duration / 60, 10);
+                                seconds = parseInt(track.currentTime) % 60;
+
+                                // (Put the minutes and seconds in the display)
+                                current.innerHTML = Math.abs(minutes) + ":" + seconds;
+                                clearInterval(i);
+                            }
+                        }, 200);
+
+                    }
+
+
+                    // function will run when the song is over
+                    if (track.ended) {
+                        play.innerHTML = '<i class="fa fa-play" aria-hidden="true"></i>';
+                        if (autoplay == 1) {
+                            index_no += 1;
+                            load_track(index_no);
+                            playsong();
+                        }
+                    }
+                }
+
+             
+
+          
+
+
+
+            </script>
+
+
+        </div>
+    </body>
+</html> 

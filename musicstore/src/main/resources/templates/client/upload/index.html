@@ -38,7 +38,7 @@ and open the template in the editor.
                             <div class="iq-card-body">
                                   
                                 <p th:if="${service.findByAccountId(session.user.id).size == 0}">You Don't Have Song</p>
-                                <div class="people-nearby" th:if="${service.findByAccountId(session.user.id).size > 0}" th:each="item:${service.findByAccountId(session.user.id)}">
+                                <div class="people-nearby" th:if="${service.findByAccountId(session.user.id).size > 0}" >
                                     <div class="nearby-user">
                                           
 
@@ -47,8 +47,8 @@ and open the template in the editor.
                                                 <thead>
                                                     <tr>
                                                         <th style="width: 5%;">No</th>
-                                                        <th style="width: 20%;">Album Poster</th>
-                                                        <th style="width: 15%;">Genre</th>
+                                                        <th style="width: 20%;">Image </th>
+<!--                                                        <th style="width: 15%;">Album</th>-->
                                                         <th style="width: 15%;">Name</th>
                                                         <!--      <th style="width: 10%;">Price</th> -->
 <!--                                                        <th style="width: 10%;">Artist</th>-->
@@ -57,13 +57,15 @@ and open the template in the editor.
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-
-                                                    <tr  >
+          
+                                                    <tr th:each="item:${service.findByAccountId(session.user.id)}" >
                                                         <td th:text="${service.findAll().size-service.findAll().indexOf(item)}"></td>
                                                         <td>
-                                                            <img style="width: 200px;height: 150px;" th:src="@{'/webdata/album/'+${item.album.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
-                                                        </td>
-                                                        <td th:text="${item.genre.name}"></td>
+                                                            <a th:href="@{/user/upload/{id}(id=${item.id})}">           
+                                                                <img style="width: 200px;height: 150px;" th:src="@{'/webdata/user/'+${item.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
+                                                             </a>
+                                                                </td>
+<!--                                                        <td th:text="${item.album.name}"></td>-->
                                                         <td th:text="${item.name}"></td>
 <!--                                                        <td th:text="${item.artist.name}"></td>-->
                                                         <td>   

@@ -8,26 +8,66 @@ and open the template in the editor.
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{client/layout.html}">
     <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            .file-upload {
+                display: inline-flex;
+                align-items: center;
+                font-size: 15px;
+            }
+
+            .file-upload__input {
+                display: none;
+            }
+
+            .file-upload__button {
+                -webkit-appearance: none;
+                background: #009879;
+                border: 2px solid #00745d;
+                border-radius: 4px;
+                outline: none;
+                padding: 0.5em 0.8em;
+                margin-right: 15px;
+                color: #ffffff;
+                font-size: 1em;
+                font-family: "Quicksand", sans-serif;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            .file-upload__button:active {
+                background: #00745d;
+            }
+
+            .file-upload__label {
+                max-width: 250px;
+                font-size: 0.95em;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                font-family: "Quicksand", sans-serif;
+            }
+
+        </style>
+
+
+
+
     </head>
     <body>
         <div layout:fragment="content" id="content-page" class="content-page">
-               <div class="container-fluid">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="iq-card">
                             <div class="iq-card-header d-flex justify-content-between">
                                 <div class="iq-header-title">
                                     <h4 class="card-title" th:text="${status}"></h4>
-                                    
-                                      </div>
+
+                                </div>
                             </div>
                             <div class="iq-card-body">
                                 <form th:action=${"/user/save"} th:object="${song}" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-                                    <input type="hidden" name="accountId" th:value="${session.user.id}" />
-                                   
+                                    <input type="hidden" th:name="accountId" th:value="${session.user.id}" />
 
                                     <div class="form-group">
                                         <label>Song Name(<span style="color: red;">*</span>):</label>
@@ -39,8 +79,8 @@ and open the template in the editor.
                                             Required
                                         </div>
                                     </div>
-                                   
-                                      
+
+
                                     <div th:if="${status != 'update'}" class="form-group">
                                         <label>File Audio(<span style="color: red;">*</span>)(.mp3,.mp4):</label>
                                         <div class="custom-file">
@@ -58,38 +98,61 @@ and open the template in the editor.
                                             <label class="custom-file-label" for="customFile">Choose file</label>
                                         </div>
                                     </div>
-                                   
-                                    <div class="form-group">
-                                        <label>Genre:</label>
-                                        <select class="form-control" id="exampleFormControlSelect1" th:field="${song.genreId}">
-                                            <option th:each="item:${listgenre}" th:text="${item.name}" th:value="${item.id}"></option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group"><!--
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <label for="country">Artist(<span style="color: red;">*</span>):</label>
-                                                <select class="form-control" id="country" name="artistId" th:field="${song.artistId}" data-dropdown required>
-                                                    <option th:if="${status == 'update'}" th:value="${song.artistId}" th:text="${song.artist.name}"></option>
-                                                    <option th:if="${song.artist == null}" th:value=" '' ">Choose Artist</option>
-                                                    <option th:each="item:${listartist}" th:if="${item.id!=song.artistId}" th:value="${item.id}" th:text="${item.name}"></option>
-                                                </select>
+
+                                    <div th:if="${status != 'update'}" class="form-group">
+                                        <label>File Image(<span style="color: red;">*</span>)(.mp3,.mp4):</label>
+                                        <div class="custom-file">
+                                            <input type="file" name="file2" class="custom-file-input" id="customFile" required> 
+                                            <label class="custom-file-label" for="customFile">Choose file</label>
+                                            <div class="invalid-feedback">
+                                                Required
                                             </div>
--->                                            <div class="col-6">
-                                                <label>Album(<span style="color: red;">*</span>):</label>
-                                                <select class="form-control" id="country2" th:field="${song.albumId}" required>
-                                                    <option th:if="${song.album != null}" th:value="${song.albumId}" th:text="${song.album.name}"></option>
-                                                      <option th:each="item:${listalbum}" th:text="${item.name}+'-'+${item.artist.name}" th:value="${item.id}"></option> 
-                                                </select>   
-                                            </div><!--
--->                                        </div><!--
-                                    </div>                -->
-<!--                                    <div class="form-group">
-                                        <label>Lyric:</label>
-                                        <textarea th:field="${song.lyric}" class="form-control" rows="4"></textarea>
-                                    </div>-->
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                    <button type="reset" class="btn btn-danger">Reset</button>
+                                        </div>
+                                    </div>
+                                    <div th:if="${status == 'update'}" class="form-group">
+                                        <label>File Image:(<span style="color: red;">*</span>)(.mp3,.mp4):</label>
+                                        <div class="file-upload-wrapper">
+                                            <input type="file" name="file2" class="custom-file-input" id="customFile"> 
+                                            <label class="custom-file-label" for="customFile">Choose file</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="wrapper">
+
+
+
+
+                                        <div class="form-group">
+                                            <label>Genre:</label>
+                                            <select class="form-control" id="exampleFormControlSelect1" th:field="${song.genreId}">
+                                                <option th:each="item:${listgenre}" th:text="${item.name}" th:value="${item.id}"></option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group"><!--
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <label for="country">Artist(<span style="color: red;">*</span>):</label>
+                                                    <select class="form-control" id="country" name="artistId" th:field="${song.artistId}" data-dropdown required>
+                                                        <option th:if="${status == 'update'}" th:value="${song.artistId}" th:text="${song.artist.name}"></option>
+                                                        <option th:if="${song.artist == null}" th:value=" '' ">Choose Artist</option>
+                                                        <option th:each="item:${listartist}" th:if="${item.id!=song.artistId}" th:value="${item.id}" th:text="${item.name}"></option>
+                                                    </select>
+                                                </div>
+                                            -->                                   <!--     <div class="col-6">
+                                                                                            <label>Album(<span style="color: red;">*</span>):</label>
+                                                                                            <select class="form-control" id="country2" th:field="${song.albumId}" required>
+                                                                                                <option th:if="${song.album != null}" th:value="${song.albumId}" th:text="${song.album.name}"></option>
+                                                                                                  <option th:each="item:${listalbum}" th:text="${item.name}+'-'+${item.artist.name}" th:value="${item.id}"></option> 
+                                                                                            </select>   
+                                                                                        </div><!--
+                                            -->                                        </div><!--
+                                                                                </div>                -->
+                                        <!--                                    <div class="form-group">
+                                                                                <label>Lyric:</label>
+                                                                                <textarea th:field="${song.lyric}" class="form-control" rows="4"></textarea>
+                                                                            </div>-->
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="reset" class="btn btn-danger">Reset</button>
                                 </form>
                             </div>
                         </div>
@@ -99,200 +162,233 @@ and open the template in the editor.
             <p th:if="${session.user == null}" style="text-align: center;"><a th:href="@{/login}">You Must Login</a></p>
         </div>
         <script th:inline="javascript">
-                // Get dropdowns and form
-                const dropdowns = document.querySelectorAll('[data-dropdown]');
-                const form = document.querySelector('form');
+            Array.prototype.forEach.call(
+                    document.querySelectorAll(".file-upload__button"),
+                    function (button) {
+                        const hiddenInput = button.parentElement.querySelector(
+                                ".file-upload__input"
+                                );
+                        const label = button.parentElement.querySelector(".file-upload__label");
+                        const defaultLabelText = "No file(s) selected";
 
-                function populate() {
-                    var country = document.getElementById('country');
-                    var artist_id = country.value;
-                    var list_album = /*[[${listalbum}]]*/[];
-                    var list_album2 = [];
-                    var size = 0;
-                    for (let i = 0; i < list_album.length; i++) {
-                        if (list_album[i].artistId == artist_id) {
-                            list_album2[size++] = list_album[i];
-                        }
-                    }
-                    var country2 = document.getElementById('country2');
-                    country2.innerHTML = "";
-                    for (let i = 0; i < list_album2.length; i++) {
-                        country2.innerHTML += "<option value='" + list_album2[i].id + "'>" + list_album2[i].name + "</option>";
-                    }
+                        // Set default text for label
+                        label.textContent = defaultLabelText;
+                        label.title = defaultLabelText;
 
+                        button.addEventListener("click", function () {
+                            hiddenInput.click();
+                        });
+
+                        hiddenInput.addEventListener("change", function () {
+                            const filenameList = Array.prototype.map.call(hiddenInput.files, function (
+                                    file
+                                    ) {
+                                return file.name;
+                            });
+
+                            label.textContent = filenameList.join(", ") || defaultLabelText;
+                            label.title = label.textContent;
+                        });
+                    }
+            );
+
+            // Get dropdowns and form
+            const dropdowns = document.querySelectorAll('[data-dropdown]');
+            const form = document.querySelector('form');
+
+            function populate() {
+                var country = document.getElementById('country');
+                var artist_id = country.value;
+                var list_album = /*[[${listalbum}]]*/[];
+                var list_album2 = [];
+                var size = 0;
+                for (let i = 0; i < list_album.length; i++) {
+                    if (list_album[i].artistId == artist_id) {
+                        list_album2[size++] = list_album[i];
+                    }
                 }
+                var country2 = document.getElementById('country2');
+                country2.innerHTML = "";
+                for (let i = 0; i < list_album2.length; i++) {
+                    country2.innerHTML += "<option value='" + list_album2[i].id + "'>" + list_album2[i].name + "</option>";
+                }
+
+            }
 
 // Check if dropdowns exist on page
-                if (dropdowns.length > 0) {
-                    // Loop through dropdowns and create custom dropdown for each select element
-                    dropdowns.forEach(dropdown => {
-                        createCustomDropdown(dropdown);
-                    });
-                }
+            if (dropdowns.length > 0) {
+                // Loop through dropdowns and create custom dropdown for each select element
+                dropdowns.forEach(dropdown => {
+                    createCustomDropdown(dropdown);
+                });
+            }
 
 // Check if form element exist on page
-                if (form !== null) {
-                    // When form is submitted console log the value of the select field
-                    form.addEventListener('submit', (e) => {
-                        e.preventDefault();
-                        console.log('Selected artist:', form.querySelector('[name="artistId"]').value);
-                    });
-                }
+            if (form !== null) {
+                // When form is submitted console log the value of the select field
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    console.log('Selected artist:', form.querySelector('[name="artistId"]').value);
+                });
+            }
 
 // Create custom dropdown
-                function createCustomDropdown(dropdown) {
-                    // Get all options and convert them from nodelist to array
-                    const options = dropdown.querySelectorAll('option');
-                    const optionsArr = Array.prototype.slice.call(options);
+            function createCustomDropdown(dropdown) {
+                // Get all options and convert them from nodelist to array
+                const options = dropdown.querySelectorAll('option');
+                const optionsArr = Array.prototype.slice.call(options);
 
-                    // Create custom dropdown element and add class dropdown to it
-                    // Insert it in the DOM after the select field
-                    const customDropdown = document.createElement('div');
-                    customDropdown.classList.add('dropdown');
-                    dropdown.insertAdjacentElement('afterend', customDropdown);
+                // Create custom dropdown element and add class dropdown to it
+                // Insert it in the DOM after the select field
+                const customDropdown = document.createElement('div');
+                customDropdown.classList.add('dropdown');
+                dropdown.insertAdjacentElement('afterend', customDropdown);
 
-                    // Create element for selected option
-                    // Add class to this element, text from the first option in select field and append it to custom dropdown
-                    const selected = document.createElement('div');
-                    selected.classList.add('dropdown__selected');
-                    selected.textContent = optionsArr[0].textContent;
-                    customDropdown.appendChild(selected);
+                // Create element for selected option
+                // Add class to this element, text from the first option in select field and append it to custom dropdown
+                const selected = document.createElement('div');
+                selected.classList.add('dropdown__selected');
+                selected.textContent = optionsArr[0].textContent;
+                customDropdown.appendChild(selected);
 
-                    // Create element for dropdown menu, add class to it and append it to custom dropdown
-                    // Add click event to selected element to toggle dropdown menu
-                    const menu = document.createElement('div');
-                    menu.classList.add('dropdown__menu');
-                    customDropdown.appendChild(menu);
-                    selected.addEventListener('click', toggleDropdown.bind(menu));
+                // Create element for dropdown menu, add class to it and append it to custom dropdown
+                // Add click event to selected element to toggle dropdown menu
+                const menu = document.createElement('div');
+                menu.classList.add('dropdown__menu');
+                customDropdown.appendChild(menu);
+                selected.addEventListener('click', toggleDropdown.bind(menu));
 
-                    // Create serach input element
-                    // Add class, type and placeholder to this element and append it to menu element
-                    const search = document.createElement('input');
-                    search.placeholder = 'Search...';
-                    search.type = 'text';
-                    search.classList.add('dropdown__menu_search');
-                    menu.appendChild(search);
+                // Create serach input element
+                // Add class, type and placeholder to this element and append it to menu element
+                const search = document.createElement('input');
+                search.placeholder = 'Search...';
+                search.type = 'text';
+                search.classList.add('dropdown__menu_search');
+                menu.appendChild(search);
 
-                    // Create wrapper element for menu items, add class to it and append to menu element
-                    const menuItemsWrapper = document.createElement('div');
-                    menuItemsWrapper.classList.add('dropdown__menu_items');
-                    menu.appendChild(menuItemsWrapper);
+                // Create wrapper element for menu items, add class to it and append to menu element
+                const menuItemsWrapper = document.createElement('div');
+                menuItemsWrapper.classList.add('dropdown__menu_items');
+                menu.appendChild(menuItemsWrapper);
 
-                    // Loop through all options and create custom option for each option and append it to items wrapper element
-                    // Add click event for each custom option to set clicked option as selected option
-                    optionsArr.forEach(option => {
-                        const item = document.createElement('div');
-                        item.classList.add('dropdown__menu_item');
-                        item.dataset.value = option.value;
-                        item.textContent = option.textContent;
-                        menuItemsWrapper.appendChild(item);
+                // Loop through all options and create custom option for each option and append it to items wrapper element
+                // Add click event for each custom option to set clicked option as selected option
+                optionsArr.forEach(option => {
+                    const item = document.createElement('div');
+                    item.classList.add('dropdown__menu_item');
+                    item.dataset.value = option.value;
+                    item.textContent = option.textContent;
+                    menuItemsWrapper.appendChild(item);
 
-                        item.addEventListener('click', setSelected.bind(item, selected, dropdown, menu));
-                    });
+                    item.addEventListener('click', setSelected.bind(item, selected, dropdown, menu));
+                });
 
-                    // Add selected class to first custom option
-                    menuItemsWrapper.querySelector('div').classList.add('selected');
+                // Add selected class to first custom option
+                menuItemsWrapper.querySelector('div').classList.add('selected');
 
-                    // Add input event to search input element to filter items
-                    // Add click event to document element to close custom dropdown if clicked outside of it
-                    // Hide original dropdown(select)
-                    search.addEventListener('input', filterItems.bind(search, optionsArr, menu));
-                    document.addEventListener('click', closeIfClickedOutside.bind(customDropdown, menu));
-                    dropdown.style.display = 'none';
-                }
+                // Add input event to search input element to filter items
+                // Add click event to document element to close custom dropdown if clicked outside of it
+                // Hide original dropdown(select)
+                search.addEventListener('input', filterItems.bind(search, optionsArr, menu));
+                document.addEventListener('click', closeIfClickedOutside.bind(customDropdown, menu));
+                dropdown.style.display = 'none';
+            }
 
 // Toggle dropdown
-                function toggleDropdown() {
-                    // Check if dropdown is opened and if it is close it, otherwise open it and focus search input
-                    if (this.offsetParent !== null) {
-                        this.style.display = 'none';
-                    } else {
-                        this.style.display = 'block';
-                        this.querySelector('input').focus();
-                    }
+            function toggleDropdown() {
+                // Check if dropdown is opened and if it is close it, otherwise open it and focus search input
+                if (this.offsetParent !== null) {
+                    this.style.display = 'none';
+                } else {
+                    this.style.display = 'block';
+                    this.querySelector('input').focus();
                 }
+            }
 
 // Set selected option
-                function setSelected(selected, dropdown, menu) {
-                    // Get value and label from clicked custom option
-                    const value = this.dataset.value;
-                    const label = this.textContent;
+            function setSelected(selected, dropdown, menu) {
+                // Get value and label from clicked custom option
+                const value = this.dataset.value;
+                const label = this.textContent;
 
-                    // Change the text on selected element
-                    // Change the value on select field
-                    selected.textContent = label;
-                    dropdown.value = value;
-                    populate();
+                // Change the text on selected element
+                // Change the value on select field
+                selected.textContent = label;
+                dropdown.value = value;
+                populate();
 
-                    // Close the menu
-                    // Reset search input value
-                    // Remove selected class from previously selected option and show all divs if they were filtered
-                    // Add selected class to clicked option
-                    menu.style.display = 'none';
-                    menu.querySelector('input').value = '';
-                    menu.querySelectorAll('div').forEach(div => {
-                        if (div.classList.contains('selected')) {
-                            div.classList.remove('selected');
-                        }
-                        if (div.offsetParent === null) {
-                            div.style.display = 'block';
-                        }
-                    });
-                    this.classList.add('selected');
-                }
+                // Close the menu
+                // Reset search input value
+                // Remove selected class from previously selected option and show all divs if they were filtered
+                // Add selected class to clicked option
+                menu.style.display = 'none';
+                menu.querySelector('input').value = '';
+                menu.querySelectorAll('div').forEach(div => {
+                    if (div.classList.contains('selected')) {
+                        div.classList.remove('selected');
+                    }
+                    if (div.offsetParent === null) {
+                        div.style.display = 'block';
+                    }
+                });
+                this.classList.add('selected');
+            }
 
 // Filter items
-                function filterItems(itemsArr, menu) {
-                    // Get all custom options
-                    // Get the value of search input and convert it to all lowercase characters
-                    // Get filtered items
-                    // Get the indexes of filtered items
-                    const customOptions = menu.querySelectorAll('.dropdown__menu_items div');
-                    const value = this.value.toLowerCase();
-                    const filteredItems = itemsArr.filter(item => item.textContent.toLowerCase().includes(value));
-                    const indexesArr = filteredItems.map(item => itemsArr.indexOf(item));
+            function filterItems(itemsArr, menu) {
+                // Get all custom options
+                // Get the value of search input and convert it to all lowercase characters
+                // Get filtered items
+                // Get the indexes of filtered items
+                const customOptions = menu.querySelectorAll('.dropdown__menu_items div');
+                const value = this.value.toLowerCase();
+                const filteredItems = itemsArr.filter(item => item.textContent.toLowerCase().includes(value));
+                const indexesArr = filteredItems.map(item => itemsArr.indexOf(item));
 
-                    // Check if option is not inside indexes array and hide it and if it is inside indexes array and it is hidden show it
-                    itemsArr.forEach(option => {
-                        if (!indexesArr.includes(itemsArr.indexOf(option))) {
-                            customOptions[itemsArr.indexOf(option)].style.display = 'none';
-                        } else {
-                            if (customOptions[itemsArr.indexOf(option)].offsetParent === null) {
-                                customOptions[itemsArr.indexOf(option)].style.display = 'block';
-                            }
+                // Check if option is not inside indexes array and hide it and if it is inside indexes array and it is hidden show it
+                itemsArr.forEach(option => {
+                    if (!indexesArr.includes(itemsArr.indexOf(option))) {
+                        customOptions[itemsArr.indexOf(option)].style.display = 'none';
+                    } else {
+                        if (customOptions[itemsArr.indexOf(option)].offsetParent === null) {
+                            customOptions[itemsArr.indexOf(option)].style.display = 'block';
                         }
-                    });
-                }
+                    }
+                });
+            }
 
-                function filterItems2(itemsArr, menu) {
-                    // Get all custom options
-                    // Get the value of search input and convert it to all lowercase characters
-                    // Get filtered items
-                    // Get the indexes of filtered items
-                    const customOptions = menu.querySelectorAll('.dropdown__menu_items div');
-                    const value = this.value.toLowerCase();
-                    const filteredItems = itemsArr.filter(item => item.textContent.toLowerCase().includes(value));
-                    const indexesArr = filteredItems.map(item => itemsArr.indexOf(item));
+            function filterItems2(itemsArr, menu) {
+                // Get all custom options
+                // Get the value of search input and convert it to all lowercase characters
+                // Get filtered items
+                // Get the indexes of filtered items
+                const customOptions = menu.querySelectorAll('.dropdown__menu_items div');
+                const value = this.value.toLowerCase();
+                const filteredItems = itemsArr.filter(item => item.textContent.toLowerCase().includes(value));
+                const indexesArr = filteredItems.map(item => itemsArr.indexOf(item));
 
-                    // Check if option is not inside indexes array and hide it and if it is inside indexes array and it is hidden show it
-                    itemsArr.forEach(option => {
-                        if (!indexesArr.includes(itemsArr.indexOf(option))) {
-                            customOptions[itemsArr.indexOf(option)].style.display = 'none';
-                        } else {
-                            if (customOptions[itemsArr.indexOf(option)].offsetParent === null) {
-                                customOptions[itemsArr.indexOf(option)].style.display = 'block';
-                            }
+                // Check if option is not inside indexes array and hide it and if it is inside indexes array and it is hidden show it
+                itemsArr.forEach(option => {
+                    if (!indexesArr.includes(itemsArr.indexOf(option))) {
+                        customOptions[itemsArr.indexOf(option)].style.display = 'none';
+                    } else {
+                        if (customOptions[itemsArr.indexOf(option)].offsetParent === null) {
+                            customOptions[itemsArr.indexOf(option)].style.display = 'block';
                         }
-                    });
-                }
+                    }
+                });
+            }
 
 // Close dropdown if clicked outside dropdown element
-                function closeIfClickedOutside(menu, e) {
-                    if (e.target.closest('.dropdown') === null && e.target !== this && menu.offsetParent !== null) {
-                        menu.style.display = 'none';
-                    }
+            function closeIfClickedOutside(menu, e) {
+                if (e.target.closest('.dropdown') === null && e.target !== this && menu.offsetParent !== null) {
+                    menu.style.display = 'none';
                 }
-            </script>
-        
+            }
+
+
+        </script>
+
+
     </body>
 </html>

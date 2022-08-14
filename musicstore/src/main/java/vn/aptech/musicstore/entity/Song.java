@@ -44,6 +44,8 @@ public class Song {
     private String video;
     @Column(name = "price")
     private Integer price;
+    @Column(name = "image")
+    private String image;
 
     @Column(name = "album_id", insertable = false, updatable = false)
     private Integer albumId;

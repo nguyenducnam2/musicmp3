@@ -47,6 +47,7 @@ and open the template in the editor.
                                             <tr>
                                                 <th style="width: 5%;">No</th>
                                                 <th style="width: 20%;">Album Poster</th>
+                                                   <th style="width: 10%;">Image</th>
                                                 <th style="width: 15%;">Album</th>
                                                 <th style="width: 15%;">Name</th>
                                                 <!--      <th style="width: 10%;">Price</th> -->
@@ -62,6 +63,7 @@ and open the template in the editor.
                                                 <td>
                                                     <img style="width: 200px;height: 150px;" th:src="@{'/webdata/album/'+${item.album.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
                                                 </td>
+                                               
                                                 <td th:text="${item.album.name}"></td>
                                                 <td th:text="${item.name}"></td>
                                                 <td th:text="${item.artist.name}"></td>

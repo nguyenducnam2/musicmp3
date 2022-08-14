@@ -85,6 +85,7 @@ public class HomeClientController implements ErrorController {
             listsong.add(service_song.findAll().get(i));
         }
         model.addAttribute("listsong", listsong);
+        model.addAttribute("service",service_song);
         model.addAttribute("listsong_hot", service_song.findByOrderByViewDesc());
         model.addAttribute("listalbum", service_album.findTop12());
         model.addAttribute("listartist", service_artist.findTop12ByOrderByIdDesc());
