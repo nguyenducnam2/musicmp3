@@ -38,6 +38,10 @@ public class Artist {
     private String description;
     @Column(name = "image")
     private String image;
+    @Column(name = "debut")
+    private String debut;
+    @Column(name = "country")
+    private String country;
 //    @OneToMany(mappedBy = "artistId")
 //    private List<Song> list_song;
 //    @OneToMany(mappedBy = "artistId")

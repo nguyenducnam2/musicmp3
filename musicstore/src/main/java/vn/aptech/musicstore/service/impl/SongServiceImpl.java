@@ -85,5 +85,10 @@ public class SongServiceImpl implements SongService{
     public List<Song> findByAccountId(Long accountId) {
         return repo.findByAccountId(accountId);
     }
+
+    @Override
+    public List<Song> findByArtistId(int artistId) {
+        return repo.findByArtistId(artistId);
+    }
     
 }
