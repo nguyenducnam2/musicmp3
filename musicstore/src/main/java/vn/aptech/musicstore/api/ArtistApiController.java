@@ -35,7 +35,7 @@ import vn.aptech.musicstore.service.ArtistService;
 @RestController
 @RequestMapping("/api/artist")
 public class ArtistApiController {
-    
+
     @Value("${static.base.url}")
     private String base_url;
 
@@ -55,14 +55,16 @@ public class ArtistApiController {
     @PostMapping
     public String create(@RequestParam("name") String name,
             @RequestParam("des") String des,
-            @RequestParam("file") MultipartFile file) throws IOException {
+            @RequestParam("file") MultipartFile file, @RequestParam("country") String country, @RequestParam("debut") String debut) throws IOException {
         Artist art = new Artist();
         art.setName(name);
         art.setDescription(des);
+        art.setDebut(debut);
+        art.setCountry(country);
         art.setImage(file.getOriginalFilename());
 //        String path_directory = "C:\\Users\\namng\\Documents\\NetBeansProjects\\musicstore\\src\\main\\resources\\static\\image";
 //        String path_directory = new ClassPathResource("static/image").getFile().getAbsolutePath();
-        Files.copy(file.getInputStream(), Paths.get(base_url+"\\artist" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(file.getInputStream(), Paths.get(base_url + "\\artist" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
         service.save(art);
         return "created";
     }
@@ -77,16 +79,16 @@ public class ArtistApiController {
     public String update(@RequestParam("id") int id,
             @RequestParam("name") String name,
             @RequestParam("des") String des,
-            @RequestParam("file") MultipartFile file) throws IOException {
+            @RequestParam("file") MultipartFile file, @RequestParam("country") String country, @RequestParam("debut") String debut) throws IOException {
         if (!(file.isEmpty())) {
-            Artist art = new Artist(id, name, des, file.getOriginalFilename());
+            Artist art = new Artist(id, name, des, file.getOriginalFilename(),debut,country);
             service.save(art);
 //            String path_directory = "C:\\Users\\namng\\Documents\\NetBeansProjects\\musicstore\\src\\main\\resources\\static\\image";
 //          String path_directory = new ClassPathResource("static/image").getFile().getAbsolutePath();
-            Files.copy(file.getInputStream(), Paths.get(base_url+"\\artist" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(file.getInputStream(), Paths.get(base_url + "\\artist" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
         } else {
             Artist art2 = service.findById(id).orElseThrow();
-            Artist art = new Artist(id, name, des, art2.getImage());
+            Artist art = new Artist(id, name, des, art2.getImage(),debut,country);
             service.save(art);
         }
         return "updated";

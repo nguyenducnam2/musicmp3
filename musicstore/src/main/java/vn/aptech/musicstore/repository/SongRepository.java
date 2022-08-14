@@ -15,19 +15,22 @@ import vn.aptech.musicstore.entity.Song;
  *
  * @author namng
  */
-public interface SongRepository extends JpaRepository<Song,Integer>{
-    
+public interface SongRepository extends JpaRepository<Song, Integer> {
+
     @Query("SELECT o FROM Song o WHERE o.albumId=:albumId")
     List<Song> findByAlbumid(@Param("albumId") int albumId);
-    
+
     @Query("SELECT o FROM Song o WHERE o.name LIKE CONCAT('%',:name,'%')")
     List<Song> findByNameCustom(@Param("name") String name);
-    
+
     List<Song> findTop12ByOrderByViewDesc();
-    
+
     @Query("SELECT o FROM Song o WHERE o.lyric LIKE CONCAT('%',:lyric,'%')")
     List<Song> findByLyricCustom(@Param("lyric") String lyric);
-    
-     @Query("SELECT o FROM Song o WHERE o.accountId=:accountId")
+
+    @Query("SELECT o FROM Song o WHERE o.accountId=:accountId")
     List<Song> findByAccountId(@Param("accountId") Long accountId);
+
+    @Query("SELECT o FROM Song o WHERE o.artistId=:artistId")
+    List<Song> findByArtistId(@Param("artistId") int artistId);
 }

@@ -26,4 +26,5 @@ public interface SongService {
     boolean existsById(int id);
     Paged<Song> getPage(int pageNumber, int size);
     List<Song> findByAccountId(Long accountId);
+    List<Song> findByArtistId(int artistId);
 }
