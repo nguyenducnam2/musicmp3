@@ -41,8 +41,8 @@
         <div th:replace="client/fragments/nav::nav"></div>
 
         <div layout:fragment="content"></div>
-        
-                <link href="https://fonts.googleapis.com/css?family=Open+Sans:700,300" rel="stylesheet">
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:700,300" rel="stylesheet">
 
 
         <!--    <div th:replace="client/fragments/footer::footer"></div> -->
@@ -157,20 +157,35 @@
         <input type="hidden" th:if="${session.user != null}" id="accountId" th:value="${session.user.id}"/> 
         <script>
             let items = document.querySelector('#items');
-
+            let genre = document.querySelector('#genre');
             function getSizeCart() {
                 fetch(`http://localhost:8080/api/cart/findItemsofCartByAccountId?accountId=` + accountId.value, {method: "GET"})
                         .then((response) => response.json())
                         .then((response) => {
-                            items.innerHTML=response.length;
+                            items.innerHTML = response.length;
                         })
                         .catch(e => {
                             console.log(e);
-                            items.innerHTML="0";
+                            items.innerHTML = "0";
                         });
             }
             if (accountId.value != null && accountId.value > 0) {
                 getSizeCart();
+            }
+            getGenreItems();
+
+            function getGenreItems() {
+                fetch(`http://localhost:8080/api/genre`, {method: "GET"})
+                        .then((response) => response.json())
+                        .then((response) => {
+                            genre.innerHTML = "";
+                            for (let i = 0; i < response.length; i++) {
+                            genre.innerHTML+="<li><a href='http://localhost:8080/song/genre/"+response[i].id+"'><i class='lar la-file-audio'></i>"+response[i].name+"</a></li>";
+                            }
+                        })
+                        .catch(e => {
+                            console.log(e);
+                        });
             }
         </script>
 

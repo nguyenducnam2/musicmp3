@@ -24,8 +24,8 @@ import vn.aptech.musicstore.service.SongService;
  * @author namng
  */
 @Service
-public class SongServiceImpl implements SongService{
-    
+public class SongServiceImpl implements SongService {
+
     @Autowired
     private SongRepository repo;
 
@@ -36,7 +36,7 @@ public class SongServiceImpl implements SongService{
 
     @Override
     public Optional<Song> findById(int id) {
-       return repo.findById(id);
+        return repo.findById(id);
     }
 
     @Override
@@ -51,12 +51,12 @@ public class SongServiceImpl implements SongService{
 
     @Override
     public List<Song> findByAlbumId(int albumId) {
-       return repo.findByAlbumid(albumId);
+        return repo.findByAlbumid(albumId);
     }
 
     @Override
     public List<Song> findByName(String name) {
-       return repo.findByNameCustom(name);
+        return repo.findByNameCustom(name);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class SongServiceImpl implements SongService{
 
     @Override
     public Paged<Song> getPage(int pageNumber, int size) {
-        PageRequest request = PageRequest.of(pageNumber - 1, size, Sort.by(Sort.Direction.DESC,"id"));
+        PageRequest request = PageRequest.of(pageNumber - 1, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<Song> postPage = repo.findAll(request);
         return new Paged<>(postPage, Paging.of(postPage.getTotalPages(), pageNumber, size));
     }
@@ -90,5 +90,10 @@ public class SongServiceImpl implements SongService{
     public List<Song> findByArtistId(int artistId) {
         return repo.findByArtistId(artistId);
     }
-    
+
+    @Override
+    public List<Song> findByGenreId(int genreId) {
+        return repo.findByGenreId(genreId);
+    }
+
 }

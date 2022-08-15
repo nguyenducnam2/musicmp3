@@ -29,24 +29,27 @@
                     <ul id="iq-sidebar-toggle" class="iq-menu">
                         <!-- case phan trang nav page cua ai thi copy the <li>,
                         tu xet th:if xu li rieng ,cua tui la vi du cho viec user dang nhap moi thay dc cho nay -->
+                        <li>
+                            <a href='#genre' class='iq-waves-effect' data-toggle='collapse' aria-expanded='false'><span class='ripple rippleEffect'></span><i class='las la-th-list iq-arrow-left'></i><span>Genre</span><i class='ri-arrow-right-s-line iq-arrow-right'></i></a><ul class='iq-submenu collapse' data-parent='#iq-sidebar-toggle' id="genre"></ul>
+                        </li>
                         <li th:if="${(user != null) && (user.role=='ROLE_USER' || user.role=='ROLE_VIP')}">
 
-                                <a class="iq-icons-list" th:href="@{/song/playlist}"><div data-icon="p" class="icon"></div><span>Playlist</span></a>
-                                <a class="iq-icons-list" th:href="@{/song/cart}"><div data-icon="Q" class="icon"></div><span>Song Cart</span><p id="items" style="color: tomato; "></p></a>
-                                <a class="iq-icons-list" th:href="@{/song/buyed}"><div data-icon=":" class="icon"></div><span>Song Bought</span></a>
-                                <a class="iq-icons-list" th:href="@{/user/upload}"><div data-icon="p" class="icon"></div><span>Upload</span></a>
+                            <a class="iq-icons-list" th:href="@{/song/playlist}"><div data-icon="p" class="icon"></div><span>Playlist</span></a>
+                            <a class="iq-icons-list" th:href="@{/song/cart}"><div data-icon="Q" class="icon"></div><span>Song Cart</span><p id="items" style="color: tomato; "></p></a>
+                            <a class="iq-icons-list" th:href="@{/song/buyed}"><div data-icon=":" class="icon"></div><span>Song Bought</span></a>
+                            <a class="iq-icons-list" th:href="@{/user/upload}"><div data-icon="p" class="icon"></div><span>Upload</span></a>
 
-                                <!--    <li><a href="admin-singer.html"><i class="las la-microphone-alt"></i>Singer</a></li
-                            <a href="#admin" class="iq-waves-effect" data-toggle="collapse" aria-expanded="false"><span class="ripple rippleEffect"></span><i class="ri-admin-line iq-arrow-left"></i><span>My Dasbour</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
-                            <ul id="admin" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
-                                <li><a th:href="@{/song/playlist}"><i class="las la-house-damage"></i>Playlist</a></li>
-                                <li><a th:href="@{/song/cart}"><i class="ri-function-line"></i>My Cart</a></li>
-                                <li><a th:href="@{/song/upload}"><i class="las la-house-damage"></i>Upload </a></li>
+                            <!--    <li><a href="admin-singer.html"><i class="las la-microphone-alt"></i>Singer</a></li
+                        <a href="#admin" class="iq-waves-effect" data-toggle="collapse" aria-expanded="false"><span class="ripple rippleEffect"></span><i class="ri-admin-line iq-arrow-left"></i><span>My Dasbour</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
+                        <ul id="admin" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
+                            <li><a th:href="@{/song/playlist}"><i class="las la-house-damage"></i>Playlist</a></li>
+                            <li><a th:href="@{/song/cart}"><i class="ri-function-line"></i>My Cart</a></li>
+                            <li><a th:href="@{/song/upload}"><i class="las la-house-damage"></i>Upload </a></li>
 
-                                <!--    <li><a href="admin-writer.html"><i class="las la-user"></i>Writer</a></li>
-                                    <li><a href="admin-singer.html"><i class="las la-microphone-alt"></i>Singer</a></li>
+                            <!--    <li><a href="admin-writer.html"><i class="las la-user"></i>Writer</a></li>
+                                <li><a href="admin-singer.html"><i class="las la-microphone-alt"></i>Singer</a></li>
 
-                                    <li><a href="admin-song.html"><i class="las la-play-circle"></i>Music</a></li> -->
+                                <li><a href="admin-song.html"><i class="las la-play-circle"></i>Music</a></li> -->
                         </li>
                         <!--      <li>
                                   <a href="calendar.html" class="iq-waves-effect"><i class="las la-calendar iq-arrow-left"></i><span>Calendar</span></a>
@@ -187,7 +190,7 @@
                               </li>-->
                     </ul>
                 </nav>
-            </div> 
+            </div>
         </div>
     </body>
 </html>

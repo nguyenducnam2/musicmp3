@@ -15,16 +15,30 @@ import vn.aptech.musicstore.pagination.Paged;
  * @author namng
  */
 public interface SongService {
+
     List<Song> findAll();
+
     Optional<Song> findById(int id);
+
     Song save(Song s);
+
     void deleteById(int id);
+
     List<Song> findByAlbumId(int albumId);
+
     List<Song> findByName(String name);
+
     List<Song> findByOrderByViewDesc();
+
     List<Song> findByLyricCustom(String lyric);
+
     boolean existsById(int id);
+
     Paged<Song> getPage(int pageNumber, int size);
+
     List<Song> findByAccountId(Long accountId);
+
     List<Song> findByArtistId(int artistId);
+
+    List<Song> findByGenreId(int genreId);
 }

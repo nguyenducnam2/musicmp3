@@ -33,4 +33,7 @@ public interface SongRepository extends JpaRepository<Song, Integer> {
 
     @Query("SELECT o FROM Song o WHERE o.artistId=:artistId")
     List<Song> findByArtistId(@Param("artistId") int artistId);
+    
+    @Query("SELECT o FROM Song o WHERE o.genreId=:genreId")
+    List<Song> findByGenreId(@Param("genreId") int genreId);
 }

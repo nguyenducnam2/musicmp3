@@ -291,4 +291,13 @@ public class SongClientController {
         return "client/song/orderdetail";
     }
 
+    @GetMapping("/genre/{id}")
+    public String genre(Model model, HttpServletRequest request, @PathVariable("id") int id) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
+        model.addAttribute("genreId", id);
+        return "client/song/genre";
+    }
+
 }
