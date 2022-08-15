@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.aptech.musicstore.entity.Account;
 import vn.aptech.musicstore.entity.Song;
 import vn.aptech.musicstore.entity.model.PasswordModel;
@@ -136,7 +137,7 @@ public class UserController {
 //        return "client/user/profile";
 //    }
     @GetMapping("/profile/{id}")
-    public String profile(@PathVariable("id") Long id, Model model) {
+    public String profile(@PathVariable("id") Long id, Model model, HttpServletRequest request) {
         Optional<Account> a = userService.findById(id);
         UserModel userM = new UserModel();
         if (a.isPresent()) {
@@ -150,29 +151,28 @@ public class UserController {
         PasswordModel passwordModel = new PasswordModel();
         passwordModel.setEmail(a.get().getEmail());
         model.addAttribute("passwordModel", passwordModel);
-        model.addAttribute("name", "null");
+        HttpSession session = request.getSession();
+        session.setAttribute("mess", "");
         return "client/user/profile";
     }
 
     @PostMapping("/changePassword")
-    public String changePassword(Model model, @ModelAttribute("passwordModel") PasswordModel passwordModel, HttpServletRequest request) {
+    public String changePassword(Model model, @ModelAttribute("passwordModel") PasswordModel passwordModel, HttpServletRequest request, RedirectAttributes rd) {
         Account user = userService.findAccountByEmail(passwordModel.getEmail());
 
+        HttpSession session = request.getSession();
         if (!userService.checkIfValidOldPassword(user, passwordModel.getOldPassword())) {
-            model.addAttribute("name", "null");
-            model.addAttribute("mess", "Failed");
-//            System.out.println("name -  mess: "+model.getAttribute("name")+model.getAttribute("mess"));
+            rd.addFlashAttribute("mess", "Failed");
             return "redirect:/user/profile/" + user.getId();
         }
         //Save New Password
         userService.changePassword(user, passwordModel.getNewPassword());
-        model.addAttribute("name", "null");
-        model.addAttribute("mess", "Successfully");
+        rd.addFlashAttribute("mess", "Successfully");
         return "redirect:/user/profile/" + user.getId();
     }
 
     @PostMapping("/processUpdate")
-    public String processUpdate(Model model, @ModelAttribute("account") Account user, @RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
+    public String processUpdate(Model model, @ModelAttribute("account") Account user, @RequestParam("file") MultipartFile file, HttpServletRequest request, RedirectAttributes rd) throws IOException {
 
         try {
             if (!(file.isEmpty())) {
@@ -184,14 +184,14 @@ public class UserController {
                 userService.save(user);
             }
         } catch (IOException iOException) {
-            model.addAttribute("mess", "failure");
-            return "client/index";
+            rd.addFlashAttribute("mess", "Failed");
+            return "redirect:/user/profile/" + user.getId();
         }
 
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
-        model.addAttribute("mess", "success");
-        return "client/index";
+        rd.addFlashAttribute("mess", "Successfully");
+        return "redirect:/user/profile/" + user.getId();
     }
 
     @GetMapping("/checkout")

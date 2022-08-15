@@ -9,8 +9,8 @@ and open the template in the editor.
       layout:decorate="~{admin/layout.html}">
     <body>
         <div layout:fragment="content" id="content-page" class="content-page">
-            <div th:if="${mess} != null" class="alert bg-secondary" role="alert">
-                <div th:if="${mess}=='Successfully'" class="iq-alert-icon">
+             <div th:if="${mess} != null" class="alert bg-secondary" role="alert">
+                <div th:if="${mess}=='success'" class="iq-alert-icon">
                     <i class="ri-pencil-line"></i>
                 </div>
                 <div th:if="${mess}=='Failed'" class="iq-alert-icon">
