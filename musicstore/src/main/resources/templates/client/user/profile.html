@@ -87,7 +87,8 @@ and open the template in the editor.
                                                     <div class="col-md-12">
                                                         <div class="profile-img-edit">
                                                             <div th:if="${session.user.image==null}">
-                                                                <img  class="profile-pic" th:src="@{/admintemplate/images/user/user-default2.png}" alt="profile-pic">
+                                                                <img th:if="${session.user.provider == null }"  class="profile-pic" th:src="@{/admintemplate/images/user/user-default2.png}" alt="profile-pic">
+                                                                <img th:if="${session.user.provider == 'Google'}"   class="profile-pic" th:src="@{/admintemplate/images/user/imagesGG.png}" alt="profile-pic">
                                                             </div>
                                                             <div  th:if="${session.user.image!=null}">
                                                                 <img class="profile-pic" th:src="@{'/webdata/user/'+${session.user.image}}" alt="profile-pic">
@@ -224,7 +225,7 @@ and open the template in the editor.
                                     <div class="iq-card">
                                         <div class="iq-card-header d-flex justify-content-between">
                                             <div class="iq-header-title">
-                                                <h4 class="card-title" th:text="${session.user.role=='ROLE_VIP' ? 'Your account is activated' : 'Upgrade Account' }">a</h4>
+                                                <h4 class="card-title" th:text="${session.user.role=='ROLE_ADMIN'|| session.user.role=='ROLE_EDITOR'|| session.user.role=='ROLE_MODERATOR' ? 'Your account no need activate' : session.user.role=='ROLE_VIP'  ? 'Your account is activated' : 'Upgrade Account' }">a</h4>
                                             </div>
                                         </div>
                                         <div class="iq-card-body">
@@ -275,7 +276,7 @@ and open the template in the editor.
                                                     </div>
                                                 </div>
 
-                                                <button type="submit" class="btn btn-primary mr-2" th:disabled="${session.user.role=='ROLE_VIP'}">Submit</button>
+                                                <button type="submit" class="btn btn-primary mr-2" th:disabled="${session.user.role=='ROLE_VIP' || session.user.role=='ROLE_ADMIN'|| session.user.role=='ROLE_EDITOR'|| session.user.role=='ROLE_MODERATOR' }">Submit</button>
                                                 <button type="reset" class="btn iq-bg-danger">Cancel</button>
                                             </form>
                                         </div>

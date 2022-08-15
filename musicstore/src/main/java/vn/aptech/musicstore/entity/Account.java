@@ -47,6 +47,7 @@ public class Account implements Serializable {
     private Boolean gender = false;
     private String address;
     private String image;
+    private String imageUrl;
     private String phone;
 
     

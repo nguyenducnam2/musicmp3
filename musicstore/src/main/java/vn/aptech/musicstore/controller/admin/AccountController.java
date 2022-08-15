@@ -5,6 +5,8 @@
 package vn.aptech.musicstore.controller.admin;
 
 import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,8 +33,12 @@ public class AccountController {
     private AccountService serviceAccount;
 
     @GetMapping
-    public String index(Model model) {
+    public String index(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.getAttribute("user");
+        session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("list", serviceAccount.findAll());
+        model.addAttribute("name", "null");
         return "admin/account/index";
     }
 
@@ -50,40 +56,50 @@ public class AccountController {
         return "admin/account/update";
     }
 
-    @GetMapping("/updateProfile/{username}")
-    public String updateProfile(@PathVariable("username") String username, Model model) {
-        Optional<Account> a = serviceAccount.findByUsername(username);
-        AccountModel dto = new AccountModel();
-
-        if (a.isPresent()) {
-            Account entity = a.get();
-            BeanUtils.copyProperties(entity, dto);
-            dto.setIsEdit(true);
-            dto.setPassword("");
-            model.addAttribute("account", dto);
-        }
-        model.addAttribute("message", "Account is not exist");
-        return "admin/profile";
-    }
-
+//    @GetMapping("/updateProfile/{username}")
+//    public String updateProfile(@PathVariable("username") String username, Model model) {
+//        Optional<Account> a = serviceAccount.findByUsername(username);
+//        AccountModel dto = new AccountModel();
+//
+//        if (a.isPresent()) {
+//            Account entity = a.get();
+//            BeanUtils.copyProperties(entity, dto);
+//            dto.setIsEdit(true);
+//            dto.setPassword("");
+//            model.addAttribute("account", dto);
+//        }
+//        return "admin/profile";
+//    }
     @PostMapping("/save")
     public String save(Model model, @ModelAttribute Account acc) {
-        Optional<Account> a = serviceAccount.findByUsername(acc.getUsername());
-        if (a.isEmpty()) {
-            acc.setEnabled(Boolean.TRUE);
-            serviceAccount.save(acc);
-            return "redirect:/admin/account";
-        } else {
-//            model.addAttribute("", serviceAccount)
-            return "redirect:/admin/account";
-
+        try {
+            if (!acc.getUsername().equals("")) {
+                Optional<Account> a = serviceAccount.findByUsername(acc.getUsername());
+                if (a.isEmpty()) {
+                    acc.setEnabled(Boolean.TRUE);
+                    serviceAccount.save(acc);
+                }
+            }
+        } catch (Exception e) {
+            model.addAttribute("name", "null");
+            model.addAttribute("mess", "Failed");
+            return "admin/account/create";
         }
+        model.addAttribute("name", "null");
+        model.addAttribute("mess", "Successfully");
+        model.addAttribute("list", serviceAccount.findAll());
+        System.out.println("name " + model.getAttribute("name"));
+        System.out.println("mess " + model.getAttribute("mess"));
+        return "admin/account/index";
     }
 
     @PostMapping("/processUpdate")
     public String processUpdate(Model model, @ModelAttribute Account acc) {
         serviceAccount.save(acc);
-        return "redirect:/admin/account";
+        model.addAttribute("name", "null");
+        model.addAttribute("mess", "Successfully");
+        model.addAttribute("list", serviceAccount.findAll());
+        return "admin/account/index";
     }
 
     @GetMapping("/delete/{id}")
@@ -91,7 +107,7 @@ public class AccountController {
         serviceAccount.deleteById(id);
         return "redirect:/admin/account";
     }
-    
+
     @GetMapping("/search")
     public String search(Model model, @RequestParam("name") String name) {
         model.addAttribute("list", serviceAccount.findByUsername(name));

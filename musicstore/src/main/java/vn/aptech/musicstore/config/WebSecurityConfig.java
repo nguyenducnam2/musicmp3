@@ -91,9 +91,9 @@ public class WebSecurityConfig {
                     .antMatchers(WHITE_LIST_URLS).permitAll()
                     //                    .antMatchers("/api/**").authenticated()
                     .antMatchers("/user/**").hasAnyRole("ADMIN", "EDITOR", "MODERATOR", "USER","VIP")
-
                     .antMatchers("/admin/account/**").hasAnyRole("ADMIN", "MODERATOR")
                     .antMatchers("/admin/**").hasAnyRole("ADMIN", "EDITOR", "MODERATOR")
+//                    .antMatchers("admin/account/updateProfile/editor").hasAnyRole("EDITOR")
                     .anyRequest().authenticated();
 
             http.authorizeHttpRequests()
@@ -124,7 +124,7 @@ public class WebSecurityConfig {
                             System.out.println("imageUrl :" +imageUrl);
                             
                             HttpSession session = request.getSession();
-                            accountService.processOAuthPostLogin(email, name, clientName);
+                            accountService.processOAuthPostLogin(email, name, clientName,imageUrl);
                             Optional<Account>  user =accountService.findByUsername(email);
                             session.setAttribute("user", user.get());
                             session.setAttribute("imageUrlAvatar", imageUrl);
