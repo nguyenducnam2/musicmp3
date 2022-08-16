@@ -138,7 +138,7 @@ public class ForegroundServiceControl extends Service {
             mediaPlayer.release();
             mediaPlayer = null;
         }
-        new playMP3().onPostExecute(linkBaiHat);
+        new playMP3().onPostExecute("http://192.168.0.17:8080/webdata/audio/beatbox.mp3");
         isPlaying = true;
         duration = mediaPlayer.getDuration();
         sendActonToPlayNhacActivity(ACTION_RESUME);

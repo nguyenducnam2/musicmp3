@@ -28,6 +28,7 @@ import java.util.Random;
 
 import vn.aptech.musicstoreapp.R;
 import vn.aptech.musicstoreapp.entity.Song;
+import vn.aptech.musicstoreapp.service_api.api.ApiUtil;
 
 public class ForegroundServiceControl extends Service {
     public static final int ACTION_PAUSE = 1;
@@ -118,7 +119,7 @@ public class ForegroundServiceControl extends Service {
             mediaPlayer.release();
             mediaPlayer = null;
         }
-        new playMP3().onPostExecute(linkBaiHat);
+        new playMP3().onPostExecute("http://192.168.0.17:8080/webdata/audio/beatbox.mp3");
         isPlaying = true;
         duration = mediaPlayer.getDuration();
         sendActonToPlayNhacActivity(ACTION_RESUME);
@@ -285,7 +286,7 @@ public class ForegroundServiceControl extends Service {
                         }
                     }
                 });
-                mediaPlayer.setDataSource(baihat);
+                mediaPlayer.setDataSource("http://192.168.0.17:8080/webdata/audio/beatbox.mp3");
                 mediaPlayer.prepare();
             } catch (IOException e) {
                 e.printStackTrace();
