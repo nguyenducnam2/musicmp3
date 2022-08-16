@@ -89,6 +89,7 @@ public class AlbumController {
         model.addAttribute("service", service);
         model.addAttribute("name", "null");
         model.addAttribute("mess", "Successfully");
+        System.out.println(album.getReleaseDate());
         return "admin/album/index";
     }
 
