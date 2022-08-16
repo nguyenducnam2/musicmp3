@@ -25,7 +25,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import vn.aptech.musicstore.entity.Artist;
+import vn.aptech.musicstore.entity.Song;
 import vn.aptech.musicstore.service.ArtistService;
+import vn.aptech.musicstore.service.SongService;
 
 /**
  *
@@ -41,6 +43,9 @@ public class ArtistApiController {
 
     @Autowired
     private ArtistService service;
+    
+    @Autowired
+    private SongService service_song;
 
     @GetMapping
     public List<Artist> findAll() {
@@ -50,6 +55,11 @@ public class ArtistApiController {
     @GetMapping("/{id}")
     public Optional<Artist> findById(@PathVariable int id) {
         return service.findById(id);
+    }
+    
+    @PostMapping("/getSongById")
+    public List<Song> getSongById(@RequestParam("id")int id){
+        return service_song.findByArtistId(id);
     }
 
     @PostMapping

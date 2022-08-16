@@ -28,14 +28,8 @@ public class HomeActivity extends AppCompatActivity {
 
         final LoadingDialog loadingDialog = new LoadingDialog(HomeActivity.this);
         mapping();
-        loadingDialog.StartLoadingDialog();
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadingDialog.dismissDialog();
-            }
-        }, 7500);
+
+
         init();
         overridePendingTransition(R.anim.anim_intent_in_home, R.anim.anim_intent_out);
     }
