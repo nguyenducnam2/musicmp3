@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         genreService.findAll().enqueue(new Callback<List<Genre>>() {
             @Override
             public void onResponse(Call<List<Genre>> call, Response<List<Genre>> response) {
-                tvDemo.setText(response.body().get(0).getName());
+                tvDemo.setText(response.body().get(1).getName());
             }
 
             @Override
