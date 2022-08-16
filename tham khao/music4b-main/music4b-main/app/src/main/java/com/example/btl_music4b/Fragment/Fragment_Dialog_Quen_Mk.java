@@ -139,7 +139,7 @@ public class Fragment_Dialog_Quen_Mk extends Fragment {
         final  String password = "L581f3186";
         Random random = new Random();
         code = 10000 + random.nextInt(89999);
-        String messenger = "[Music4B]Mã xác nhận của bạn là :"+ code+". Không chia sẻ mã này cho bất kì ai.";
+        String messenger = "[Music4B]Your Pin confirm is :"+ code+". Please don't share this code!!!.";
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
