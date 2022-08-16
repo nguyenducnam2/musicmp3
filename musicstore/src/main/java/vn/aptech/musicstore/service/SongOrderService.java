@@ -7,6 +7,7 @@ package vn.aptech.musicstore.service;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.repository.query.Param;
 import vn.aptech.musicstore.entity.SongOrder;
 import vn.aptech.musicstore.pagination.Paged;
 
@@ -20,4 +21,5 @@ public interface SongOrderService {
     SongOrder save(SongOrder obj);
     void delete(SongOrder obj);
     Paged<SongOrder> getPage(int pageNumber, int size);
+    List<SongOrder> getPageByDate(int pageNumber, int size,String from,String to);
 }

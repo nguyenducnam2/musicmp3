@@ -43,6 +43,9 @@ public class SongOrderController {
     public String findAll(Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
         model.addAttribute("list", service.getPage(pageNumber, size));
+        DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentDateTime = dfm.format(new Date());
+        model.addAttribute("currentDateTime", currentDateTime);
         return "admin/songorder/index";
     }
 
@@ -59,6 +62,18 @@ public class SongOrderController {
         return "admin/songorder/detail";
     }
 
+    @GetMapping("/filterbydate")
+    public String filterbydate(Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size, @RequestParam("from") String from, @RequestParam("to") String to) {
+        System.out.println(from+to);
+        model.addAttribute("list", service.getPageByDate(pageNumber, size, from, to));
+        DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentDateTime = dfm.format(new Date());
+        model.addAttribute("currentDateTime", currentDateTime);
+        model.addAttribute("mess", "filter");
+        return "admin/songorder/index";
+    }
+
     @GetMapping("/exportPDF")
     public void exportPDF(HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");
@@ -69,6 +84,6 @@ public class SongOrderController {
         response.setHeader(headerKey, headerValue);
         List<SongOrder> list = service.findAll();
         SongOrderPDFExporter exporter = new SongOrderPDFExporter(list);
-        exporter.export(response,currentDateTime);
+        exporter.export(response, currentDateTime);
     }
 }

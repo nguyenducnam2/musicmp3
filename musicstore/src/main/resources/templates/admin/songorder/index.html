@@ -24,9 +24,15 @@ and open the template in the editor.
                                 <div class="row justify-content-between">
                                     <div class="col-sm-12 col-md-6">
                                         <div id="user_list_datatable_info" class="dataTables_filter">
-                                            <form class="mr-3 position-relative">
+                                            <form th:action="@{/admin/songorder/filterbydate}" class="mr-3 position-relative">
                                                 <div class="form-group mb-0">
-                                                    <input type="search" class="form-control" id="exampleInputSearch" placeholder="Search" aria-controls="user-list-table">
+                                                    <div class="form-group">
+                                                        <label for="exampleInputdate">From Date:</label>
+                                                        <input type="date" name="from" class="form-control" id="exampleInputdate" th:value="${currentDateTime}">
+                                                        <label for="exampleInputdate">To Date:</label>
+                                                        <input type="date" name="to" class="form-control" id="exampleInputdate" th:value="${currentDateTime}">
+                                                        <button type="submit" class="btn iq-bg-primary">Filter</button>
+                                                    </div>
                                                 </div>
                                             </form>
                                         </div>
@@ -50,8 +56,26 @@ and open the template in the editor.
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody th:if="${mess==null}">
                                             <tr th:each="item:${list.page}">
+                                                <td class="text-center"><img class="rounded img-fluid avatar-40" th:src="@{'/webdata/user/'+${item.account.image}}" alt="profile"></td>
+                                                <td>[[${item.account.username}]]</td>
+                                                <td>
+                                                    <span th:if="${item.status=='Success'}" class="badge iq-bg-success">[[${item.status}]]</span>
+                                                    <span th:if="${item.status=='Canceled'}" class="badge iq-bg-primary">user [[${item.status}]]</span>
+                                                </td>
+                                                <td>[[${item.total}]] $</td>
+                                                <td>[[${item.payment}]]</td>
+                                                <td>[[${new String(item.date).substring(0,10)}]]</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center list-user-action">
+                                                        <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="View" th:href="@{/admin/songorder/{id}(id=${item.id})}"><i class="ri-user-add-line"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody th:if="${mess!=null}">
+                                            <tr th:each="item:${list}">
                                                 <td class="text-center"><img class="rounded img-fluid avatar-40" th:src="@{'/webdata/user/'+${item.account.image}}" alt="profile"></td>
                                                 <td>[[${item.account.username}]]</td>
                                                 <td>
@@ -75,7 +99,7 @@ and open the template in the editor.
                     </div>
                 </div>
             </div>
-            <nav aria-label="Page navigation" class="paging">
+            <nav th:if="${mess==null}" aria-label="Page navigation" class="paging">
                 <ul class="pagination" th:if="${list.page.totalPages > 1}">
                     <li class="page-item" th:classappend="${!list.paging.isPrevEnabled()? 'disabled' : ''}">
                         <a class="page-link" th:href="@{'/admin/songorder/?pageNumber=' + ${list.paging.pageNumber - 1}}"

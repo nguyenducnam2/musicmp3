@@ -24,8 +24,8 @@ import vn.aptech.musicstore.service.SongOrderService;
  * @author namng
  */
 @Service
-public class SongOrderServiceImpl implements SongOrderService{
-    
+public class SongOrderServiceImpl implements SongOrderService {
+
     @Autowired
     private SongOrderRepository repo;
 
@@ -48,12 +48,17 @@ public class SongOrderServiceImpl implements SongOrderService{
     public void delete(SongOrder obj) {
         repo.delete(obj);
     }
-    
+
     @Override
     public Paged<SongOrder> getPage(int pageNumber, int size) {
-        PageRequest request = PageRequest.of(pageNumber - 1, size, Sort.by(Sort.Direction.DESC,"id"));
+        PageRequest request = PageRequest.of(pageNumber - 1, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<SongOrder> postPage = repo.findAll(request);
         return new Paged<>(postPage, Paging.of(postPage.getTotalPages(), pageNumber, size));
     }
-    
+
+    @Override
+    public List<SongOrder> getPageByDate(int pageNumber, int size, String from, String to) {
+        return repo.filterByDate(from, to);
+    }
+
 }
