@@ -20,7 +20,7 @@ public class Dialog_Forget_Password extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_forget_password);
         imgclose = findViewById(R.id.imageCloseForgetPassword);
-        overridePendingTransition(R.anim.anim_intent_in, R.anim.anim_intent_out);
+//        overridePendingTransition(R.anim.anim_intent_in, R.anim.anim_intent_out);
         imgclose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

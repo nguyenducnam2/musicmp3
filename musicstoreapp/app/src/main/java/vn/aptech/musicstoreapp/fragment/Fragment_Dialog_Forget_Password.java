@@ -131,7 +131,7 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
         final  String password = "L581f3186";
         Random random = new Random();
         code = 10000 + random.nextInt(89999);
-        String messenger = "[Music4B]Mã xác nhận của bạn là :"+ code+". Không chia sẻ mã này cho bất kì ai.";
+        String messenger = "[Muzik App]Your Pin confirm is :"+ code+". Please don't share this code!!!";
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
@@ -149,13 +149,13 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(email));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(username));
-            message.setSubject("Quên mật khẩu");
+            message.setSubject("Reset Password");
             message.setText(messenger);
             Transport.send(message);
 
             char[] ch = new char[37];
             username.getChars(0, 3, ch, 0);
-            tvMess.setText("Mã xác nhận đã gửi đến "+ch[0]+ch[1]+ch[2]+"***@gmail.com");
+            tvMess.setText("Pin code is sent to "+ch[0]+ch[1]+ch[2]+"***@gmail.com");
             tvMess.setVisibility(View.VISIBLE);
             String secs = "60";
             interval = Integer.parseInt(secs);
@@ -164,14 +164,14 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
                 public void run() {
                     timeValue = setInterval();
                     if (timeValue == 0){
-                        btnGetPin.setText("Lấy mã");
+                        btnGetPin.setText("Get Pin");
                     }else {
                         btnGetPin.setText(""+timeValue);
                     }
                 }
             }, delay, period);
         } catch (Exception e) {
-            Toast.makeText(getActivity(), "Lỗi kết nối", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Connection error", Toast.LENGTH_SHORT).show();
         }
 
     }

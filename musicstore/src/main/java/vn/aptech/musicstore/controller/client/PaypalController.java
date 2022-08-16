@@ -26,6 +26,7 @@ import vn.aptech.musicstore.entity.Order;
 import vn.aptech.musicstore.entity.OrderDetail;
 import vn.aptech.musicstore.entity.SongOrder;
 import vn.aptech.musicstore.entity.SongOrderDetail;
+import vn.aptech.musicstore.entity.UpgradeVipOrderDetails;
 import vn.aptech.musicstore.entity.model.OrderOnline;
 import vn.aptech.musicstore.service.CartItemService;
 import vn.aptech.musicstore.service.CartService;
@@ -35,6 +36,7 @@ import vn.aptech.musicstore.service.OrderService;
 import vn.aptech.musicstore.service.PaypalService;
 import vn.aptech.musicstore.service.SongOrderDetailService;
 import vn.aptech.musicstore.service.SongOrderService;
+import vn.aptech.musicstore.service.UpgradeVipOrderDetailsService;
 import vn.aptech.musicstore.service.impl.AccountServiceImpl;
 
 /**
@@ -70,6 +72,9 @@ public class PaypalController {
 
     @Autowired
     private SongOrderDetailService songOrderDetailService;
+
+    @Autowired
+    private UpgradeVipOrderDetailsService upgradeVipOrderDetailsService;
 
     @GetMapping("/payment/{orderId}")
     public ModelAndView home(@PathVariable int orderId) {
@@ -239,22 +244,70 @@ public class PaypalController {
     }
 
     @GetMapping("/user/success")
-    public String successPayVip(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, HttpServletRequest request, RedirectAttributes rd) {
+    public String successPayVip(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, HttpServletRequest request, RedirectAttributes rd) throws PayPalRESTException {
+        Payment payment = service.executePayment(paymentId, payerId);
         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("user");
         int duration = (int) session.getAttribute("duration");
-        
-        String token = UUID.randomUUID().toString();
-        Optional<Account> user = userService.findByUsername(acc.getUsername());
-        userService.createVipTokenForUser(user.get(), token, duration*24*60);
-        return "redirect:/song/playlist";
+        try {
+            if (payment.getState().equals("approved")) {
+                SongOrder order = new SongOrder();
+                order.setPayment("Paypal");
+                order.setStatus("Success");
+                order.setTotal((Double) session.getAttribute("total"));
+                order.setAccountId(acc.getId());
+                order.setAccount(acc);
+                songOrderService.save(order);
+
+                UpgradeVipOrderDetails orderdetail = new UpgradeVipOrderDetails();
+                orderdetail.setDuration(duration);
+                orderdetail.setTotal((Double) session.getAttribute("total"));
+                orderdetail.setUserId(acc.getId());
+                orderdetail.setAcc(acc);
+                upgradeVipOrderDetailsService.save(orderdetail);
+
+                String token = UUID.randomUUID().toString();
+                Optional<Account> user = userService.findByUsername(acc.getUsername());
+                userService.createVipTokenForUser(user.get(), token, duration * 24 * 60);
+                rd.addFlashAttribute("mess", "Successfully");
+                session.removeAttribute("duration");
+                session.removeAttribute("total");
+                return "redirect:/user/profile/" + user.get().getId();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        rd.addFlashAttribute("mess", "Failed");
+        return "redirect:/user/profile/" + acc.getId();
     }
 
     @GetMapping("/user/cancel")
-    public String cancelPayVip(HttpServletRequest request) {
-        return "redirect:/";
+    public String cancelPayVip(HttpServletRequest request, RedirectAttributes rd) {
+        HttpSession session = request.getSession();
+        Account acc = (Account) session.getAttribute("user");
+        int duration = (int) session.getAttribute("duration");
+
+        SongOrder order = new SongOrder();
+        order.setPayment("Paypal");
+        order.setStatus("Canceled");
+        order.setTotal((Double) session.getAttribute("total"));
+        order.setAccountId(acc.getId());
+        order.setAccount(acc);
+        songOrderService.save(order);
+
+        UpgradeVipOrderDetails orderdetail = new UpgradeVipOrderDetails();
+        orderdetail.setDuration(duration);
+        orderdetail.setTotal((Double) session.getAttribute("total"));
+        orderdetail.setUserId(acc.getId());
+        orderdetail.setAcc(acc);
+        upgradeVipOrderDetailsService.save(orderdetail);
+
+        session.removeAttribute("duration");
+        session.removeAttribute("total");
+        rd.addFlashAttribute("mess", "Failed");
+        return "redirect:/user/profile/" + acc.getId();
     }
-    
+
     @Autowired
     private AccountServiceImpl userService;
 }
