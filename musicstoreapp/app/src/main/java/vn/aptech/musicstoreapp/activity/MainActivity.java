@@ -1,4 +1,4 @@
-package vn.aptech.musicstoreapp;
+package vn.aptech.musicstoreapp.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,6 +13,8 @@ import retrofit2.Response;
 import vn.aptech.musicstoreapp.api.ApiUtil;
 import vn.aptech.musicstoreapp.model.Genre;
 import vn.aptech.musicstoreapp.service.GenreService;
+
+import vn.aptech.musicstoreapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
