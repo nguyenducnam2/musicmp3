@@ -66,21 +66,21 @@ public class RegistrationController {
         return userService.findByEmail(email);
     }
 
-    @PostMapping("/register")
+    @PostMapping("/registerAndroid")
     public String registerUser(@RequestBody UserModel userModel) {
         userService.registerUser(userModel);
         return "Success";
     }
 
-    @PostMapping("/login")
-    public String login(@RequestParam("username") String username, @RequestParam("password") String password) {
-        Optional<Account> acc = userService.findByUsername(username);
-        if (acc.isPresent()) {
-            if (userService.checkIfValidOldPassword(acc.get(), password)) {
-                return "Login Success";
+    @PostMapping("/loginAndroid")
+    public Account login(@RequestParam("username") String username, @RequestParam("password") String password) {
+        Optional<Account> userAndroid = userService.findByUsername(username);
+        if (userAndroid.isPresent()) {
+            if (userService.checkIfValidOldPassword(userAndroid.get(), password)) {
+                return userAndroid.get();
             }
         }
-        return "Login fail";
+        return null;
     }
 
     @GetMapping("/findByUsername")
