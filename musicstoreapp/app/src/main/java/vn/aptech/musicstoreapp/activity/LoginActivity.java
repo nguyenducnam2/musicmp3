@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-//    androidx.appcompat.widget.Toolbar toolbarLogin;
+    androidx.appcompat.widget.Toolbar toolbarLogin;
     private SQLiteDatabase db;
     private TextInputLayout edPassword, edUsername;
     private Button btnLogin;
@@ -61,12 +61,12 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-//        toolbarLogin.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                finish();
-//            }
-//        });
+        toolbarLogin.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         tvForgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,8 +146,8 @@ public class LoginActivity extends AppCompatActivity {
         edPassword = findViewById(R.id.edPassword);
         btnLogin = findViewById(R.id.btnLogin);
         tvForgetPassword = findViewById(R.id.tvForgetPassword);
-//        toolbarLogin = findViewById(R.id.toolbarLogin);
-//        setSupportActionBar(toolbarLogin);
+        toolbarLogin = findViewById(R.id.toolbarLogin);
+        setSupportActionBar(toolbarLogin);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 }

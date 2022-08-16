@@ -5,6 +5,8 @@
         <item name="colorPrimary">#FFFFFF</item>
         <item name="colorPrimaryDark">#1E2D30</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
     <style name="loginFacebook">
         <item name="android:background">@drawable/btn_facebook</item>

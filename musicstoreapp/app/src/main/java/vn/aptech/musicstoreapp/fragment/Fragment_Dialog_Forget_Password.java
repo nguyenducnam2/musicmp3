@@ -131,7 +131,7 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
         final  String password = "L581f3186";
         Random random = new Random();
         code = 10000 + random.nextInt(89999);
-        String messenger = "[Music4B]Mã xác nhận của bạn là :"+ code+". Không chia sẻ mã này cho bất kì ai.";
+        String messenger = "[Muzik App]Mã xác nhận của bạn là :"+ code+". Không chia sẻ mã này cho bất kì ai.";
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");

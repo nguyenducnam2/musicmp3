@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
 //        deleteData();
 //        overridePendingTransition(R.anim.anim_intent_in, R.anim.anim_intent_out);
 //        callbackManager = CallbackManager.Factory.create();
+
+
 //        btnLoginFb.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
 //            @Override
 //            public void onSuccess(LoginResult loginResult) {
@@ -98,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
 //        overridePendingTransition(R.anim.anim_intent_in_home, R.anim.anim_intent_out);
 
 
