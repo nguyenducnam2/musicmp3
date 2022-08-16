@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import vn.aptech.musicstoreapp.R;
 import vn.aptech.musicstoreapp.entity.Artist;
+import vn.aptech.musicstoreapp.service_api.api.ApiUtil;
 
 public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ViewHolder> {
     Context context;
@@ -38,8 +39,8 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         Artist ngheSi = mangnghesi.get(position);
-        holder.txttennghesi.setText(ngheSi.getName());
-        Picasso.get(/*context*/).load(ngheSi.getImage()).into(holder.imgnghesi);
+        holder.txttennghesi.setText(ngheSi.getImage());
+        Picasso.get(/*context*/).load(ApiUtil.WEBDATA_URL+"artist/"+ngheSi.getImage()).into(holder.imgnghesi);
       /*  view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
