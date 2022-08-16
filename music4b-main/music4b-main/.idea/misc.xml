@@ -45,15 +45,22 @@
         <entry key="..\:/FPTSem4/Term4/6.DAWD/musicmp3/music4b-main/music4b-main/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
         <entry key="..\:/Users/namng/Documents/musicmp3/music4b-main/music4b-main/app/src/main/res/drawable/bgr_camera.xml" value="0.1" />
         <entry key="..\:/Users/namng/Documents/musicmp3/music4b-main/music4b-main/app/src/main/res/drawable/custom_backgroud.xml" value="0.1" />
-        <entry key="..\:/Users/namng/Documents/musicmp3/music4b-main/music4b-main/app/src/main/res/layout/activity_home.xml" value="0.16530797101449277" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/music4b-main/music4b-main/app/src/main/res/layout/activity_danhsachbaihat.xml" value="0.16530797101449277" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/music4b-main/music4b-main/app/src/main/res/layout/activity_home.xml" value="0.21" />
         <entry key="..\:/Users/namng/Documents/musicmp3/music4b-main/music4b-main/app/src/main/res/layout/activity_insert_nhac_thu_vien.xml" value="0.16530797101449277" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/music4b-main/music4b-main/app/src/main/res/layout/activity_main.xml" value="0.16530797101449277" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/music4b-main/music4b-main/app/src/main/res/layout/activity_play_nhac.xml" value="0.16530797101449277" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/music4b-main/music4b-main/app/src/main/res/layout/customdialog.xml" value="0.10914855072463768" />
         <entry key="..\:/Users/namng/Documents/musicmp3/music4b-main/music4b-main/app/src/main/res/layout/dialog_dang_ky_free.xml" value="0.16530797101449277" />
         <entry key="..\:/Users/namng/Documents/musicmp3/music4b-main/music4b-main/app/src/main/res/layout/dong_bangxephang.xml" value="0.11956521739130435" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/music4b-main/music4b-main/app/src/main/res/layout/dong_nghesi.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/namng/Documents/musicmp3/music4b-main/music4b-main/app/src/main/res/layout/dong_thuvien_playlist.xml" value="0.11956521739130435" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/music4b-main/music4b-main/app/src/main/res/layout/fragment_nghesi.xml" value="0.16530797101449277" />
         <entry key="..\:/Users/namng/Documents/musicmp3/music4b-main/music4b-main/app/src/main/res/layout/fragment_playlist.xml" value="0.16530797101449277" />
         <entry key="..\:/Users/namng/Documents/musicmp3/music4b-main/music4b-main/app/src/main/res/layout/fragment_profile.xml" value="0.16530797101449277" />
         <entry key="..\:/Users/namng/Documents/musicmp3/music4b-main/music4b-main/app/src/main/res/layout/fragment_thuvien_nghesi.xml" value="0.16530797101449277" />
         <entry key="..\:/Users/namng/Documents/musicmp3/music4b-main/music4b-main/app/src/main/res/layout/fragment_trang_chu.xml" value="0.16530797101449277" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/music4b-main/music4b-main/app/src/main/res/menu/menu_timkiem.xml" value="0.20416666666666666" />
       </map>
     </option>
   </component>
