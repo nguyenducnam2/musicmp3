@@ -1,4 +1,4 @@
-package vn.aptech.musicstoreapp.model;
+package vn.aptech.musicstoreapp.entity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

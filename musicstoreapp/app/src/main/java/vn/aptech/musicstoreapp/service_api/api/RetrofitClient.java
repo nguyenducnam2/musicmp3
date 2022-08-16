@@ -1,4 +1,4 @@
-package vn.aptech.musicstoreapp.api;
+package vn.aptech.musicstoreapp.service_api.api;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

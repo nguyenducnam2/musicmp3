@@ -1,6 +1,6 @@
-package vn.aptech.musicstoreapp.api;
+package vn.aptech.musicstoreapp.service_api.api;
 
-import vn.aptech.musicstoreapp.service.GenreService;
+import vn.aptech.musicstoreapp.service_api.service.GenreService;
 
 public class ApiUtil {
     public static final String BASE_URL = "http://192.168.1.4:8080/api/";

@@ -10,9 +10,9 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import vn.aptech.musicstoreapp.api.ApiUtil;
-import vn.aptech.musicstoreapp.model.Genre;
-import vn.aptech.musicstoreapp.service.GenreService;
+import vn.aptech.musicstoreapp.service_api.api.ApiUtil;
+import vn.aptech.musicstoreapp.entity.Genre;
+import vn.aptech.musicstoreapp.service_api.service.GenreService;
 
 import vn.aptech.musicstoreapp.R;
 
