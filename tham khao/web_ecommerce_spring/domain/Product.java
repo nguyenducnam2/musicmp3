@@ -1,5 +1,6 @@
 package com.java.web_ecommerce_spring.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,9 @@ public class Product {
     @Column(name = "quantity")
     private int quantity;
 
+    @Column(name = "quantityimport")
+    private int quantityimport;
+
     @Column(name = "viewCount")
     private int viewCount;
 
@@ -44,10 +48,12 @@ public class Product {
     @Column(name = "created")
     private LocalDate createdAt;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product")
     private List<OrderDetail> orderDetails;
 

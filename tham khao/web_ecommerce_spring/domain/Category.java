@@ -1,5 +1,6 @@
 package com.java.web_ecommerce_spring.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class Category {
     @Column(name = "parentId")
     private int parentId;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "category")
     private List<Product> products;
 }

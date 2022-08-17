@@ -47,4 +47,16 @@ public class HomeController {
 
         return mv;
     }
+
+    @GetMapping(value = "/service")
+    public ModelAndView service(Principal principal){
+        ModelAndView mv = new ModelAndView("public/service");
+        return mv;
+    }
+
+    @GetMapping(value = "/policy")
+    public ModelAndView policy(Principal principal){
+        ModelAndView mv = new ModelAndView("public/policy");
+        return mv;
+    }
 }

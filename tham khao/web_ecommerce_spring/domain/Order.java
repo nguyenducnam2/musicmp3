@@ -1,5 +1,6 @@
 package com.java.web_ecommerce_spring.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,7 +29,7 @@ public class Order {
     private String address;
 
     @Column(name = "amount")
-    private float amount;
+    private int amount;
 
     @Column(name = "description")
     private String description;
@@ -39,9 +40,11 @@ public class Order {
     @Column(name = "is_payment")
     private int isPayment;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "order")
     private List<OrderDetail> orderDetails;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;

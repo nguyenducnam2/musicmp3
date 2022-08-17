@@ -1,5 +1,6 @@
 package com.java.web_ecommerce_spring.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,7 @@ public class User {
     @Column(name = "enable")
     private int enable;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "role_id",referencedColumnName = "id")
     private Role role;

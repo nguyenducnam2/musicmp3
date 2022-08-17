@@ -6,6 +6,7 @@ import com.java.web_ecommerce_spring.serviceImpls.OrderServiceImpl;
 import com.java.web_ecommerce_spring.serviceImpls.ProductServiceImpl;
 import com.java.web_ecommerce_spring.serviceImpls.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,17 @@ public class AdminOrderController {
         ModelAndView mv = new ModelAndView("admin/order");
         mv.addObject("msg",msg);
         mv.addObject("list",list);
+        String userName = principal.getName();
+        mv.addObject("userName",userName);
+        return mv;
+    }
+
+    @GetMapping({ "/export"})
+    public ModelAndView export(String msg, Principal principal)
+    {
+        ModelAndView mv = new ModelAndView("admin/export");
+        Sort sort = Sort.by("id").descending();
+        mv.addObject("list" ,orderDetailService.findAll(sort));
         String userName = principal.getName();
         mv.addObject("userName",userName);
         return mv;

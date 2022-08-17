@@ -5,6 +5,7 @@ import com.java.web_ecommerce_spring.domain.*;
 import com.java.web_ecommerce_spring.serviceImpls.CommentServiceImpl;
 import com.java.web_ecommerce_spring.services.CategoryService;
 import com.java.web_ecommerce_spring.services.ProductService;
+import com.java.web_ecommerce_spring.services.UserService;
 import com.java.web_ecommerce_spring.utils.Middleware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +30,9 @@ public class ProductController {
 
     @Autowired
     ProductService productService;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     CommentServiceImpl commentService;
@@ -57,20 +62,26 @@ public class ProductController {
     }
 
     @PostMapping(value = "/comment")
-    public ModelAndView comment(HttpServletRequest request){
+    public ModelAndView comment(HttpServletRequest request, RedirectAttributes rd){
         User user = middleware.middlewareUser(request);
+        User checkUser = userService.findUserById(user.getId());
         String text = request.getParameter("text");
         float rate = Float.parseFloat(request.getParameter("rate"));
         int id = Integer.parseInt(request.getParameter("id"));
         Product product = productService.getProductById(id);
-        Comment comment = new Comment();
-        comment.setProduct(product);
-        comment.setRate(rate);
-        comment.setText(text);
-        comment.setUser(user);
-        commentService.save(comment);
         String url = "redirect:/public/product/detail/"+id;
         ModelAndView mv = new ModelAndView(url);
+        if(checkUser.getEnable() == 0){
+            rd.addFlashAttribute("msg","fail");
+        }else{
+            Comment comment = new Comment();
+            comment.setProduct(product);
+            comment.setRate(rate);
+            comment.setText(text);
+            comment.setUser(user);
+            commentService.save(comment);
+            rd.addFlashAttribute("msgsc","msgsc");
+        }
         return mv;
     }
 

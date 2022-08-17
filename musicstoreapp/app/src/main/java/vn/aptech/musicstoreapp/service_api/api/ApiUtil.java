@@ -1,5 +1,7 @@
 package vn.aptech.musicstoreapp.service_api.api;
 
+import vn.aptech.musicstoreapp.entity.Account;
+import vn.aptech.musicstoreapp.service_api.service.AccountService;
 import vn.aptech.musicstoreapp.service_api.service.AlbumService;
 import vn.aptech.musicstoreapp.service_api.service.ArtistService;
 import vn.aptech.musicstoreapp.service_api.service.GenreService;
@@ -23,5 +25,9 @@ public class ApiUtil {
 
     public static SongService getSongService() {
         return RetrofitClient.getClient(BASE_URL).create(SongService.class);
+    }
+
+    public static AccountService getAccountService() {
+        return RetrofitClient.getClient(BASE_URL).create(AccountService.class);
     }
 }

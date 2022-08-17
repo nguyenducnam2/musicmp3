@@ -1,5 +1,6 @@
 package com.java.web_ecommerce_spring.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,10 +24,12 @@ public class OrderDetail {
     @Column(name = "discount")
     private float discount;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;

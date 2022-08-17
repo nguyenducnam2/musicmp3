@@ -48,6 +48,16 @@ public class AdminProductController {
         return mv;
     }
 
+    @GetMapping(value = "/inventory")
+    public ModelAndView inventory(Principal principal){
+        ModelAndView mv = new ModelAndView("admin/inventory");
+        Sort sort = Sort.by("id").descending();
+        mv.addObject("products" ,productService.getTopProduct(sort));
+        String userName = principal.getName();
+        mv.addObject("userName",userName);
+        return mv;
+    }
+
     @GetMapping(value = "/seller")
     public ModelAndView seller(Principal principal){
         ModelAndView mv = new ModelAndView("admin/product-seller");
@@ -81,6 +91,7 @@ public class AdminProductController {
             fileNames = FileUtil.upload(file, request);
         }
         product.setImage(fileNames);
+        product.setQuantityimport(product.getQuantity());
         product.setCreatedAt(java.time.LocalDate.now());
 
         Category category = categoryService.getCategoryById(categoryId);

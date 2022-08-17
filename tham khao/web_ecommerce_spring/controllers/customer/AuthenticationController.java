@@ -106,7 +106,7 @@ public class AuthenticationController {
 
     @PostMapping("/changePassword")
     public ModelAndView changePassword(HttpServletRequest request,RedirectAttributes rd){
-        ModelAndView mv = new ModelAndView("redirect:profile");
+        ModelAndView mv = new ModelAndView("redirect:password");
         String oldpassword = request.getParameter("password");
         String passwordMd5 = EncrytedPasswordUtils.md5(oldpassword);
         String newpassword = request.getParameter("newpassword");
@@ -172,6 +172,16 @@ public class AuthenticationController {
     {
         User user = middleware.middlewareUser(request);
         ModelAndView mv = new ModelAndView("public/profile");
+        mv.addObject("categories",categoryService.getAll());
+        mv.addObject("user",user);
+        return mv;
+    }
+
+    @GetMapping({ "/password"})
+    public ModelAndView password(HttpServletRequest request)
+    {
+        User user = middleware.middlewareUser(request);
+        ModelAndView mv = new ModelAndView("public/password");
         mv.addObject("categories",categoryService.getAll());
         mv.addObject("user",user);
         return mv;
