@@ -1,9 +1,14 @@
 package vn.aptech.musicstoreapp.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Artist {
+import java.io.Serializable;
+
+public class Artist implements Parcelable {
     @SerializedName("id")
     @Expose
     private int id;
@@ -34,6 +39,27 @@ public class Artist {
         this.debut = debut;
         this.country = country;
     }
+
+    protected Artist(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        image = in.readString();
+        description = in.readString();
+        debut = in.readString();
+        country = in.readString();
+    }
+
+    public static final Creator<Artist> CREATOR = new Creator<Artist>() {
+        @Override
+        public Artist createFromParcel(Parcel in) {
+            return new Artist(in);
+        }
+
+        @Override
+        public Artist[] newArray(int size) {
+            return new Artist[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -81,5 +107,20 @@ public class Artist {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(image);
+        dest.writeString(description);
+        dest.writeString(debut);
+        dest.writeString(country);
     }
 }

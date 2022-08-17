@@ -1,9 +1,12 @@
 package vn.aptech.musicstoreapp.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Song {
+public class Song implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -77,6 +80,61 @@ public class Song {
         this.genre = genre;
         this.account = account;
     }
+
+    protected Song(Parcel in) {
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readInt();
+        }
+        name = in.readString();
+        media = in.readString();
+        lyric = in.readString();
+        if (in.readByte() == 0) {
+            view = null;
+        } else {
+            view = in.readInt();
+        }
+        video = in.readString();
+        if (in.readByte() == 0) {
+            price = null;
+        } else {
+            price = in.readInt();
+        }
+        image = in.readString();
+        if (in.readByte() == 0) {
+            albumId = null;
+        } else {
+            albumId = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            artistId = null;
+        } else {
+            artistId = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            genreId = null;
+        } else {
+            genreId = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            accountId = null;
+        } else {
+            accountId = in.readLong();
+        }
+    }
+
+    public static final Creator<Song> CREATOR = new Creator<Song>() {
+        @Override
+        public Song createFromParcel(Parcel in) {
+            return new Song(in);
+        }
+
+        @Override
+        public Song[] newArray(int size) {
+            return new Song[size];
+        }
+    };
 
     public Integer getId() {
         return id;
@@ -204,5 +262,61 @@ public class Song {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(id);
+        }
+        dest.writeString(name);
+        dest.writeString(media);
+        dest.writeString(lyric);
+        if (view == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(view);
+        }
+        dest.writeString(video);
+        if (price == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(price);
+        }
+        dest.writeString(image);
+        if (albumId == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(albumId);
+        }
+        if (artistId == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(artistId);
+        }
+        if (genreId == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(genreId);
+        }
+        if (accountId == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(accountId);
+        }
     }
 }

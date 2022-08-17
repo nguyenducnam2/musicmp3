@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -21,8 +23,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.palette.graphics.Palette;
 import androidx.viewpager.widget.ViewPager;
+
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -37,6 +42,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import vn.aptech.musicstoreapp.R;
 import vn.aptech.musicstoreapp.adapter.ViewPagerSongCd;
+import vn.aptech.musicstoreapp.entity.Artist;
 import vn.aptech.musicstoreapp.entity.Song;
 import vn.aptech.musicstoreapp.fragment.Fragment_SongCd;
 import vn.aptech.musicstoreapp.service_api.api.ApiUtil;
@@ -45,6 +51,7 @@ import vn.aptech.musicstoreapp.service_api.service.SongService;
 import vn.aptech.musicstoreapp.service_local.ForegroundServiceControl;
 
 public class PlayMusicActivity extends AppCompatActivity {
+    private SQLiteDatabase db;
     private androidx.appcompat.widget.Toolbar toolbarplaynhac;
     private SeekBar seekBarnhac;
     private ImageView imageViewtim;
@@ -54,6 +61,9 @@ public class PlayMusicActivity extends AppCompatActivity {
     private int dem = 0, position = 0, duration = 0, timeValue = 0, durationToService = 0;
     private boolean repeat = false, checkrandom = false, isplaying;
     private static ArrayList<Song> mangbaihat = new ArrayList<>();
+    //  private static ArrayList<BaiHatThuVienPlayListModel> mangbaihetthuvienplaylist = new ArrayList<>();
+    //  private static final ArrayList<BaiHatYeuThichModel> mangbaihatyeuthich = new ArrayList<>();
+    private String taikhoan;
     private Fragment_SongCd fragment_dia_nhac;
     public static ViewPagerSongCd adapternhac;
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -78,44 +88,109 @@ public class PlayMusicActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playmusic);
-
+        db = openOrCreateDatabase("NguoiDung.db", MODE_PRIVATE, null);
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
                 new IntentFilter("send_data_to_activity"));
         GetDataFromIntent();
-
+//        getDataSQLite();
         AnhXa();
         enventClick();
-
+        setViewStart();
         StartService();
-
+        overridePendingTransition(R.anim.anim_intent_in, R.anim.anim_intent_out);
     }
 
     private void StartService() {
         Intent intent = new Intent(this, ForegroundServiceControl.class);
         if (mangbaihat.size() > 0) {
             intent.putExtra("obj_song_baihat", mangbaihat);
-        }
+        }/*else if (mangbaihatyeuthich.size() > 0){
+            intent.putExtra("obj_song_yeuthich", mangbaihatyeuthich);
+        }else if (mangbaihetthuvienplaylist.size() > 0){
+            intent.putExtra("obj_song_thuvien", mangbaihetthuvienplaylist);
+        }*/
         startService(intent);
     }
 
-    private void handleMusic(int action) {
-        switch (action) {
-            case ForegroundServiceControl.ACTION_PAUSE:
-                imageButtonplaypausenhac.setImageResource(R.drawable.nutpause);
-                break;
-            case ForegroundServiceControl.ACTION_RESUME:
-                imageButtonplaypausenhac.setImageResource(R.drawable.nutplay);
-                break;
-            case ForegroundServiceControl.ACTION_NEXT:
-                completeNextMusic();
-                break;
-            case ForegroundServiceControl.ACTION_PREVIOUS:
-                completePreviousMusic();
-                break;
-        }
+    private void insertYeuThich(String un, int idbh, String tbh, String tcs, String hbh, String lbh) {
+      /*  SongService dataservice = ApiUtil.getSongService();
+        Call<Song> callback = dataservice.insertyeuthich(un, idbh, tbh, tcs, hbh, lbh);
+        callback.enqueue(new Callback<ResponseModel>() {
+            @Override
+            public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+            }
+
+            @Override
+            public void onFailure(Call<ResponseModel> call, Throwable t) {
+            }
+        }); */
+    }
+
+    private void deleteYeuThich(String un, int idbh) {
+       /* Dataservice dataservice = APIService.getService();
+        Call<ResponseModel> callback = dataservice.deleteyeuthich(un, idbh);
+        callback.enqueue(new Callback<ResponseModel>() {
+            @Override
+            public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+            }
+            @Override
+            public void onFailure(Call<ResponseModel> call, Throwable t) {
+            }
+        }); */
+    }
+
+    private void checkYeuThich(String un, int idbh) {
+        /*Dataservice dataservice = APIService.getService();
+        Call<ResponseModel> callback = dataservice.checkyeuthich(un, idbh);
+        callback.enqueue(new Callback<ResponseModel>() {
+            @Override
+            public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+                ResponseModel responseBody = response.body();
+                if (responseBody != null) {
+                    if (responseBody.getSuccess().equals("1")) {
+                        dem = 1;
+                        imageViewtim.setImageResource(R.drawable.iconloved);
+                    } else {
+                        dem = 0;
+                        imageViewtim.setImageResource(R.drawable.iconlove);
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseModel> call, Throwable t) {
+            }
+        });*/
     }
 
     private void enventClick() {
+        imageViewtim.setOnClickListener(view -> {
+            if (dem == 0) {
+                Animation animation = AnimationUtils.loadAnimation(PlayMusicActivity.this, R.anim.anim_timclick);
+                imageViewtim.setImageResource(R.drawable.iconloved);
+                view.startAnimation(animation);
+                if (mangbaihat.size() > 0) {
+                    insertYeuThich(taikhoan, mangbaihat.get(position).getId(), mangbaihat.get(position).getName(),
+                            mangbaihat.get(position).getArtist().getName(), mangbaihat.get(position).getImage(), mangbaihat.get(position).getMedia());
+                }/*else if (mangbaihetthuvienplaylist.size() > 0){
+                    insertYeuThich(taikhoan, mangbaihetthuvienplaylist.get(position).getIdBaiHat(), mangbaihetthuvienplaylist.get(position).getTenBaiHat(),
+                            mangbaihetthuvienplaylist.get(position).getTenCaSi(), mangbaihetthuvienplaylist.get(position).getHinhBaiHat(), mangbaihetthuvienplaylist.get(position).getLinkBaiHat());
+                }else if (mangbaihatyeuthich.size() > 0){
+                    insertYeuThich(taikhoan, mangbaihatyeuthich.get(position).getIdBaiHat(), mangbaihatyeuthich.get(position).getTenBaiHat(),
+                            mangbaihatyeuthich.get(position).getTenCaSi(), mangbaihatyeuthich.get(position).getHinhBaiHat(), mangbaihatyeuthich.get(position).getLinkBaiHat());
+                }*/
+                dem++;
+            } else {
+                imageViewtim.setImageResource(R.drawable.iconlove);
+                if (mangbaihat.size() > 0) {
+                    deleteYeuThich(taikhoan, mangbaihat.get(position).getId());
+                }/*else if (mangbaihetthuvienplaylist.size() > 0){
+                    deleteYeuThich(taikhoan, mangbaihetthuvienplaylist.get(position).getIdBaiHat());
+                }else if (mangbaihatyeuthich.size() > 0){
+                    deleteYeuThich(taikhoan, mangbaihatyeuthich.get(position).getIdBaiHat());
+                }*/
+                dem--;
+            }
+        });
         imageButtonplaypausenhac.setOnClickListener(view -> {
             if (isplaying) {
                 sendActionToService(ForegroundServiceControl.ACTION_PAUSE);
@@ -161,20 +236,48 @@ public class PlayMusicActivity extends AppCompatActivity {
         imageButtonpreviewnhac.setOnClickListener(view -> sendActionToService(ForegroundServiceControl.ACTION_PREVIOUS));
         toolbarplaynhac.setNavigationOnClickListener(view -> {
             mangbaihat.clear();
+            //mangbaihetthuvienplaylist.clear();
+            //mangbaihatyeuthich.clear();
             finish();
         });
     }
 
-    private void completePreviousMusic() {
-        if (mangbaihat.size() > 0) {
-            PreviousMusic();
-        }
-    }
+    @SuppressWarnings("deprecation")
+    private void setViewStart() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mangbaihat.size() > 0) {
+                    ApiUtil.getArtistService().findAll().enqueue(new Callback<List<Artist>>() {
+                        @Override
+                        public void onResponse(Call<List<Artist>> call, Response<List<Artist>> response) {
+                            for (Artist item : response.body()) {
+                                if (item.getId() == mangbaihat.get(position).getArtistId()) {
+                                    mangbaihat.get(position).setArtist(item);
+                                }
+                            }
+                            setView(taikhoan, mangbaihat.get(position).getId(),
+                                    ApiUtil.WEBDATA_URL + "artist/" + mangbaihat.get(position).getArtist().getImage(), mangbaihat.get(position).getName(), mangbaihat.get(position).getArtist().getName());
+                        }
 
-    private void completeNextMusic() {
-        if (mangbaihat.size() > 0) {
-            NextMusic();
-        }
+                        @Override
+                        public void onFailure(Call<List<Artist>> call, Throwable t) {
+
+                        }
+                    });
+                }/*else if (mangbaihetthuvienplaylist.size() > 0){
+                    setView(taikhoan, mangbaihetthuvienplaylist.get(position).getIdBaiHat(),
+                            mangbaihetthuvienplaylist.get(position).getHinhBaiHat(), mangbaihetthuvienplaylist.get(position).getTenBaiHat()
+                            , mangbaihetthuvienplaylist.get(position).getTenCaSi());
+                }else if (mangbaihatyeuthich.size() > 0){
+                    setView(taikhoan, mangbaihatyeuthich.get(position).getIdBaiHat(),
+                            mangbaihatyeuthich.get(position).getHinhBaiHat(), mangbaihatyeuthich.get(position).getTenBaiHat(), mangbaihatyeuthich.get(position).getTenCaSi());
+                }*/ else {
+                    handler.postDelayed(this, 300);
+                }
+            }
+        }, 500);
     }
 
     private void NextMusic() {
@@ -182,9 +285,43 @@ public class PlayMusicActivity extends AppCompatActivity {
         timeValue = 0;
     }
 
+    private void completeNextMusic() {
+        if (mangbaihat.size() > 0) {
+            NextMusic();
+            setView(taikhoan, mangbaihat.get(position).getId(),
+                    mangbaihat.get(position).getImage(), mangbaihat.get(position).getName(), mangbaihat.get(position).getArtist().getName());
+        }/*else if (mangbaihetthuvienplaylist.size() > 0){
+            NextMusic();
+            setView(taikhoan, mangbaihetthuvienplaylist.get(position).getIdBaiHat(),
+                    mangbaihetthuvienplaylist.get(position).getHinhBaiHat(), mangbaihetthuvienplaylist.get(position).getTenBaiHat()
+                    , mangbaihetthuvienplaylist.get(position).getTenCaSi());
+        }else if (mangbaihatyeuthich.size() > 0){
+            NextMusic();
+            setView(taikhoan, mangbaihatyeuthich.get(position).getIdBaiHat(),
+                    mangbaihatyeuthich.get(position).getHinhBaiHat(), mangbaihatyeuthich.get(position).getTenBaiHat(), mangbaihatyeuthich.get(position).getTenCaSi());
+        }*/
+    }
+
     private void PreviousMusic() {
         imageButtonplaypausenhac.setImageResource(R.drawable.nutplay);
         timeValue = 0;
+    }
+
+    private void completePreviousMusic() {
+        if (mangbaihat.size() > 0) {
+            PreviousMusic();
+            setView(taikhoan, mangbaihat.get(position).getId(),
+                    mangbaihat.get(position).getImage(), mangbaihat.get(position).getName(), mangbaihat.get(position).getArtist().getName());
+        }/*else if (mangbaihetthuvienplaylist.size() > 0){
+            PreviousMusic();
+            setView(taikhoan, mangbaihetthuvienplaylist.get(position).getIdBaiHat(),
+                    mangbaihetthuvienplaylist.get(position).getHinhBaiHat(), mangbaihetthuvienplaylist.get(position).getTenBaiHat(),
+                    mangbaihetthuvienplaylist.get(position).getTenCaSi());
+        }else if (mangbaihatyeuthich.size() > 0){
+            PreviousMusic();
+            setView(taikhoan, mangbaihatyeuthich.get(position).getIdBaiHat(),
+                    mangbaihatyeuthich.get(position).getHinhBaiHat(), mangbaihatyeuthich.get(position).getTenBaiHat(), mangbaihatyeuthich.get(position).getTenCaSi());
+        }*/
     }
 
     private void GetDataFromIntent() {
@@ -192,39 +329,13 @@ public class PlayMusicActivity extends AppCompatActivity {
         mangbaihat.clear();
         if (intent != null) {
             if (intent.hasExtra("cakhuc")) {
-                ArtistService dataservice = ApiUtil.getArtistService();
-                retrofit2.Call<List<Song>> callback = dataservice.getSongById(5);
-                callback.enqueue(new Callback<List<Song>>() {
-                    @Override
-                    public void onResponse(Call<List<Song>> call, Response<List<Song>> response) {
-                        mangbaihat = (ArrayList<Song>) response.body();
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Song>> call, Throwable t) {
-
-                    }
-                });
+                Song baiHat = intent.getParcelableExtra("cakhuc");
+                mangbaihat.add(baiHat);
+            } else if (intent.hasExtra("cacbaihat")) {
+                mangbaihat = intent.getParcelableArrayListExtra("cacbaihat");
             }
         }
     }
-
-    private void sendActionToService(int action) {
-        Intent intent = new Intent(this, ForegroundServiceControl.class);
-        intent.putExtra("action_music_service", action);
-        intent.putExtra("duration", durationToService);
-        intent.putExtra("repeat_music", repeat);
-        intent.putExtra("random_music", checkrandom);
-        startService(intent);
-    }
-
-
-    private void TimeSong() {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss");
-        textViewtatoltime.setText(simpleDateFormat.format(duration));
-        seekBarnhac.setMax(duration);
-    }
-
 
     private void AnhXa() {
         toolbarplaynhac = findViewById(R.id.toolbarplaynhac);
@@ -244,9 +355,78 @@ public class PlayMusicActivity extends AppCompatActivity {
         adapternhac = new ViewPagerSongCd(getSupportFragmentManager());
         adapternhac.AddFragment(fragment_dia_nhac);
         viewPagerplaynhac.setAdapter(adapternhac);
-
+        setSupportActionBar(toolbarplaynhac);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         toolbarplaynhac.setTitleTextColor(Color.BLACK);
         fragment_dia_nhac = (Fragment_SongCd) adapternhac.getItem(position);
+    }
+
+    private void TimeSong() {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss");
+        textViewtatoltime.setText(simpleDateFormat.format(duration));
+        seekBarnhac.setMax(duration);
+    }
+
+    private void handleMusic(int action) {
+        switch (action) {
+            case ForegroundServiceControl.ACTION_PAUSE:
+                imageButtonplaypausenhac.setImageResource(R.drawable.nutpause);
+                break;
+            case ForegroundServiceControl.ACTION_RESUME:
+                imageButtonplaypausenhac.setImageResource(R.drawable.nutplay);
+                break;
+            case ForegroundServiceControl.ACTION_NEXT:
+                completeNextMusic();
+                break;
+            case ForegroundServiceControl.ACTION_PREVIOUS:
+                completePreviousMusic();
+                break;
+        }
+    }
+
+    private void sendActionToService(int action) {
+        Intent intent = new Intent(this, ForegroundServiceControl.class);
+        intent.putExtra("action_music_service", action);
+        intent.putExtra("duration", durationToService);
+        intent.putExtra("repeat_music", repeat);
+        intent.putExtra("random_music", checkrandom);
+        startService(intent);
+    }
+
+    private void setView(String taikhoan, int idBaiHat, String hinhBaiHat, String tenBaiHat, String tenCaSi) {
+        setGradient(hinhBaiHat);
+        fragment_dia_nhac.PlayNhac(hinhBaiHat);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(tenBaiHat);
+        textViewcasi.setText(tenCaSi);
+        textViewtennhac.setText(tenBaiHat);
+        checkYeuThich(taikhoan, idBaiHat);
+    }
+
+    private void setGradient(String urlImage) {
+        Picasso.get().load(urlImage)
+                .into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        Palette.from(bitmap).generate(palette -> {
+                            assert palette != null;
+                            Palette.Swatch swatch = palette.getDominantSwatch();
+                            RelativeLayout mContaier = findViewById(R.id.mContainer);
+                            mContaier.setBackgroundResource(R.drawable.bgr_playnhac);
+                            assert swatch != null;
+                            GradientDrawable gradientDrawableBg = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP,
+                                    new int[]{swatch.getRgb(), swatch.getRgb()});
+                            mContaier.setBackground(gradientDrawableBg);
+                        });
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                    }
+                });
     }
 
     @Override
