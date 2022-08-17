@@ -67,6 +67,7 @@ public class PlayMusicActivity extends AppCompatActivity {
     private String taikhoan;
     private Fragment_SongCd fragment_dia_nhac;
     public static ViewPagerSongCd adapternhac;
+    // xet status isPlaying?,duration,seekBar ..
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -92,7 +93,7 @@ public class PlayMusicActivity extends AppCompatActivity {
         setContentView(R.layout.activity_playmusic);
         db = openOrCreateDatabase("NguoiDung.db", MODE_PRIVATE, null);
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
-                new IntentFilter("send_data_to_activity"));
+                new IntentFilter("send_data_to_activity")); // dang ki broad
         GetDataFromIntent();
 //        getDataSQLite();
         AnhXa();
