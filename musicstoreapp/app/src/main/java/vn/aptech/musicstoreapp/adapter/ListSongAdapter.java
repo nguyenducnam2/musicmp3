@@ -72,26 +72,8 @@ public class ListSongAdapter extends RecyclerView.Adapter<ListSongAdapter.ViewHo
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, PlayMusicActivity.class);
-                    intent.putExtra("cakhuc", mangbaihat.get(0).getId());
-                    MediaPlayer mediaPlayer = new MediaPlayer();
-                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
-                    Uri uri= Uri.parse("http://192.168.1.2:8080/webdata/audio/beatbox.mp3");
-                    try {
-                        mediaPlayer.setDataSource(context,uri);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        mediaPlayer.prepare();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    mediaPlayer.start();
+                    intent.putExtra("cakhuc", mangbaihat.get(getAdapterPosition()));
                     context.startActivity(intent);
-
-
-
                 }
             });
         }

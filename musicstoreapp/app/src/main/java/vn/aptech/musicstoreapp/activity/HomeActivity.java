@@ -31,7 +31,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
         init();
-//        overridePendingTransition(R.anim.anim_intent_in_home, R.anim.anim_intent_out);
+       // overridePendingTransition(R.anim.anim_intent_in_home, R.anim.anim_intent_out);
     }
 
     private void mapping() {
