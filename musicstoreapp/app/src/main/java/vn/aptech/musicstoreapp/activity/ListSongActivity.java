@@ -49,7 +49,7 @@ public class ListSongActivity extends AppCompatActivity {
         mapping();
         floatingActionButton.setVisibility(View.GONE);
         DataIntent();
-        overridePendingTransition(R.anim.anim_intent_in, R.anim.anim_intent_out);
+//        overridePendingTransition(R.anim.anim_intent_in, R.anim.anim_intent_out);
 
 
 
