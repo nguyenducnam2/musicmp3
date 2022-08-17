@@ -2,6 +2,9 @@ package vn.aptech.musicstoreapp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -69,7 +73,24 @@ public class ListSongAdapter extends RecyclerView.Adapter<ListSongAdapter.ViewHo
                 public void onClick(View view) {
                     Intent intent = new Intent(context, PlayMusicActivity.class);
                     intent.putExtra("cakhuc", mangbaihat.get(0).getId());
+                    MediaPlayer mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+                    Uri uri= Uri.parse("http://192.168.1.2:8080/webdata/audio/beatbox.mp3");
+                    try {
+                        mediaPlayer.setDataSource(context,uri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        mediaPlayer.prepare();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    mediaPlayer.start();
                     context.startActivity(intent);
+
+
 
                 }
             });

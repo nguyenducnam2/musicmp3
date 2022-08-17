@@ -87,7 +87,7 @@ public class PlayMusicActivity extends AppCompatActivity {
         enventClick();
 
         StartService();
-        overridePendingTransition(R.anim.anim_intent_in, R.anim.anim_intent_out);
+
     }
 
     private void StartService() {
@@ -245,7 +245,6 @@ public class PlayMusicActivity extends AppCompatActivity {
         adapternhac.AddFragment(fragment_dia_nhac);
         viewPagerplaynhac.setAdapter(adapternhac);
 
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         toolbarplaynhac.setTitleTextColor(Color.BLACK);
         fragment_dia_nhac = (Fragment_SongCd) adapternhac.getItem(position);
     }

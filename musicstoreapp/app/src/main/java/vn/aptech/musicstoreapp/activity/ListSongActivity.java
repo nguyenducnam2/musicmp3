@@ -66,7 +66,7 @@ public class ListSongActivity extends AppCompatActivity {
         txtcollapsing = findViewById(R.id.textViewcollapsing);
         btnThemnhac = findViewById(R.id.btnthemnhacthuvien);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,7 +96,7 @@ public class ListSongActivity extends AppCompatActivity {
                             setValueInView(ApiUtil.WEBDATA_URL + "artist/" + ngheSi.getImage());
                             GetDataNgheSi(ngheSi.getId());
                             txtcollapsing.setText(ngheSi.getName());
-                            getSupportActionBar().setTitle(ngheSi.getName());
+
                         }
                     }
 

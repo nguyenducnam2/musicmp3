@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
@@ -119,7 +120,7 @@ public class ForegroundServiceControl extends Service {
             mediaPlayer.release();
             mediaPlayer = null;
         }
-        new playMP3().onPostExecute("http://192.168.0.17:8080/webdata/audio/beatbox.mp3");
+        new playMP3().onPostExecute("http://192.168.1.2:8080/webdata/audio/beatbox.mp3");
         isPlaying = true;
         duration = mediaPlayer.getDuration();
         sendActonToPlayNhacActivity(ACTION_RESUME);
@@ -272,6 +273,7 @@ public class ForegroundServiceControl extends Service {
             try {
                 mediaPlayer = new MediaPlayer();
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                Uri uri=Uri.parse("http://192.168.1.2:8080/webdata/audio/beatbox.mp3");
                 mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
@@ -286,7 +288,7 @@ public class ForegroundServiceControl extends Service {
                         }
                     }
                 });
-                mediaPlayer.setDataSource("http://192.168.0.17:8080/webdata/audio/beatbox.mp3");
+                mediaPlayer.setDataSource(ForegroundServiceControl.this,uri);
                 mediaPlayer.prepare();
             } catch (IOException e) {
                 e.printStackTrace();
