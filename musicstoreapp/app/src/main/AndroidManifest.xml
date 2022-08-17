@@ -24,8 +24,7 @@
         <activity
             android:name=".activity.HomeActivity"
             android:exported="false" />
-        <activity
-            android:name=".fragment.Dialog_Forget_Password"           />
+        <activity android:name=".fragment.Dialog_Forget_Password" />
         <activity
             android:name=".activity.LoginActivity"
             android:exported="false" />
@@ -38,11 +37,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".service_local.BroadcastReceiverAction"/>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-        <service android:name=".service_local.ForegroundServiceControl"/>
-        <receiver android:name=".service_local.BroadcastReceiverAction"/>
     </application>
 
 </manifest>

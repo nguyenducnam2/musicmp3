@@ -185,7 +185,7 @@ public class ForegroundServiceControl extends Service {
         if (mangbaihat != null && mangbaihat.size() > 0){
             startMusic(ApiUtil.WEBDATA_URL+"audio/"+mangbaihat.get(positionPlayer).getMedia());
             urlImage =ApiUtil.WEBDATA_URL+"album/"+ mangbaihat.get(positionPlayer).getArtist().getImage();
-            sendNotificationMedia(mangbaihat.get(positionPlayer).getName(), mangbaihat.get(positionPlayer).getArtist().getName());
+         //   sendNotificationMedia(mangbaihat.get(positionPlayer).getName(), mangbaihat.get(positionPlayer).getArtist().getName());
         }/*else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0){
             startMusic(mangbaihetthuvienplaylist.get(positionPlayer).getLinkBaiHat());
             urlImage = mangbaihetthuvienplaylist.get(positionPlayer).getHinhBaiHat();

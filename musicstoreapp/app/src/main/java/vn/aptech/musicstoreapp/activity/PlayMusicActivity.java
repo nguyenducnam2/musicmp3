@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -70,6 +71,7 @@ public class PlayMusicActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent != null) {
+                Toast.makeText(PlayMusicActivity.this,"zzzzz",Toast.LENGTH_LONG);
                 isplaying = intent.getBooleanExtra("status_player", false);
                 int action = intent.getIntExtra("action_music", 0);
                 duration = intent.getIntExtra("duration_music", 0);
