@@ -6,6 +6,13 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import vn.aptech.musicstoreapp.service_api.api.ApiUtil;
+
 public class Song implements Parcelable {
 
     @SerializedName("id")
@@ -122,6 +129,9 @@ public class Song implements Parcelable {
         } else {
             accountId = in.readLong();
         }
+        genre=in.readParcelable(Genre.class.getClassLoader());
+        artist=in.readParcelable(Artist.class.getClassLoader());
+        album=in.readParcelable(Album.class.getClassLoader());
     }
 
     public static final Creator<Song> CREATOR = new Creator<Song>() {
@@ -318,5 +328,8 @@ public class Song implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeLong(accountId);
         }
+        dest.writeParcelable(genre,flags);
+        dest.writeParcelable(artist,flags);
+        dest.writeParcelable(album,flags);
     }
 }
