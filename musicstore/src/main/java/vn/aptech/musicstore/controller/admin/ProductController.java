@@ -88,7 +88,7 @@ public class ProductController {
             model.addAttribute("service", service);
             model.addAttribute("name", "null");
             model.addAttribute("mess", "Failed");
-            return "redirect:admin/product";
+            return "redirect:/admin/product";
         }
         model.addAttribute("listpage", service.getPage(pageNumber, size));
         model.addAttribute("service", service);

@@ -76,27 +76,27 @@ public class PaypalController {
     @Autowired
     private UpgradeVipOrderDetailsService upgradeVipOrderDetailsService;
 
-    @GetMapping("/payment/{orderId}")
-    public ModelAndView home(@PathVariable int orderId) {
-        ModelAndView mv = new ModelAndView("public/payment");
-        Order order = orderService.findOrderById(orderId);
-        List<OrderDetail> listOrderItem = orderDetailService.findOrderDetailsByOrder(order);
-        mv.addObject("order", order);
-        mv.addObject("orderItems", listOrderItem);
-        return mv;
-    }
+//    @GetMapping("/payment/{orderId}")
+//    public ModelAndView home(@PathVariable int orderId) {
+//        ModelAndView mv = new ModelAndView("public/payment");
+//        Order order = orderService.findOrderById(orderId);
+//        List<OrderDetail> listOrderItem = orderDetailService.findOrderDetailsByOrder(order);
+//        mv.addObject("order", order);
+//        mv.addObject("orderItems", listOrderItem);
+//        return mv;
+//    }
 
-    @GetMapping("/pay/{orderId}")
-    public String payment(@ModelAttribute("order") OrderOnline order, HttpServletRequest request, @PathVariable Double orderId) {
+    @GetMapping("/pay")
+    public String payment(HttpServletRequest request, @RequestParam("amount") Double amount, @RequestParam("orderId") int orderId) {
         try {
-            Payment payment = service.createPayment(orderId, order.getCurrency(), order.getMethod(),
-                    order.getIntent(), null, applicationUrl(request) + CANCEL_URL,
-                    applicationUrl(request) + SUCCESS_URL);
+            Payment payment = service.createPayment(amount, "USD", "paypal",
+                    "sale", null, "http://localhost:8080/song/cancel",
+                    "http://localhost:8080/song/success");
             for (Links link : payment.getLinks()) {
                 if (link.getRel().equals("approval_url")) {
                     HttpSession session = request.getSession();
-                    session.setAttribute("OrderId", orderId);
-                    System.out.println("succcccc" + orderId);
+                    session.setAttribute("orderId", orderId);
+                    session.setAttribute("amount", amount);
                     return "redirect:" + link.getHref();
                 }
             }
