@@ -90,8 +90,8 @@ public class PaypalController {
     public String payment(HttpServletRequest request, @RequestParam("amount") Double amount, @RequestParam("orderId") int orderId) {
         try {
             Payment payment = service.createPayment(amount, "USD", "paypal",
-                    "sale", null, "http://localhost:8080/song/cancel",
-                    "http://localhost:8080/song/success");
+                    "sale", null, "http://localhost:8080/cart/cancel",
+                    "http://localhost:8080/cart/success");
             for (Links link : payment.getLinks()) {
                 if (link.getRel().equals("approval_url")) {
                     HttpSession session = request.getSession();
