@@ -8,8 +8,11 @@ import vn.aptech.musicstoreapp.service_api.service.GenreService;
 import vn.aptech.musicstoreapp.service_api.service.SongService;
 
 public class ApiUtil {
-    public static final String BASE_URL = "http://172.16.0.113:8080/api/";
-    public static final String WEBDATA_URL = "http://172.16.0.113:8080/webdata/";
+//    public static final String BASE_URL = "http://172.16.0.113:8080/api/";
+//    public static final String WEBDATA_URL = "http://172.16.0.113:8080/webdata/";
+    public static final String BASE_URL = "http://192.168.1.12:8080/api/";
+    public static final String WEBDATA_URL = "http://192.168.1.12:8080/webdata/";
+
 
     public static GenreService getGenreService() {
         return RetrofitClient.getClient(BASE_URL).create(GenreService.class);
