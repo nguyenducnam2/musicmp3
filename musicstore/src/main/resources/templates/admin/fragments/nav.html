@@ -30,6 +30,7 @@
                             <a href="#shop" class="iq-waves-effect" data-toggle="collapse" aria-expanded="false"><span class="ripple rippleEffect"></span><i class="ri-admin-line iq-arrow-left"></i><span>Manager Admin</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
                             <ul id="shop" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                                 <li><a th:href="@{/admin/account}"><i class="las la-user"></i></i>Account</a></li>
+                                <li><a th:href="@{/admin/account}"><i class="las la-user"></i></i>Promotion</a></li>
                             </ul>
                         </li>    
                         <li sec:authorize="hasAnyRole('ADMIN','MODERATOR','EDITOR')" class="active active-menu">

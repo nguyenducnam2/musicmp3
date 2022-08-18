@@ -14,7 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        tools:targetApi="31">
+        <activity
+            android:name=".MenuActivity2"
+            android:exported="false" />
         <activity
             android:name=".activity.PlayMusicActivity"
             android:exported="false" />
@@ -38,17 +40,17 @@
             </intent-filter>
         </activity>
 
-
-        <receiver android:name=".service_local.BroadcastReceiverAction"
+        <receiver
+            android:name=".service_local.BroadcastReceiverAction"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.AIRPLANE_MODE"/>
+                <action android:name="android.intent.action.AIRPLANE_MODE" />
             </intent-filter>
         </receiver>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
     </application>
 
 </manifest>
