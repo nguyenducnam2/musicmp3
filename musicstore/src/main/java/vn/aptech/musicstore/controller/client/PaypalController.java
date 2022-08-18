@@ -85,7 +85,6 @@ public class PaypalController {
 //        mv.addObject("orderItems", listOrderItem);
 //        return mv;
 //    }
-
     @GetMapping("/pay")
     public String payment(HttpServletRequest request, @RequestParam("amount") Double amount, @RequestParam("orderId") int orderId) {
         try {
@@ -254,14 +253,14 @@ public class PaypalController {
                 SongOrder order = new SongOrder();
                 order.setPayment("Paypal");
                 order.setStatus("Success");
-                order.setTotal((Double) session.getAttribute("total"));
+                order.setTotal((Double) session.getAttribute("total2"));
                 order.setAccountId(acc.getId());
                 order.setAccount(acc);
                 songOrderService.save(order);
 
                 UpgradeVipOrderDetails orderdetail = new UpgradeVipOrderDetails();
                 orderdetail.setDuration(duration);
-                orderdetail.setTotal((Double) session.getAttribute("total"));
+                orderdetail.setTotal((Double) session.getAttribute("total2"));
                 orderdetail.setUserId(acc.getId());
                 orderdetail.setAcc(acc);
                 upgradeVipOrderDetailsService.save(orderdetail);
@@ -271,7 +270,9 @@ public class PaypalController {
                 userService.createVipTokenForUser(user.get(), token, duration * 24 * 60);
                 rd.addFlashAttribute("mess", "Successfully");
                 session.removeAttribute("duration");
-                session.removeAttribute("total");
+                session.removeAttribute("total2");
+                session.setAttribute("user", user.get());
+//                session.setAttribute("duration", orderdetail.getDuration());
                 return "redirect:/user/profile/" + user.get().getId();
             }
         } catch (Exception e) {
@@ -290,20 +291,20 @@ public class PaypalController {
         SongOrder order = new SongOrder();
         order.setPayment("Paypal");
         order.setStatus("Canceled");
-        order.setTotal((Double) session.getAttribute("total"));
+        order.setTotal((Double) session.getAttribute("total2"));
         order.setAccountId(acc.getId());
         order.setAccount(acc);
         songOrderService.save(order);
 
         UpgradeVipOrderDetails orderdetail = new UpgradeVipOrderDetails();
         orderdetail.setDuration(duration);
-        orderdetail.setTotal((Double) session.getAttribute("total"));
+        orderdetail.setTotal((Double) session.getAttribute("total2"));
         orderdetail.setUserId(acc.getId());
         orderdetail.setAcc(acc);
         upgradeVipOrderDetailsService.save(orderdetail);
 
         session.removeAttribute("duration");
-        session.removeAttribute("total");
+        session.removeAttribute("total2");
         rd.addFlashAttribute("mess", "Failed");
         return "redirect:/user/profile/" + acc.getId();
     }
