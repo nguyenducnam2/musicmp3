@@ -4,11 +4,13 @@
     package="vn.aptech.musicstoreapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="com.google.android.c2dm.permission.send" />
     <uses-permission android:name="com.google.android.c2dm.permission.Receive" />
 
     <application
+        android:name=".service_local.ChannelNotification"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -48,6 +50,7 @@
                 <action android:name="android.intent.action.AIRPLANE_MODE" />
             </intent-filter>
         </receiver>
+        <service android:name=".service_local.ForegroundServiceControl"/>
 
         <meta-data
             android:name="preloaded_fonts"

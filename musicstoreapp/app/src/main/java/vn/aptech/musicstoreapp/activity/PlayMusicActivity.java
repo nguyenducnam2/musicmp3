@@ -1,5 +1,7 @@
 package vn.aptech.musicstoreapp.activity;
 
+import static android.content.ContentValues.TAG;
+
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -91,7 +94,8 @@ public class PlayMusicActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playmusic);
-        db = openOrCreateDatabase("NguoiDung.db", MODE_PRIVATE, null);
+    //    db = openOrCreateDatabase("NguoiDung.db", MODE_PRIVATE, null);
+        Log.e(TAG,"onCreate PlayMusicActivity");
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
                 new IntentFilter("send_data_to_activity")); // dang ki broad
         GetDataFromIntent();
@@ -100,7 +104,7 @@ public class PlayMusicActivity extends AppCompatActivity {
         enventClick();
         setViewStart();
         StartService();
-        overridePendingTransition(R.anim.anim_intent_in, R.anim.anim_intent_out);
+        //overridePendingTransition(R.anim.anim_intent_in, R.anim.anim_intent_out);
     }
 
     private void StartService() {
@@ -168,6 +172,7 @@ public class PlayMusicActivity extends AppCompatActivity {
     private void enventClick() {
         imageViewtim.setOnClickListener(view -> {
             if (dem == 0) {
+                Log.e(TAG,"like click");
                 Animation animation = AnimationUtils.loadAnimation(PlayMusicActivity.this, R.anim.anim_timclick);
                 imageViewtim.setImageResource(R.drawable.iconloved);
                 view.startAnimation(animation);
@@ -195,10 +200,13 @@ public class PlayMusicActivity extends AppCompatActivity {
             }
         });
         imageButtonplaypausenhac.setOnClickListener(view -> {
+            Log.e(TAG,"playpause click");
             if (isplaying) {
+                Log.e(TAG,"isplaying == true");
                 sendActionToService(ForegroundServiceControl.ACTION_PAUSE);
                 imageButtonplaypausenhac.setImageResource(R.drawable.nutpause);
             } else {
+                Log.e(TAG,"isplaying == false");
                 sendActionToService(ForegroundServiceControl.ACTION_RESUME);
                 imageButtonplaypausenhac.setImageResource(R.drawable.nutplay);
             }
@@ -333,6 +341,7 @@ public class PlayMusicActivity extends AppCompatActivity {
         if (intent != null) {
             if (intent.hasExtra("cakhuc")) {
                 Song baiHat = intent.getParcelableExtra("cakhuc");
+                Log.e(TAG,"-"+baiHat.getName());
                 mangbaihat.add(baiHat);
             } else if (intent.hasExtra("cacbaihat")) {
                 mangbaihat = intent.getParcelableArrayListExtra("cacbaihat");
