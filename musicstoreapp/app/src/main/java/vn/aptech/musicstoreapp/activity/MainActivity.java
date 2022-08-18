@@ -105,19 +105,19 @@ public class MainActivity extends AppCompatActivity {
 //        overridePendingTransition(R.anim.anim_intent_in_home, R.anim.anim_intent_out);
 
 
-//        tvDemo=findViewById(R.id.tvDemo);
-//        genreService= ApiUtil.getGenreService();
-//        genreService.findAll().enqueue(new Callback<List<Genre>>() {
-//            @Override
-//            public void onResponse(Call<List<Genre>> call, Response<List<Genre>> response) {
-//                tvDemo.setText(response.body().get(1).getName());
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Genre>> call, Throwable t) {
-//
-//            }
-//        });
+        tvDemo=findViewById(R.id.tvUsername);
+        genreService= ApiUtil.getGenreService();
+        genreService.findAll().enqueue(new Callback<List<Genre>>() {
+            @Override
+            public void onResponse(Call<List<Genre>> call, Response<List<Genre>> response) {
+                tvDemo.setText(response.body().get(0).getName());
+            }
+
+            @Override
+            public void onFailure(Call<List<Genre>> call, Throwable t) {
+
+            }
+        });
 
     }
 
