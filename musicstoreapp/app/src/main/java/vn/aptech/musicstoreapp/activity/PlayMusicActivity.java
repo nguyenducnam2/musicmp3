@@ -75,7 +75,7 @@ public class PlayMusicActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent != null) {
-                Toast.makeText(PlayMusicActivity.this,"zzzzz",Toast.LENGTH_LONG);
+                Toast.makeText(PlayMusicActivity.this, "zzzzz", Toast.LENGTH_LONG);
                 isplaying = intent.getBooleanExtra("status_player", false);
                 int action = intent.getIntExtra("action_music", 0);
                 duration = intent.getIntExtra("duration_music", 0);
@@ -94,8 +94,8 @@ public class PlayMusicActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playmusic);
-    //    db = openOrCreateDatabase("NguoiDung.db", MODE_PRIVATE, null);
-        Log.e(TAG,"onCreate PlayMusicActivity");
+        //    db = openOrCreateDatabase("NguoiDung.db", MODE_PRIVATE, null);
+        Log.e(TAG, "onCreate PlayMusicActivity");
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
                 new IntentFilter("send_data_to_activity")); // dang ki broad
         GetDataFromIntent();
@@ -172,7 +172,7 @@ public class PlayMusicActivity extends AppCompatActivity {
     private void enventClick() {
         imageViewtim.setOnClickListener(view -> {
             if (dem == 0) {
-                Log.e(TAG,"like click");
+                Log.e(TAG, "like click");
                 Animation animation = AnimationUtils.loadAnimation(PlayMusicActivity.this, R.anim.anim_timclick);
                 imageViewtim.setImageResource(R.drawable.iconloved);
                 view.startAnimation(animation);
@@ -200,13 +200,13 @@ public class PlayMusicActivity extends AppCompatActivity {
             }
         });
         imageButtonplaypausenhac.setOnClickListener(view -> {
-            Log.e(TAG,"playpause click");
+            Log.e(TAG, "playpause click");
             if (isplaying) {
-                Log.e(TAG,"isplaying == true");
+                Log.e(TAG, "isplaying == true");
                 sendActionToService(ForegroundServiceControl.ACTION_PAUSE);
                 imageButtonplaypausenhac.setImageResource(R.drawable.nutpause);
             } else {
-                Log.e(TAG,"isplaying == false");
+                Log.e(TAG, "isplaying == false");
                 sendActionToService(ForegroundServiceControl.ACTION_RESUME);
                 imageButtonplaypausenhac.setImageResource(R.drawable.nutplay);
             }
@@ -260,23 +260,7 @@ public class PlayMusicActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (mangbaihat.size() > 0) {
-                    ApiUtil.getArtistService().findAll().enqueue(new Callback<List<Artist>>() {
-                        @Override
-                        public void onResponse(Call<List<Artist>> call, Response<List<Artist>> response) {
-                            for (Artist item : response.body()) {
-                                if (item.getId() == mangbaihat.get(position).getArtistId()) {
-                                    mangbaihat.get(position).setArtist(item);
-                                }
-                            }
-                            setView(taikhoan, mangbaihat.get(position).getId(),
-                                    ApiUtil.WEBDATA_URL + "artist/" + mangbaihat.get(position).getArtist().getImage(), mangbaihat.get(position).getName(), mangbaihat.get(position).getArtist().getName());
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<Artist>> call, Throwable t) {
-
-                        }
-                    });
+                    setView(taikhoan, mangbaihat.get(position).getId(),ApiUtil.WEBDATA_URL + "album/" + mangbaihat.get(position).getArtist().getImage(), mangbaihat.get(position).getName(), mangbaihat.get(position).getArtist().getName());
                 }/*else if (mangbaihetthuvienplaylist.size() > 0){
                     setView(taikhoan, mangbaihetthuvienplaylist.get(position).getIdBaiHat(),
                             mangbaihetthuvienplaylist.get(position).getHinhBaiHat(), mangbaihetthuvienplaylist.get(position).getTenBaiHat()
@@ -300,7 +284,7 @@ public class PlayMusicActivity extends AppCompatActivity {
         if (mangbaihat.size() > 0) {
             NextMusic();
             setView(taikhoan, mangbaihat.get(position).getId(),
-                    mangbaihat.get(position).getImage(), mangbaihat.get(position).getName(), mangbaihat.get(position).getArtist().getName());
+                    ApiUtil.WEBDATA_URL+"album/"+mangbaihat.get(position).getAlbum().getImage(), mangbaihat.get(position).getName(), mangbaihat.get(position).getArtist().getName());
         }/*else if (mangbaihetthuvienplaylist.size() > 0){
             NextMusic();
             setView(taikhoan, mangbaihetthuvienplaylist.get(position).getIdBaiHat(),
@@ -322,7 +306,7 @@ public class PlayMusicActivity extends AppCompatActivity {
         if (mangbaihat.size() > 0) {
             PreviousMusic();
             setView(taikhoan, mangbaihat.get(position).getId(),
-                    mangbaihat.get(position).getImage(), mangbaihat.get(position).getName(), mangbaihat.get(position).getArtist().getName());
+                    ApiUtil.WEBDATA_URL+"album/"+mangbaihat.get(position).getAlbum().getImage(), mangbaihat.get(position).getName(), mangbaihat.get(position).getArtist().getName());
         }/*else if (mangbaihetthuvienplaylist.size() > 0){
             PreviousMusic();
             setView(taikhoan, mangbaihetthuvienplaylist.get(position).getIdBaiHat(),
@@ -341,7 +325,7 @@ public class PlayMusicActivity extends AppCompatActivity {
         if (intent != null) {
             if (intent.hasExtra("cakhuc")) {
                 Song baiHat = intent.getParcelableExtra("cakhuc");
-                Log.e(TAG,"-"+baiHat.getName());
+                Log.e(TAG, "-" + baiHat.getName());
                 mangbaihat.add(baiHat);
             } else if (intent.hasExtra("cacbaihat")) {
                 mangbaihat = intent.getParcelableArrayListExtra("cacbaihat");

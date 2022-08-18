@@ -1,8 +1,11 @@
 package vn.aptech.musicstoreapp.fragment;
 
+import static android.content.ContentValues.TAG;
+
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +32,7 @@ public class Fragment_SongCd extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.fragment_songcd,container, false);
+        view = inflater.inflate(R.layout.fragment_songcd, container, false);
         circleImageView = view.findViewById(R.id.imageviewcircle);
         objectAnimator = ObjectAnimator.ofFloat(circleImageView, "rotation", 0f, 360f);
         objectAnimator.setDuration(20000);
@@ -39,7 +42,9 @@ public class Fragment_SongCd extends Fragment {
         objectAnimator.start();
         return view;
     }
+
     public void PlayNhac(String hinhanh) {
+        Log.e(TAG, hinhanh);
         Picasso.get().load(hinhanh).into(circleImageView);
     }
 }

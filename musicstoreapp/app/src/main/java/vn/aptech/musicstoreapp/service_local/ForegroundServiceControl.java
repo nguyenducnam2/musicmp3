@@ -1,5 +1,7 @@
 package vn.aptech.musicstoreapp.service_local;
 
+import static android.content.ContentValues.TAG;
+
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -15,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.media.session.MediaSessionCompat;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -184,8 +187,8 @@ public class ForegroundServiceControl extends Service {
     private void CompleteAndStart(){
         if (mangbaihat != null && mangbaihat.size() > 0){
             startMusic(ApiUtil.WEBDATA_URL+"audio/"+mangbaihat.get(positionPlayer).getMedia());
-            urlImage =ApiUtil.WEBDATA_URL+"album/exo.jpg";
-         //   sendNotificationMedia(mangbaihat.get(positionPlayer).getName(), mangbaihat.get(positionPlayer).getArtist().getName());
+            urlImage =ApiUtil.WEBDATA_URL+"album/"+mangbaihat.get(positionPlayer).getAlbum().getImage();
+            sendNotificationMedia(mangbaihat.get(positionPlayer).getName(), mangbaihat.get(positionPlayer).getArtist().getName());
         }/*else if (mangbaihetthuvienplaylist != null && mangbaihetthuvienplaylist.size() > 0){
             startMusic(mangbaihetthuvienplaylist.get(positionPlayer).getLinkBaiHat());
             urlImage = mangbaihetthuvienplaylist.get(positionPlayer).getHinhBaiHat();
