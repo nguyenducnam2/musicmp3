@@ -8,6 +8,6 @@ package vn.aptech.musicstore.service.impl;
  *
  * @author Administrator
  */
-public class PromotionCodeServiceImpl {
+public class PromotionCodeServiceImpl  {
     
 }
