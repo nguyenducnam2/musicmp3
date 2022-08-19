@@ -51,7 +51,7 @@ and open the template in the editor.
                                                 <th style="width: 30%;">discount</th>
                                                 <th style="width: 10%;">code</th>
                                                 <th style="width: 5%;">Start date</th> 
-                                                <th style="width: 5%;">Expiration Time</th> 
+                                                <th style="width: 5%;">End date</th> 
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -61,16 +61,9 @@ and open the template in the editor.
                                                 <td th:text="${item.discount}"></td>
                                                 <td th:text="${item.code}"></td>
                                                 <td th:text="${item.startDate}"></td>
-                                                <td th:text="${item.expirationTime}"></td>
-                                                <!--<td th:text="${item.fullname}"></td>-->
-<!--                                                <td th:switch="${item.role}"> 
-                                                    <span th:case="'ROLE_ADMIN'">Admin</span>
-                                                    <span th:case="'ROLE_EDITOR'">Editor</span>
-                                                    <span th:case="'ROLE_USER'">User</span>
-                                                    <span th:case="'ROLE_MODERATOR'">MOD</span>
-                                                    <span th:case="*">Other</span>
-                                                </td>-->
-                                                <!--<td th:text="${item.enabled ? 'Active':'Block'}">State</td>-->
+                                                <td th:text="${item.endDate}"></td>
+                                                
+<!--                                                <td th:text="${item.enabled ? 'Active':'Block'}">State</td>-->
 
                                                 <td>
 <!--                                                    <div th:if="${#httpServletRequest.getUserPrincipal().getName()} == ${item.username}" class="flex align-items-center list-user-action">

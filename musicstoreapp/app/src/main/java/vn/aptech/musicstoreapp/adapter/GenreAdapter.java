@@ -54,7 +54,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.ViewHolder>{
             @Override
             public void onResponse(Call<List<Song>> call, Response<List<Song>> response) {
                 Random random=new Random();
-                Picasso.get(/*context*/).load(ApiUtil.WEBDATA_URL+"artist/"+response.body().get(random.nextInt(response.body().size())).getArtist().getImage()).into(holder.imgchude);
+//                Picasso.get(/*context*/).load(ApiUtil.WEBDATA_URL+"artist/"+response.body().get(random.nextInt(response.body().size())).getArtist().getImage()).into(holder.imgchude);
             }
 
             @Override
