@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" th:href="@{/public/css/sach-moi-tuyen-chon.css}">
+    <script type="text/javascript" th:src="@{/public/js/main.js}"></script>
+    <link rel="stylesheet" th:href="@{/public/fontawesome_free_5.13.0/css/all.css}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/public/slick/slick.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/public/slick/slick-theme.css}"/>
+    <script type="text/javascript" th:src="@{/public/slick/slick.min.js}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    <script type="text/javascript"
+            src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+    <link rel="canonical" href="http://dealbook.xyz/">
+    <meta name="google-site-verification" content="urDZLDaX8wQZ_-x8ztGIyHqwUQh2KRHvH9FhfoGtiEw" />
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/public/favicon_io/apple-touch-icon.png}">
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/public/favicon_io/favicon-32x32.png}">
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/public/favicon_io/favicon-16x16.png}">
+    <link rel="manifest" th:href="@{/public/favicon_io/site.webmanifest}">
+    <style>img[alt="www.000webhost.com"]{display: none;}</style>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        function abc(){
+            alert("Dsds")
+        }
+        function login(){
+            var password = $('#password1').val();
+            var email = $('#email1').val();
+            if (password == ''  || email == '' ){
+                swal({
+                    title: 'Need to fill out the information completely!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            } else {
+
+                var formData = new FormData();
+                formData.append('password', password);
+                formData.append('email', email);
+                $.ajax(
+                    {
+                        type: 'POST',
+                        url: '/public/user/login/',
+                        contentType: false,
+                        processData: false,
+                        data: formData,
+                        success: function (data) {
+                            if(data == "false_user"){
+                                swal({
+                                    title: 'Incorrect account information!',
+                                    /* text: 'Redirecting...', */
+                                    icon: 'error',
+                                    timer: 3000,
+                                    buttons: true,
+                                    type: 'error'
+                                })
+                            }else if(data == "true"){
+                                swal({
+                                    title: 'Login successfully !',
+                                    /* text: 'Redirecting...', */
+                                    icon: 'success',
+                                    timer: 5000,
+                                    buttons: true,
+                                    type: 'success'
+                                })
+                                setInterval(function(){
+                                    location.reload()
+                                }, 3000);
+                            } else {
+                                swal({
+                                    title: 'Unverified account, please check your email!',
+                                    /* text: 'Redirecting...', */
+                                    icon: 'error',
+                                    timer: 3000,
+                                    buttons: true,
+                                    type: 'error'
+                                })
+                            }
+                        },
+                        error: function (err) {
+                            alert(err);
+                        }
+                    }
+                )
+            }
+
+        }
+        $( document ).ready(function() {
+            const cb = document.querySelector('#checkbox1');
+            if(cb.checked == false){
+                document.getElementById("register_id").disabled = true;
+            }
+        });
+        function changeStatus(){
+            const cb = document.querySelector('#checkbox1');
+            if(cb.checked == false){
+                document.getElementById("register_id").disabled = true;
+            }else if(cb.checked == true){
+                document.getElementById("register_id").disabled = false;
+            }
+        }
+        function register(){
+
+            const validateEmail = (email) => {
+                return email.match(
+                    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                );
+            };
+            var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+            var password = $('#password').val();
+            var rePassword = $('#rePassword').val();
+            var email = $('#email').val();
+            var fullName = $('#fullName').val();
+            let phoneNumber = $('#phoneNumber').val().replace(/\s+/g, '');
+            var atposition = email.indexOf("@");
+            var dotposition = email.lastIndexOf(".");
+            if (password == '' || rePassword == '' || email == '' || fullName == '' || phoneNumber == ''){
+                swal({
+                    title: 'You need to fill in all the information!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            }
+            else if (vnf_regex.test(phoneNumber) == false)
+            {
+                swal({
+                    title: 'Phone number is not in the correct format!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            } else if(atposition < 1 || dotposition < (atposition + 2) || (dotposition + 2) >= email.length){
+                swal({
+                    title: 'Email is not in the correct format!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            } else if(!validateEmail(email)){
+                swal({
+                    title: 'Email is not in the correct format!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            }else {
+                if (password !== rePassword){
+                    swal({
+                        title: 'Two passwords do not match!',
+                        /* text: 'Redirecting...', */
+                        icon: 'error',
+                        timer: 3000,
+                        buttons: true,
+                        type: 'error'
+                    })
+                } else {
+                    var formData = new FormData();
+                    formData.append('password', password);
+                    formData.append('email', email);
+                    formData.append('fullName', fullName);
+                    formData.append('phoneNumber', phoneNumber);
+                    formData.append('rePassword', rePassword);
+                    $.ajax(
+                        {
+                            type: 'POST',
+                            url: '/public/user/register/',
+                            contentType: false,
+                            processData: false,
+                            data: formData,
+                            success: function (data) {
+                                if(data == "exist"){
+                                    swal({
+                                        title: 'Email is existed!',
+                                        /* text: 'Redirecting...', */
+                                        icon: 'error',
+                                        timer: 3000,
+                                        buttons: true,
+                                        type: 'error'
+                                    })
+                                }else if(data == "true"){
+                                    swal({
+                                        title: 'Register successfully!',
+                                        /* text: 'Redirecting...', */
+                                        icon: 'success',
+                                        timer: 5000,
+                                        buttons: true,
+                                        type: 'success'
+                                    })
+                                    $('#err').val("");
+                                }
+                            },
+                            error: function (err) {
+                                alert(err);
+                            }
+                        }
+                    )
+                }
+            }
+
+        }
+    </script>
+</head>
+
+<body>
+<!--Start of Tawk.to Script-->
+
+<!--End of Tawk.to Script-->
+<!-- code cho nut like share facebook  -->
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v6.0"></script>
+
+<!-- header -->
+<nav th:replace="public/fragments :: html_nav" class="navbar navbar-expand-md bg-white navbar-light">
+
+</nav>
+
+
+<!-- form dang ky khi click vao button tren header-->
+<div th:replace="public/fragments :: html_register" class="modal fade mt-5" id="formdangky" data-backdrop="static" tabindex="-1" aria-labelledby="dangky_tieude"
+     aria-hidden="true">
+
+</div>
+
+
+<!-- form dang nhap khi click vao button tren header-->
+<div th:replace="public/fragments :: html_login" class="modal fade mt-5" id="formdangnhap" data-backdrop="static" tabindex="-1"
+     aria-labelledby="dangnhap_tieude" aria-hidden="true">
+
+</div>
+
+<!-- thanh "danh muc sach" đã được ẩn bên trong + hotline + ho tro truc tuyen -->
+<section  class="duoinavbar">
+    <div class="container text-white">
+        <div class="row justify">
+            <div class="col-lg-3 col-md-5">
+                <div class="categoryheader">
+                    <div class="noidungheader text-white">
+                        <i class="fa fa-bars"></i>
+                        <span class="text-uppercase font-weight-bold ml-1">
+Category Product</span>
+                    </div>
+                    <!-- CATEGORIES -->
+                    <div class="categorycontent">
+                        <ul>
+                            <th:block th:each="category,index : ${categories}">
+                                <li th:if="${category.parentId == 0}"> <a  th:text="${category.name}"></a><i class="fa fa-chevron-right float-right"></i>
+                                    <ul>
+                                        <li class="liheader"><a href="#" class="header text-uppercase" th:text="${category.name}"></a></li>
+                                        <div class="content trai">
+                                            <th:block th:each="category1,index1 : ${categories}">
+                                                <li th:if="${category.id == category1.parentId}"><a th:text="${category1.name}" th:href="'/public/product/'+${category1.id}"></a></li>
+                                                <th:block/>
+                                        </div>
+                                    </ul>
+                                </li>
+                                <th:block/>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 ml-auto contact d-none d-md-block">
+                <div class="benphai float-right">
+                    <div class="hotline">
+                        <i class="fa fa-phone"></i>
+                        <span>Hotline:<b>1900 1999</b> </span>
+                    </div>
+                    <i class="fas fa-comments-dollar"></i>
+                    <a href="#">
+                        Online support </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- breadcrumb  -->
+<!-- các sản phẩm  -->
+<section class="content my-4">
+    <div class="container">
+        <div class="noidung bg-white" style=" width: 100%;">
+            <div class="items">
+                <div class="row">
+                    <h4 style="margin: 10px auto !important;">TERMS OF SERVICE</h4>
+                    <div id="tofContent" class="container" >
+
+
+                        <p class="MsoNormal" style="background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">1. INTRODUCTION</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            1.1 Welcome to the e_Store e-commerce exchange via website interface or mobile application (“e_Store Page”). </font><font style="vertical-align: inherit;">Before using the e_Store Site or creating a e_Store account (“Account”), please carefully read the following&nbsp; </font></font><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Terms of Service&nbsp;</font></font></b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> and&nbsp; </font></font><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">the e_Store E-Commerce Platform Operation Regulations</font></font></b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">&nbsp;to clearly understand their legal rights and obligations towards e_Store Co., Ltd and e_Store's affiliates and subsidiaries (hereinafter referred to as "e_Store", collectively "us", "we", ours"). </font><font style="vertical-align: inherit;">The “Services” we provide or make available include (a) the e_Store Site, (b) the services provided by the e_Store Site and by the e_Store customer software available on the e_Store Site, and (c) ) all information, links, features, data, text, images, graphs, music, audio, video (including live videos posted in real time (livestream) )), messages, tags, content, programs, software, service applications (including any mobile service applications) or other materials available on the e_Store Site or related services to the e_Store Site (“Content”). </font><font style="vertical-align: inherit;">Any new features added or expanded to the Service are governed by these Terms of Service. </font><font style="vertical-align: inherit;">These Terms of Service govern your use of the Services provided by e_Store.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            1.2 The Service includes an online exchange service that connects consumers with each other in order to provide business opportunities between buyers (“Buyer”) and sellers (“Seller”) (collectively, “friends”). ”, “User” or “Parties”). </font><font style="vertical-align: inherit;">The real contract of sale is directly between the Buyer and the Seller. </font><font style="vertical-align: inherit;">The Parties involved in such transaction will be responsible for the sales contract between them, the listing of goods, product warranties and the like. </font><font style="vertical-align: inherit;">e_Store does not interfere in transactions between Users. </font><font style="vertical-align: inherit;">e_Store may or may not pre-screen Users or the Content or information provided by Users. </font><font style="vertical-align: inherit;">e_Store reserves the right to remove any Content or information on the e_Store Site in accordance with Section 6.4 below. </font><font style="vertical-align: inherit;">e_Store does not warrant that the Users will actually complete the transaction. </font><font style="vertical-align: inherit;">Note,
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            1.3 Before becoming a User of the e_Store Site, you need to read and accept all terms and conditions set forth in, and referenced to, these Terms of Service and the Privacy Policy referenced herein.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            1.4 e_Store reserves the right to change, modify, suspend or terminate all or any part of the e_Store Site or the Service at any time as required by law. </font><font style="vertical-align: inherit;">The beta version of the Service or its features may not be exactly the same as the final version.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            1.5 e_Store reserves the right to refuse your request to open an Account or your access to the e_Store Site or the Service in accordance with the law and the Terms of Service.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            BY USE OF THE SERVICE OR CREATEING AN ACCOUNT AT e_Store, YOU ACCEPT AND AGREE TO THESE TERMS OF SERVICE AND THE ADDITIONAL POLICY FOLLOWED HERE.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            IF YOU DON'T AGREE TO THESE TERMS OF SERVICE, PLEASE DO NOT USE THE SERVICE OR ACCESS THE e_Store PAGE. </font><font style="vertical-align: inherit;">IF YOU ARE A MINIMOR OR LIMITED IN CIVIL CAPACITY UNDER THE LAW IN THE COUNTRY YOU LIVE, YOU NEED TO GET SUPPLY OR CONTRACTS PER CASES APPLICATION, TO OPEN ACCOUNT OR USE THE SERVICE. </font><font style="vertical-align: inherit;">IN THAT CASE, THE PARENTS OR LEGAL GUARDIAN, PER CASES APPLICATION, NEED SUPPORT FOR YOU TO UNDERSTAND OR ACCEPT THE TERMS OF THE HOUSEHOLD AGREEMENT on your behalf. </font><font style="vertical-align: inherit;">IF YOU ARE undecided about your AGE AND CIVIL ACTION CAPACITY, OR UNDERSTAND THESE TERMS AND RELATED LAW APPLICATIONS TO YOUR CIVIL , </font><font style="vertical-align: inherit;">PLEASE DON'T CREATE ACCOUNTS OR USE THE SERVICES UNTIL RECEIVING HELP FROM PARENTS OR LEGAL GUARDIANS. </font><font style="vertical-align: inherit;">IF YOU ARE THE PARENT OR LEGAL GUARDIAN OF MINIMUM OR LIMITED IN CIVIL CAPACITY, PERFORMANCE BY CASE LEGAL PROVISIONS AND WITNESS WORDS THE CURRENT REPRESENTATIVE ACCEPTS THIS TERMS OF SERVICE AND IS RESPONSIBLE FOR THE FULL PROCESS OF USE OF e_Store'S ACCOUNT OR SERVICES WITHOUT SPECIFICATIONS.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b>&nbsp;</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2. PRIVACY</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            2.1 e_Store takes the security of your information seriously. </font><font style="vertical-align: inherit;">To protect the interests of users, e_Store provides a Privacy Policy at e_Store.vn that explains in detail e_Store's security practices. </font><font style="vertical-align: inherit;">Please refer to the Privacy Policy for how e_Store collects and uses information in connection with Users' Accounts and/or use of the Services ("User Information"). </font><font style="vertical-align: inherit;">These Terms of Service are closely related to the Privacy Policy. </font><font style="vertical-align: inherit;">By using the Service or providing information on the e_Store Site, the User:
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            a. </font><font style="vertical-align: inherit;">allow e_Store to collect, use, publish and/or process your Content, personal data and User Information as set forth in the Privacy Policy;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            b. </font><font style="vertical-align: inherit;">agree and acknowledge that the information provided on the e_Store Site shall be jointly owned by you and e_Store; </font><font style="vertical-align: inherit;">and
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            c. </font><font style="vertical-align: inherit;">will not, directly or indirectly, disclose User Information to any third party, or in any manner permit any third party to access or use the Information. Your Users.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            2.2 Where the User owns another User's personal data through the use of the Service (the "Receiving Party") hereby agrees that it will (i) comply with all applicable laws and regulations. about the security of personal information related to such information; </font><font style="vertical-align: inherit;">(ii) allow the User who is the owner of the personal information collected by the Recipient (the "Disclosure Party") to delete his/her information collected from the database. data of the Recipient; </font><font style="vertical-align: inherit;">and (iii) permit the Disclosing Party to review information collected about them by the Recipient, in accordance with or as required by applicable law.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b>&nbsp;</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">3. LIMITATION OF US LIABILITY</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            3.1 e_Store grants the User the appropriate right to access and use the Services subject to the terms and conditions set forth in these Terms of Service. </font><font style="vertical-align: inherit;">All Content, trademarks, service marks, trade names, logos and other proprietary intellectual property (“Intellectual Property”) displayed on the e_Store Site are owned by e_Store and third party owners, if applicable. </font><font style="vertical-align: inherit;">No party accessing the e_Store Site shall be granted the right or license directly or indirectly to use or reproduce any Intellectual Property, nor shall any party accessing the e_Store Site be authorized to access the Site. claim any right, title or interest in relation to the Intellectual Property. </font><font style="vertical-align: inherit;">By using or accessing the Service, you agree to comply with the laws relating to copyright, trademark, </font><font style="vertical-align: inherit;">service marks or any other law that protects the Service, the e_Store Site and the Content of the e_Store Site. </font><font style="vertical-align: inherit;">You agree not to copy, distribute, republish, transmit, publicly disclose, publicly perform, modify, adapt, rent, sell, or create derivative works of any part of the Service, the e_Store Site and the Content of the e_Store Site. </font><font style="vertical-align: inherit;">You may not duplicate or modify any part or all of the content of the e_Store Site on any server or as part of any other website without e_Store's prior written consent. </font><font style="vertical-align: inherit;">In addition, you agree that you will not use any robot,
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            3.2 e_Store permits a connection from the User's website to the e_Store Site, provided that the User's website is not construed as any endorsement or connection with e_Store.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b>&nbsp;</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">4. SOFTWARE</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            Any software provided by e_Store to the User is governed by these Terms of Service. </font><font style="vertical-align: inherit;">e_Store reserves all rights in relation to the software not expressly granted herein by e_Store. </font><font style="vertical-align: inherit;">Any script or code, linked to or referenced from the Service, is licensed to you by third parties who are the owners of such script or code and not by e_Store.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b>&nbsp;</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">5. ACCOUNT AND SECURITY</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            5.1 Some features of our Services require registration of an Account by selecting a unique username (“Username”) and password and providing some personal information certain. </font><font style="vertical-align: inherit;">You may use your Account to access other products, websites or services that e_Store permits, is affiliated with or is working with. </font><font style="vertical-align: inherit;">e_Store does not test and is not responsible for any content, features, security, services, privacy policies, or other practices of such products, websites or services. </font><font style="vertical-align: inherit;">Where you use your Account to access other products, websites or services that e_Store allows, is affiliated with or is cooperating with, the terms of service of those products, websites or services there,
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            5.2 You agree to (a) keep your password confidential and use your Username and password only when logging in, (b) ensure that you log out of your account after each login session on the e_Store Site, and (c) immediately notify e_Store of any unauthorized use of your Account, Username and/or password. </font><font style="vertical-align: inherit;">You are responsible for the activity under your Username and Account, including loss or damage arising from unauthorized use of the password or from the User's failure to comply with these Terms. Use.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            5.3 You agree that e_Store reserves the right to immediately delete the User's Account and Username, remove or cancel from the e_Store Site any Content related to the User's Account and Username with for any reason with or without notice or liability to the User or any other third party. </font><font style="vertical-align: inherit;">Grounds for taking these actions may include (a) an extended period of inactivity for an Account and Username, (b) a breach of the term or spirit of these Terms of Service, (c) ) engage in illegal, fraudulent, harassing, intrusive, threatening or abusive behavior, (d) have multiple user accounts, (e) purchase products on the e_Store Site for business purposes, (f) bulk purchases from a Seller or a group of related Sellers, </font><font style="vertical-align: inherit;">(g) abuse discount codes or sponsors or promotional benefits (including selling discount codes to third parties as well as abusing coupon codes on e_Store Sites), (h) doing harm to other Users, third parties or the economic interests of e_Store. </font><font style="vertical-align: inherit;">Use of the Account for illegal, fraudulent, harassing, intrusive, threatening or abusive purposes may be submitted to the competent governmental authority as required by law.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            5.4 The User may request deletion of the account by notifying e_Store in writing ( </font></font><a href="https://help.e_Store.vn/vn/s/contactus"><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">here</font></font></b></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> ). </font><font style="vertical-align: inherit;">However, the User remains responsible and liable for any uncompleted transactions (arising before or after the account is deleted) or the shipment of goods related to the requested account. erase. </font><font style="vertical-align: inherit;">Then, in accordance with the Terms of Service, the User must contact e_Store after promptly and completely completing and completing the incomplete transactions. </font><font style="vertical-align: inherit;">The User is responsible for his/her account deletion request.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            5.5 You may only use the Service and/or open an Account at e_Store if you meet the conditions to accept these Terms of Service.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b>&nbsp;</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">6. TERMS OF USE</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            6.1 The license to use the e_Store Site and the Service is valid until terminated. </font><font style="vertical-align: inherit;">The license to use it will be terminated in accordance with these Terms of Service or in the event that the User breaches any term or condition set forth in these Terms of Service. </font><font style="vertical-align: inherit;">In such event, e_Store may terminate the User's use with or without notice.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            6.2 Users are not allowed to:
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (a) upload, post, transmit or otherwise make available any Content that is unlawful, harmful, threatening, abusive, harassing, confusing, disturbing, misleading, defamatory, is offensive, obscene, libelous, invasive of another's privacy, offensive, or racially, ethnically or any other inappropriate content;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (b) violate any law, third party rights or&nbsp; </font><font style="vertical-align: inherit;">&nbsp;e_Store's
+                        </font></font><a href="https://e_Store.vn/docs/3604"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Product Prohibition/Restriction Policy;</font></font></a><font style="vertical-align: inherit;"></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (c) post, transmit, or otherwise display any Content in the presence of a minor, or use the Service to the detriment of a minor in any way; which mode;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (d) use the Service or post Content to impersonate any person or entity, or otherwise misrepresent an individual or entity;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (e) forge headers or otherwise manipulate formats to conceal the origin of any Content transmitted through the Service;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:21.3pt;text-align:justify;text-indent:14.7pt;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (f) remove any proprietary notices from the e_Store Site;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (g) cause, accept or authorize the modification, composition, derivative works, or adaptation of the Service without the express permission of e_Store;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (h) use the Service for the benefit of any third party or any conduct not acceptable under these Terms of Service;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (i) use the Service or post Content for purposes that are fraudulent, unreasonable, false, misleading or misleading;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (j) opening and operating various user accounts in connection with any conduct that violates the terms or spirit of these Terms of Service;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (k) access the e_Store e-commerce platform, open an account, or otherwise access your user account through any software or hardware not approved or provided by e_Store, including emulator software, emulator, automation software or any similar software, device or hardware.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (l) modify the price of any product or interfere with another User's catalog.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (m) take any action that falsifies e_Store's rating or feedback system;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (n) attempt to transcode, reverse engineer, disassemble or hack (hack) the Service (or any component thereof); </font><font style="vertical-align: inherit;">or circumvent or circumvent any encryption technology or security measures applied by e_Store to the Services and/or data transmitted, processed or stored by e_Store;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (o) exploit or collect any information relating to another User's Account, including any personal information or data;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (p) upload, email, post, transmit or otherwise make available any Content that you are not authorized by any law or contractual or trust relationship (such as information insider, proprietary and confidential information known or disclosed as part of an employment relationship or under confidentiality agreements);
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (q) upload, email, post, transmit or otherwise make available any Content that would result in an infringement of patent, trademark, trade secret, copyright or any other rights. any privileges of any party;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (r) upload, email, post, transmit or otherwise make publicly available any advertising, promotional materials, “harassment mail”, “spam”, “strings” and authorized or illegal, or any other form of unauthorized solicitation;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (s) upload, email, post, transmit or otherwise make publicly available any material containing viruses, worms, trojans or any other computer code, files or programs designed designed to directly or indirectly interfere, control, interrupt, destroy or limit the functionality or overall of any computer software or hardware or data or telecommunications equipment;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (t) disrupt the normal flow of interaction, speed up the "scroll" rate of the screen than other Users may be able to for the Service, or otherwise perform a behavior that negatively affects the performance of the Service. affect the ability of other Users to participate in real transactions,
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (u) interfere with, manipulate or disrupt the Service or servers or systems associated with the Service or other Users' use and experience of the Service, or fail to comply with any requirements requirements, processes, policies and laws for systems linked to the e_Store Site;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (v) take any action or conduct that may directly or indirectly destroy, disable, overload, or impair the Service or the servers or systems associated with the Service;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (w) use the Service to violate any applicable local, federal, national or international law, regulation, rule, directive, guideline, policy (whether or not in effect) a intentionally or unintentionally related to the prevention of money laundering or the prevention of terrorism;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (x) use the Service to violate or circumvent any penalty or embargo administered or enforced by the relevant authorities.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (y) use the Service to invade another's privacy or to "stalk" or otherwise harass others;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (z) infringe on e_Store's rights, including any intellectual property rights, and to cause confusion thereof;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (aa) use the Service to collect or store other Users' personal data in connection with the prohibited acts and activities mentioned above; </font><font style="vertical-align: inherit;">and/or
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (ab) list goods that infringe the copyright, trademark or other intellectual property rights of third parties, or use the Service in ways that may infringe the intellectual property rights of third parties. other side.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            6.3 The User understands that the Content, whether publicly posted or privately transmitted, is the sole responsibility of the person who created it. </font><font style="vertical-align: inherit;">That means you, not e_Store, are solely responsible for the Content you upload, post, email, transmit or otherwise make public on the e_Store Site. </font><font style="vertical-align: inherit;">The User understands that by using the e_Store Site, you may encounter Content that you consider offensive, inappropriate or inappropriate. </font><font style="vertical-align: inherit;">e_Store shall not be liable for the Content, including errors or omissions in connection with the Content, or for loss or damage resulting from the use of, or reliance on, the Content posted, mailed, transmitted, or otherwise posted. download or otherwise publish on the e_Store Site.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            6.4 The User acknowledges that e_Store and its designees have the sole right (but no obligation) to screen, reject, delete, stop, pause, remove or remove any Content available on the Site. e_Store Site, including any Content or information you have posted. </font><font style="vertical-align: inherit;">e_Store reserves the right to remove Content that (i) violates the Terms of Service; </font><font style="vertical-align: inherit;">(ii) in the event that e_Store receives a valid claim as required by law from another User; </font><font style="vertical-align: inherit;">(iii) in the event that e_Store receives a valid notice of intellectual property infringement or a legal request for removal; </font><font style="vertical-align: inherit;">or (iv) other reasons as prescribed by law. </font><font style="vertical-align: inherit;">e_Store reserves the right to block communications (including status updates, postings, messages and/or chats) about or related to the Service as part of our efforts to protect the Service or its Users. e_Store, </font><font style="vertical-align: inherit;">or otherwise enforce the terms of these Terms of Service. </font><font style="vertical-align: inherit;">The User agrees that he or she must evaluate, and bear all risks associated with, any use of the Content, including any reliance on the accuracy, completeness, or usefulness of the Content. there. </font><font style="vertical-align: inherit;">In this regard, the User acknowledges that he is not and, to the maximum extent permitted by law, does not need to rely on any Content created by e_Store or submitted to e_Store, including information on the e_Store Forums or on other parts of the e_Store Site.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            6.5 The User accepts and agrees that e_Store may access, maintain and disclose the User's Account information as required by law or by order of a court or government agency or agency. Competent government agencies require e_Store or other legal reasons to: (a) comply with legal procedures; </font><font style="vertical-align: inherit;">(b) enforce the Terms of Service; </font><font style="vertical-align: inherit;">(c) respond to complaints that the Content infringes on the rights of third parties; </font><font style="vertical-align: inherit;">(d) respond to User requests regarding customer care; </font><font style="vertical-align: inherit;">or (e) protect the rights, property or safety of e_Store, the User and/or the community.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b>&nbsp;</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">7. VIOLATION OF TERMS OF SERVICE</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            7.1 Violation of this policy may result in a number of actions, including any or all of the following:
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;text-indent:.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            - Delete product catalog;
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;text-indent:.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            - Limiting the right to use the Account;
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;text-indent:.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            - Suspension and termination of the Account;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            - Recovery of money/property obtained due to fraud, and related costs such as shipping costs of the order, payment fees...;
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;text-indent:.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            - Criminal charges;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            - Apply civil remedies, including claims for compensation and/or temporary emergency measures;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            - Other actions or remedies in accordance with the Community Standards, the Terms of Service, or the e_Store Policies.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            7.2 If you find a User on our e_Store Site that is in violation of the Terms of Service, please contact e_Store&nbsp; </font></font><a href="https://help.e_Store.vn/vn/s/contactus"><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Here</font></font></b></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> .
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b>&nbsp;</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">8. REPORTING POTENTIAL INSPECTION OF INTELLECTUAL PROPERTY RIGHTS</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            8.1 The Users are independent individuals or organizations and they are not affiliated with e_Store in any way. </font><font style="vertical-align: inherit;">e_Store is also not an agent or representative of the User and does not hold and/or own any merchandise offered for sale on the e_Store Site.&nbsp;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            8.2 If you are an Intellectual Property Rights Owner (“IPR Owner”) or an authorized representative of an IPR Owner (“IPR Representative”) and you believe that your rights or of a potentially infringed client, please use the sample complaint form&nbsp; </font></font><a href="https://help.e_Store.vn/portal/webform/49a778ec05154c1da619f372ab4906c0" target="_blank"><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Here</font></font></b></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> &nbsp;attached complete with valid documents proving the claimant's existence and legal ownership of the intellectual property rights. protected intellectual property within the relevant territory, as well as evidence of IP infringement in the listings specifically claimed. </font><font style="vertical-align: inherit;">We will spend a reasonable amount of time processing the information provided.&nbsp;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;">
+                            <br>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">9. ORDER AND PAYMENT</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            9.1 From time to time, e_Store supports one or more of the following payment methods:
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;text-indent:.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><u><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Credit/Debit Card or Credit Card Installment</font></font></u>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            Credit/debit card payments or credit card installments are made through a third-party payment channel, and the list of accepted cards depends on the payment channel you're using.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;text-indent:.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (ii)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><u><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Payment on Delivery (COD)</font></font></u>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            e_Store provides COD service in some countries. </font><font style="vertical-align: inherit;">Buyer can pay cash directly to the carrier at the time of delivery.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;text-indent:.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (iii)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><u><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Payment by Domestic ATM Card – Internet Banking</font></font></u>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            The form of payment by domestic ATM card - internet banking is only for Buyers who have a domestic ATM card with internet banking link (online payment), and not for VISA and Mastercard cards.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            9.2 Buyer can only change payment channel before making payment.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            9.3 e_Store is neither responsible nor liable for any loss or damage suffered by Buyer or Seller resulting from incorrect entry of shipping and/or payment information for an order placed and /or use a payment method not listed in clause 9.1 above. </font><font style="vertical-align: inherit;">e_Store reserves the right to check the legitimacy of the Buyer's right to use the payment method and reserves the right to suspend the transaction until the legitimacy is confirmed, or cancel the relevant transaction if it cannot confirm the legitimacy. this.&nbsp;&nbsp;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            Note: e_Store will be responsible for orders that use e_Store's delivery support services.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            9.4 Currently, e_Store can only make payments to Users via bank transfer. </font><font style="vertical-align: inherit;">Therefore, the User needs to provide e_Store with bank account information in order to receive payment, i.e. payment for products sold or refunded from e_Store.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;">
+                            &nbsp;
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">10. e_Store ACCOUNT BALANCE</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            10.1 e_Store Account Balance is a feature provided by e_Store or its authorized service providers to assist in the recognition of sales proceeds or refunded value for return/refund transactions. </font><font style="vertical-align: inherit;">This total recognized value, minus the amount already paid, will be shown in e_Store Account Balance.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            10.2 You may request to receive the full amount recorded at your e_Store Account Balance (up to the entire balance in your e_Store Account Balance) by requesting a transfer to a bank account with information provided to e_Store (“Receiving Account”) by submitting a remittance request (“Payment Request”). </font><font style="vertical-align: inherit;">e_Store may also automatically transfer the value recognized at your e_Store Account Balance to your Receipt Account periodically, as per your settings. </font><font style="vertical-align: inherit;">e_Store only makes transfers on business days and such transfers may take up to 3 (three) business days for the Receiving Account to be credited, according to relevant banking.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            10.3 Proceeds from sales, using supported shipping services on the e_Store Page will be credited to e_Store Account Balance after 08 (eight) days from the date the order is updated with the Delivery status. Success (for orders at e_Store Mall), or after 48 hours after the order is updated with the status of Delivery Successful (for orders not belonging to e_Store Mall), or after Buyer confirms receipt get goods. </font><font style="vertical-align: inherit;">Purchases of returned/refunded cash payment (COD) orders will be credited to your e_Store Account Balance within 01 (one) working day after the date the return/refund request is received. acceptance.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            10.4 Once a Payment Request has been submitted, it cannot be changed or cancelled.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            10.5 If an error occurs in the processing of any transaction, you agree to authorize e_Store to correct the error and make a credit or debit in your Receiving Account, provided that the correction This is done in accordance with relevant laws. </font><font style="vertical-align: inherit;">If e_Store is unable to credit or debit the Receiving Account for any reason, you will also authorize us to continue to credit or debit the Receiving Account, after applying any any relevant fees, to any bank account or other means of payment you have provided to e_Store or deduct the credit or debit and related fees from the credited balance receive at your e_Store Account Balance in the future, to the extent permitted by law.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            10.6 You authorize us to make credit or debit entries relating to the amount recognized in your e_Store Account Balance, for the purpose of:
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;text-indent:.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (i) correct errors in the execution of any transaction;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (ii) where e_Store believes that you perform fraudulent or suspicious transactions and/or transactions
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (iii) in connection with any loss, damage or inaccuracies;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (iv) in connection with any bonus or refund;
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;text-indent:.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (v) in connection with any unpaid fees;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (vi) in connection with the resolution of any transactional dispute, including any indemnification to or from you;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (vii) in connection with prohibited products or products recalled by the competent authority; </font><font style="vertical-align: inherit;">and
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (viii) in connection with any modification of the agreement committed between Buyer and Seller.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b>&nbsp;</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"></font></b>&nbsp;<font style="vertical-align: inherit;"><b><font style="vertical-align: inherit;">11. e_Store </font></b><b><font style="vertical-align: inherit;">GUARANTEE </font></b></font><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">POLICY</font></font></b>&nbsp;<b><font style="vertical-align: inherit;"></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            11.1 e_Store Guarantee is a service provided by e_Store or a unit authorized by e_Store to protect transactions. </font><font style="vertical-align: inherit;">In order to protect against the risks of liability, the amount Buyer pays for an order to Seller will be kept by e_Store or a unit authorized by e_Store (“e_Store Guarantee Account”). </font><font style="vertical-align: inherit;">Seller will not receive interest or any other proceeds from the funds in the e_Store Secured Account.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            11.2 After Buyer pays for the order (“Buyer Payment”), Buyer’s Payment will be kept in e_Store Secured Account until:
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (a) Buyer sends confirmation to e_Store that he has received the item, in which case, unless Section 11.2(d) applies, e_Store will transfer Payments from Buyer to Seller's e_Store Guarantee Account;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (b) In the event that the e_Store Guarantee Period (or the extension period approved under Section 11.3) has expired, except where Sections 11.2(c) and 11.2(d) apply, e_Store will transfer the Payment Payment from Buyer to e_Store Guarantee Account for Seller;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (c) Where e_Store determines that Buyer's return/refund request is approved, except where Section 11.2(d) applies, e_Store will refund Buyer, subject to the terms of the Return Policy. e_Store Merchandise and Refund.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (d) at such a time as e_Store reasonably determines that it is reasonable to allocate Payments from Buyers, including when e_Store considers it reasonably necessary to comply with any applicable law or order. court or to enforce these Terms of Service.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            Self-agreement between Buyer and Seller will not apply e_Store Guarantee Policy.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            11.3 Payments made through e_Store payment channels will be retained in the e_Store Guaranteed Account for a certain period of time (“the e_Store Guarantee Period”). </font><font style="vertical-align: inherit;">For more information on e_Store Guarantee Time, please follow&nbsp; this </font></font><u><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">link</font></font></u><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> &nbsp;.&nbsp;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            11.4 In case the Seller's bank account cannot be credited and/or the Seller cannot be contacted, e_Store will contact the Seller using the information provided by the Seller. </font><font style="vertical-align: inherit;">In the event that the Seller cannot be contacted and after twelve (12) months from the date the Buyer's Payment is due to be paid to the Seller but has not been paid to the Seller, e_Store will process the Payment. This Payment is in accordance with the law.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            11.5 Seller/Buyer must be the beneficiary of the Account and conduct transactions on the e_Store Site by themselves. </font><font style="vertical-align: inherit;">e_Store reserves the right to require the Seller or Buyer to provide personal data such as portraits, bank account information and/or any other necessary documents for use for information verification purposes, including confirmation required by third parties making payments and shipping service providers. </font><font style="vertical-align: inherit;">The Seller/Buyer hereby consents to e_Store's use or provision of his/her personal data for the Seller/Buyer's use of the e_Store Site. </font><font style="vertical-align: inherit;">In addition, Seller/Buyer authorizes e_Store to use his/her personal data to respond to any inquiries e_Store deems necessary to confirm Seller/Buyer's identity with other organisations. as Seller/Buyer's bank.&nbsp;</font></font><a href="/docs/3603"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Privacy Policy</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> .
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            11.6 e_Store's Guarantee is in addition to, and does not limit, Seller and Buyer's obligations under applicable law, which may be broader or more stringent than those required by law. in e_Store's Guarantee Policy. </font><font style="vertical-align: inherit;">The e_Store Guarantee is neither intended nor designed to assist Seller or Buyer in complying with their own legal obligations which are solely the sole responsibility of the Seller or Buyer. Buy, and e_Store is not responsible for the legal obligations of the Seller or Buyer as mentioned above. </font><font style="vertical-align: inherit;">In any event, e_Store's Guarantee Policy does not constitute a product warranty.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            11.7 For the avoidance of doubt, any transaction not made on the e_Store Site will not be covered by the e_Store Guarantee.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            &nbsp;
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">12. e_Store COINS POINT SYSTEM</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            12.1 The User may accumulate reward points (“e_Store Coins”) for purchases on the e_Store Site through the use of the e_Store Guarantee system or through participating in e_Store activities as authorized by e_Store at the sole discretion of e_Store. determined from time to time (“Eligible Activity”). </font><font style="vertical-align: inherit;">In general, e_Store Coins will be credited to the User's Account upon completion of a successful transaction or activity approved by e_Store. </font><font style="vertical-align: inherit;">You are eligible to participate in the e_Store Coin reward system if you are a User and your Account is not eligible for participation.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;">
+                            12.2&nbsp;&nbsp;&nbsp;&nbsp;
+                            Giao dịch chưa hoàn thành trên Trang e_Store khi sử dụng Chính Sách Đảm Bảo
+                            e_Store sẽ không đủ điều kiện tham gia hệ thống điểm thưởng e_Store Xu. e_Store có
+                            toàn quyền loại trừ các mặt hàng không thuộc đối tượng của hệ thống điểm thưởng
+                            e_Store Xu.
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;">
+                            12.3&nbsp;&nbsp;&nbsp;&nbsp;
+                            e_Store Xu không có giá trị tiền tệ, không cấu thành tài sản của Người Sử Dụng
+                            và không thể được mua, bán, chuyển nhượng hoặc quy đổi thành tiền mặt.
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;">
+                            12.4&nbsp;&nbsp;&nbsp;&nbsp;
+                            Tùy thuộc vào các quy tắc và quy định được e_Store quyết định, thay đổi và chỉnh
+                            sửa vào từng thời điểm, tùy thuộc vào hạn mức theo toàn quyền quyết định của
+                            e_Store, Người Sử Dụng có thể sử dụng e_Store Xu bằng cách gửi yêu cầu đến e_Store
+                            và sử dụng e_Store Xu để khấu trừ vào giá sản phẩm khi thực hiện giao dịch mua
+                            hàng trên Trang e_Store theo quy định của e_Store vào từng thời điểm. &nbsp;Tất cả
+                            các khoản hoàn tiền phải tuân thủ theo Chính Sách Trả Hàng và Hoàn Tiền tại Mục
+                            14.4.
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;">
+                            12.5&nbsp;&nbsp;&nbsp;&nbsp;
+                            e_Store Xu mà bạn đã sử dụng sẽ được trừ vào số dư e_Store Xu. Mỗi e_Store Xu đều
+                            có hạn sử dụng. &nbsp;Lưu ý kiểm tra chi tiết Tài Khoản của bạn trên Trang
+                            e_Store để biết số dư e_Store Xu cũng như hạn sử dụng.
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            12.6 From time to time, e_Store will inform you that e_Store Coin bonus points will be applied to specific Eligible Activities. </font><font style="vertical-align: inherit;">Eligible Activity may include you making purchases with participating Sellers or specific e_Store promotions. </font><font style="vertical-align: inherit;">We will notify you of the terms of such rewards programs as applicable from time to time.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            12.7 If you have a claim regarding the quantity of e_Store Coins received from a Eligible Activity, such claim must be submitted to e_Store ( </font></font><a href="https://help.e_Store.vn/vn/s/contactus"><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">here</font></font></b></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> ) within one (01) month from the date you successfully made the delivery. Translate. </font><font style="vertical-align: inherit;">We may ask you to provide evidence to support your claim. </font><font style="vertical-align: inherit;">e_Store reserves the right to refuse to settle a claim if the time limit for submitting a complaint has passed.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            12.8 e_Store does not warrant and accept no responsibility for the fulfillment of tax obligations for e_Store Coin. </font><font style="vertical-align: inherit;">You should check with your tax advisor whether receiving e_Store Coins will affect your tax liability.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            12.9 Within the limits of applicable law, e_Store reserves the right to (i) discontinue the e_Store Coin reward system at any time, and (ii) cancel or postpone the User's right to participate in the e_Store Coin reward system Use, including the ability to obtain or use e_Store Coins.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b>&nbsp;</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">13. WOMEN SHIPPING</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            13.1 When successfully shipping the order, e_Store will notify the Seller of the receipt of payment from the Buyer. </font><font style="vertical-align: inherit;">Unless otherwise agreed with e_Store, the Seller is responsible for providing sufficient bank account information for e_Store to process the payment for that order.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            13.2 Seller must make every effort to ensure that Buyer receives the item on time within the e_Store Guarantee Time.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            13.3 The User understands that the Seller assumes all risks associated with the carriage of the purchased goods and warrants that the Seller has or will insure the goods, including the carriage. </font><font style="vertical-align: inherit;">In the event that the Purchased Goods are damaged, lost or undeliverable during transit, the User acknowledges and agrees that e_Store shall not be liable for any loss, cost, charge, or liability. loss or any charges arising therefrom and Seller and/or Buyer will contact the carrier to resolve such incident.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            13.4 For Cross Country Transactions.&nbsp;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            &nbsp;
+                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;The User understands that, when a listing states that the product for sale is to be shipped from abroad ("Overseas Product"), the product is sold by a Seller outside Vietnam, and the export /import of such product is subject to the law. </font><font style="vertical-align: inherit;">The User should understand the import/export restrictions of the importing country. </font><font style="vertical-align: inherit;">The User agrees that e_Store cannot provide legal advice in this regard and agrees that e_Store shall not bear any risks or liabilities for the import/export of goods into Vietnam.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp; By choosing to purchase Overseas Products, the User hereby agrees to entrust e_Store, either by himself or through a third party, to carry out the necessary procedures/steps for the importation of Overseas Products. enter Vietnam in accordance with the law.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            &nbsp;
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">14. CANCELLATION, RETURN AND REFUND</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            14.1 Buyer can cancel order only before paying by International credit/debit card.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            14.2 Buyers may request returns and refunds in accordance&nbsp; </font><font style="vertical-align: inherit;">with e_Store's
+                        </font></font><a href="/docs/3605"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Return and Refund Policy.</font></font></a><u>&nbsp;</u><font style="vertical-align: inherit;"></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            14.3 e_Store does not manage order cancellation, return, refund of self-transaction orders between Seller and Buyer.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            14.4 If you use e_Store Coins to pay and receive a refund based on e_Store's Return and Refund Policy, e_Store will separately refund the amount you paid for the item and the amount of e_Store Coin you used in your Account. Your account.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            &nbsp;
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">15. SELLER'S RESPONSIBILITIES</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            15.1 The Seller must manage and ensure the accuracy and completeness of information such as prices and product details, quantity of products in stock and updated terms and conditions of sale. updated in the Seller's product catalog and may not post inaccurate or misleading information.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            15.2 Product prices are determined by the Seller at its sole discretion, except for products that are priced by a competent authority. </font><font style="vertical-align: inherit;">The Product Price should include the full amount to be paid by Buyer (e.g. taxes, fees, etc.) and Seller will not require Buyer to pay any additional or separate amounts. </font><font style="vertical-align: inherit;">If the listed goods or service price information does not clearly indicate whether the price includes or does not include costs associated with the purchase of the goods or services such as taxes, packaging fees, shipping and other charges, Other costs incurred, this price is understood to include all relevant costs mentioned above.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            15.3 To the extent permitted by law, Seller agrees that e_Store may, in its sole discretion, conduct promotional activities to facilitate transactions between Seller and Buyer through reducing, discount or refund or through other ways. </font><font style="vertical-align: inherit;">The final price the Buyer needs to pay is the actual price for which the above adjustments have been applied.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            15.4 In order to promote the purchase of products listed by Seller, e_Store may post such products (at adjusted prices) on third party websites (such as portals and price comparison portals). and other websites (domestic or international) operated by or in partnership with e_Store.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            15.5 Seller is responsible for providing invoice to Buyer in accordance with the law.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            15.6 Seller acknowledges and agrees that Seller is responsible for paying taxes, customs fees and any other charges for the product sold and e_Store does not provide any legal or regulatory advice. any tax related to this matter. </font><font style="vertical-align: inherit;">The Seller should use professional tax consulting services if necessary.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            15.7 Seller acknowledges and agrees that any breach by Seller of e_Store's policies will result in the action referred to in Section 7.1.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            &nbsp;
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">16. CHARGES</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            16.1 Unless otherwise provided in these Terms of Service or otherwise agreed by the parties, Buyers are not required to pay any fees for using e_Store e-commerce trading platform services.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            16.2 If there is any fee payable, that fee is also subject to tax in accordance with the relevant laws. </font><font style="vertical-align: inherit;">Seller acknowledges and agrees that e_Store may deduct the fees payable to e_Store and applicable taxes from the amount of the sale paid by Buyer. </font><font style="vertical-align: inherit;">e_Store will issue a receipt or financial invoice for the fees and taxes paid by the Seller upon request. </font><font style="vertical-align: inherit;">Please refer to how to request a financial invoice&nbsp; </font></font><a href="https://help.e_Store.vn/s/article/T%C3%B4i-mu%E1%BB%91n-l%E1%BA%A5y-h%C3%B3a-%C4%91%C6%A1n-%C4%91%E1%BB%8F-th%C3%AC-ph%E1%BA%A3i-l%C3%A0m-sao-D%C3%A0nh-cho-ng%C6%B0%E1%BB%9Di-b%C3%A1n"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">HERE</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> .
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            16.3 Payment Fee
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            Payment fee is the fee applied to each successful order on the e_Store e-commerce trading floor (not applicable to orders that are canceled or required to be returned/refunded for the entire order). </font><font style="vertical-align: inherit;">In all cases, Seller is responsible for paying the Payment Fee.&nbsp;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            Payment fees are deducted directly on each order before sales are credited to Seller's e_Store Account Balance.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            The payment fee is calculated on the total amount paid by the Buyer for the order, including the total amount of the goods and the shipping fee actually paid by the Buyer.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            Depending on the payment method selected by the Buyer, the payment fee applied to each order will be different:
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;">
+                            &nbsp;
+                        </p>
+                        <div align="center">
+                            <table class="MsoNormalTable ke-zeroborder" border="0" cellspacing="0" cellpadding="0" width="451" style="border-collapse:collapse;">
+                                <tbody>
+                                <tr>
+                                    <td width="244" style="border:solid black 1.0pt;background:white;">
+                                        <p class="MsoNormal" align="center" style="text-align:center;">
+                                            <b><span style="font-size:10.5pt;font-family:&quot;"><font style="vertical-align: inherit;"><span style="color:black;"><font style="vertical-align: inherit;">Payment</font></span><font style="vertical-align: inherit;"> method</font></font><span style="color:black;"><font style="vertical-align: inherit;"></font></span></span></b><span style="font-size:12.0pt;font-family:&quot;"></span>
+                                        </p>
+                                    </td>
+                                    <td width="207" style="border:solid black 1.0pt;background:white;">
+                                        <p class="MsoNormal" align="center" style="text-align:center;">
+                                            <b><span style="font-size:10.5pt;font-family:&quot;color:black;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Fees (VAT included)</font></font></span></b><span style="font-size:12.0pt;font-family:&quot;"></span>
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="244" style="border:solid black 1.0pt;background:white;">
+                                        <p class="MsoNormal">
+                                            <span style="font-size:10.5pt;font-family:&quot;color:black;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Credit/debit card or</font></font></span><span style="font-size:12.0pt;font-family:&quot;"></span>
+                                        </p>
+                                        <p class="MsoNormal">
+                                            <span style="font-size:10.5pt;font-family:&quot;color:black;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Installment by credit card</font></font></span><span style="font-size:12.0pt;font-family:&quot;"></span>
+                                        </p>
+                                    </td>
+                                    <td width="207" style="border:solid black 1.0pt;background:white;">
+                                        <p class="MsoNormal" align="center" style="text-align:center;">
+                                            <span style="font-size:10.5pt;font-family:&quot;color:black;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2.5%</font></font></span><span style="font-size:12.0pt;font-family:&quot;"></span>
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="244" style="border:solid black 1.0pt;background:white;">
+                                        <p class="MsoNormal">
+                                            <span style="font-size:10.5pt;font-family:&quot;color:black;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Payment on delivery (COD)</font></font></span><span style="font-size:12.0pt;font-family:&quot;"></span>
+                                        </p>
+                                    </td>
+                                    <td width="207" style="border:solid black 1.0pt;background:white;">
+                                        <p class="MsoNormal" align="center" style="text-align:center;">
+                                            <span style="font-size:10.5pt;font-family:&quot;color:black;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2.5%</font></font></span><span style="font-size:12.0pt;font-family:&quot;"></span>
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="244" style="border:solid black 1.0pt;background:white;">
+                                        <p class="MsoNormal">
+                                            <span style="font-size:10.5pt;font-family:&quot;color:black;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Domestic ATM card/ Internet banking</font></font></span><span style="font-size:12.0pt;font-family:&quot;"></span>
+                                        </p>
+                                    </td>
+                                    <td width="207" style="border:solid black 1.0pt;background:white;">
+                                        <p class="MsoNormal" align="center" style="text-align:center;">
+                                            <span style="font-size:10.5pt;font-family:&quot;color:black;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2.5%</font></font></span><span style="font-size:12.0pt;font-family:&quot;"></span>
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="244" style="border:solid black 1.0pt;background:white;">
+                                        <p class="MsoNormal">
+                                            <span style="font-size:10.5pt;font-family:&quot;color:black;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">e_StorePay Wallet</font></font></span><span style="font-size:12.0pt;font-family:&quot;"></span>
+                                        </p>
+                                    </td>
+                                    <td width="207" style="border:solid black 1.0pt;background:white;">
+                                        <p class="MsoNormal" align="center" style="text-align:center;">
+                                            <span style="font-size:10.5pt;font-family:&quot;color:black;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2.5%</font></font></span><span style="font-size:12.0pt;font-family:&quot;"></span>
+                                        </p>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b>&nbsp;</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            16.4 Fixed Fee&nbsp;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            e_Store applies a fixed commission fee (“Fixed Fee”) to all transactions of selling products and using Seller's services successfully made through the e_Store e-commerce exchange (orders under "Delivered") or an order with a Return/Refund request is accepted by the Seller/e_Store as "Refund Now" (except for the reason that the item has not been received). </font><font style="vertical-align: inherit;">The Flat Fee is a percentage of the total transaction value, and is inclusive of value-added tax. </font><font style="vertical-align: inherit;">Seller is obligated to pay all Fixed Fees and related taxes/fees (including but not limited to value added tax).
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            Calculation:
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            Fixed Fee = Total order value x 1.5%.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (Note: Total order value is the total amount that Buyer must pay for each specific order; excluding shipping costs and other costs that Seller must pay to e_Store).
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            The Flat Fee is deducted directly on each order before the sales proceeds are transferred to the Seller's e_Store Account Balance.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            Seller agrees and irrevocably authorizes e_Store to deduct the fees specified in Article 16 of the Terms of Service from the Seller's funds at e_Store Secured Account, e_Store Account Balance or any amount that e_Store holds for or receives on behalf of the Seller from time to time without the Seller's consent.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            The Fixed Fees specified in this Article do not apply to Genuine Sellers (e_Store Mall).
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <br>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">17. DISPUTES</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            17.1 In the event that a transaction-related problem arises, Seller and Buyer agree to first negotiate with each other to attempt to resolve such dispute by mutual discussion, and e_Store will make reasonable efforts to to arrange. </font><font style="vertical-align: inherit;">If the matter is not resolved by mutual discussion, the User may complain to the local competent authority to resolve the dispute arising from the transaction.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            17.2 Each Seller and Buyer undertakes and agrees that it will not bring proceedings or otherwise claim against e_Store or its affiliates (except in the case of e_Store or its affiliates). be the Seller of the product in connection with such claim) in connection with any transaction made on the e_Store Site or any dispute relating thereto.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            17.3 Users covered by the e_Store Guarantee Policy may submit a written request to e_Store for assistance in resolving disputes arising from a transaction. </font><font style="vertical-align: inherit;">e_Store will take necessary steps to assist Users in resolving these disputes. </font><font style="vertical-align: inherit;">For more details, please see&nbsp; </font><font style="vertical-align: inherit;">&nbsp;e_Store's
+                        </font></font><a href="/docs/3605"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Return and Refund Policy.</font></font></a><font style="vertical-align: inherit;"></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            17.4 For greater certainty, support under this Section 17 applies only to Buyers who are the subject of e_Store's Guarantee. </font><font style="vertical-align: inherit;">Buyers using other payment methods can contact Seller directly.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b>&nbsp;</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">18. FEEDBACK</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            18.1 e_Store always receives information and feedback from Users to help e_Store improve the quality of the Service. </font><font style="vertical-align: inherit;">Please see e_Store's feedback process below:
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (ii) Feedback needs to be made in writing via email or using the feedback form available on the app.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.25in;text-align:justify;text-indent:.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (iii) All anonymous responses will not be accepted.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (iv) Users involved in feedback will be fully informed and given the opportunity to improve the situation.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (v) Unclear and defamatory responses will not be accepted
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b>&nbsp;</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">19. US LIABILITY EXCLUSION</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            19.1 </font></font><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">THE SERVICE IS PROVIDED AS 'AS AVAILABLE' AND WITHOUT ANY WARRANTIES, DISCLAIMER, OR RESPONSIBILITIES FROM e_Store regarding ANY CONTENT PERFORMED, IMPLIED, IMPLIED, WARRANTY, GUARANTEE OF QUALITY, PERFORMANCE, NO VIOLATION, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE, AND NO ANY WARRANTIES ARE GUARANTEED, WARRANT CURRENTLY, BUY SELL OR USE THE PRODUCT AFTER BUYING.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            19.2 USERS NEED TO ACCEPT THAT ANY RISKS AGAINST OUTSIDE THE USE OR OPERATION OF THE e_Store SITE AND/OR THE e_Store SERVICES WILL BE WITH THE USER FOR LIMITED LIMITED.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            19.3 e_Store does not control and does not warrant or accept responsibility for: (a) the fitness, existence, quality, safety or legality of the products available on the e_Store site; </font><font style="vertical-align: inherit;">or (b) the ability of the seller to sell the products or the ability of the buyer to buy and pay for the products. </font><font style="vertical-align: inherit;">If there is a dispute involving one or more users, these users agree to resolve the dispute directly with each other and waive e_Store and its affiliates from all claims, demands and damages. loss arising out of or in connection with the dispute.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b>&nbsp;</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">20. EXCLUSIONS AND LIMITATIONS OF LIABILITY</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            20.1 e_Store HAS NO RESPONSIBILITIES FOR AGAINST CONTRACT, WARRANTY, ERROR (INCLUDING NECESSARY (BE ACTIVE OR PASSIVE), PRODUCT LIABILITY, LIABILITY OR LIABILITY), OTHER PEOPLE RELATED TO LAW, LEGAL RIGHTS, REGULATIONS OR OTHER FORMS FOR
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (i) (A) LOSS OF USE; </font><font style="vertical-align: inherit;">(B) LOSS OF PROFITS; </font><font style="vertical-align: inherit;">(C) LOSS OF REVENUE; </font><font style="vertical-align: inherit;">(D) LOSS OF DATA; </font><font style="vertical-align: inherit;">(E) LOSS OF PRESTIGE; </font><font style="vertical-align: inherit;">OR (F) FAILURE RESERVATION LARGE MEASURES, FOR PER CASE EASILY DIRECTLY OR INDIRECT; </font><font style="vertical-align: inherit;">OR
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (ii) INDIRECT, RANDOM, SPECIAL OR Consequential DAMAGE (INCLUDING ANY DATA LOSS, SERVICE INTERRUPTION, COMPUTER, ELECTRONIC DEVICES) FROM OR IN RELATED TO THE USE OF THE e_Store SITE OR SERVICES, INCLUDING DAMAGE AGAINST THERE, EVEN WHEN e_Store HAS BEEN NOTICED OF THE POSSIBILITY OF SUCH DAMAGES OR CORRECTED.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            20.2 YOU HAVE THE RIGHT TO REQUIRE TERMINATION OF YOUR ACCOUNT AND/OR STOP USE OF THE SERVICE IN THE CASE OF DISCHARGE WITH THE SERVICE.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            20.3 CASE OF e_Store, BY JUDGEMENT OF A JUDGEMENT OF COURT, IS RESPONSIBLE TO THE MAXIMUM LIMITATION PERMITTED BY THE LAW (INCLUDING FOR INCREDIBLE LOSS OF OUR CONFIDENCE) ANY THIRD PARTY IS ONLY LIMITED TO THE LOWER FOR (A) THE FEES PAYMENT TO YOU UNDER e_Store GUARANTEE POLICY; </font><font style="vertical-align: inherit;">AND (B) VND 2,000,000 (Two MILLION VND) OR OTHER AMOUNT AS SPECIFICALLY DETERMINED IN JUMP FINAL JUDGEMENT OF THE JUSTICE OF JUDGEMENT.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            20.4 NOTHING IN THIS TERMS OF SERVICE WILL BE LIMITED OR EXCLUSIVE ANY LIABILITY FOR PERSONAL INJURY OR ACCIDENT RESULTS BY SHOPP's Negligence, Error, or Accident. e_Store'S PARTICIPATION WITHIN THAT LIABILITY IS NOT LIMITED AND/OR EXCLUDED BY LAW.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b>&nbsp;</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">21. LINKS AND INTERACTIONS WITH THIRD PARTY SITES/SERVICES</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            Third-party links contained on the e_Store Site will cause the User to exit the e_Store Site. </font><font style="vertical-align: inherit;">These links may be provided as a courtesy.&nbsp;</font></font><a name="undefined"></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Websites or applications accessed from these links are not under the control of e_Store in any way and you therefore access them at your own risk.&nbsp;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            Users may interact with, purchase goods and/or use services from, or participate in promotions of third parties while using the e_Store Site. </font><font style="vertical-align: inherit;">Any such activity, and any terms, conditions, warranties or representations relating to such activity, shall be solely the relationship/transaction/agreement between the User and the relevant third party. mandarin.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            e_Store provides the Services to you in accordance with these Terms of Service. </font><font style="vertical-align: inherit;">And the User acknowledges and agrees that certain third parties providing goods and/or services through the e_Store Site may require your agreement to additional terms and conditions or terms and conditions. other conditions before you use or access such goods or services through the e_Store Site. </font><font style="vertical-align: inherit;">Acceptance of these additional terms and conditions constitutes a separate legal binding between you and such third parties.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            e_Store is not responsible or liable, in any way, for any content (including links or links), exchanges, purchases, and transactions between Users. Use with any third party websites or services linked to, or linked to, e_Store. </font><font style="vertical-align: inherit;">e_Store provides these links or facilitates this interaction solely for convenience, and the inclusion of any link shall not, in any way, imply or represent affiliation. , endorsement or endorsement by e_Store of any linked website and/or any content therein.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            e_Store allows you to share videos from YouTube in the e_Store Livestream feature (“YouTube Content”). </font><font style="vertical-align: inherit;">By sharing YouTube Content, you hereby agree to be governed by YouTube's Privacy Policy ( </font></font><a href="http://www.google.com/policies/privacy"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">http://www.google.com/policies/privacy</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> ).
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            &nbsp;
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">22. USER'S CONTRIBUTION TO THE SERVICE</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            22.1 By submitting any Content to e_Store, you represent and warrant that you have obtained all necessary rights and/or consents to grant the following rights to e_Store. </font><font style="vertical-align: inherit;">You further acknowledge and agree that you are solely responsible for any content you post or make available on or through the Service, including responsibility for the accuracy, reliability, originality, clear copy of the rights, legal compliance, and legal limitations associated with any Contributions. </font><font style="vertical-align: inherit;">The User hereby grants the rights to e_Store and its successors, continuously, irrevocably, globally, non-exclusively, royalty-free, sublicensable and transferable. , the right to use, copy, distribute, reproduce, transfer, change, modify, create derivative works from, publicly display, </font><font style="vertical-align: inherit;">and make such Contributions, through or in connection with the Service, in any medium and through any communication channel, including for the purpose of promoting or redistributing part of the Service. (or derivative products of the Service). </font><font style="vertical-align: inherit;">The rights you give us terminate only when you or e_Store remove the Contribution from the Service. </font><font style="vertical-align: inherit;">You understand that your donation may be transferred to a variety of systems and modified to conform and meet technical requirements. </font><font style="vertical-align: inherit;">The rights you give us terminate only when you or e_Store remove the Contribution from the Service. </font><font style="vertical-align: inherit;">You understand that your donation may be transferred to a variety of systems and modified to conform and meet technical requirements. </font><font style="vertical-align: inherit;">The rights you give us terminate only when you or e_Store remove the Contribution from the Service. </font><font style="vertical-align: inherit;">You understand that your donation may be transferred to a variety of systems and modified to conform and meet technical requirements.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            22.2 Any Content, materials, information or ideas that the User posts or otherwise transfers to e_Store in any way (each referred to as “Content”. Submit”), will not be secured by e_Store and may be disseminated or used by e_Store or its affiliates without charge or liability to the User, for any purpose. , including the development, production and promotion of products. </font><font style="vertical-align: inherit;">By making Submissions to e_Store, you acknowledge and agree that e_Store and/or third parties may independently develop software, applications, interfaces, products, and modify and enhance the software, applications, interfaces, products that are identical or similar to the ideas stated in your Submission in terms of functionality, code or other characteristics. </font><font style="vertical-align: inherit;">So, </font><font style="vertical-align: inherit;">you hereby grant to e_Store and its successors, continuously, irrevocably, globally, non-exclusively, royalty-free, sublicensable and assignable, the right to use, copy, distribute, reproduce, transmit, modify, modify, create derivative works from, publicly display, and perform such Submission, through or in connection with the Submission under any media and through any communication channel, including for the purpose of promoting or redistributing a portion of the Service (or derivative works of the Service). </font><font style="vertical-align: inherit;">This provision does not apply to personal information that is the subject of e_Store's privacy policy unless you disclose such information on or through the Service. </font><font style="vertical-align: inherit;">irrevocable, universal, non-exclusive, royalty-free, sublicensable and transferable, right to use, copy, distribute, reproduce, transfer, alter, modify , create derivative works from, publicly display, and perform such Submission, through or in connection with the Submission in any media and through any communication channel, including included for the purpose of promoting or redistributing part of the Service (or its derivatives). </font><font style="vertical-align: inherit;">This provision does not apply to personal information that is the subject of e_Store's privacy policy unless you disclose such information on or through the Service. </font><font style="vertical-align: inherit;">irrevocable, universal, non-exclusive, royalty-free, sublicensable and transferable, right to use, copy, distribute, reproduce, transfer, alter, modify , create derivative works from, publicly display, and perform such Submission, through or in connection with the Submission in any media and through any communication channel, including included for the purpose of promoting or redistributing part of the Service (or its derivatives). </font><font style="vertical-align: inherit;">This provision does not apply to personal information that is the subject of e_Store's privacy policy unless you disclose such information on or through the Service. </font><font style="vertical-align: inherit;">change, modify, create derivative works from, publicly display, and perform such Submission, through or in connection with the Submission in any media and through any channel. any communication, including for the purpose of promoting or redistributing part of the Service (or its derivatives). </font><font style="vertical-align: inherit;">This provision does not apply to personal information that is the subject of e_Store's privacy policy unless you disclose such information on or through the Service. </font><font style="vertical-align: inherit;">change, modify, create derivative works from, publicly display, and perform such Submission, through or in connection with the Submission in any media and through any channel. any communication, including for the purpose of promoting or redistributing part of the Service (or its derivatives). </font><font style="vertical-align: inherit;">This provision does not apply to personal information that is the subject of e_Store's privacy policy unless you disclose such information on or through the Service.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            &nbsp;
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">23. THIRD PARTY CONTRIBUTIONS TO THE SERVICES AND EXTERNAL LINKS</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            23.1 Each party that contributes to the Service in terms of data, messages, images, audio, video, software and other Content, shall be responsible for the accuracy, reliability, originality, clarity rights, legal compliance, and legal limitations with respect to any Contributions. </font><font style="vertical-align: inherit;">e_Store will remove from the website/App information on selling fake goods, imitation goods, smuggled goods, goods infringing on intellectual property rights and other illegal goods, services and information when detecting or receive a well-founded complaint about this information. </font><font style="vertical-align: inherit;">The User does not hold e_Store responsible for any User activities or inactions, including without limitation, matters they post or otherwise make available through the Service.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            23.2 In addition, the e_Store Site may contain links to third-party products, websites, services and offers. </font><font style="vertical-align: inherit;">These third party links, products, websites, services and offers are not owned and controlled by e_Store. </font><font style="vertical-align: inherit;">In fact, such products, websites, services and offerings are made by, and are the property of, the respective third parties, and are protected by laws and treaties of copyright or other proprietary rights. other wisdom. </font><font style="vertical-align: inherit;">e_Store does not review, and is not responsible for, the content, functionality, safety, services, privacy policies, or other practices of these third parties. </font><font style="vertical-align: inherit;">e_Store encourages Users to inquire about the terms and other policies listed by third parties on their websites or other means. </font><font style="vertical-align: inherit;">By using the Service, </font><font style="vertical-align: inherit;">you acknowledge that e_Store is not responsible in any way for your use of, or inability to use, any website or widget. </font><font style="vertical-align: inherit;">You further acknowledge and agree that e_Store may disable your use of, or remove, any third-party links, or applications on the Service, within the limits of such third parties. violate these Terms of Service.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b>&nbsp;</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">24. ASSESSMENT AND WARRANTIES OF THE USER</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;text-indent:.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            The User represents and warrants that:
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (a) User possesses the capacity, (and in the case of minors, valid consent from a parent or legal guardian), the legal right and ability to enter into these Terms this Service and to comply with its terms; </font><font style="vertical-align: inherit;">and
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:1.0in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (b) The User only uses the Service for lawful purposes and in accordance with these Terms of Service and all laws, rules, regulations, directives, guidelines, policies and regulations apply.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b>&nbsp;</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">25. COMPENSATION</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            You agree to indemnify, defend and hold harmless e_Store, its shareholders, subsidiaries, affiliates, directors, officers, agents, co-brand owners or partners, and employees. e_Store (collectively, the “Indemnified Party”) in connection with claims, actions, proceedings, and lawsuits and liabilities, losses, payments, penalties, fines, costs and related costs (including dispute settlement costs) borne by the Indemnified Party, arising out of (a) a transaction made on the e_Store Site, or a dispute relating to such transaction (except for where e_Store or its affiliates is the Seller for the transaction relating to the claim), (b) e_Store Guarantee Policy, (c) the organization, operation, administration and/or perform the Services performed by or on behalf of e_Store,(d) your breach or failure to comply with any provision of these Terms of Service or any policy or guideline referenced herein, (e) your use or improper use of the Service , or (f) your violation of any law or any third party rights, or (g) any Content posted by the User.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b>&nbsp;</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">26. PRIVACY</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            If any provision of these Terms of Service is unlawful, rescinded, or for any reason unenforceable, then that provision shall be severable from these terms and conditions. this Agreement and shall not affect the validity or enforceability of any remaining provision nor affect the validity or enforceability of any provision subject to review by law.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b>&nbsp;</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">27. LAW APPLY</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            These Terms of Service shall be governed by and construed in accordance with the laws of Vietnam. </font><font style="vertical-align: inherit;">Any dispute, controversy, claim or disagreement of any kind arising out of or relating to these Terms of Service against or in connection with e_Store or any of the Indemnified Parties under The subject matter of these Terms of Service shall be resolved by the Vietnam International Arbitration Center (VIAC). </font><font style="vertical-align: inherit;">The language of arbitration is Vietnamese.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b>&nbsp;</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">28. GENERAL PROVISIONS</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            28.1 e_Store reserves all rights not conferred herein.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            28.2 e_Store reserves the right to amend these Terms of Service at any time by posting the revised Terms of Service on the e_Store Site. </font><font style="vertical-align: inherit;">User's continued use of the e_Store Site after changes are posted will constitute User's acceptance of the revised Terms of Service.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            28.3 The User may not assign, sublicense or assign any of the rights or obligations granted to the User herein.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            28.4 Nothing in these Terms of Service shall constitute a partnership, joint venture or agency-owner relationship between you and e_Store.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            28.5 At any time or at any time, e_Store's failure to perform any of the provisions hereof shall not in any way affect e_Store's later rights to enforce this right unless waiver of these rights is waived in writing.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            28.6 These Terms of Service are solely for the benefit of e_Store and the User but for the benefit of any other person or entity, excluding e_Store's affiliates and subsidiaries (and to each successor or assignee of e_Store or its affiliates and subsidiaries).
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            28.7 The terms set forth in these Terms of Service and any agreements and policies included or referenced in these Terms of Service constitute the overall agreement and understanding of the parties. with respect to the Service and the e_Store Site and supersedes any prior agreement or understanding between the parties relating thereto. </font><font style="vertical-align: inherit;">With the parties entering into the agreement formed under these Terms of Service, the parties do not rely on any representations, representations, warranties, understandings, undertakings, promises or undertakings of any kind. person except as expressly set forth in these Terms of Service. </font><font style="vertical-align: inherit;">These Terms of Service may not be contradicted, construed or supplemented as evidence of prior agreements, any existing oral agreements or any consistent additional terms.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            28.8 You agree to comply with all applicable laws relating to anti-corruption and anti-bribery.
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.5in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            28.9 If you have any questions or concerns regarding the Terms of Service or arising issues related to the Terms of Service on the e_Store Site, please contact e_Store&nbsp; </font></font><a href="https://help.e_Store.vn/vn/s/contactus"><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">here</font></font></b></a><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> .</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            LEGAL NOTICE: Please send all legal notices to e_Store&nbsp; </font></font><a href="https://help.e_Store.vn/vn/s/contactus"><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">here</font></font></b></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> &nbsp;– Recipient: Vietnam Legal Team.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            &nbsp;
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            I HAVE READ THIS TERMS OF SERVICE AND AGREE TO ALL OF THE FOLLOWING TERMS AS ANY TERMS TO BE MODIFIED FOLLOWLY. </font><font style="vertical-align: inherit;">BY CLICKING THE "SIGNUP" OR "REGISTER THROUGH FACEBOOK" WHEN SIGNING UP TO USING THE e_Store SITE, I UNDERSTAND THAT I ARE CREATEING A DIGITAL SIGNATURE THAT I UNDERSTAND IS AS VALUE AND EFFECTIVE HAND SIGNED.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            &nbsp;
+                        </p>
+                        <p class="MsoNormal" style="background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Updated April 27, 2022.</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="background:white;">
+                            <i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">This version takes effect on 4/5/2022. </font><font style="vertical-align: inherit;">To refer to an earlier version of the Terms of Service, please click&nbsp; </font></font></i><a href="https://e_Store.vn/docs/6979"><i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">HERE</font></font></i></a><i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> .</font></font></i>
+                        </p>
+                        <p>
+                            <br>
+                        </p>
+                        <p>
+                            <br>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+            <!--het khoi san pham-->
+        </div>
+        <!--het div noidung-->
+    </div>
+    <!--het container-->
+</section>
+
+
+
+
+<!-- footer  -->
+<footer th:replace="public/fragments :: footer">
+
+</footer>
+
+<!-- nut cuon len dau trang -->
+<div class="fixed-bottom">
+    <div class="btn btn-warning float-right rounded-circle nutcuonlen" id="backtotop" href="#"
+         style="background:#CF111A;"><i class="fa fa-chevron-up text-white"></i></div>
+</div>
+
+
+</body>
+
+</html>

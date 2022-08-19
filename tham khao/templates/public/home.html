@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+
+<head th:replace="public/fragments :: html_head">
+
+</head>
+
+<body>
+
+<!-- code cho nut like share facebook  -->
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v6.0"></script>
+
+<!-- header -->
+<nav th:replace="public/fragments :: html_nav" class="navbar navbar-expand-md bg-white navbar-light">
+
+</nav>
+
+
+<!-- form dang ky khi click vao button tren header-->
+<div th:replace="public/fragments :: html_register"  class="modal fade mt-5" id="formdangky" data-backdrop="static" tabindex="-1" aria-labelledby="dangky_tieude"
+     aria-hidden="true">
+</div>
+
+<div th:if="${verify}" >
+    <script>
+        swal({
+            title: 'Account verification successful!',
+            /* text: 'Redirecting...', */
+            icon: 'success',
+            timer: 3000,
+            buttons: true,
+            type: 'success'
+        })
+    </script>
+</div>
+<!-- form dang nhap khi click vao button tren header-->
+<div th:replace="public/fragments :: html_login"  class="modal fade mt-5" id="formdangnhap" data-backdrop="static" tabindex="-1"
+     aria-labelledby="dangnhap_tieude" aria-hidden="true">
+
+</div>
+
+
+<!-- thanh tieu de "danh muc sach" + hotline + ho tro truc tuyen -->
+<section th:replace="public/fragments :: html_menu"  class="duoinavbar">
+
+</section>
+
+<!-- noi dung danh muc sach(categories) + banner slider -->
+<section  class="header bg-light">
+    <div class="container">
+        <div class="row">
+            <div th:replace="public/fragments :: html_content_menu"  class="col-md-3" style="margin-right: -15px;">
+                <!-- CATEGORIES -->
+
+            </div>
+            <!-- banner slider  -->
+            <div th:replace="public/fragments :: html_banner" class="col-md-9 px-0">
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- khoi sach moi  -->
+<section class="_1khoi sachmoi bg-white">
+    <div class="container">
+        <div class="noidung" style=" width: 100%;">
+            <div class="row">
+                <!--header-->
+                <div class="col-12 d-flex justify-content-between align-items-center pb-2 bg-transparent pt-4">
+                    <h1 class="header text-uppercase" style="font-weight: 400;">PRODUCT HOT</h1>
+                    <a href="/public/product/all" class="btn btn-warning btn-sm text-white">View all</a>
+                </div>
+            </div>
+            <div class="khoisanpham" style="padding-bottom: 2rem">
+                <!-- 1 san pham -->
+                <th:block th:each="product,index : ${topProduct}">
+                <div class="card">
+                    <a th:href="'/public/product/detail/'+${product.id}" class="motsanpham"
+                       style="text-decoration: none; color: black;" data-toggle="tooltip" data-placement="bottom"
+                       title="Lập Kế Hoạch Kinh Doanh Hiệu Quả">
+                        <img class="card-img-top anh" style="height: 400px !important;" th:src="'/resources/uploads/' + ${product.image}"
+                             alt="lap-ke-hoach-kinh-doanh-hieu-qua">
+                        <div class="card-body noidungsp mt-3">
+                            <h3 class="card-title ten" th:text="${product.name}"></h3>
+                            <small class="tacgia text-muted" th:text="${product.category.name}"></small>
+                            <div class="gia d-flex align-items-baseline">
+                                <!--<div class="giamoi" th:text="${#numbers.formatCurrency(product.price - (product.price * product.discount / 100))}"></div>
+                                <div class="giacu text-muted" th:text="${#numbers.formatCurrency(product.price)}"></div>-->
+                                <div class="giamoi" th:text="${product.price - (product.price * product.discount / 100)} + ' $'"></div>
+                                <div class="giacu text-muted" th:text="${product.price} + ' $'"></div>
+                                <div class="sale" th:text="'-'+${product.discount}+'%'"></div>
+                            </div>
+                            <div class="danhgia">
+                                <ul class="d-flex" style="list-style: none;">
+                                    <li class="active"><i class="fa fa-star"></i></li>
+                                    <li class="active"><i class="fa fa-star"></i></li>
+                                    <li class="active"><i class="fa fa-star"></i></li>
+                                    <li class="active"><i class="fa fa-star"></i></li>
+                                    <li><i class="fa fa-star"></i></li>
+                                    <li><span class="text-muted" th:text="${product.viewCount} + ' view'"></span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- khoi sach combo hot  -->
+<section class="_1khoi combohot mt-4">
+    <div class="container">
+        <div class="noidung bg-white" style=" width: 100%;">
+            <div class="row">
+                <!--header -->
+                <div class="col-12 d-flex justify-content-between align-items-center pb-2 bg-light">
+                    <h2 class="header text-uppercase" style="font-weight: 400;">PROMOTION PRODUCTS</h2>
+                    <a href="/public/product/all" class="btn btn-warning btn-sm text-white">View all</a>
+                </div>
+            </div>
+            <div class="khoisanpham">
+                <th:block th:each="product,index : ${productDiscounts}">
+                    <div class="card">
+                        <a th:href="'/public/product/detail/'+${product.id}" class="motsanpham"
+                           style="text-decoration: none; color: black;" data-toggle="tooltip" data-placement="bottom"
+                           title="Lập Kế Hoạch Kinh Doanh Hiệu Quả">
+                            <img class="card-img-top anh" style="height: 400px !important;" th:src="'/resources/uploads/' + ${product.image}"
+                                 alt="lap-ke-hoach-kinh-doanh-hieu-qua">
+                            <div class="card-body noidungsp mt-3">
+                                <h3 class="card-title ten" th:text="${product.name}"></h3>
+                                <small class="tacgia text-muted" th:text="${product.category.name}"></small>
+                                <div class="gia d-flex align-items-baseline">
+                                    <!--<div class="giamoi" th:text="${#numbers.formatCurrency(product.price - (product.price * product.discount / 100))}"></div>
+                                    <div class="giacu text-muted" th:text="${#numbers.formatCurrency(product.price)}"></div>-->
+                                    <div class="giamoi" th:text="${product.price - (product.price * product.discount / 100)} + ' $'"></div>
+                                    <div class="giacu text-muted" th:text="${product.price} + ' $'"></div>
+                                    <div class="sale" th:text="'-'+${product.discount}+'%'"></div>
+                                </div>
+                                <div class="danhgia">
+                                    <ul class="d-flex" style="list-style: none;">
+                                        <li class="active"><i class="fa fa-star"></i></li>
+                                        <li class="active"><i class="fa fa-star"></i></li>
+                                        <li class="active"><i class="fa fa-star"></i></li>
+                                        <li class="active"><i class="fa fa-star"></i></li>
+                                        <li><i class="fa fa-star"></i></li>
+                                        <li><span class="text-muted" th:text="${product.viewCount} + ' view'"></span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- div _1khoi -- khoi sachnendoc -->
+<section class="_1khoi sachnendoc bg-white mt-4">
+    <div class="container">
+        <div class="noidung" style=" width: 100%;">
+            <div class="row">
+                <!--header-->
+                <div class="col-12 d-flex justify-content-between align-items-center pb-2 bg-transparent pt-4">
+                    <h2 class="header text-uppercase" style="font-weight: 400;">NEW PRODUCT</h2>
+                    <a href="/public/product/all" class="btn btn-warning btn-sm text-white">View all</a>
+                </div>
+                <!-- 1 san pham -->
+                <th:block th:each="product,index : ${productTopCreates}">
+                    <div class="col-lg col-sm-4">
+                        <div class="card">
+                            <a th:href="'/public/product/detail/'+${product.id}" class="motsanpham" style="text-decoration: none; color: black;"
+                               data-toggle="tooltip" data-placement="bottom"
+                               title="Từng bước chân nở hoa: Khi câu kinh bước tới">
+                                <img class="card-img-top anh" style="height: 300px !important;" th:src="'/resources/uploads/' + ${product.image}"
+                                     alt="tung-buoc-chan-no-hoa">
+                                <div class="card-body noidungsp mt-3">
+                                    <h3 class="card-title ten" th:text="${product.name}"></h3>
+                                    <small class="thoigian text-muted" th:text="${product.createdAt}"></small>
+                                    <!--<div><a class="detail" href="#">View detail</a></div>-->
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </th:block>
+
+            </div>
+        </div>
+        <hr>
+    </div>
+</section>
+
+<!-- thanh cac dich vu :mien phi giao hang, qua tang mien phi ........ -->
+<section th:replace="public/fragments :: footer1" class="abovefooter text-white" style="background-color: #CF111A;">
+
+</section>
+
+<!-- footer  -->
+<!--<footer th:replace="public/fragments :: footer" >
+
+</footer>-->
+
+<!-- nut cuon len dau trang -->
+<div class="fixed-bottom">
+    <div class="btn btn-warning float-right rounded-circle nutcuonlen" id="backtotop" href="#"
+         style="background:#CF111A;"><i class="fa fa-chevron-up text-white"></i></div>
+</div>
+
+</body>
+
+</html>

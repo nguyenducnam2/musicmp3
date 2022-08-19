@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" th:href="@{/public/css/sach-moi-tuyen-chon.css}">
+    <script type="text/javascript" th:src="@{/public/js/main.js}"></script>
+    <link rel="stylesheet" th:href="@{/public/fontawesome_free_5.13.0/css/all.css}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/public/slick/slick.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/public/slick/slick-theme.css}"/>
+    <script type="text/javascript" th:src="@{/public/slick/slick.min.js}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    <script type="text/javascript"
+            src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+    <link rel="canonical" href="http://dealbook.xyz/">
+    <meta name="google-site-verification" content="urDZLDaX8wQZ_-x8ztGIyHqwUQh2KRHvH9FhfoGtiEw" />
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/public/favicon_io/apple-touch-icon.png}">
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/public/favicon_io/favicon-32x32.png}">
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/public/favicon_io/favicon-16x16.png}">
+    <link rel="manifest" th:href="@{/public/favicon_io/site.webmanifest}">
+    <style>img[alt="www.000webhost.com"]{display: none;}</style>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        function abc(){
+            alert("Dsds")
+        }
+        function login(){
+            var password = $('#password1').val();
+            var email = $('#email1').val();
+            if (password == ''  || email == '' ){
+                swal({
+                    title: 'Need to fill out the information completely!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            } else {
+
+                var formData = new FormData();
+                formData.append('password', password);
+                formData.append('email', email);
+                $.ajax(
+                    {
+                        type: 'POST',
+                        url: '/public/user/login/',
+                        contentType: false,
+                        processData: false,
+                        data: formData,
+                        success: function (data) {
+                            if(data == "false_user"){
+                                swal({
+                                    title: 'Incorrect account information!',
+                                    /* text: 'Redirecting...', */
+                                    icon: 'error',
+                                    timer: 3000,
+                                    buttons: true,
+                                    type: 'error'
+                                })
+                            }else if(data == "true"){
+                                swal({
+                                    title: 'Login successfully !',
+                                    /* text: 'Redirecting...', */
+                                    icon: 'success',
+                                    timer: 5000,
+                                    buttons: true,
+                                    type: 'success'
+                                })
+                                setInterval(function(){
+                                    location.reload()
+                                }, 3000);
+                            } else {
+                                swal({
+                                    title: 'Unverified account, please check your email!',
+                                    /* text: 'Redirecting...', */
+                                    icon: 'error',
+                                    timer: 3000,
+                                    buttons: true,
+                                    type: 'error'
+                                })
+                            }
+                        },
+                        error: function (err) {
+                            alert(err);
+                        }
+                    }
+                )
+            }
+
+        }
+        $( document ).ready(function() {
+            const cb = document.querySelector('#checkbox1');
+            if(cb.checked == false){
+                document.getElementById("register_id").disabled = true;
+            }
+        });
+        function changeStatus(){
+            const cb = document.querySelector('#checkbox1');
+            if(cb.checked == false){
+                document.getElementById("register_id").disabled = true;
+            }else if(cb.checked == true){
+                document.getElementById("register_id").disabled = false;
+            }
+        }
+        function register(){
+
+            const validateEmail = (email) => {
+                return email.match(
+                    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                );
+            };
+            var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+            var password = $('#password').val();
+            var rePassword = $('#rePassword').val();
+            var email = $('#email').val();
+            var fullName = $('#fullName').val();
+            let phoneNumber = $('#phoneNumber').val().replace(/\s+/g, '');
+            var atposition = email.indexOf("@");
+            var dotposition = email.lastIndexOf(".");
+            if (password == '' || rePassword == '' || email == '' || fullName == '' || phoneNumber == ''){
+                swal({
+                    title: 'You need to fill in all the information!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            }
+            else if (vnf_regex.test(phoneNumber) == false)
+            {
+                swal({
+                    title: 'Phone number is not in the correct format!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            } else if(atposition < 1 || dotposition < (atposition + 2) || (dotposition + 2) >= email.length){
+                swal({
+                    title: 'Email is not in the correct format!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            } else if(!validateEmail(email)){
+                swal({
+                    title: 'Email is not in the correct format!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            }else {
+                if (password !== rePassword){
+                    swal({
+                        title: 'Two passwords do not match!',
+                        /* text: 'Redirecting...', */
+                        icon: 'error',
+                        timer: 3000,
+                        buttons: true,
+                        type: 'error'
+                    })
+                } else {
+                    var formData = new FormData();
+                    formData.append('password', password);
+                    formData.append('email', email);
+                    formData.append('fullName', fullName);
+                    formData.append('phoneNumber', phoneNumber);
+                    formData.append('rePassword', rePassword);
+                    $.ajax(
+                        {
+                            type: 'POST',
+                            url: '/public/user/register/',
+                            contentType: false,
+                            processData: false,
+                            data: formData,
+                            success: function (data) {
+                                if(data == "exist"){
+                                    swal({
+                                        title: 'Email is existed!',
+                                        /* text: 'Redirecting...', */
+                                        icon: 'error',
+                                        timer: 3000,
+                                        buttons: true,
+                                        type: 'error'
+                                    })
+                                }else if(data == "true"){
+                                    swal({
+                                        title: 'Register successfully!',
+                                        /* text: 'Redirecting...', */
+                                        icon: 'success',
+                                        timer: 5000,
+                                        buttons: true,
+                                        type: 'success'
+                                    })
+                                    $('#err').val("");
+                                }
+                            },
+                            error: function (err) {
+                                alert(err);
+                            }
+                        }
+                    )
+                }
+            }
+
+        }
+    </script>
+</head>
+
+<body>
+<!--Start of Tawk.to Script-->
+
+<!--End of Tawk.to Script-->
+<!-- code cho nut like share facebook  -->
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v6.0"></script>
+
+<!-- header -->
+<nav th:replace="public/fragments :: html_nav" class="navbar navbar-expand-md bg-white navbar-light">
+
+</nav>
+
+
+<!-- form dang ky khi click vao button tren header-->
+<div th:replace="public/fragments :: html_register" class="modal fade mt-5" id="formdangky" data-backdrop="static" tabindex="-1" aria-labelledby="dangky_tieude"
+     aria-hidden="true">
+
+</div>
+
+
+<!-- form dang nhap khi click vao button tren header-->
+<div th:replace="public/fragments :: html_login" class="modal fade mt-5" id="formdangnhap" data-backdrop="static" tabindex="-1"
+     aria-labelledby="dangnhap_tieude" aria-hidden="true">
+
+</div>
+
+<!-- thanh "danh muc sach" đã được ẩn bên trong + hotline + ho tro truc tuyen -->
+<section  class="duoinavbar">
+    <div class="container text-white">
+        <div class="row justify">
+            <div class="col-lg-3 col-md-5">
+                <div class="categoryheader">
+                    <div class="noidungheader text-white">
+                        <i class="fa fa-bars"></i>
+                        <span class="text-uppercase font-weight-bold ml-1">
+Category Product</span>
+                    </div>
+                    <!-- CATEGORIES -->
+                    <div class="categorycontent">
+                        <ul>
+                            <th:block th:each="category,index : ${categories}">
+                                <li th:if="${category.parentId == 0}"> <a  th:text="${category.name}"></a><i class="fa fa-chevron-right float-right"></i>
+                                    <ul>
+                                        <li class="liheader"><a href="#" class="header text-uppercase" th:text="${category.name}"></a></li>
+                                        <div class="content trai">
+                                            <th:block th:each="category1,index1 : ${categories}">
+                                                <li th:if="${category.id == category1.parentId}"><a th:text="${category1.name}" th:href="'/public/product/'+${category1.id}"></a></li>
+                                                <th:block/>
+                                        </div>
+                                    </ul>
+                                </li>
+                                <th:block/>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 ml-auto contact d-none d-md-block">
+                <div class="benphai float-right">
+                    <div class="hotline">
+                        <i class="fa fa-phone"></i>
+                        <span>Hotline:<b>1900 1999</b> </span>
+                    </div>
+                    <i class="fas fa-comments-dollar"></i>
+                    <a href="#">
+                        Online support </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- breadcrumb  -->
+<!-- các sản phẩm  -->
+<section class="content my-4">
+    <div class="container">
+        <div class="noidung bg-white" style=" width: 100%;">
+            <div class="items">
+                <div class="row">
+                    <h4 style="margin: 10px auto !important;">PRIVACY POLICY</h4>
+                    <div id="tofContent" class="container">
+                        <p class="MsoNormal" style="text-align:justify;">
+                        <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">1. INTRODUCTION</font></font></b>
+                    </p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            1.1. </font><font style="vertical-align: inherit;">Welcome to the e_Store.vn platform (including the e_Storewebsite and mobile application) operated by e_StoreCo., Ltd. and its affiliates (collectively and individually, "e_Store", "them", "them" and "them" me", or "our"). </font><font style="vertical-align: inherit;">e_Storeseriously performs its responsibilities related to information security in accordance with the provisions on privacy protection of personal information of Vietnamese law (“Privacy Law”) and is committed to respecting privacy and interest of all users in our website and mobile application (“Platform”) (we collectively refer to the Platforms and the services we provide as described in our Platforms). I am "the Services"). </font><font style="vertical-align: inherit;">User means a person who registers an account with us to use the Services, </font><font style="vertical-align: inherit;">includes both buyers and sellers (collectively and individually, “The Users”, “you” or “your”). </font><font style="vertical-align: inherit;">We recognize the importance of the personal data you have entrusted to us and believe that it is our responsibility to appropriately manage, protect and process your personal data. </font><font style="vertical-align: inherit;">This Privacy Policy ("Privacy Policy" or "Policy") is designed to help you understand how we collect, use, disclose and/or process the personal data you have collected. provide us and/or keep about you, whether now or in the future, and to help you make an informed decision before providing us with any of your personal data. . </font><font style="vertical-align: inherit;">We recognize the importance of the personal data you have entrusted to us and believe that it is our responsibility to appropriately manage, protect and process your personal data. </font><font style="vertical-align: inherit;">This Privacy Policy ("Privacy Policy" or "Policy") is designed to help you understand how we collect, use, disclose and/or process the personal data you have collected. provide us and/or keep about you, whether now or in the future, and to help you make an informed decision before providing us with any of your personal data. . </font><font style="vertical-align: inherit;">We recognize the importance of the personal data you have entrusted to us and believe that it is our responsibility to appropriately manage, protect and process your personal data. </font><font style="vertical-align: inherit;">This Privacy Policy ("Privacy Policy" or "Policy") is designed to help you understand how we collect, use, disclose and/or process the personal data you have collected. provide us and/or keep about you, whether now or in the future, and to help you make an informed decision before providing us with any of your personal data. .
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            1.2 "Personal Data" or "personal data" means data, whether true or not, about an individual through which it can be identified, or from such data and information to which an organization has or has the ability to access. </font><font style="vertical-align: inherit;">Common examples of personal data may include name, national identification number and contact information.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            1.3 By using the Services, registering for an account with us, or accessing the Platform, you acknowledge and agree that you accept the methods, requirements, and/or policies described in the Policy. this privacy policy, and you hereby consent to our collection, use, disclosure and/or processing of your personal data as described herein. </font><font style="vertical-align: inherit;">IF YOU DO NOT AGREE TO THE PERMIT TO THE PROCESSING OF YOUR PERSONAL DATA AS DESCRIBED IN THIS POLICY, PLEASE DO NOT USE OUR SERVICES OR ACCESS OUR PLANTS OR WEBSITE. </font><font style="vertical-align: inherit;">If we change our Privacy Policy, we will notify you including through posting of those changes or the revised Privacy Policy on our Platform. </font><font style="vertical-align: inherit;">To the extent permitted by law, your continued use of the Services or Platforms, including your trading,
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            1.4. </font><font style="vertical-align: inherit;">This policy applies in conjunction with any other applicable notices, contractual terms, and consent terms relating to our collection, storage, use, disclosure and/or processing of your personal data. you and are not intended to override such notices or terms unless we expressly state otherwise.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            1.5. </font><font style="vertical-align: inherit;">This Policy applies to both Seller and Buyer who are using the Service unless expressly stated to the contrary.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2. </font></font></b>&nbsp;<b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">WHEN WILL e_StoreCOLLECT PERSONAL DATA?</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            2.1. </font><font style="vertical-align: inherit;">We will/may collect personal data about you:
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● when you register and/or use our Services or Platforms, or open an account with us;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● when you submit any forms, including applications or other forms in connection with any of our products and services, online or otherwise;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● when you enter into any agreement or provide other documents or information related to your interactions with us, or when you use our products and services;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● when you interact with us, such as through phone calls (which may be recorded), correspondence, faxes, face-to-face meetings, email and social media platforms;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● when you use our electronic services, or interact with us through our Platform or Website or Services. </font><font style="vertical-align: inherit;">This includes through cookies, which we may deploy when you interact with our Platforms or Websites;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● when you give permission on your device to share information with our apps or Platforms
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● When you link your e_Storeaccount to your social media accounts or other external accounts or use other social networking features, in accordance with the supplier's policies
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● when you make transactions through our Services;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● when you provide feedback or submit a complaint to us;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● when you register for a contest; </font><font style="vertical-align: inherit;">or
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● when you submit your personal data to us for any reason.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            The above cases are not intended to be an exhaustive list of cases and only outline some of the more common instances when your personal data may be collected.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">3. WHAT DATA WILL e_StoreCOLLECT?</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            3.1. </font><font style="vertical-align: inherit;">Personal data that e_Storemay collect includes:
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● full name;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● email address;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● date of birth;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● billing and/or shipping address;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            bank account and payment information
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● phone number;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● gender;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● Information sent by or relating to the device(s) used to access our Services or Platforms
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● information about your network and the people and accounts with which you interact;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● image or audio or video;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● Government-issued identity information or other information for our legal review, customer identification, information verification or fraud prevention purposes
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● Media or communication data, such as your preferences for receiving advertising communications from us or third parties, communication preferences and history of communications with us, our service providers, and other third parties;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● Usage and transaction information, including details about your search history, transactions, advertising and display content that interacts with the Platform, and related products and services;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            location data
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● any other information about the user when the user logs in to use our Services or Platforms, and when the user uses the Services or Platforms, as well as information about the user's use how to use our Services or Platforms; </font><font style="vertical-align: inherit;">and
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● aggregated data about user content usage.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            3.2 You agree not to provide us with any information that is inaccurate or misleading, and you agree to notify us of any inaccurate or misleading information. </font><font style="vertical-align: inherit;">We reserve the right in our sole discretion to request other documents necessary to verify the information provided by you.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            3.3. </font><font style="vertical-align: inherit;">If you sign in to become a User of our Platforms using Your social network account (“Social Network Account”), link your account to your Social Network Account or use any e_Storesocial networking feature, we have the right to access information about you that you have voluntarily provided to your Social Media Account service provider in accordance with the policies of these service providers, and we will manage and use your personal data in accordance with the provisions of this Policy at all times.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            3.4 If you do not want us to collect the aforesaid personal information/data, you may opt out at any time by notifying our Data Protection Officer in writing. </font><font style="vertical-align: inherit;">More information about the content can be found under "How can you withdraw your permission to remove your name, request access or correct information you have provided us with?" </font><font style="vertical-align: inherit;">down here. </font><font style="vertical-align: inherit;">Note, however, that refusing or revoking your permission for us to collect, use or process your personal data may affect your use of the Services and the Platform. </font><font style="vertical-align: inherit;">For example, location services will not work if you do not allow the application to access your location.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">4. COLLECT OTHER DATA</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            4.1 As with most websites and other mobile applications, your device sends information that may include data about you, which is recorded by a web server when you use our Platform. </font><font style="vertical-align: inherit;">This information generally includes, but is not limited to, IP address, computer/mobile device operating system, browser type, mobile device type, mobile device characteristics, device identifiers, etc. unified device identifier (UDID) or mobile device identifier (MEID) of your mobile device, the Web site's reference address (if applicable), the pages you have visited on the website or application our mobile use and visit time and sometimes "cookies" (which can be disabled using your browser preferences) to help the website remember your last visit. </font><font style="vertical-align: inherit;">If you log in, </font><font style="vertical-align: inherit;">This information is linked to your personal account. </font><font style="vertical-align: inherit;">This information is also included in anonymous statistics to help us understand how visitors use our Website.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            4.2 Our mobile applications may collect accurate information about the address of your mobile device using technologies such as GPS, Wi-Fi, etc. </font><font style="vertical-align: inherit;">We collect, use, disclose and/or process this information for one or more purposes including, but not limited to, location-based services for which you request or transmit content. be relevant to you based on your location or allow you to share your location with other Users as part of the Services offered by our mobile applications. </font><font style="vertical-align: inherit;">For most mobile devices, you can withdraw your permission for us to collect this information based on your location through your device's settings. </font><font style="vertical-align: inherit;">If you have any questions about how to disable location services on your mobile device,
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            4.3 As when you view pages on our website or mobile application, when you view content and advertisements and access other software on our Platform or through the Service, the majority of similar information sent to us (including but not limited to, IP address, operating system, etc.); </font><font style="vertical-align: inherit;">but, instead of pageviews, your device sends us information about the content, advertisements viewed and/or software installed by the Services and Platforms and when.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b>5.
+                                COOKIES</b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            5.1 We or our authorized service providers and our advertising partners may sometimes use "cookies" or other features to enable us or third parties to collect or share share information regarding your use of our Services or Platforms. </font><font style="vertical-align: inherit;">These features will help us improve the Platform and the Services we offer, help us recommend new services and features, and/or enable us and our advertising partners provide content that is more relevant to you. </font><font style="vertical-align: inherit;">"Cookies" are identifiers stored on your computer or mobile device that store data about your computer or device, how and when the Services or Platforms are used or accessed access, </font><font style="vertical-align: inherit;">by how many people and to track activity within our Platforms. </font><font style="vertical-align: inherit;">We may associate cookie information with personal data. </font><font style="vertical-align: inherit;">Cookies are also associated with information about the content you have chosen to shop with and the websites you have viewed. </font><font style="vertical-align: inherit;">This information is used to track your shopping cart, to deliver content tailored to your interests, to enable advertising service partners to provide advertising services on pages through the Internet. and to perform data analysis and or monitor the use of the Service
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            5.2 You may refuse to use cookies by selecting the appropriate settings on your browser or device. </font><font style="vertical-align: inherit;">Please note, however, that if you do this you may not be able to use the full functionality of the Platform or our Services.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">6. HOW WE USE THE INFORMATION YOU PROVIDE US?</font></font></b> <b></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            6.1 We may collect, use, disclose and/or process your personal data for the following purposes:
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● to review and/or process your application/transaction with us or your transaction or correspondence with third parties via the Services;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● to administer, operate, provide and/or manage your use and/or access to our Services and Platforms (including your preferences), and relationships and resources your user account with us;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            to respond to, process, settle or complete a transaction and/or respond to your requests for certain products and services and to notify you of service issues and activities unusual account movements;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● to enforce our Terms of Service or any applicable end user license agreement;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● to protect personal safety and the rights, property or safety of others;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● for identification, verification, legal review or customer identification purposes;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● to evaluate and make decisions regarding your credit and risk profile and eligibility for credit products;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● to maintain and manage any software updates and/or other updates and support as may be required from time to time to ensure the smooth functioning of our Services;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● to address or facilitate customer service, carry out your instructions, resolve or respond to any inquiries submitted by (or intended to be submitted by) you or on your behalf;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● to contact you or communicate with you by phone, text message and/or fax message, email and/or mail or otherwise for the purpose of administering and/or managing your relationship with them me or your use of our Services, such as in communicating administrative information to you regarding our Services. </font><font style="vertical-align: inherit;">You acknowledge and agree that our such communication may be by mail, document or notice to you, which may include disclosure of certain personal data about you to provide such documents as well as on the package/envelope;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● to allow other users to interact with or communicate with you or see some of your activity on the Platform, including to notify you when another user has sent you a private message or posted to comment on you on the Platform or to link to your use of social features on the Platform;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● to conduct research, analysis and development activities (including but not limited to data analysis, surveying, product and service development and/or characterization), to analyze how you use our Services, to recommend products and/or services of your interest, to improve our Services or products and/or to improve our customer experience friend;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● to enable other testing and surveys to, among other things, validate the size and composition of our target audience, and understand their experience with the e_StoreServices;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● for marketing and promotional purposes, in this case, to send you through various means and communication methods, marketing and promotional information and materials relating to products and/or services (including, but not limited to, the products and/or services of third parties with which e_Storemay cooperate or associate) with which e_Store(and/or its affiliates or related companies) it) may sell, market or promote, whether such products or services exist now or are created in the future. </font><font style="vertical-align: inherit;">You may unsubscribe from marketing communications at any time by using the unsubscribe function in electronic marketing materials. </font><font style="vertical-align: inherit;">We may use your contact information to send newsletters and/or communication materials from us or from our related companies;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            to respond to legal proceedings or to comply with or as required by applicable law, and requirements of any competent governmental authority or request of any jurisdiction or when we have a good faith belief that disclosure is necessary, including but not limited to, meeting the requirements of meeting the disclosure requirements required by any law binding on e_Storeor the the relevant e_Storecompany or affiliate (including, if applicable, the display of your name, contact details and company details);
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● to compile statistics and research to meet reporting and/or regulatory or internal recordkeeping requirements;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            to carry out discovery and verification or other screening activities (including but not limited to background checks) in compliance with obligations under the law or regulatory authorities or our risk control procedures, which may be required by law or may have been applied by us;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            to check our Services or e_Storeactivity
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            to prevent or investigate any actual or suspected fraud of our Terms of Service, fraud, illegality, omission or misconduct, whether in connection with your use of our Services or any matter arising from your relationship with us;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● To respond to any actual threats or claims made against e_Storeor other requests regarding Content that violates regulations of third parties;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● to store, host, backup (whether for disaster recovery or other purposes) of your personal data;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            to process and/or facilitate a business asset transaction or a potential business asset transaction, where such transaction involves e_Storeas a party or involves only one company. e_Store's company or affiliate as a party to or in relation to e_Storeand/or any one or more of e_Store's affiliates or companies such as the participating party(s), and which may include organizations other third parties to such a transaction. </font><font style="vertical-align: inherit;">"Business Asset Transactions" mean any purchase, sale, lease, merger, consolidation or any other acquisition, liquidation or financing of an entity or part of an entity, or of any business or property of an organization; </font><font style="vertical-align: inherit;">and/or
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● any purpose for which we notify you at the time of obtaining your permission.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            (collectively, the “ </font></font><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Purposes</font></font></b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> ”)
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            6.2 You acknowledge, authorize and agree that we may access, store and disclose your Account information and Content if required to do so by law or by court order or by any other any government or regulatory authority having jurisdiction over e_Storeor its affiliates or with good cause e_Storebelieves that such access, retention or disclosure is necessary and justifiable to: ( a) comply with legal process; </font><font style="vertical-align: inherit;">(b) comply with a request from any government or regulatory authority having jurisdiction over e_Storeor its relevant affiliates; </font><font style="vertical-align: inherit;">(c) enforce our Terms of Service or this Privacy Policy; </font><font style="vertical-align: inherit;">(d) respond to any claim deemed frivolous or actual against e_Storeor its related affiliates or other claims that any Content infringes a third party's rights ; </font><font style="vertical-align: inherit;">(e) respond to your requests for customer service; </font><font style="vertical-align: inherit;">or (f) protect the rights, property or personal safety of e_Storeor its affiliates, users and/or the public.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            6.3 As the Purposes for which we will/may collect, use, disclose or process your personal data depend on the circumstances available, such purpose may not appear above. </font><font style="vertical-align: inherit;">However, we will notify you of such other purpose at the time of obtaining your consent, unless the applicable data processing without your consent is permitted under the provisions of the law on privacy protection of personal information or in accordance with the law.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">7. HOW e_StorePROTECTS AND STORE CUSTOMER INFORMATION</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            7.1 We implement various security measures and make every effort to ensure the safety of your personal data on our systems. </font><font style="vertical-align: inherit;">Users' personal data is stored behind secure networks and can only be accessed by certain employees with special access to our systems. </font><font style="vertical-align: inherit;">However, there is certainly no guarantee of absolute security.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            7.2 We will maintain personal data in accordance with the provisions of the law on the protection of privacy of personal information and/or other applicable laws. </font><font style="vertical-align: inherit;">That is, we will destroy or remove identifying information from your personal data when we have reasonable grounds to determine that (i) the retention of such personal data is no longer the purpose for which such personal data is collected; </font><font style="vertical-align: inherit;">(ii) retention is no longer required for any legal or business purpose and (iii) there is no longer any other legitimate interest to continue to retain this personal data. </font><font style="vertical-align: inherit;">If you stop using our Platform, or your right to use the Platform and/or Services is terminated or cancelled, we may continue to save, </font><font style="vertical-align: inherit;">use and/or disclose your personal data in accordance with this Privacy Policy and our obligations under the laws on the protection of the confidentiality of personal information. </font><font style="vertical-align: inherit;">Subject to the law, we may safely destroy your personal data without prior notice to you.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">8. DOES e_StoreDISCLOSURE INFORMATION COLLECTED FROM ACCESSORIES?</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            8.1 In the course of doing business, we will/may need to use, process, disclose and/or transfer your personal data to third party service providers, agents and/or our affiliates or related companies, and/or other third parties which may be located in Vietnam or outside Vietnam, for one or more of the foregoing Purposes, and the disclosure This will be done in accordance with the order and provisions of current law. </font><font style="vertical-align: inherit;">Such third party service providers, agents and/or affiliated or related companies and/or other third parties will process your personal data or on our behalf or other, for one or more of the foregoing Purposes. </font><font style="vertical-align: inherit;">We strive to ensure that our third parties and affiliates keep your personal data safe from access, collection, use,
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● our subsidiaries, affiliates and related companies;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● the seller or buyer with whom you have transacted or interacted on the Platform or in connection with your use of the Service for the Purposes set forth above;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            other users of our Platform for one or more of the Purposes set forth above
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;background:white;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● contractors, agents, service providers and other third parties we hire to support or supplement our business. </font><font style="vertical-align: inherit;">These parties include, but are not limited to, those who provide administrative or other services to us such as postal companies, telecommunications companies, advertising and media partners, information technology companies, e-commerce operations organizations, and data centers
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● governmental or regulatory authorities having jurisdiction over e_Storeor as permitted under Section 6.2;
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● a buyer or other successor in the event of a merger, divestment, restructuring, reorganization, dissolution, or sale or transfer of part or all of e_Store's assets, whether an ongoing matter or are in bankruptcy, liquidation or similar proceedings, where the personal data e_Storeholds about our users is included in the transferred assets; </font><font style="vertical-align: inherit;">or to a counterparty in a business asset transaction with which e_Storeor any of its affiliates or related companies is involved in the transaction; </font><font style="vertical-align: inherit;">and
+                        </font></font></p>
+                        <p class="MsoNormal" style="margin-left:.5in;text-align:justify;text-indent:-.25in;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            ● third parties to whom we disclose information for one of the Purposes and such third parties will in turn collect and process your personal data for one or more Purposes
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            8.2 We may share information including statistical and demographic information about Users as well as information about users' use of the Services with advertising and programming service providers. </font><font style="vertical-align: inherit;">We will also share statistical and demographic information about our users and their use of the Services with advertising partners and third parties that provide advertising and re-advertising services. , and/or programming.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            8.3. </font><font style="vertical-align: inherit;">For the avoidance of doubt, in the event that privacy laws or other applicable laws permit an organization such as us to collect, use or disclose data personally without your consent, such permission by law will continue to apply. </font><font style="vertical-align: inherit;">In accordance with the foregoing and in accordance with applicable laws, we may use your personal data for recognized legal grounds, including to comply with legal obligations. our agents, to perform our contract with you, to gain our legitimate interests and reasons for using that data outweigh any harm to your right to data protection. or as necessary in connection with a legal request.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            8.4 Third parties may intercept or gain unauthorized access to personal data submitted to or contained on the website, technologies may not work correctly or as intended, or someone may have access to access, abuse or misuse information through no fault of ours. </font><font style="vertical-align: inherit;">However, we will implement reasonable security measures to protect your personal data in accordance with the provisions of the law on the protection of privacy of personal information; </font><font style="vertical-align: inherit;">However, absolute security cannot be guaranteed such as in the case of unauthorized disclosure arising from malicious hacker activity or sophisticated attack by bad guys through no fault of ours.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            8.5 e_Storeallows you to share videos from YouTube in the e_StoreLivestream feature (“YouTube Content”). </font><font style="vertical-align: inherit;">Technically, e_Storeuses YouTube's own YouTube API Feature. </font><font style="vertical-align: inherit;">By sharing YouTube Content, you hereby agree to be governed by YouTube's Privacy Policy ( </font></font><a href="http://www.google.com/policies/privacy"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">http://www.google.com/policies/privacy</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> ).
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            8.6 As set forth in e_Store's Terms of Service, the User (including any employee, agent, agent or any other party acting for such User or on behalf of such User) Owners of other Users' personal data through the use of the Service ("Data Recipient") hereby agree that, they will (i) comply with the provisions of the law on the protection of personal data individuals related to such data, including any collection, processing, storage and transfer of such data; </font><font style="vertical-align: inherit;">(ii) allow e_Storeor the User from whom the Personal data of the Recipient is collected (the "Disclosure Party") to delete his or her data collected from the Data Recipient's database ; </font><font style="vertical-align: inherit;">and (iii) allow e_Storeor the Data Disclosure Party to review the content that has been collected regarding them by the Data Recipient, &nbsp;
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            8.7 Notwithstanding anything set forth herein, Seller (including any employee, agent, representative or any other party acting for such User or on behalf of such User) shall comply comply with all applicable laws and regulations and, in connection with any personal data Buyer receives from e_Store, (i) not authorize the use of such Buyer's personal data unless have good cause necessary to respond to Buyer's requests and to respond to, process, settle or complete transactions without Buyer's and e_Store's prior written permission ; </font><font style="vertical-align: inherit;">(ii) must cease communicating with Buyers using such information outside of the e_Storeplatform; </font><font style="vertical-align: inherit;">(iii) may not disclose this Buyer's personal data to any unauthorized third party without the prior written consent of Buyer and e_Store; </font><font style="vertical-align: inherit;">(iv) must take appropriate security measures to protect each e_Storeuser's personal data in their possession, retaining this data only as long as it is still necessary for the purposes above, and in accordance with the provisions of the personal data protection legislation, and delete or return this data to e_Storeupon request from e_Storeor as soon as possible upon completion of the transaction; </font><font style="vertical-align: inherit;">and (v) notify e_Store's Personal Data Protection Department at </font><font style="vertical-align: inherit;">retain this data only as long as it is still necessary for the purposes above and in accordance with the provisions of personal data protection laws, and delete or return this data to e_Storeupon request from e_Store. or as soon as possible upon completion of the transaction; </font><font style="vertical-align: inherit;">and (v) notify e_Store's Personal Data Protection Department at </font><font style="vertical-align: inherit;">retain this data only as long as it is still necessary for the purposes above and in accordance with the provisions of personal data protection laws, and delete or return this data to e_Storeupon request from e_Store. or as soon as possible upon completion of the transaction; </font><font style="vertical-align: inherit;">and (v) notify e_Store's Personal Data Protection Department at</font></font><a href="mailto:dpo.vn@e_Store.com"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">dpo.vn@e_Store.com</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> in the event of a potential data breach or other loss of this user's data.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <br>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">9. INFORMATION ABOUT CHILDREN</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            9.1 These Services are not intended for use by children under the age of 13. </font><font style="vertical-align: inherit;">We do not knowingly collect or retain any personal data or non-personally identifiable information from anyone under the age of 13, nor does any part of our Platform or other Services for children under 13 years old. </font><font style="vertical-align: inherit;">Parents or guardians of children under 13 years old, please supervise and ensure that personal information of children under 13 years old under their custody does not post personal information to e_Store. </font><font style="vertical-align: inherit;">In the event that personal information of children under 13 years of age is provided to e_Storeby custodial parents, the parent or guardian agrees to the processing of information of children under 13 years of age. authority, and agree to be governed by this Policy on behalf of the ward.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">10. INFORMATION COLLECTED BY THIRD PARTYS</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            10.1 Our platform uses Google Analytics, a web analytics service provided by Google, Inc. </font><font style="vertical-align: inherit;">("Google"). </font><font style="vertical-align: inherit;">Google Analytics uses cookies, which are text files on your device, to help the Platform analyze how users use our Platform. </font><font style="vertical-align: inherit;">The information generated by the cookie about your use of the Platform (including your IP address) will be sent to and stored by Google on servers in the United States. </font><font style="vertical-align: inherit;">Google will use this information to evaluate your use of our Platform, compile reports on website activity for website operators, and provide other services related to website activity. and Internet use. </font><font style="vertical-align: inherit;">Google may also send this information to third parties where required by law, </font><font style="vertical-align: inherit;">or where such third parties process information on behalf of Google. </font><font style="vertical-align: inherit;">Google will not associate your IP address with any other data that Google holds
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            10.2 We, and third parties, may from time to time provide downloads of software applications to you for use by the Platform or through the Services. </font><font style="vertical-align: inherit;">These applications may privately access, and allow a third party to view, your identifying information, such as your name, user ID, your device's IP Address, or other information such as such as the game you are playing during any particular session, and any cookies you may have previously set or have been set for you by a software application or third party website. </font><font style="vertical-align: inherit;">In addition, these applications may ask you to provide additional information directly to third parties. </font><font style="vertical-align: inherit;">Third-party products or services offered through these applications are not owned or controlled by e_Store.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">11. DISCLAIMER OF SECURITY OBLIGATIONS AND THIRD PARTY SITES</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            11.1 WE DO NOT GUARANTEE THE SECURITY OF THE PERSONAL DATA AND/OR OTHER INFORMATION THAT YOU PROVIDE ON THIRD PARTY SITES. </font><font style="vertical-align: inherit;">We implement various security measures to maintain the safety of your personal data that we hold or control. </font><font style="vertical-align: inherit;">Your personal data is stored behind secure networks and can only be accessed by a limited number of individuals who have special access rights to our systems, and have been required to keep the data secure. whether that individual. </font><font style="vertical-align: inherit;">When you place an order or access your personal data, we recommend the use of a secure server. </font><font style="vertical-align: inherit;">All personal data or personal information you provide will be encrypted into our databases to be accessed only as described above.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            11.2 In order to provide you with added value, we may select various third-party websites or applications or services to link to, and frame within the Platform. </font><font style="vertical-align: inherit;">We may also enter into co-marketing and other relationships to provide e-commerce and other services and features to our visitors. </font><font style="vertical-align: inherit;">These linked sites have separate and independent privacy policies and security measures. </font><font style="vertical-align: inherit;">Even if such third party is affiliated with us, we have no control over these linked websites/applications/services, each of which has its own privacy protection and data collection practices. separate material, independent of us.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            11.3 We are therefore not responsible or liable for the content, security practices (or lack of security measures) and the activities of linked websites/applications/services. this. </font><font style="vertical-align: inherit;">These linked websites/applications/services are solely for your convenience and you are therefore solely responsible for accessing them. </font><font style="vertical-align: inherit;">However, we seek to protect the integrity of our Platform and the links placed on each of those websites and we therefore welcome feedback on these linked sites (including including if a particular site is down).
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <br>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">12. WILL e_StoreTRANSFER YOUR INFORMATION OUTSIDE?</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            12.1 Your personal information and/or data may be transferred abroad, stored or processed outside of your country for one or more Purposes. </font><font style="vertical-align: inherit;">In most cases, your personal data will be processed by us in Vietnam, where our servers are located. </font><font style="vertical-align: inherit;">e_Storewill only transfer your personal data abroad in accordance with the provisions of the law on the protection of personal data.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">13. HOW CAN YOU WITHDRAW, DELETE, REQUEST ACCESS OR ADJUSTMENT OF INFORMATION YOU PROVIDE TO US?</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            13.1 </font><i><u><font style="vertical-align: inherit;">Withdrawal of Consent</font></u></i></font><i>&nbsp;<u><font style="vertical-align: inherit;"></font></u></i><u></u>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            13.1.1 You may withdraw your consent to the collection, use and/or disclosure and/or request deletion of your personal data that we hold or control by sending an email to the Specialist. Our Personal Data Protection Officer at email dpo.vn@e_Store.com or </font></font><a href="https://help.e_Store.vn/vn/s/contactusform"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">HERE</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> , and we will process these requests in accordance with the Privacy Policy and relevant laws. </font><font style="vertical-align: inherit;">However, your withdrawal of your permission may mean that we will no longer be able to provide the Services to you and we may need to end the current relationship between you and/ or contract you have with Us.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            13.1.2 When you share content on YouTube, in addition to withdrawing your permission by emailing us in accordance with Article 13.1.1, you may also withdraw your access e_Storeaccess your personal data through Google's security settings page at </font></font><a href="https://security.google.com/settings/security/permissions"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">https://security.google.com/settings/security/permissions</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> .
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            13.2&nbsp; </font></font><i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Request for Access to or Correction of Personal Data</font></font></i>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            13.2.1 If you have registered an account with us, you may personally access and/or correct your personal data that we hold or control through the Account Settings page or the label. on the platform. </font><font style="vertical-align: inherit;">If you have not registered an account with us, you may personally request to access and/or correct your personal data that we hold or control by submitting a written request to us. . </font><font style="vertical-align: inherit;">We will need sufficient information from you to determine your identity and the nature of your request in order to be able to process your request. </font><font style="vertical-align: inherit;">Therefore, please submit your written request by emailing our Data Management staff </font></font><a href="https://help.e_Store.vn/vn/s/contactusform"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">HERE</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> .
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            13.2.2 We may charge you a reasonable fee to process and process your request to access personal data. </font><font style="vertical-align: inherit;">If we do charge a fee, we will provide you with a written fee estimate. </font><font style="vertical-align: inherit;">Please note that we are not obligated to respond to or process your access request unless you have agreed to pay the fee.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            13.2.3 We reserve the right to refuse to correct your personal data in accordance with the provisions of the laws on the protection of the confidentiality of personal information, where such laws require and/or permit an organization refuse to correct personal data in such cases.
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">14. QUESTIONS, CONCEPTS OR COMPLAINTS? </font><font style="vertical-align: inherit;">CONTACT US</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            14.1 If you have any questions or complaints about our privacy practices please contact us </font></font><a href="https://help.e_Store.vn/vn/s/contactusform"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">HERE</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> .
+                        </font></font></p>
+                        <p class="MsoNormal" style="text-align:justify;">
+                            <br>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Updated 11/11/2021.</font></font></b>
+                        </p>
+                        <p class="MsoNormal" style="text-align:justify;background:white;">
+                            <i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">This version takes effect on November 18, 2021.&nbsp;</font></font></i><i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">To refer to the previous version of the Privacy Policy, please click&nbsp; </font></font><a href="https://e_Store.vn/docs/6980" target="_blank"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">HERE</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> .</font></font></i>
+                        </p>
+
+                        <p></p>
+                        <p>
+                            <br>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+            <!--het khoi san pham-->
+        </div>
+        <!--het div noidung-->
+    </div>
+    <!--het container-->
+</section>
+
+
+
+
+<!-- footer  -->
+<footer th:replace="public/fragments :: footer">
+
+</footer>
+
+<!-- nut cuon len dau trang -->
+<div class="fixed-bottom">
+    <div class="btn btn-warning float-right rounded-circle nutcuonlen" id="backtotop" href="#"
+         style="background:#CF111A;"><i class="fa fa-chevron-up text-white"></i></div>
+</div>
+
+
+</body>
+
+</html>

@@ -91,22 +91,18 @@ public class PaypalController {
 //        return mv;
 //    }
     @GetMapping("/cart/pay")
-    public String payment(HttpServletRequest request, @RequestParam("amount") Double amount, @RequestParam("orderId") int orderId) {
+    public String payment(HttpServletRequest request) {
         try {
-            Payment payment = service.createPayment(amount, "USD", "paypal",
+            Payment payment = service.createPayment(shoppingCartService.getAmount(), "USD", "paypal",
                     "sale", null, "http://localhost:8080/cart/cancel",
                     "http://localhost:8080/cart/success");
             for (Links link : payment.getLinks()) {
                 if (link.getRel().equals("approval_url")) {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("orderId", orderId);
-                    session.setAttribute("amount", amount);
                     return "redirect:" + link.getHref();
                 }
             }
 
         } catch (PayPalRESTException e) {
-            System.out.println("exceeeg" + orderId);
             e.printStackTrace();
         }
         return "redirect:/";
@@ -118,39 +114,39 @@ public class PaypalController {
     }
 
     @GetMapping("/cart/success")
-    public String successPay(HttpServletRequest request) {
-//        try {
-//            Payment payment = service.executePayment(paymentId, payerId);
-//            System.out.println(payment.toJSON());
-//            if (payment.getState().equals("approved")) {
-        HttpSession session = request.getSession();
-        Account user = (Account) session.getAttribute("user");
-        Order order = new Order();
-        List<Product> newList = shoppingCartService.getProducts().stream().collect(toList());
-        order.setAddress(user.getAddress());
-        order.setPhoneNumber(user.getPhone());
-        order.setUser(user);
-        order.setIsPayment(0);
-        order.setStatus(1);
-        order.setDescription("Paypal");
-        order.setOrderDate(java.time.LocalDate.now().toString());
-        order.setAmount((float) shoppingCartService.getAmount());
-        orderService.save(order);
-        for (int i = 0; i < newList.size(); i++) {
-            OrderDetail detail = new OrderDetail();
-            detail.setOrder(order);
-            detail.setProduct(newList.get(i));
-            detail.setQuantity(newList.get(i).getQuantity());
-            detail.setUnitPrice(newList.get(i).getPrice());
-            orderDetailService.save(detail);
+    public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, HttpServletRequest request) {
+        try {
+            Payment payment = service.executePayment(paymentId, payerId);
+            System.out.println(payment.toJSON());
+            if (payment.getState().equals("approved")) {
+                HttpSession session = request.getSession();
+                Account user = (Account) session.getAttribute("user");
+                Order order = new Order();
+                List<Product> newList = shoppingCartService.getProducts().stream().collect(toList());
+                order.setAddress(user.getAddress());
+                order.setPhoneNumber(user.getPhone());
+                order.setUser(user);
+                order.setIsPayment(0);
+                order.setStatus(1);
+                order.setDescription("Paypal");
+                order.setOrderDate(java.time.LocalDate.now().toString());
+                order.setAmount((float) shoppingCartService.getAmount());
+                orderService.save(order);
+                for (int i = 0; i < newList.size(); i++) {
+                    OrderDetail detail = new OrderDetail();
+                    detail.setOrder(order);
+                    detail.setProduct(newList.get(i));
+                    detail.setQuantity(newList.get(i).getQuantity());
+                    detail.setUnitPrice(newList.get(i).getPrice());
+                    orderDetailService.save(detail);
+                }
+                shoppingCartService.clear();
+                return "client/cart/success";
+            }
+        } catch (PayPalRESTException e) {
+            System.out.println(e.getMessage());
         }
-        shoppingCartService.clear();
-        return "client/cart/success";
-//            }
-//        } catch (PayPalRESTException e) {
-//            System.out.println(e.getMessage());
-//        }
-//        return "redirect:/";
+        return "redirect:/";
     }
 
     private String applicationUrl(HttpServletRequest request) {

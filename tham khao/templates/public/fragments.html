@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+
+<head th:fragment="html_head">
+  <title>Website</title>
+  <meta name="description"
+        content="Mua sách online hay, giá tốt nhất, combo sách hot bán chạy, giảm giá cực khủng cùng với những ưu đãi như miễn phí giao hàng, quà tặng miễn phí, đổi trả nhanh chóng. Đa dạng sản phẩm, đáp ứng mọi nhu cầu.">
+  <meta name="keywords" content="nhà sách online, mua sách hay, sách hot, sách bán chạy, sách giảm giá nhiều">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<!--  <link rel="stylesheet" th:href="@{/public/css/product-item.css}">-->
+  <link rel="stylesheet" th:href="@{/public/css/home.css}">
+  <script type="text/javascript" th:src="@{/public/js/main.js}"></script>
+  <link rel="stylesheet" th:href="@{/public/fontawesome_free_5.13.0/css/all.css}">
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+        rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" th:href="@{/public/slick/slick.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/public/slick/slick-theme.css}"/>
+  <script type="text/javascript" th:src="@{/public/slick/slick.min.js}"></script>
+  <script type="text/javascript" th:src="@{/public/js/main.js}"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  <script type="text/javascript"
+          src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+  <link rel="canonical" href="http://dealbook.xyz/">
+  <meta name="google-site-verification" content="urDZLDaX8wQZ_-x8ztGIyHqwUQh2KRHvH9FhfoGtiEw" />
+  <link rel="apple-touch-icon" sizes="180x180" th:href="@{/public/favicon_io/apple-touch-icon.png}">
+  <link rel="icon" type="image/png" sizes="32x32" th:href="@{/public/favicon_io/favicon-32x32.png}">
+  <link rel="icon" type="image/png" sizes="16x16" th:href="@{/public/favicon_io/favicon-16x16.png}">
+  <link rel="manifest" th:href="@{/public/favicon_io/site.webmanifest}">
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <style>img[alt="www.000webhost.com"]{display: none;}</style>
+
+  <script>
+    function abc(){
+      alert("Dsds")
+    }
+    $( document ).ready(function() {
+      const cb = document.querySelector('#checkbox1');
+      if(cb.checked == false){
+        document.getElementById("register_id").disabled = true;
+      }
+    });
+    function changeStatus(){
+      const cb = document.querySelector('#checkbox1');
+      if(cb.checked == false){
+        document.getElementById("register_id").disabled = true;
+      }else if(cb.checked == true){
+        document.getElementById("register_id").disabled = false;
+      }
+    }
+    function register(){
+
+      const validateEmail = (email) => {
+        return email.match(
+                /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+      };
+      var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+      var password = $('#password').val();
+      var rePassword = $('#rePassword').val();
+      var email = $('#email').val();
+      var fullName = $('#fullName').val();
+      let phoneNumber = $('#phoneNumber').val().replace(/\s+/g, '');
+      var atposition = email.indexOf("@");
+      var dotposition = email.lastIndexOf(".");
+      if (password == '' || rePassword == '' || email == '' || fullName == '' || phoneNumber == ''){
+        swal({
+          title: 'You need to fill in all the information!',
+          /* text: 'Redirecting...', */
+          icon: 'error',
+          timer: 3000,
+          buttons: true,
+          type: 'error'
+        })
+      }
+      else if (vnf_regex.test(phoneNumber) == false)
+      {
+        swal({
+          title: 'Phone number is not in the correct format!',
+          /* text: 'Redirecting...', */
+          icon: 'error',
+          timer: 3000,
+          buttons: true,
+          type: 'error'
+        })
+      } else if(atposition < 1 || dotposition < (atposition + 2) || (dotposition + 2) >= email.length){
+        swal({
+          title: 'Email is not in the correct format!',
+          /* text: 'Redirecting...', */
+          icon: 'error',
+          timer: 3000,
+          buttons: true,
+          type: 'error'
+        })
+      } else if(!validateEmail(email)){
+        swal({
+          title: 'Email is not in the correct format!',
+          /* text: 'Redirecting...', */
+          icon: 'error',
+          timer: 3000,
+          buttons: true,
+          type: 'error'
+        })
+      }else {
+        if (password !== rePassword){
+          swal({
+            title: 'Two passwords do not match!',
+            /* text: 'Redirecting...', */
+            icon: 'error',
+            timer: 3000,
+            buttons: true,
+            type: 'error'
+          })
+        } else {
+          var formData = new FormData();
+          formData.append('password', password);
+          formData.append('email', email);
+          formData.append('fullName', fullName);
+          formData.append('phoneNumber', phoneNumber);
+          formData.append('rePassword', rePassword);
+          $.ajax(
+                  {
+                    type: 'POST',
+                    url: '/public/user/register/',
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (data) {
+                      if(data == "exist"){
+                        swal({
+                          title: 'Email is existed!',
+                          /* text: 'Redirecting...', */
+                          icon: 'error',
+                          timer: 3000,
+                          buttons: true,
+                          type: 'error'
+                        })
+                      }else if(data == "true"){
+                        swal({
+                          title: 'Register successfully!',
+                          /* text: 'Redirecting...', */
+                          icon: 'success',
+                          timer: 5000,
+                          buttons: true,
+                          type: 'success'
+                        })
+                        $('#err').val("");
+                      }
+                    },
+                    error: function (err) {
+                      alert(err);
+                    }
+                  }
+          )
+        }
+      }
+
+    }
+
+    function login(){
+      var password = $('#password1').val();
+      var email = $('#email1').val();
+      if (password == ''  || email == '' ){
+        swal({
+          title: 'You need to fill in all the information!',
+          /* text: 'Redirecting...', */
+          icon: 'error',
+          timer: 3000,
+          buttons: true,
+          type: 'error'
+        })
+      } else {
+
+          var formData = new FormData();
+          formData.append('password', password);
+          formData.append('email', email);
+          $.ajax(
+                  {
+                    type: 'POST',
+                    url: '/public/user/login/',
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (data) {
+                      if(data == "false_user"){
+                        swal({
+                          title: 'Username or password incorrect!',
+                          /* text: 'Redirecting...', */
+                          icon: 'error',
+                          timer: 3000,
+                          buttons: true,
+                          type: 'error'
+                        })
+                      }else if(data == "true"){
+                        swal({
+                          title: 'Login sucessfully!',
+                          /* text: 'Redirecting...', */
+                          icon: 'success',
+                          timer: 3000,
+                          buttons: true,
+                          type: 'success'
+                        })
+                        setInterval(function(){
+                          location.reload()
+                        }, 2000);
+                      } else {
+                        swal({
+                          title: 'Unverified account please check mail!',
+                          /* text: 'Redirecting...', */
+                          icon: 'error',
+                          timer: 3000,
+                          buttons: true,
+                          type: 'error'
+                        })
+                      }
+                    },
+                    error: function (err) {
+                      alert(err);
+                    }
+                  }
+          )
+      }
+
+    }
+  </script>
+</head>
+
+<body>
+<!--Start of Tawk.to Script-->
+
+<!--End of Tawk.to Script-->
+<!-- code cho nut like share facebook  -->
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v6.0"></script>
+
+<!-- header -->
+<nav th:fragment="html_nav" class="navbar navbar-expand-md bg-white navbar-light">
+  <div class="container">
+    <!-- logo  -->
+    <a class="navbar-brand" href="/public/home" style="color: #CF111A;"><b>e</b>_Store</a>
+
+    <!-- navbar-toggler  -->
+    <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse"
+            data-target="#collapsibleNavId" aria-controls="collapsibleNavId" aria-expanded="false"
+            aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+
+    <div class="collapse navbar-collapse" id="collapsibleNavId">
+      <!-- form tìm kiếm  -->
+      <form action="/public/product/search" method="post" class="form-inline ml-auto my-2 my-lg-0 mr-3">
+        <div class="input-group" style="width: 520px;">
+          <input type="text" name="keyWord" class="form-control" aria-label="Small"
+                 placeholder="Enter the product you are looking for..." required>
+          <div class="input-group-append">
+            <button type="submit" class="btn" style="background-color: #CF111A; color: white;">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- ô đăng nhập đăng ký giỏ hàng trên header  -->
+      <ul class="navbar-nav mb-1 ml-auto">
+        <li class="nav-item giohang mt-1">
+          <a th:unless="${session.order}" href="/public/cart/index" class="btn btn-secondary rounded-circle">
+            <i class="fa fa-shopping-cart"></i>
+            <div class="cart-amount" id="numberCart">0</div>
+          </a>
+          <a th:if="${session.order}" href="/public/cart/index" class="btn btn-secondary rounded-circle">
+            <i class="fa fa-shopping-cart"></i>
+            <div class="cart-amount" id="numberCart" th:text="${session.order.getItemModels().size()}" >0</div>
+          </a>
+          <a class="nav-link text-dark giohang text-uppercase" href="/public/cart/index"
+             style="display:inline-block">Cart</a>
+        </li>
+        <div class="dropdown mb-2">
+          <li  th:unless="${session.user}" type="button" class="btn dropdown" data-toggle="dropdown">
+            <a href="#" class="btn btn-secondary rounded-circle">
+              <i class="fa fa-user"></i>
+            </a>
+            <a class="nav-link text-dark text-uppercase" href="#" style="display:inline-block">Account</a>
+          </li>
+          <li  th:if="${session.user}" class="btn dropdown" data-toggle="dropdown">
+            <a href="#" class="btn btn-secondary rounded-circle">
+              <i class="fa fa-user"></i>
+            </a>
+            <a class="nav-link text-dark text-uppercase" href="#" th:text="${session.user.fullName}" style="display:inline-block">Account</a>
+          </li>
+          <div th:unless="${session.user}" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item nutdangky text-center mb-2" href="#" data-toggle="modal"
+               data-target="#formdangky">Register</a>
+            <a class="dropdown-item nutdangnhap text-center" href="#" data-toggle="modal"
+               data-target="#formdangnhap">Login</a>
+          </div>
+
+          <div th:if="${session.user}" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item nutdangky text-center mb-2" href="/public/user/profile" >Profile</a>
+            <a class="dropdown-item nutdangky text-center mb-2" href="/public/user/password" >Change Password</a>
+            <a class="dropdown-item nutdangky text-center mb-2" href="/public/favorite" >Favorite</a>
+            <a class="dropdown-item nutdangky text-center mb-2" href="/public/user/order" >Order history</a>
+            <a class="dropdown-item nutdangky text-center mb-2" href="/public/user/logout" >Logout</a>
+
+          </div>
+        </div>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<!-- form dang ky khi click vao button tren header-->
+<div th:fragment="html_register" class="modal fade mt-5" id="formdangky" data-backdrop="static" tabindex="-1" aria-labelledby="dangky_tieude"
+     aria-hidden="true">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <ul class="tabs d-flex justify-content-around list-unstyled mb-0">
+          <li class="tab tab-dangnhap text-center">
+            <a class=" text-decoration-none">Login</a>
+            <hr>
+          </li>
+          <li class="tab tab-dangky text-center">
+            <a class="text-decoration-none">Register</a>
+            <hr>
+          </li>
+        </ul>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="form-signup" class="form-signin mt-2">
+          <div class="form-label-group">
+            <input type="text" class="form-control" placeholder="Enter fullname" name="fullName" id="fullName" required
+                   autofocus>
+          </div>
+          <div class="form-label-group">
+            <input type="text" class="form-control" placeholder="Enter phone number" name="phoneNumber" id="phoneNumber"
+                   required>
+          </div>
+
+          <div class="form-label-group">
+            <input type="email" class="form-control" placeholder="Enter email" name="email" id="email"
+                   required>
+          </div>
+          <div  class="form-label-group">
+            <input type="password" class="form-control" placeholder="Enter password" name="password" id="password"
+                   required>
+          </div>
+          <div  class="form-label-group">
+            <input type="password" class="form-control" placeholder="Enter rePassword" name="rePassword" id="rePassword"
+                   required>
+          </div>
+          <div  class="form-label-group">
+            <input type="checkbox"  onchange="changeStatus()" name="checkbox1" id="checkbox1"
+                   required>
+            <label for="checkbox1"> I accept the terms of use of the website</label><br>
+          </div>
+          <p id="err" style="color: red"></p>
+          <button id="register_id" class="btn btn-lg btn-block btn-signin text-uppercase text-white mt-3" onclick="register()"  type="button"
+                  style="background: #F5A623">Register</button>
+          <hr class="mt-3 mb-2">
+
+          <div class="custom-control custom-checkbox">
+            <p class="text-center">By registering, you agree to e_Store </p>
+            <p class="text-decoration-none text-center">
+              <a href="/public/service/"  style="color: #F5A623;display: inline">Translation Terms
+                Service</a> <a href="#"  style="color: black;display: inline"> & </a><a href="/public/policy/"  style="color: #F5A623;display: inline">Privacy Policy</a>
+            </p>
+
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- form dang nhap khi click vao button tren header-->
+<div th:fragment="html_login" class="modal fade mt-5" id="formdangnhap" data-backdrop="static" tabindex="-1"
+     aria-labelledby="dangnhap_tieude" aria-hidden="true">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <ul class="tabs d-flex justify-content-around list-unstyled mb-0">
+          <li class="tab tab-dangnhap text-center">
+            <a class=" text-decoration-none">Login</a>
+            <hr>
+          </li>
+          <li class="tab tab-dangky text-center">
+            <a class="text-decoration-none">Register</a>
+            <hr>
+          </li>
+        </ul>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="form-signin" class="form-signin mt-2">
+          <div class="form-label-group">
+            <input type="email" class="form-control" placeholder="Enter email" name="email" id="email1"
+                   required autofocus>
+          </div>
+
+          <div class="form-label-group">
+            <input type="password" class="form-control" placeholder="Password" name="password" id="password1" required>
+          </div>
+
+<!--          <div class="custom-control custom-checkbox mb-3">-->
+<!--&lt;!&ndash;            <input type="checkbox" class="custom-control-input" id="customCheck1">&ndash;&gt;-->
+<!--&lt;!&ndash;            <label class="custom-control-label" for="customCheck1">Nhớ mật khẩu</label>&ndash;&gt;-->
+<!--&lt;!&ndash;            <a href="#" class="float-right text-decoration-none" style="color: #F5A623">Quên mật&ndash;&gt;-->
+<!--&lt;!&ndash;              khẩu</a>&ndash;&gt;-->
+<!--          </div>-->
+
+          <button class="btn btn-lg btn-block btn-signin text-uppercase text-white" onclick="login()" type="button"
+                  style="background: #F5A623">Login</button>
+          <hr class="my-4">
+<!--          <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i-->
+<!--                  class="fab fa-google mr-2"></i> Đăng nhập bằng Google</button>-->
+<!--          <button class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit"><i-->
+<!--                  class="fab fa-facebook-f mr-2"></i> Đăng nhập bằng Facebook</button>-->
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- thanh tieu de "danh muc sach" + hotline + ho tro truc tuyen -->
+<section th:fragment="html_menu" class="duoinavbar">
+  <div class="container text-white">
+    <div class="row justify">
+      <div class="col-md-3">
+        <div class="categoryheader">
+          <div class="noidungheader text-white">
+            <i class="fa fa-bars"></i>
+            <span class="text-uppercase font-weight-bold ml-1">Category Product</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <div class="benphai float-right">
+          <div class="hotline">
+            <i class="fa fa-phone"></i>
+            <span>Hotline:<b>1900 1999</b> </span>
+          </div>
+          <i class="fas fa-comments-dollar"></i>
+          <a href="#">Online support
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- noi dung danh muc sach(categories) + banner slider -->
+<section  class="header bg-light">
+  <div class="container">
+    <div class="row">
+      <div th:fragment="html_content_menu" class="col-md-3" style="margin-right: -15px;">
+        <!-- CATEGORIES -->
+        <div class="categorycontent">
+          <ul>
+            <th:block th:each="category,index : ${categories}">
+              <li th:if="${category.parentId == 0}"> <a th:text="${category.name}"></a><i class="fa fa-chevron-right float-right"></i>
+                <ul>
+                  <li class="liheader"><a href="#" class="header text-uppercase" th:text="${category.name}"></a></li>
+                  <div class="content trai">
+                    <th:block th:each="category1,index1 : ${categories}">
+                        <li th:if="${category.id == category1.parentId}"><a th:text="${category1.name}" th:href="'/public/product/'+${category1.id}"></a></li>
+                     <th:block/>
+                  </div>
+                </ul>
+              </li>
+             <th:block/>
+          </ul>
+        </div>
+      </div>
+      <!-- banner slider  -->
+      <div th:fragment="html_banner" class="col-md-9 px-0">
+        <div id="carouselId" class="carousel slide" data-ride="carousel">
+          <ol class="nutcarousel carousel-indicators rounded-circle">
+            <li data-target="#carouselId" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselId" data-slide-to="1"></li>
+            <li data-target="#carouselId" data-slide-to="2"></li>
+          </ol>
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <a href="#"><img src="https://file.hstatic.net/1000233206/file/gaming_gears_f33a32ce612f41a588290a8e02f32439_1024x1024.jpg" class="img-fluid"
+                               style="height: 386px;" width="900px" alt="First slide"></a>
+            </div>
+            <div class="carousel-item">
+              <a href="#"><img src="https://www.phucanh.vn/media/news/0907_Postface-TuanvangGaminggear.jpg"  class="img-fluid"
+                               style="height: 386px;" width="900px" alt="Second slide"></a>
+            </div>
+
+          </div>
+          <a class="carousel-control-prev" href="#carouselId" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselId" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- khoi sach moi  -->
+<section class="_1khoi sachmoi bg-white">
+  <div class="container">
+    <div class="noidung" style=" width: 100%;">
+      <div class="row">
+        <!--header-->
+        <div class="col-12 d-flex justify-content-between align-items-center pb-2 bg-transparent pt-4">
+          <h1 class="header text-uppercase" style="font-weight: 400;">SÁCH MỚI TUYỂN CHỌN</h1>
+          <a href="sach-moi-tuyen-chon.html" class="btn btn-warning btn-sm text-white">Xem tất cả</a>
+        </div>
+      </div>
+      <div class="khoisanpham" style="padding-bottom: 2rem;">
+        <!-- 1 san pham -->
+        <div class="card">
+          <a href="Lap-trinh-ke-hoach-kinh-doanh-hieu-qua.html" class="motsanpham"
+             style="text-decoration: none; color: black;" data-toggle="tooltip" data-placement="bottom"
+             title="Lập Kế Hoạch Kinh Doanh Hiệu Quả">
+            <img class="card-img-top anh" src="images/lap-ke-hoach-kinh-doanh-hieu-qua.jpg"
+                 alt="lap-ke-hoach-kinh-doanh-hieu-qua">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Lập Kế Hoạch Kinh Doanh Hiệu Quả</h3>
+              <small class="tacgia text-muted">Brian Finch</small>
+              <div class="gia d-flex align-items-baseline">
+                <div class="giamoi">111.200 ₫</div>
+                <div class="giacu text-muted">139.000 ₫</div>
+                <div class="sale">-20%</div>
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <a href="Ma-bun-luu-manh-va-nhung-cau-chuyen-khac-cua-nguyen-tri.html" class="motsanpham"
+             style="text-decoration: none; color: black;" data-toggle="tooltip" data-placement="bottom"
+             title="Ma Bùn Lưu Manh Và Những Câu Chuyện Khác Của Nguyễn
+                        Trí">
+            <img class="card-img-top anh" src="images/ma-bun-luu-manh.jpg" alt="ma-bun-luu-manh">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Ma Bùn Lưu Manh Và Những Câu Chuyện Khác Của Nguyễn
+                Trí</h3>
+              <small class="tacgia text-muted">Nguyễn Trí</small>
+              <div class="gia d-flex align-items-baseline">
+                <div class="giamoi">68.000 ₫</div>
+                <div class="giacu text-muted">85.000 ₫</div>
+                <div class="sale">-20%</div>
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+             data-toggle="tooltip" data-placement="bottom"
+             title="Bank 4.0 - Giao dịch mọi nơi, không chỉ là ngân hàng">
+            <img class="card-img-top anh" src="images/bank-4.0.jpg" alt="bank-4.0">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Bank 4.0 - Giao dịch mọi nơi, không chỉ là ngân hàng
+              </h3>
+              <small class="tacgia text-muted">Brett King</small>
+              <div class="gia d-flex align-items-baseline">
+                <div class="giamoi">111.200 ₫</div>
+                <div class="giacu text-muted">139.000 ₫</div>
+                <div class="sale">-20%</div>
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+             data-toggle="tooltip" data-placement="bottom" title="Bộ Sách 500 Câu Chuyện Đạo Đức - Những Câu Chuyện
+                        Tình Thân (Bộ 8 Cuốn)">
+            <img class="card-img-top anh" src="images/bo-sach-500-cau-chuyen-dao-duc.jpg"
+                 alt="bo-sach-500-cau-chuyen-dao-duc">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Bộ Sách 500 Câu Chuyện Đạo Đức - Những Câu Chuyện
+                Tình Thân (Bộ 8 Cuốn)</h3>
+              <small class="tacgia text-muted">Nguyễn Hạnh - Trần Thị Thanh Nguyên</small>
+              <div class="gia d-flex align-items-baseline">
+                <div class="giamoi">111.200 ₫</div>
+                <div class="giacu text-muted">139.000 ₫</div>
+                <div class="sale">-20%</div>
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+             data-toggle="tooltip" data-placement="bottom"
+             title="Lịch Sử Ung Thư - Hoàng Đế Của Bách Bệnh">
+            <img class="card-img-top anh" src="images/ung-thu-hoang-de-cua-bach-benh.jpg"
+                 alt="ung-thu-hoang-de-cua-bach-benh">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Lịch Sử Ung Thư - Hoàng Đế Của Bách Bệnh</h3>
+              <small class="tacgia text-muted">Siddhartha Mukherjee</small>
+              <div class="gia d-flex align-items-baseline">
+                <div class="giamoi">111.200 ₫</div>
+                <div class="giacu text-muted">139.000 ₫</div>
+                <div class="sale">-20%</div>
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+             data-toggle="tooltip" data-placement="bottom"
+             title="Cuốn Sách Khám Phá: Trời Đêm Huyền Diệu">
+            <img class="card-img-top anh" src="images/troi-dem-huyen-dieu.jpg"
+                 alt="troi-dem-huyen-dieu">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Cuốn Sách Khám Phá: Trời Đêm Huyền Diệu</h3>
+              <small class="tacgia text-muted">Disney Learning</small>
+              <div class="gia d-flex align-items-baseline">
+                <div class="giamoi">111.200 ₫</div>
+                <div class="giacu text-muted">139.000 ₫</div>
+                <div class="sale">-20%</div>
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+             data-toggle="tooltip" data-placement="bottom"
+             title="Bộ Sách Những Câu Chuyện Cho Con Thành Người Tử Tế (Bộ 5 Cuốn)">
+            <img class="card-img-top anh"
+                 src="images/bo-sach-nhung-cau-chuyen-cho-con-thanh-nguoi-tu-te.jpg"
+                 alt="bo-sach-nhung-cau-chuyen-cho-con-thanh-nguoi-tu-te">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Bộ Sách Những Câu Chuyện Cho Con Thành Người Tử Tế (Bộ 5
+                Cuốn)</h3>
+              <small class="tacgia text-muted">Nhiều Tác Giả</small>
+              <div class="gia d-flex align-items-baseline">
+                <div class="giamoi">111.200 ₫</div>
+                <div class="giacu text-muted">139.000 ₫</div>
+                <div class="sale">-20%</div>
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+             data-toggle="tooltip" data-placement="bottom" title="Lịch Sử Thế Giới">
+            <img class="card-img-top anh" src="images/lich-su-the-gioi.jpg" alt="lich-su-the-gioi">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Lịch Sử Thế Giới</h3>
+              <small class="tacgia text-muted">Nam Phong tùng thư - Phạm Quỳnh chủ nhiệm</small>
+              <div class="gia d-flex align-items-baseline">
+                <div class="giamoi">111.200 ₫</div>
+                <div class="giacu text-muted">139.000 ₫</div>
+                <div class="sale">-20%</div>
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- khoi sach combo hot  -->
+<section class="_1khoi combohot mt-4">
+  <div class="container">
+    <div class="noidung bg-white" style=" width: 100%;">
+      <div class="row">
+        <!--header -->
+        <div class="col-12 d-flex justify-content-between align-items-center pb-2 bg-light">
+          <h2 class="header text-uppercase" style="font-weight: 400;">COMBO SÁCH HOT - GIẢM ĐẾN 25%</h2>
+          <a href="#" class="btn btn-warning btn-sm text-white">Xem tất cả</a>
+        </div>
+      </div>
+      <div class="khoisanpham">
+        <div class="card">
+          <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+             data-toggle="tooltip" data-placement="bottom" title="Chuyện Nghề Và Chuyện Đời - Bộ 4 Cuốn">
+            <img class="card-img-top anh" src="images/combo-chuyen-nghe-chuyen-doi.jpg"
+                 alt="combo-chuyen-nghe-chuyen-doi">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Chuyện Nghề Và Chuyện Đời - Bộ 4 Cuốn</h3>
+              <small class="tacgia text-muted">Nguyễn Hữu Long</small>
+              <div class="gia d-flex align-items-baseline">
+                <div class="giamoi">111.200 ₫</div>
+                <div class="giacu text-muted">139.000 ₫</div>
+                <div class="sale">-20%</div>
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+             data-toggle="tooltip" data-placement="bottom"
+             title="Combo Mẹ Con Sư Tử - Bồ Tát Ngàn Tay Ngàn Mắt">
+            <img class="card-img-top anh" src="images/combo-me-con-su-tu-bo-tat-ngan-tay-ngan-mat.jpg"
+                 alt="combo-me-con-su-tu-bo-tat-ngan-tay-ngan-mat">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Combo Mẹ Con Sư Tử - Bồ Tát Ngàn Tay Ngàn Mắt</h3>
+              <small class="tacgia text-muted">Thích Nhất Hạnh</small>
+              <div class="gia d-flex align-items-baseline">
+                <div class="giamoi">111.200 ₫</div>
+                <div class="giacu text-muted">139.000 ₫</div>
+                <div class="sale">-20%</div>
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+             data-toggle="tooltip" data-placement="bottom" title="Combo Osho: Hạnh Phúc Tại Tâm, Can Đảm Biến Thách Thức Thành
+                            Sức Mạnh & Sáng Tạo Bừng Cháy Sức Mạnh Bên Trong">
+            <img class="card-img-top anh" src="images/combo-hanh-phuc-sang-tao.jpg"
+                 alt="combo-hanh-phuc-sang-tao">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Combo Osho: Hạnh Phúc Tại Tâm, Can Đảm Biến Thách Thức Thành
+                Sức Mạnh & Sáng Tạo Bừng Cháy Sức Mạnh Bên Trong
+              </h3>
+              <small class="tacgia text-muted">Gosho Aoyama, Mutsuki Watanabe, Takahisa Taira</small>
+              <div class="gia d-flex align-items-baseline">
+                <div class="giamoi">111.200 ₫</div>
+                <div class="giacu text-muted">139.000 ₫</div>
+                <div class="sale">-20%</div>
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+             data-toggle="tooltip" data-placement="bottom"
+             title="Combo Giáo Dục Và Ý Nghĩa Cuộc Sống Và Bạn Đang Nghịch Gì Với Đời Mình?">
+            <img class="card-img-top anh" src="images/combo-giao-duc-va-y-nghia-cuoc-song.jpg"
+                 alt="combo-giao-duc-va-y-nghia-cuoc-song">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Combo Giáo Dục Và Ý Nghĩa Cuộc Sống Và Bạn Đang Nghịch Gì Với
+                Đời Mình?</h3>
+              <small class="tacgia text-muted"> J.Krishnamurti</small>
+              <div class="gia d-flex align-items-baseline">
+                <div class="giamoi">111.200 ₫</div>
+                <div class="giacu text-muted">139.000 ₫</div>
+                <div class="sale">-20%</div>
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+             data-toggle="tooltip" data-placement="bottom"
+             title="Combo Dinh Dưỡng Xanh - Thần dược xanh">
+            <img class="card-img-top anh" src="images/combo-dinh-duong-than-duoc-xanh.jpg"
+                 alt="combo-dinh-duong-than-duoc-xanh">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Combo Dinh Dưỡng Xanh - Thần dược xanh</h3>
+              <small class="tacgia text-muted">Ryu Seung-SunVictoria Boutenko</small>
+              <div class="gia d-flex align-items-baseline">
+                <div class="giamoi">111.200 ₫</div>
+                <div class="giacu text-muted">139.000 ₫</div>
+                <div class="sale">-20%</div>
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+             data-toggle="tooltip" data-placement="bottom"
+             title="Combo Ăn Xanh Để Khỏe - Sống Lành Để Trẻ">
+            <img class="card-img-top anh" src="images/combo-an-xanh-song-lanh.jpg"
+                 alt="combo-an-xanh-song-lanh">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Combo Ăn Xanh Để Khỏe - Sống Lành Để Trẻ</h3>
+              <small class="tacgia text-muted">Norman W. Walker</small>
+              <div class="gia d-flex align-items-baseline">
+                <div class="giamoi">111.200 ₫</div>
+                <div class="giacu text-muted">139.000 ₫</div>
+                <div class="sale">-20%</div>
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+             data-toggle="tooltip" data-placement="bottom"
+             title="Combo Lược Sử Loài Người - Lược Sử Tương Lai - 21 Bài Học Cho Thế Kỷ 21">
+            <img class="card-img-top anh" src="images/combo-luoc-su-loai-nguoi.jpg"
+                 alt="combo-luoc-su-loai-nguoi">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Combo Lược Sử Loài Người - Lược Sử Tương Lai - 21 Bài Học Cho
+                Thế Kỷ 21</h3>
+              <small class="tacgia text-muted">Yuval Noah Harari</small>
+              <div class="gia d-flex align-items-baseline">
+                <div class="giamoi">111.200 ₫</div>
+                <div class="giacu text-muted">139.000 ₫</div>
+                <div class="sale">-20%</div>
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+             data-toggle="tooltip" data-placement="bottom" title="Bộ Sách Phong Cách Sống (Bộ 5 Cuốn)">
+            <img class="card-img-top anh" src="images/combo-phong-cach-song.jpg"
+                 alt="combo-phong-cach-song">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Bộ Sách Phong Cách Sống (Bộ 5 Cuốn)</h3>
+              <small class="tacgia text-muted">Marie Tourell Soderberg, Joanna Nylund, Yukari
+                Mitsuhashi, Margareta Magnusson, Linnea Dunne</small>
+              <div class="gia d-flex align-items-baseline">
+                <div class="giamoi">111.200 ₫</div>
+                <div class="giacu text-muted">139.000 ₫</div>
+                <div class="sale">-20%</div>
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- khoi sach sap phathanh  -->
+<section class="_1khoi sapphathanh mt-4">
+  <div class="container">
+    <div class="noidung bg-white" style=" width: 100%;">
+      <div class="row">
+        <!--header-->
+        <div class="col-12 d-flex justify-content-between align-items-center pb-2 bg-light">
+          <h2 class="header text-uppercase" style="font-weight: 400;">SÁCH SẮP PHÁT HÀNH / ĐẶT TRƯỚC</h2>
+          <a href="#" class="btn btn-warning btn-sm text-white">Xem tất cả</a>
+        </div>
+      </div>
+      <div class="khoisanpham">
+        <!-- 1 san pham -->
+        <div class="card">
+          <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+             data-toggle="tooltip" data-placement="bottom" title="Ngoại Giao Của Chính Quyền Sài Gòn">
+            <img class="card-img-top anh" src="images/ngoai-giao-cua-chinh-quyen-sai-gon.jpg"
+                 alt="ngoai-giao-cua-chinh-quyen-sai-gon">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Ngoại Giao Của Chính Quyền Sài Gòn</h3>
+              <small class="tacgia text-muted">Brian Finch</small>
+              <div class="gia d-flex align-items-baseline">
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+             data-toggle="tooltip" data-placement="bottom" title="Đường Mây Trên Đất Hoa">
+            <img class="card-img-top anh" src="images/duong-may-tren-dat-hoa.jpg"
+                 alt="duong-may-tren-dat-hoa">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Đường Mây Trên Đất Hoa</h3>
+              <small class="tacgia text-muted">Brian Finch</small>
+              <div class="gia d-flex align-items-baseline">
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+             data-toggle="tooltip" data-placement="bottom" title="Muôn Kiếp Nhân Sinh">
+            <img class="card-img-top anh" src="images/muon-kiep-nhan-sinh.jpg"
+                 alt="muon-kiep-nhan-sinh">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Muôn Kiếp Nhân Sinh</h3>
+              <small class="tacgia text-muted">Brian Finch</small>
+              <div class="gia d-flex align-items-baseline">
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+             data-toggle="tooltip" data-placement="bottom" title="Đường Mây Trong Cõi Mộng">
+            <img class="card-img-top anh" src="images/duong-may-trong-coi-mong.jpg"
+                 alt="duong-may-trong-coi-mong.jpg">
+            <div class="card-body noidungsp mt-3">
+              <h3 class="card-title ten">Đường Mây Trong Cõi Mộng</h3>
+              <small class="tacgia text-muted">Brian Finch</small>
+              <div class="gia d-flex align-items-baseline">
+              </div>
+              <div class="danhgia">
+                <ul class="d-flex" style="list-style: none;">
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li class="active"><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><span class="text-muted">0 nhận xét</span></li>
+                </ul>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- div _1khoi -- khoi sachnendoc -->
+<section class="_1khoi sachnendoc bg-white mt-4">
+  <div class="container">
+    <div class="noidung" style=" width: 100%;">
+      <div class="row">
+        <!--header-->
+        <div class="col-12 d-flex justify-content-between align-items-center pb-2 bg-transparent pt-4">
+          <h2 class="header text-uppercase" style="font-weight: 400;">SÁCH HAY NÊN ĐỌC</h2>
+          <a href="#" class="btn btn-warning btn-sm text-white">Xem tất cả</a>
+        </div>
+        <!-- 1 san pham -->
+        <div class="col-lg col-sm-4">
+          <div class="card">
+            <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+               data-toggle="tooltip" data-placement="bottom"
+               title="Từng bước chân nở hoa: Khi câu kinh bước tới">
+              <img class="card-img-top anh" src="images/tung-buoc-chan-no-hoa.jpg"
+                   alt="tung-buoc-chan-no-hoa">
+              <div class="card-body noidungsp mt-3">
+                <h3 class="card-title ten">Từng bước chân nở hoa: Khi câu kinh bước tới</h3>
+                <small class="thoigian text-muted">03/04/2020</small>
+                <div><a class="detail" href="#">View details</a></div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-lg col-sm-4">
+          <div class="card">
+            <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+               data-toggle="tooltip" data-placement="bottom" title="Cảm ơn vì đã được thương">
+              <img class="card-img-top anh" src="images/cam-on-vi-da-duoc-thuong.jpg"
+                   alt="cam-on-vi-da-duoc-thuong">
+              <div class="card-body noidungsp mt-3">
+                <h3 class="card-title ten">Cảm ơn vì đã được thương</h3>
+                <small class="thoigian text-muted">31/03/2020</small>
+                <div><a class="detail" href="#">View details</a></div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-lg col-sm-4">
+          <div class="card">
+            <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+               data-toggle="tooltip" data-placement="bottom"
+               title="Hào quang của vua Gia Long trong mắt Michel Gaultier">
+              <img class="card-img-top anh" src="images/vua-gia-long.jpg" alt="vua-gia-long">
+              <div class="card-body noidungsp mt-3">
+                <h3 class="card-title ten">Hào quang của vua Gia Long trong mắt Michel Gaultier</h3>
+                <small class="thoigian text-muted">21/03/2020</small>
+                <div><a class="detail" href="#">View details</a></div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-lg col-sm-4">
+          <div class="card">
+            <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+               data-toggle="tooltip" data-placement="bottom"
+               title="Suối nguồn” và cái tôi hiện sinh trong từng cá thể">
+              <img class="card-img-top anh" src="images/suoi-nguon-va-cai-toi-trong-tung-ca-the.jpg"
+                   alt="suoi-nguon-va-cai-toi-trong-tung-ca-the">
+              <div class="card-body noidungsp mt-3">
+                <h3 class="card-title ten">"Suối nguồn” và cái tôi hiện sinh trong từng cá thể</h3>
+                <small class="thoigian text-muted">16/03/2020</small>
+                <div><a class="detail" href="#">View details</a></div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-lg col-sm-4">
+          <div class="card cuoicung">
+            <a href="#" class="motsanpham" style="text-decoration: none; color: black;"
+               data-toggle="tooltip" data-placement="bottom"
+               title="Đại dịch trên những con đường tơ lụa">
+              <img class="card-img-top anh" src="images/dai-dich-tren-con-duong-to-lua.jpg"
+                   alt="dai-dich-tren-con-duong-to-lua">
+              <div class="card-body noidungsp mt-3">
+                <h3 class="card-title ten">Đại dịch trên những con đường tơ lụa</h3>
+                <small class="thoigian text-muted">16/03/2020</small>
+                <div><a class="detail" href="#">Xem chi tiết</a></div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+  </div>
+</section>
+
+<!-- thanh cac dich vu :mien phi giao hang, qua tang mien phi ........ -->
+<section th:fragment="footer1" class="abovefooter text-white" style="background-color: #CF111A;">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3 col-sm-6">
+        <div class="dichvu d-flex align-items-center">
+
+          <div class="noidung">
+            <h3 class="tieude font-weight-bold">
+              MORE THAN 14,000 PRODUCTS</h3>
+            <p class="detail">
+              New - Quality - Comfort</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="dichvu d-flex align-items-center">
+          <div class="noidung">
+            <h3 class="tieude font-weight-bold">
+              FREE SHIP</h3>
+            <p class="detail">
+              From 1,500,000 VND in Da Nang city</p>
+            <p class="detail">From 3,000,000 VND in other provinces</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="dichvu d-flex align-items-center">
+          <div class="noidung">
+            <h3 class="tieude font-weight-bold">
+              FREE GIFTS</h3>
+            <p class="detail">Give away mouse pad</p>
+            <p class="detail">
+              Free Cases</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="dichvu d-flex align-items-center">
+          <div class="noidung">
+            <h3 class="tieude font-weight-bold">
+              QUICK REFUND</h3>
+            <p class="detail">
+              Faulty goods can be returned quicklyg</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- footer  -->
+<footer th:fragment="footer">
+  <div class="container py-4">
+    <div class="row">
+      <div class="col-md-3 col-xs-6">
+        <div class="gioithieu">
+          <h3 class="header text-uppercase font-weight-bold">About e_Store</h3>
+          <a href="#">
+            Introduce about e_Store</a>
+          <a href="#">
+            Recruit</a>
+          <div class="fb-like" data-href="https://www.facebook.com/DealBook-110745443947730/"
+               data-width="300px" data-layout="button" data-action="like" data-size="small"
+               data-share="true"></div>
+        </div>
+      </div>
+      <div class="col-md-3 col-xs-6">
+        <div class="hotrokh">
+          <h3 class="header text-uppercase font-weight-bold">CUSTOMER SUPPORT</h3>
+          <a href="#">
+            Ordering guide</a>
+          <a href="#">
+            Payment methods</a>
+          <a href="#">
+            Shipping method</a>
+          <a href="#">
+            Return Policy</a>
+        </div>
+      </div>
+      <div class="col-md-3 col-xs-6">
+        <div class="lienket">
+          <h3 class="header text-uppercase font-weight-bold">
+            COOPERATION AND LINKS</h3>
+
+        </div>
+      </div>
+      <div class="col-md-3 col-xs-6">
+        <div class="ptthanhtoan">
+          <h3 class="header text-uppercase font-weight-bold">
+            Payment methods</h3>
+          <img th:src="@{/public/images/visa-payment.jpg}" alt="visa-payment">
+          <img th:src="@{/public/images/master-card-payment.jpg}" alt="master-card-payment">
+          <img th:src="@{/public/images/jcb-payment.jpg}" alt="jcb-payment">
+          <img th:src="@{/public/images/atm-payment.jpg}"  alt="atm-payment">
+          <img th:src="@{/public/images/cod-payment.jpg}" alt="cod-payment">
+          <img th:src="@{/public/images/payoo-payment.jpg}" alt="payoo-payment">
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- nut cuon len dau trang -->
+<div class="fixed-bottom">
+  <div class="btn btn-warning float-right rounded-circle nutcuonlen" id="backtotop" href="#"
+       style="background:#CF111A;"><i class="fa fa-chevron-up text-white"></i></div>
+</div>
+
+</body>
+
+</html>

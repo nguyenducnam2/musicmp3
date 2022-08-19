@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="admin/fragments :: html_head">
+
+</head>
+
+<body class="sb-nav-fixed">
+<nav th:replace="admin/fragments :: html_nav" class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+
+</nav>
+<div  id="layoutSidenav">
+    <div th:replace="admin/fragments :: html_menu" id="layoutSidenav_nav">
+
+    </div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">Top 10 Best Selling Products</h1>
+                <ol class="breadcrumb mb-4">
+                </ol>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                    </div>
+                    <div class="card-body">
+                        <table id="datatablesSimple">
+                            <thead>
+                            <tr style="background-color: gray !important;">
+                                <th>NO</th>
+                                <th>Name</th>
+                                <th>Image</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Category</th>
+                                <th>Discount</th>
+                                <th>Description</th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                            <th:block th:each="product,index : ${products}">
+                                <tr>
+                                    <td th:text="${index.index +1}"></td>
+                                    <td th:text="${product.name}"></td>
+                                    <td ><img style="width: 150px; height: 200px" th:src="'/resources/uploads/' + ${product.image}"></td>
+                                    <td th:text="${product.price} + ' $'"></td>
+                                    <td th:text="${product.quantity}"></td>
+                                    <td th:text="${product.category.name}"></td>
+                                    <td th:text="${product.discount} + '%'"></td>
+                                    <td  ><a data-bs-toggle="modal"
+                                             th:data-bs-target="'#exampleDes'+${product.id}" href="">Detail</a></td>
+                                </tr>
+                                <!-- Modal Des-->
+                                <div class="modal fade" th:id="'exampleDes'+${product.id}" tabindex="-1"
+                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Description : <span th:text="${product.name}"></span></h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p th:utext="${product.description}"></p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </th:block>
+
+
+                            <script>
+                                var dodai = document.getElementById("dodai").value;
+                                var a = parseInt(dodai);
+                                for(var i = 1;i<=a+10;i++){
+                                    var name = "#editor"  + i
+                                    ClassicEditor.create(document.querySelector(name)).then(eidt => {
+                                        console.log("da" + eidt);
+                                    })
+                                        .catch(error => {
+                                            console.error(error);
+                                        });
+                                }
+                            </script>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer th:replace="admin/fragments :: footer" class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Your Website 2021</div>
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script th:src="@{/admin1/assets/assets/demo/chart-area-demo.js}"></script>
+<script th:src="@{/admin1/assets/assets/demo/chart-bar-demo.js}"></script>
+<script th:src="@{/admin1/assets/assets/demo/chart-pie-demo.js}"></script>
+</body>
+
+</html>

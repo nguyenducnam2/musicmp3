@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html  lang="en">
+
+<head th:replace="admin/fragments :: html_head">
+</head>
+
+<body class="sb-nav-fixed">
+<nav th:replace="admin/fragments :: html_nav" class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+
+</nav>
+
+<div id="layoutSidenav">
+    <div th:replace="admin/fragments :: html_menu" id="layoutSidenav_nav">
+
+    </div>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">List of administration accounts</h1>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div th:if="${msg == 'success'}" class="alert alert-success">
+                            <strong>Success!</strong>
+                        </div>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                data-bs-target="#exampleModalAdd">
+                            Create
+                        </button>
+                        <!-- Modal Add-->
+                        <div class="modal fade" id="exampleModalAdd" tabindex="-1" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog ">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabelll">Create</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form th:action="@{/admin/employee-add}" method="post" enctype="multipart/form-data">
+                                            <div class="col">
+                                                <div class="row">
+                                                    <div class="col-12  ">
+                                                        <label for="addname"
+                                                               class="col-form-label">Họ tên:</label>
+                                                        <input type="text" class="form-control"
+                                                               id="addname" name="name" required>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12  ">
+                                                        <label for="addname"
+                                                               class="col-form-label">Email:</label>
+                                                        <input type="email" class="form-control"
+                                                               id="addname" name="email" required>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12  ">
+                                                        <label for="addname"
+                                                               class="col-form-label">Số điện thoại:</label>
+                                                        <input type="number" class="form-control"
+                                                               id="addname" name="phoneNumber" required>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12  ">
+                                                        <label for="addname"
+                                                               class="col-form-label">UserName:</label>
+                                                        <input type="text" class="form-control"
+                                                               id="addname" name="userName" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Save </button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal Add-->
+                    </div>
+                    <div class="card-body">
+                        <table id="datatablesSimple">
+                            <thead>
+                            <tr style="background-color: gray !important;">
+                                <th>STT</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Phone Number</th>
+                                <th>UserName</th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Phone Number</th>
+                                <th>UserName</th>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                            <input type="hidden" th:value="${list.size()}" id="dodai" />
+                            <th:block th:each="category,index : ${list}">
+                                <tr>
+                                    <td th:text="${index.index +1}"></td>
+                                    <td th:text="${category.fullName}"></td>
+                                    <td th:text="${category.email}"></td>
+                                    <td th:text="${category.phoneNumber}"></td>
+                                    <td th:text="${category.userName}"></td>
+                                </tr>
+                            </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <script>
+
+            ClassicEditor.create(document.querySelector('#editor')).then(eidt => {
+                console.log("da" + eidt);
+            })
+                .catch(error => {
+                    console.error(error);
+                });
+
+        </script>
+        <script>
+
+            var dodai = document.getElementById("dodai").value;
+            var a = parseInt(dodai);
+            for(var i = 1;i<=a+10;i++){
+                var name = "#editor"  + i
+                ClassicEditor.create(document.querySelector(name)).then(eidt => {
+                    console.log("da" + eidt);
+                })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+
+
+        </script>
+        <footer th:replace="admin/fragments :: footer" class="py-4 bg-light mt-auto">
+
+        </footer>
+    </div>
+</div>
+
+<script src="js/JQuery3.3.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="js/scripts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+<script src="js/datatables-simple-demo.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="admin/fragments :: html_head">
+
+</head>
+
+<body class="sb-nav-fixed">
+<nav th:replace="admin/fragments :: html_nav" class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+
+</nav>
+<div  id="layoutSidenav">
+    <div th:replace="admin/fragments :: html_menu" id="layoutSidenav_nav">
+
+    </div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">Discount Code</h1>
+                <ol class="breadcrumb mb-4">
+                </ol>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div th:if="${msg == '1'}" class="alert alert-success">
+                            <strong>Successful!!</strong>
+                        </div>
+                        <div th:if="${msg == '2'}" class="alert alert-danger">
+                            <strong>Discount Code already exists !</strong>
+                        </div>
+                        <button type="button" class="btn btn-success" style="width: 100px" data-bs-toggle="modal"
+                                data-bs-target="#exampleModalAdd">
+                            Create
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <table id="datatablesSimple">
+                            <thead>
+                            <tr style="background-color: gray !important;">
+                                <th>NO</th>
+                                <th>Name</th>
+                                <th>Code</th>
+                                <th>Percent</th>
+                                <th>Start date</th>
+                                <th>End date</th>
+                                <th>Action</th>
+
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                            <th:block th:each="item,index : ${discountCodes}">
+                                <tr>
+                                    <td th:text="${index.index +1}"></td>
+                                    <td th:text="${item.name}"></td>
+                                    <td th:text="${item.code}"></td>
+                                    <td th:text="${item.percent + '%' }"></td>
+                                    <td th:text="${item.startDate}"></td>
+                                    <td th:text="${item.endDate}"></td>
+                                    <td>
+                                        <button style="width: 100px" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                th:data-bs-target="'#exampleModal'+${item.id}">
+                                            Update
+                                        </button>
+                                        <a style="width: 100px" th:href="'discount-code/delete/'+ ${item.id}" class="btn btn-danger">
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                                <!-- Modal Update-->
+                                <div class="modal fade" th:id="'exampleModal'+${item.id}" tabindex="-1"
+                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Update</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form th:action="'discount-code/update/'+ ${item.id}" method="post">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <div class="">
+                                                                <label  class="col-form-label">Name<span style="color: red">(*)</span>:</label>
+                                                                <input type="text" th:value="${item.name}" name="name" class="form-control" required>
+                                                                <input type="hidden" th:value="${item.id}" name="name" class="form-control" required>
+                                                            </div>
+                                                            <div class="">
+                                                                <label  class="col-form-label">Code<span style="color: red">(*)</span>:</label>
+                                                                <input type="text" th:value="${item.code}" name="code" class="form-control" min="1" max="10000" required>
+                                                            </div>
+                                                            <div class="">
+                                                                <label  class="col-form-label">Start date<span style="color: red">(*)</span>:</label>
+                                                                <input type="date" th:value="${item.startDate}" name="startDate" class="form-control" min="1" max="1000" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="">
+                                                                <label  class="col-form-label">End date<span style="color: red">(*)</span>:</label><br>
+                                                                <input type="date" th:value="${item.endDate}" name="endDate" class="form-control" required>
+                                                            </div>
+                                                            <div class="">
+                                                                <label  class="col-form-label">Percent (%):</label><br>
+                                                                <input type="number" th:value="${item.percent}" name="percent" class="form-control" min="0" max="100" required value="0">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" style="width:100px" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" style="width:100px" class="btn btn-primary">Update</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </th:block>
+                            <!-- Modal Add-->
+                            <div class="modal fade" id="exampleModalAdd" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-xl">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Create</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="/admin/discount-code/add" method="post" enctype="multipart/form-data">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="">
+                                                            <label  class="col-form-label">Name<span style="color: red">(*)</span>:</label>
+                                                            <input type="text" name="name" class="form-control" required>
+                                                        </div>
+                                                        <div class="">
+                                                            <label  class="col-form-label">Code<span style="color: red">(*)</span>:</label>
+                                                            <input type="text" name="code" class="form-control" min="1" max="10000" required>
+                                                        </div>
+                                                        <div class="">
+                                                            <label  class="col-form-label">Start date<span style="color: red">(*)</span>:</label>
+                                                            <input type="date" name="startDate" class="form-control" min="1" max="1000" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="">
+                                                            <label  class="col-form-label">End date<span style="color: red">(*)</span>:</label><br>
+                                                            <input type="date" name="endDate" class="form-control" required>
+                                                        </div>
+                                                        <div class="">
+                                                            <label  class="col-form-label">Percent (%):</label><br>
+                                                            <input type="number" name="percent" class="form-control" min="0" max="100" required value="0">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" style="width:100px" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" style="width:100px" class="btn btn-primary">Create</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer th:replace="admin/fragments :: footer" class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Your Website 2022</div>
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script th:src="@{/admin1/assets/assets/demo/chart-area-demo.js}"></script>
+<script th:src="@{/admin1/assets/assets/demo/chart-bar-demo.js}"></script>
+<script th:src="@{/admin1/assets/assets/demo/chart-pie-demo.js}"></script>
+</body>
+
+</html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="li">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" th:href="@{/public/css/sach-moi-tuyen-chon.css}">
+    <script type="text/javascript" th:src="@{/public/js/main.js}"></script>
+    <link rel="stylesheet" th:href="@{/public/fontawesome_free_5.13.0/css/all.css}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/public/slick/slick.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/public/slick/slick-theme.css}"/>
+    <script type="text/javascript" th:src="@{/public/slick/slick.min.js}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    <script type="text/javascript"
+            src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+    <link rel="canonical" href="http://dealbook.xyz/">
+    <meta name="google-site-verification" content="urDZLDaX8wQZ_-x8ztGIyHqwUQh2KRHvH9FhfoGtiEw" />
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/public/favicon_io/apple-touch-icon.png}">
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/public/favicon_io/favicon-32x32.png}">
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/public/favicon_io/favicon-16x16.png}">
+    <link rel="manifest" th:href="@{/public/favicon_io/site.webmanifest}">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <style>img[alt="www.000webhost.com"]{display: none;}</style>
+    <script>
+        function abc(){
+            alert("Dsds")
+        }
+        function login(){
+            var password = $('#password1').val();
+            var email = $('#email1').val();
+            if (password == ''  || email == '' ){
+                swal({
+                    title: 'Need to fill out the information completely!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            } else {
+
+                var formData = new FormData();
+                formData.append('password', password);
+                formData.append('email', email);
+                $.ajax(
+                    {
+                        type: 'POST',
+                        url: '/public/user/login/',
+                        contentType: false,
+                        processData: false,
+                        data: formData,
+                        success: function (data) {
+                            if(data == "false_user"){
+                                swal({
+                                    title: 'Incorrect account information!',
+                                    /* text: 'Redirecting...', */
+                                    icon: 'error',
+                                    timer: 3000,
+                                    buttons: true,
+                                    type: 'error'
+                                })
+                            }else if(data == "true"){
+                                swal({
+                                    title: 'Login successfully !',
+                                    /* text: 'Redirecting...', */
+                                    icon: 'success',
+                                    timer: 5000,
+                                    buttons: true,
+                                    type: 'success'
+                                })
+                                setInterval(function(){
+                                    location.reload()
+                                }, 3000);
+                            } else {
+                                swal({
+                                    title: 'Unverified account, please check your email!',
+                                    /* text: 'Redirecting...', */
+                                    icon: 'error',
+                                    timer: 3000,
+                                    buttons: true,
+                                    type: 'error'
+                                })
+                            }
+                        },
+                        error: function (err) {
+                            alert(err);
+                        }
+                    }
+                )
+            }
+
+        }
+        $( document ).ready(function() {
+            const cb = document.querySelector('#checkbox1');
+            if(cb.checked == false){
+                document.getElementById("register_id").disabled = true;
+            }
+        });
+        function changeStatus(){
+            const cb = document.querySelector('#checkbox1');
+            if(cb.checked == false){
+                document.getElementById("register_id").disabled = true;
+            }else if(cb.checked == true){
+                document.getElementById("register_id").disabled = false;
+            }
+        }
+        function register(){
+
+            const validateEmail = (email) => {
+                return email.match(
+                    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                );
+            };
+            var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+            var password = $('#password').val();
+            var rePassword = $('#rePassword').val();
+            var email = $('#email').val();
+            var fullName = $('#fullName').val();
+            let phoneNumber = $('#phoneNumber').val().replace(/\s+/g, '');
+            var atposition = email.indexOf("@");
+            var dotposition = email.lastIndexOf(".");
+            if (password == '' || rePassword == '' || email == '' || fullName == '' || phoneNumber == ''){
+                swal({
+                    title: 'You need to fill in all the information!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            }
+            else if (vnf_regex.test(phoneNumber) == false)
+            {
+                swal({
+                    title: 'Phone number is not in the correct format!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            } else if(atposition < 1 || dotposition < (atposition + 2) || (dotposition + 2) >= email.length){
+                swal({
+                    title: 'Email is not in the correct format!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            } else if(!validateEmail(email)){
+                swal({
+                    title: 'Email is not in the correct format!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            }else {
+                if (password !== rePassword){
+                    swal({
+                        title: 'Two passwords do not match!',
+                        /* text: 'Redirecting...', */
+                        icon: 'error',
+                        timer: 3000,
+                        buttons: true,
+                        type: 'error'
+                    })
+                } else {
+                    var formData = new FormData();
+                    formData.append('password', password);
+                    formData.append('email', email);
+                    formData.append('fullName', fullName);
+                    formData.append('phoneNumber', phoneNumber);
+                    formData.append('rePassword', rePassword);
+                    $.ajax(
+                        {
+                            type: 'POST',
+                            url: '/public/user/register/',
+                            contentType: false,
+                            processData: false,
+                            data: formData,
+                            success: function (data) {
+                                if(data == "exist"){
+                                    swal({
+                                        title: 'Email is existed!',
+                                        /* text: 'Redirecting...', */
+                                        icon: 'error',
+                                        timer: 3000,
+                                        buttons: true,
+                                        type: 'error'
+                                    })
+                                }else if(data == "true"){
+                                    swal({
+                                        title: 'Register successfully!',
+                                        /* text: 'Redirecting...', */
+                                        icon: 'success',
+                                        timer: 5000,
+                                        buttons: true,
+                                        type: 'success'
+                                    })
+                                    $('#err').val("");
+                                }
+                            },
+                            error: function (err) {
+                                alert(err);
+                            }
+                        }
+                    )
+                }
+            }
+        }
+    </script>
+</head>
+
+<body>
+<!--Start of Tawk.to Script-->
+
+<!--End of Tawk.to Script-->
+<!-- code cho nut like share facebook  -->
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v6.0"></script>
+
+<!-- header -->
+<nav th:replace="public/fragments :: html_nav" class="navbar navbar-expand-md bg-white navbar-light">
+
+</nav>
+
+
+<!-- form dang ky khi click vao button tren header-->
+<div th:replace="public/fragments :: html_register" class="modal fade mt-5" id="formdangky" data-backdrop="static" tabindex="-1" aria-labelledby="dangky_tieude"
+     aria-hidden="true">
+
+</div>
+
+
+<!-- form dang nhap khi click vao button tren header-->
+<div th:replace="public/fragments :: html_login" class="modal fade mt-5" id="formdangnhap" data-backdrop="static" tabindex="-1"
+     aria-labelledby="dangnhap_tieude" aria-hidden="true">
+
+</div>
+
+<!-- thanh "danh muc sach" đã được ẩn bên trong + hotline + ho tro truc tuyen -->
+<section  class="duoinavbar">
+    <div class="container text-white">
+        <div class="row justify">
+            <div class="col-lg-3 col-md-5">
+                <div class="categoryheader">
+                    <div class="noidungheader text-white">
+                        <i class="fa fa-bars"></i>
+                        <span class="text-uppercase font-weight-bold ml-1">
+Category Product</span>
+                    </div>
+                    <!-- CATEGORIES -->
+                    <div class="categorycontent">
+                        <ul>
+                            <th:block th:each="category,index : ${categories}">
+                                <li th:if="${category.parentId == 0}"> <a  th:text="${category.name}"></a><i class="fa fa-chevron-right float-right"></i>
+                                    <ul>
+                                        <li class="liheader"><a href="#" class="header text-uppercase" th:text="${category.name}"></a></li>
+                                        <div class="content trai">
+                                            <th:block th:each="category1,index1 : ${categories}">
+                                                <li th:if="${category.id == category1.parentId}"><a th:text="${category1.name}" th:href="'/public/product/'+${category1.id}"></a></li>
+                                                <th:block/>
+                                        </div>
+                                    </ul>
+                                </li>
+                                <th:block/>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 ml-auto contact d-none d-md-block">
+                <div class="benphai float-right">
+                    <div class="hotline">
+                        <i class="fa fa-phone"></i>
+                        <span>Hotline:<b>1900 1999</b> </span>
+                    </div>
+                    <i class="fas fa-comments-dollar"></i>
+                    <a href="#">Online support </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- breadcrumb  -->
+<section class="breadcrumbbar">
+    <div class="container">
+        <ol class="breadcrumb mb-0 p-0 bg-transparent">
+            <li class="breadcrumb-item"><a href="/public/home">Home</a></li>
+            <li class="breadcrumb-item active"><a th:href="'/public/product/'+${category.id}" th:text="${category.name}">
+                New book selection</a></li>
+        </ol>
+    </div>
+</section>
+
+<!-- ảnh banner -->
+<section class="banner">
+    <div class="container">
+<!--        <a href="sach-moi-tuyen-chon.html"><img src="https://inanaz.com.vn/wp-content/uploads/2020/02/mau-banner-quang-cao-dep-8.jpg" alt="sach-moi-full-banner"-->
+<!--                                                class="img-fluid"></a>-->
+    </div>
+</section>
+
+<!-- các sản phẩm  -->
+<section class="content my-4">
+    <div class="container">
+        <div class="noidung bg-white" style=" width: 100%;">
+            <div class="items">
+                <div class="row">
+                    <th:block th:each="product,index : ${list.content}">
+                        <div class="col-lg-3 col-md-4 col-xs-6">
+
+                            <!-- 1 sản phẩm  -->
+                            <div class="card">
+                                <a th:href="'/public/product/detail/'+${product.id}" class="motsanpham"
+                                   style="text-decoration: none; color: black;" data-toggle="tooltip"
+                                   data-placement="bottom" title="Lập Kế Hoạch Kinh Doanh Hiệu Quả">
+                                    <img class="card-img-top anh" style="height: 300px !important;" th:src="'/resources/uploads/' + ${product.image}" alt="lap-ke-hoach-kinh-doanh-hieu-qua">
+                                    <div class="card-body noidungsp mt-3">
+                                        <h6 class="card-title ten" th:text="${product.name}">Make an Effective Business Plan</h6>
+                                        <small class="tacgia text-muted" th:text="${product.category.name}">Brian Finch</small>
+                                        <div class="gia d-flex align-items-baseline">
+                                            <!--<div class="giamoi" th:text="${#numbers.formatCurrency(product.price - (product.price * product.discount / 100))}"></div>
+                                            <div class="giacu text-muted" th:text="${#numbers.formatCurrency(product.price)}"></div>-->
+                                            <div class="giamoi" th:text="${product.price - (product.price * product.discount / 100)} + ' $'"></div>
+                                            <div class="giacu text-muted" th:text="${product.price} + ' $'"></div>
+                                            <div class="sale" th:text="'-'+${product.discount}+'%'"></div>
+                                        </div>
+                                        <div class="danhgia">
+                                            <ul class="d-flex" style="list-style: none;">
+                                                <li class="active"><i class="fa fa-star"></i></li>
+                                                <li class="active"><i class="fa fa-star"></i></li>
+                                                <li class="active"><i class="fa fa-star"></i></li>
+                                                <li class="active"><i class="fa fa-star"></i></li>
+                                                <li><i class="fa fa-star"></i></li>
+                                                <span class="text-muted" th:text="${product.viewCount} + ' view'">0 nhận xét</span>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    <th:block/>
+                </div>
+            </div>
+
+            <!-- pagination bar  -->
+            <div class="pagination-bar my-3">
+                <div class="row">
+                    <div class="col-12">
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                 <li th:if="${numberPage>0}" class="page-item">
+                                    <a class="page-link" th:href="@{${category.id}(page = ${list.number - 1})}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                <th:block th:each="recruitment,state  : ${recruitmentList}">
+                                    <li th:class="'page-item '+${numberPage == state.index  ? 'active' : null }"><a class="page-link" th:href="@{${category.id}(page = ${state.index})}" th:text="${state.index + 1}"></a></li>
+                                </th:block>
+                                <li th:if="${numberPage<list.totalPages - 1}" class="page-item">
+                                    <a th:href="@{${category.id}(page = ${list.number + 1})}" class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&rsaquo;</span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <!--het khoi san pham-->
+        </div>
+        <!--het div noidung-->
+    </div>
+    <!--het container-->
+</section>
+
+
+
+
+<!-- footer  -->
+<footer th:replace="public/fragments :: footer">
+
+</footer>
+
+<!-- nut cuon len dau trang -->
+<div class="fixed-bottom">
+    <div class="btn btn-warning float-right rounded-circle nutcuonlen" id="backtotop" href="#"
+         style="background:#CF111A;"><i class="fa fa-chevron-up text-white"></i></div>
+</div>
+
+
+</body>
+
+</html>

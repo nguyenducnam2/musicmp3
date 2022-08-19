@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="li">
+
+<head >
+    <title>Website</title>
+    <meta name="description"
+          content="Mua sách online hay, giá tốt nhất, combo sách hot bán chạy, giảm giá cực khủng cùng với những ưu đãi như miễn phí giao hàng, quà tặng miễn phí, đổi trả nhanh chóng. Đa dạng sản phẩm, đáp ứng mọi nhu cầu.">
+    <meta name="keywords" content="nhà sách online, mua sách hay, sách hot, sách bán chạy, sách giảm giá nhiều">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" th:href="@{/public/css/gio-hang.css}">
+    <script type="text/javascript" th:src="@{/public/js/main.js}"></script>
+    <link rel="stylesheet" th:href="@{/public/fontawesome_free_5.13.0/css/all.css}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/public/slick/slick.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/public/slick/slick-theme.css}"/>
+    <script type="text/javascript" th:src="@{/public/slick/slick.min.js}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    <script type="text/javascript"
+            src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+    <link rel="canonical" href="http://dealbook.xyz/">
+    <meta name="google-site-verification" content="urDZLDaX8wQZ_-x8ztGIyHqwUQh2KRHvH9FhfoGtiEw" />
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/public/favicon_io/apple-touch-icon.png}">
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/public/favicon_io/favicon-32x32.png}">
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/public/favicon_io/favicon-16x16.png}">
+    <link rel="manifest" th:href="@{/public/favicon_io/site.webmanifest}">
+    <style>img[alt="www.000webhost.com"]{display: none;}</style>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        function changeNumber(id){
+            var nameId = 'numberCart'+id;
+            var giamoiId = "giamoi"+id;
+            var giacuId = "giacu"+id;
+            const quantity = document.getElementById(nameId).value;
+            const giamoi = document.getElementById(giamoiId);
+            const giacu = document.getElementById(giacuId);
+            $.ajax({
+                url: "/public/cart/update-number",
+                type:"post",
+                data:{
+                    productId:id,
+                    quantity:quantity
+                },
+                success: function(data){
+
+                    if(data.giaMoi == "null"){
+                        document.getElementById("orderId").disabled = true;
+                        swal({
+                            title: 'The number of products in stock is not enough!',
+                            /* text: 'Redirecting...', */
+                            icon: 'error',
+                            timer: 3000,
+                            buttons: true,
+                            type: 'error'
+                        })
+                    }else{
+                        document.getElementById("orderId").disabled = false;
+                        giamoi.innerHTML = data.giaMoi;
+                        giacu.innerHTML = data.giaCu;
+                        const tamtinh = document.getElementById("tamtinh");
+                        const tongtien = document.getElementById("tongtien");
+                        tamtinh.innerHTML = data.total;
+                        tongtien.innerHTML =  data.total + 3;
+                    }
+                }
+            });
+        }
+        function addDiscountCode(number){
+            const discountCode = document.getElementById("discountCode").value;
+
+            $.ajax({
+                url: "/public/cart/add-discount-code",
+                type:"post",
+                data:{
+                    discountCode:discountCode,
+                    number:number
+                },
+                success: function(data){
+                    alert(data.total)
+                    if(data.status == 0){
+                        swal({
+                            title: 'Discount code does not exist',
+                            /* text: 'Redirecting...', */
+                            icon: 'error',
+                            timer: 3000,
+                            buttons: true,
+                            type: 'error'
+                        })
+                        tongtien.innerHTML =  (data.total + 3);
+                    }else{
+                        tongtien.innerHTML =  (data.total);
+                    }
+                }
+            });
+        }
+        function abc(){
+            alert("Dsds")
+        }
+        $( document ).ready(function() {
+            const cb = document.querySelector('#checkbox1');
+            if(cb.checked == false){
+                document.getElementById("register_id").disabled = true;
+            }
+        });
+        function changeStatus(){
+            const cb = document.querySelector('#checkbox1');
+            if(cb.checked == false){
+                document.getElementById("register_id").disabled = true;
+            }else if(cb.checked == true){
+                document.getElementById("register_id").disabled = false;
+            }
+        }
+        function register(){
+
+            const validateEmail = (email) => {
+                return email.match(
+                    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                );
+            };
+            var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+            var password = $('#password').val();
+            var rePassword = $('#rePassword').val();
+            var email = $('#email').val();
+            var fullName = $('#fullName').val();
+            let phoneNumber = $('#phoneNumber').val().replace(/\s+/g, '');
+            var atposition = email.indexOf("@");
+            var dotposition = email.lastIndexOf(".");
+            if (password == '' || rePassword == '' || email == '' || fullName == '' || phoneNumber == ''){
+                swal({
+                    title: 'You need to fill in all the information!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            }
+            else if (vnf_regex.test(phoneNumber) == false)
+            {
+                swal({
+                    title: 'Phone number is not in the correct format!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            } else if(atposition < 1 || dotposition < (atposition + 2) || (dotposition + 2) >= email.length){
+                swal({
+                    title: 'Email is not in the correct format!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            } else if(!validateEmail(email)){
+                swal({
+                    title: 'Email is not in the correct format!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            }else {
+                if (password !== rePassword){
+                    swal({
+                        title: 'Two passwords do not match!',
+                        /* text: 'Redirecting...', */
+                        icon: 'error',
+                        timer: 3000,
+                        buttons: true,
+                        type: 'error'
+                    })
+                } else {
+                    var formData = new FormData();
+                    formData.append('password', password);
+                    formData.append('email', email);
+                    formData.append('fullName', fullName);
+                    formData.append('phoneNumber', phoneNumber);
+                    formData.append('rePassword', rePassword);
+                    $.ajax(
+                        {
+                            type: 'POST',
+                            url: '/public/user/register/',
+                            contentType: false,
+                            processData: false,
+                            data: formData,
+                            success: function (data) {
+                                if(data == "exist"){
+                                    swal({
+                                        title: 'Email is existed!',
+                                        /* text: 'Redirecting...', */
+                                        icon: 'error',
+                                        timer: 3000,
+                                        buttons: true,
+                                        type: 'error'
+                                    })
+                                }else if(data == "true"){
+                                    swal({
+                                        title: 'Register successfully!',
+                                        /* text: 'Redirecting...', */
+                                        icon: 'success',
+                                        timer: 5000,
+                                        buttons: true,
+                                        type: 'success'
+                                    })
+                                    $('#err').val("");
+                                }
+                            },
+                            error: function (err) {
+                                alert(err);
+                            }
+                        }
+                    )
+                }
+            }
+
+        }
+
+        function login(){
+            var password = $('#password1').val();
+            var email = $('#email1').val();
+            if (password == ''  || email == '' ){
+                swal({
+                    title: 'You need to fill in all the information!',
+                    /* text: 'Redirecting...', */
+                    icon: 'error',
+                    timer: 3000,
+                    buttons: true,
+                    type: 'error'
+                })
+            } else {
+
+                var formData = new FormData();
+                formData.append('password', password);
+                formData.append('email', email);
+                $.ajax(
+                    {
+                        type: 'POST',
+                        url: '/public/user/login/',
+                        contentType: false,
+                        processData: false,
+                        data: formData,
+                        success: function (data) {
+                            if(data == "false_user"){
+                                swal({
+                                    title: 'Username or password incorrect!',
+                                    /* text: 'Redirecting...', */
+                                    icon: 'error',
+                                    timer: 3000,
+                                    buttons: true,
+                                    type: 'error'
+                                })
+                            }else if(data == "true"){
+                                swal({
+                                    title: 'Login sucessfully!',
+                                    /* text: 'Redirecting...', */
+                                    icon: 'success',
+                                    timer: 3000,
+                                    buttons: true,
+                                    type: 'success'
+                                })
+                                setInterval(function(){
+                                    location.reload()
+                                }, 2000);
+                            } else {
+                                swal({
+                                    title: 'Unverified account please check mail!',
+                                    /* text: 'Redirecting...', */
+                                    icon: 'error',
+                                    timer: 3000,
+                                    buttons: true,
+                                    type: 'error'
+                                })
+                            }
+                        },
+                        error: function (err) {
+                            alert(err);
+                        }
+                    }
+                )
+            }
+
+        }
+    </script>
+</head>
+
+<body>
+<!--Start of Tawk.to Script-->
+
+<!--End of Tawk.to Script-->
+<!-- code cho nut like share facebook  -->
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v6.0"></script>
+
+<!-- header -->
+<nav th:replace="public/fragments :: html_nav" class="navbar navbar-expand-md bg-white navbar-light">
+
+</nav>
+
+
+<!-- form dang ky khi click vao button tren header-->
+<div th:replace="public/fragments :: html_register" class="modal fade mt-5" id="formdangky" data-backdrop="static" tabindex="-1" aria-labelledby="dangky_tieude"
+     aria-hidden="true">
+
+</div>
+
+<!-- form dang nhap khi click vao button tren header-->
+<div th:replace="public/fragments :: html_login" class="modal fade mt-5" id="formdangnhap" data-backdrop="static" tabindex="-1"
+     aria-labelledby="dangnhap_tieude" aria-hidden="true">
+
+</div>
+<div th:if="${user_login}" >
+    <script>
+        swal({
+            title: 'You need login',
+            /* text: 'Redirecting...', */
+            icon: 'error',
+            timer: 3000,
+            buttons: true,
+            type: 'error'
+        })
+    </script>
+</div>
+<div th:if="${order_success}" >
+    <script>
+        swal({
+            title: 'Order successfully',
+            /* text: 'Redirecting...', */
+            icon: 'success',
+            timer: 3000,
+            buttons: true,
+            type: 'success'
+        })
+    </script>
+</div>
+<div th:if="${order_error}" >
+    <script>
+        swal({
+            title: 'The number of products in stock is not enough',
+            /* text: 'Redirecting...', */
+            icon: 'error',
+            timer: 3000,
+            buttons: true,
+            type: 'error'
+        })
+    </script>
+</div>
+<!-- thanh "danh muc sach" đã được ẩn bên trong + hotline + ho tro truc tuyen -->
+<section  class="duoinavbar">
+    <div class="container text-white">
+        <div class="row justify">
+            <div class="col-lg-3 col-md-5">
+                <div class="categoryheader">
+                    <div class="noidungheader text-white">
+                        <i class="fa fa-bars"></i>
+                        <span class="text-uppercase font-weight-bold ml-1">
+Category Product</span>
+                    </div>
+                    <!-- CATEGORIES -->
+                    <div class="categorycontent">
+                        <ul>
+                            <th:block th:each="category,index : ${categories}">
+                                <li th:if="${category.parentId == 0}"> <a th:href="'/public/product/'+${category.id}" th:text="${category.name}"></a><i class="fa fa-chevron-right float-right"></i>
+                                    <ul>
+                                        <li class="liheader"><a href="#" class="header text-uppercase" th:text="${category.name}"></a></li>
+                                        <div class="content trai">
+                                            <th:block th:each="category1,index1 : ${categories}">
+                                                <li th:if="${category.id == category1.parentId}"><a th:text="${category1.name}" th:href="'/public/product/'+${category1.id}"></a></li>
+                                                <th:block/>
+                                        </div>
+                                    </ul>
+                                </li>
+                                <th:block/>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 ml-auto contact d-none d-md-block">
+                <div class="benphai float-right">
+                    <div class="hotline">
+                        <i class="fa fa-phone"></i>
+                        <span>Hotline:<b>1900 1999</b> </span>
+                    </div>
+                    <i class="fas fa-comments-dollar"></i>
+                    <a href="#">
+                        Online support </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- breadcrumb  -->
+<section class="breadcrumbbar">
+    <div class="container">
+        <ol class="breadcrumb mb-0 p-0 bg-transparent">
+            <li class="breadcrumb-item"><a href="/public/home">Home</a></li>
+            <li th:if="${product == null}" class="breadcrumb-item active"><a href="/public/cart/index" > Cart</a></li>
+            <li th:if="${product != null}" class="breadcrumb-item active"><a href="/public/cart/index" > Buy Now</a></li>
+        </ol>
+    </div>
+</section>
+<section class="content my-3">
+    <div class="container">
+        <div class="cart-page bg-white">
+            <div class="row">
+                <!-- giao diện giỏ hàng khi không có item  -->
+                <div class="col-12 cart-empty d-none">
+                    <div th:if="${productBuyNow == null && session.order == null}" class="py-3 pl-3">
+                        <h6  class="header-gio-hang">YOUR CART<span>(0 item)</span></h6>
+                        <div class="cart-empty-content w-100 text-center justify-content-center">
+                            <img src="/public/images/shopping-cart-not-product.png" alt="shopping-cart-not-product">
+                            <p>There are no products in your cart</p>
+                            <a href="/public/home" class="btn nutmuathem mb-3">
+                                Buy more</a>
+                        </div>
+                    </div>
+
+                    <div th:if="${ productBuyNow == null && session.order != null}" class="py-3 pl-3">
+                        <h6 th:if="${session.order.getItemModels().size() == 0}" class="header-gio-hang">YOUR CART <span>(0 item)</span></h6>
+                        <div th:if="${session.order.getItemModels().size() == 0}" class="cart-empty-content w-100 text-center justify-content-center">
+                            <img src="/public/images/shopping-cart-not-product.png" alt="shopping-cart-not-product">
+                            <p>There are no products in your cart</p>
+                            <a href="/public/home" class="btn nutmuathem mb-3">Buy more</a>
+                        </div>
+                    </div>
+                    <div th:if="${ productBuyNow == null && session.order != null}" class="cart-content py-3 pl-3">
+                        <h6 th:if="${ session.order.getItemModels().size() != 0}" class="header-gio-hang">YOUR CART <span th:text="${session.order.getItemModels().size() +' item'}">(1 sản phẩm)</span></h6>
+                        <div th:if="${ session.order.getItemModels().size() != 0}" class="cart-list-items">
+                            <th:block th:each="product : ${session.order.getItemModels()}">
+                            <div class="cart-item d-flex">
+                                <a th:href="'/public/product/detail/'+${product.product.id}" class="img">
+                                    <img th:src="'/resources/uploads/' + ${product.product.image}" class="img-fluid" alt="anhsp1">
+                                </a>
+                                <div class="item-caption d-flex w-100">
+                                    <div class="item-info ml-3">
+                                        <a th:href="'/public/product/detail/'+${product.product.id}" class="ten" th:text="${product.product.name}" ></a>
+                                        <div class="soluong d-flex">
+                                            <div class="input-number input-group mb-3">
+                                                <input th:onchange="'changeNumber(' +${product.product.id}+ ')'" th:id="${'numberCart'+product.product.id}" type="number" min="1" th:value="${product.quantity}" style="width: 50px" class="soluongsp  text-center">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="margin-right: 20px" class="item-price ml-auto d-flex flex-column align-items-end">
+                                        <div class="giamoi" th:id="${'giamoi'+product.product.id}" th:text="${(product.product.price - (product.product.price * product.product.discount / 100)) * product.quantity} + ' $'"></div>
+                                        <div class="giacu" th:id="${'giacu'+product.product.id}" th:text="${product.product.price * product.quantity} + ' $'"></div>
+                                        <a th:href="${'/public/cart/delete/'+product.product.id}" class="remove mt-auto"><i class="far fa-trash-alt"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr><th:block/>
+                        </div>
+                        <form action="/public/cart/order/0" method="post">
+                        <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="p-4 border rounded">
+                                        <div class="row form-group">
+                                            <div class="col-md-12 mb-3 mb-md-0">
+                                                <label class="text-black" for="fname">Address</label>
+                                                <input type="text" id="fname" name="address" class="form-control" placeholder="Enter address" required>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group mb-4">
+                                            <div class="col-md-12 mb-3 mb-md-0">
+                                                <label class="text-black" for="fname">Phone number</label>
+                                                <input type="text" id="fname" name="phoneNumber" class="form-control" placeholder="Enter phonenumber" pattern="[0-9]{3}[0-9]{4}[0-9]{3}" required>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group mb-4">
+                                            <div class="col-md-12 mb-3 mb-md-0">
+                                                <label class="text-black" for="fname">Note</label>
+                                                <textarea type="text" name="note" class="form-control" placeholder="Enter note" required></textarea>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row form-group">
+                                            <div class="col-md-12">
+                                                <input type="submit" id="orderId" value="Order" class="btn px-4 btn-danger text-white">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            <div class="col-lg-6">
+                                <div class="tonggiatien" style="margin-right: 20px">
+                                    <div class="group d-flex justify-content-between">
+                                        <p class="label">
+                                            Provisional:</p>
+
+                                        <p  class="tamtinh" th:id="tamtinh" th:text="${session.order.total-3  } + ' $'">328.000 ₫</p>
+                                    </div>
+                                    <div class="group d-flex justify-content-between">
+                                        <p class="label">
+                                            Transport free:</p>
+                                        <p class="phivanchuyen">3$</p>
+                                    </div>
+                                    <div class="group ">
+                                        <p class="label">
+                                            Discount code:</p>
+                                        <input type="text" id="discountCode" name="discountCode" onchange="addDiscountCode(0)" class="form-control" placeholder="Discount code" >
+                                    </div>
+                                    <div class="group d-flex justify-content-between align-items-center">
+                                        <strong class="text-uppercase">Total:</strong>
+                                        <p class="tongcong" th:id="tongtien" th:text="${session.order.total} + ' $'">328.000 ₫</p>
+                                    </div>
+                                    <small class="note d-flex justify-content-end text-muted">
+                                        (Prices include VAT)
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+
+                    <div th:if="${ productBuyNow != null }" class="cart-content py-3 pl-3">
+                        <h6  class="header-gio-hang">YOUR CART <span>(1 item)</span></h6>
+                        <form th:action=" @{'/public/cart/order/'+${productBuyNow.id}}" method="post" class="p-4 border rounded">
+                            <div>
+                        <div class="cart-list-items">
+                                <div class="cart-item d-flex">
+                                    <a th:href="'/public/product/detail/'+${productBuyNow.id}" class="img">
+                                        <img th:src="'/resources/uploads/' + ${productBuyNow.image}" class="img-fluid" alt="anhsp1">
+                                    </a>
+                                    <div class="item-caption d-flex w-100">
+                                        <div class="item-info ml-3">
+                                            <a th:href="'/public/product/detail/'+${productBuyNow.id}" class="ten" th:text="${productBuyNow.name}" ></a>
+                                            <div class="soluong d-flex">
+                                                <div class="input-number input-group mb-3">
+                                                    <input name="quantity" th:id="${'numberCart'+productBuyNow.id}" type="number" min="1" th:value="1" style="width: 50px" class="soluongsp  text-center">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="margin-right: 20px" class="item-price ml-auto d-flex flex-column align-items-end">
+                                            <div class="giamoi" th:id="${'giamoi'+productBuyNow.id}" th:text="${(productBuyNow.price - (productBuyNow.price * productBuyNow.discount / 100)) * 1} + ' $'"></div>
+                                            <div class="giacu" th:id="${'giacu'+productBuyNow.id}" th:text="${productBuyNow.price * 1} + ' $'"></div>
+                                            <a th:href="${'/public/cart/delete/'+productBuyNow.id}" class="remove mt-auto"><i class="far fa-trash-alt"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+
+                                    <div class="row form-group">
+                                        <div class="col-md-12 mb-3 mb-md-0">
+                                            <label class="text-black" for="fname">Address</label>
+                                            <input type="text" id="fname" name="address" class="form-control" placeholder="Enter address" required>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group mb-4">
+                                        <div class="col-md-12 mb-3 mb-md-0">
+                                            <label class="text-black" for="fname">Phone number</label>
+                                            <input type="text" id="fname" name="phoneNumber" class="form-control" placeholder="Enter phonenumber" pattern="[0-9]{3}[0-9]{4}[0-9]{3}" required>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group mb-4">
+                                        <div class="col-md-12 mb-3 mb-md-0">
+                                            <label class="text-black" for="fname">Note</label>
+                                            <textarea type="text" name="note" class="form-control" placeholder="Enter note" required></textarea>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row form-group">
+                                        <div class="col-md-12">
+                                            <input type="submit" id="orderId" value="Order" class="btn px-4 btn-danger text-white">
+                                        </div>
+                                    </div>
+
+
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="tonggiatien" style="margin-right: 20px">
+                                    <div class="group d-flex justify-content-between">
+                                        <p class="label">
+                                            Provisional:</p>
+                                        <p class="tamtinh" th:id="tamtinh" th:text="${(productBuyNow.price - (productBuyNow.price * productBuyNow.discount / 100)) * 1} + ' $'">328.000 ₫</p>
+                                    </div>
+                                    <div class="group d-flex justify-content-between">
+                                        <p class="label">
+                                            Transport free:</p>
+                                        <p class="phivanchuyen">3$</p>
+                                    </div>
+                                    <div class="group ">
+                                        <p class="label">
+                                            Discount code:</p>
+                                        <input type="text" id="discountCode" name="discountCode" onchange="addDiscountCode(1)" class="form-control" placeholder="Discount code" >
+                                    </div>
+                                    <div class="group d-flex justify-content-between align-items-center">
+                                        <strong class="text-uppercase">Total:</strong>
+                                        <p class="tongcong" th:id="tongtien" th:text="${(productBuyNow.price - (productBuyNow.price * productBuyNow.discount / 100)) * 1+3} + ' $'">328.000 ₫</p>
+                                    </div>
+                                    <small class="note d-flex justify-content-end text-muted">
+                                        (Prices include VAT)
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        </div>
+                    </form>
+                </div>
+
+                <!-- giao diện giỏ hàng khi có hàng (phần comment màu xanh bên dưới là phần 2 sản phẩm trong giỏ hàng nhưng giờ đã demo bằng jquery) -->
+                <div class="col-md-8 cart">
+                    <div class="cart-content py-3 pl-3">
+                         <h6 class="header-gio-hang">
+                             YOUR CART<span>(1 sản phẩm)</span></h6>
+                        <div class="cart-list-items">
+
+                            <div class="cart-item d-flex">
+                                <a href="product-item.html" class="img">
+                                    <img src="images/anhsp1.jpg" class="img-fluid" alt="anhsp1">
+                                </a>
+                                <div class="item-caption d-flex w-100">
+                                    <div class="item-info ml-3">
+                                        <a href="product-item.html" class="ten">Lập kế hoạch kinh doanh hiệu quả</a>
+                                        <div class="soluong d-flex">
+                                            <div class="input-number input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text btn-spin btn-dec">-</span>
+                                                </div>
+                                                <input type="text" value="1" class="soluongsp  text-center">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text btn-spin btn-inc">+</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="item-price ml-auto d-flex flex-column align-items-end">
+                                        <div class="giamoi">111.200 ₫</div>
+                                        <div class="giacu">139.000 ₫</div>
+                                        <span class="remove mt-auto"><i class="far fa-trash-alt"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                         <div class="row">
+                            <div class="col-md-3">
+                                <a href="/public/home" class="btn nutmuathem mb-3">Mua thêm</a>
+                            </div>
+                            <div class="col-md-5 offset-md-4">
+                                <div class="tonggiatien">
+                                    <div class="group d-flex justify-content-between">
+                                        <p class="label">Tạm tính:</p>
+                                        <p class="tamtinh">328.000 ₫</p>
+                                    </div>
+                                    <div class="group d-flex justify-content-between">
+                                        <p class="label">Giảm giá:</p>
+                                        <p class="giamgia">0 ₫</p>
+                                    </div>
+                                    <div class="group d-flex justify-content-between">
+                                        <p class="label">Phí vận chuyển:</p>
+                                        <p class="phivanchuyen">0 ₫</p>
+                                    </div>
+                                    <div class="group d-flex justify-content-between">
+                                        <p class="label">Phí dịch vụ:</p>
+                                        <p class="phidicvu">0 ₫</p>
+                                    </div>
+                                    <div class="group d-flex justify-content-between align-items-center">
+                                        <strong class="text-uppercase">Tổng cộng:</strong>
+                                        <p class="tongcong">328.000 ₫</p>
+                                    </div>
+                                    <small class="note d-flex justify-content-end text-muted">
+                                        (Giá đã bao gồm VAT)
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- giao diện phần thanh toán nằm bên phải  -->
+                <div class="col-md-4 cart-steps pl-0">
+                    <div id="cart-steps-accordion" role="tablist" aria-multiselectable="true">
+                        <!-- bước số 1: đăng nhập hoặc đăng ký -->
+                        <div class="card">
+                            <div class="card-header cardheader" role="tab" id="step1header">
+                                <h5 class="mb-0">
+                                    <a data-toggle="collapse" data-parent="#cart-steps-accordion"
+                                       href="#step1contentid" aria-expanded="true" aria-controls="step1contentid"
+                                       class="text-uppercase header"><span class="steps">1</span>
+                                        <span class="label">KHÁCH HÀNG MỚI / ĐĂNG NHẬP</span>
+                                        <i class="fa fa-chevron-right float-right"></i>
+                                    </a>
+                                </h5>
+                            </div>
+                            <div id="step1contentid" class="collapse in stepscontent" role="tabpanel"
+                                 aria-labelledby="step1header" >
+                                <div class="card-body p-0">
+                                    <nav>
+                                        <div class="nav nav-tabs dangnhap-dangky" id="nav-tab" role="tablist">
+                                            <a class="nav-item nav-link active text-center text-uppercase"
+                                               id="nav-dangnhap-tab" data-toggle="tab" href="#nav-dangnhap"
+                                               role="tab" aria-controls="nav-dangnhap" aria-selected="true">Đăng
+                                                nhập</a>
+                                            <a class="nav-item nav-link text-center text-uppercase"
+                                               id="nav-dangky-tab" data-toggle="tab" href="#nav-dangky" role="tab"
+                                               aria-controls="nav-dangky" aria-selected="false">Đăng ký</a>
+                                        </div>
+                                    </nav>
+                                    <div class="tab-content" id="nav-tabContent">
+                                        <div class="tab-pane fade show active" id="nav-dangnhap" role="tabpanel"
+                                             aria-labelledby="nav-dangnhap-tab">
+                                            <form id="form-signin-cart" class="form-signin mt-2">
+                                                <div class="form-label-group">
+                                                    <input type="email" id="inputEmail" class="form-control"
+                                                           placeholder="Nhập địa chỉ email" name="email" required
+                                                           autofocus>
+                                                </div>
+                                                <div class="form-label-group">
+                                                    <input type="password" id="inputPassword" class="form-control"
+                                                           placeholder="Mật khẩu" name="password" required>
+                                                </div>
+                                                <div class="custom-control custom-checkbox mb-3">
+                                                    <a href="#" class="float-right text-decoration-none"
+                                                       style="color: #F5A623">Quên mật khẩu</a>
+                                                </div>
+                                                <button
+                                                        class="btn btn-lg btn-block btn-signin text-uppercase text-white"
+                                                        type="submit" style="background: #F5A623">Đăng nhập</button>
+
+                                                <hr class="my-4">
+                                                <button class="btn btn-lg btn-google btn-block text-uppercase"
+                                                        type="submit"><i class="fab fa-google mr-2"></i> Đăng nhập bằng
+                                                    Google</button>
+                                                <button class="btn btn-lg btn-facebook btn-block text-uppercase"
+                                                        type="submit"><i class="fab fa-facebook-f mr-2"></i> Đăng nhập
+                                                    bằng Facebook</button>
+                                            </form>
+                                            <div class="btnduoicung" style="padding: 0 15px 15px 15px;">
+                                                <button
+                                                        class="btn btn-lg btn-block btn-shopping-without-signup text-uppercase text-white"
+                                                        style="background: #F5A623">Mua hàng không cần đăng ký</button>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="nav-dangky" role="tabpanel"
+                                             aria-labelledby="nav-dangky-tab">
+                                            <form id="form-signup-cart" class="form-signin mt-2">
+                                                <div class="form-label-group">
+                                                    <input type="text" id="inputName" class="form-control"
+                                                           placeholder="Nhập họ và tên" name="name" required autofocus>
+                                                </div>
+                                                <div class="form-label-group">
+                                                    <input type="text" id="inputPhone" class="form-control"
+                                                           placeholder="Nhập số điện thoại" name="phone" required>
+                                                </div>
+                                                <div class="form-label-group">
+                                                    <input type="email" id="inputEmail" class="form-control"
+                                                           placeholder="Nhập địa chỉ email" name="email" required>
+                                                </div>
+
+                                                <div class="form-label-group">
+                                                    <input type="password" id="inputPassword" class="form-control"
+                                                           placeholder="Nhập mật khẩu" name="password" required>
+                                                </div>
+                                                <div class="form-label-group mb-3">
+                                                    <input type="password" id="inputConfirmPassword"
+                                                           class="form-control" name="confirm_password"
+                                                           placeholder="Nhập lại mật khẩu" required>
+                                                </div>
+                                                <div class="custom-control custom-checkbox mb-3">
+                                                    <p class="text-center">Bằng việc đăng ký, bạn đã đồng ý với
+                                                        DealBook về</p>
+                                                    <a href="#" class="text-decoration-none text-center"
+                                                       style="color: #F5A623">Điều khoản dịch
+                                                        vụ & Chính sách bảo mật</a>
+                                                </div>
+                                                <hr class="mt-3 mb-2">
+                                                <button
+                                                        class="btn btn-lg btn-block btn-signin text-uppercase text-white mt-3"
+                                                        type="submit" style="background: #F5A623">Đăng ký</button>
+
+                                            </form>
+                                            <div class="btnduoicung" style="padding: 0 15px 15px 15px;">
+                                                <button
+                                                        class="btn btn-lg btn-block btn-shopping-without-signup text-uppercase text-white"
+                                                        style="background: #F5A623">Mua hàng không cần đăng ký</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- bước số 2: nhập địa chỉ giao hàng  -->
+                        <div class="card">
+                            <div class="card-header" role="tab" id="step2header">
+                                <h5 class="mb-0">
+                                    <a data-toggle="collapse" data-parent="#cart-steps-accordion"
+                                       href="#step2contentid" aria-expanded="true" aria-controls="step2contentid"
+                                       class="text-uppercase header"><span class="steps">2</span>
+                                        <span class="label">Địa chỉ giao hàng</span>
+                                        <i class="fa fa-chevron-right float-right"></i>
+                                    </a>
+                                </h5>
+                            </div>
+                            <div id="step2contentid" class="stepscontent collapse in" role="tabpanel"
+                                 aria-labelledby="step2header" >
+                                <div class="card-body">
+                                    <form class="form-diachigiaohang">
+                                        <div class="form-label-group">
+                                            <input type="text" id="inputName" class="form-control"
+                                                   placeholder="Nhập họ và tên" name="name" required autofocus>
+                                        </div>
+                                        <div class="form-label-group">
+                                            <input type="text" id="inputPhone" class="form-control"
+                                                   placeholder="Nhập số điện thoại" name="phone" required>
+                                        </div>
+                                        <div class="form-label-group">
+                                            <input type="email" id="inputEmail" class="form-control"
+                                                   placeholder="Nhập địa chỉ email" name="email" required>
+                                        </div>
+                                        <div class="form-label-group">
+                                            <input type="text" id="inputAddress" class="form-control"
+                                                   placeholder="Nhập Địa chỉ giao hàng" name="address" required>
+                                        </div>
+                                        <div class="form-label-group">
+                                            <input type="text" id="inputCity" class="form-control"
+                                                   placeholder="Nhập Tỉnh/Thành phố" name="city" required>
+                                        </div>
+                                        <div class="form-label-group">
+                                            <input type="text" id="inputDistrict" class="form-control"
+                                                   placeholder="Nhập Quận/Huyện" name="district" required>
+                                        </div>
+                                        <div class="form-label-group">
+                                                <textarea type="text" id="inputNote" class="form-control"
+                                                          placeholder="Nhập ghi chú (Nếu có)" name="note"></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- bước 3: thanh toán đặt mua  -->
+                            <div class="card">
+                                <div class="card-header" role="tab" id="step3header">
+                                    <h5 class="mb-0">
+                                        <a data-toggle="collapse" data-parent="#cart-steps-accordion"
+                                           href="#step3contentid" aria-expanded="true"
+                                           aria-controls="step3contentid" class="text-uppercase header"><span
+                                                class="steps">3</span>
+                                            <span class="label">Thanh toán đặt mua</span>
+                                            <i class="fa fa-chevron-right float-right"></i>
+                                        </a>
+                                    </h5>
+                                </div>
+                                <div id="step3contentid" class="stepscontent collapse in" role="tabpanel"
+                                     aria-labelledby="step3header" >
+                                    <div class="card-body" style="padding: 15px;">
+                                        <div class="goigiaohang">
+                                            <h6 class="header text-uppercase">Chọn gói giao hàng</h6>
+                                            <div class="option">
+                                                <input type="radio" name="goigiaohang" id="ghtc" checked>
+                                                <label for="ghtc">Giao hàng tiêu chuẩn</label>
+                                                <p>Từ 1-3 ngày tại TP. Hồ Chí Minh; từ 3-5 ngày đối với các Tỉnh /
+                                                    Thành khác</p>
+                                            </div>
+                                            <div class="option">
+                                                <input type="radio" name="goigiaohang" id="ghn">
+                                                <label for="ghn">Giao hàng nhanh</label>
+                                                <p>1 ngày tại TP. Hồ Chí Minh; từ 2-3 ngày đối với các Tỉnh / Thành
+                                                    khác</p>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="pttt">
+                                            <h6 class="header text-uppercase">Chọn phương thức thanh toán</h6>
+                                            <div class="option mb-2">
+                                                <input type="radio" name="pttt" id="cod" checked>
+                                                <label for="cod">Thanh toán bằng tiền mặt khi nhận hàng</label>
+                                            </div>
+                                            <div class="option option2">
+                                                <input type="radio" name="pttt" id="atm">
+                                                <label for="atm" class="chuyenkhoan">Thanh toán chuyển khoản trước
+                                                    qua Thẻ ATM/Internet Banking</label>
+                                                <p class="mt-4">- Quý khách chỉ chuyển khoản khi được xác nhận có đủ
+                                                    sách qua điện thoại từ DealBook.</p>
+                                                <p>- Thời gian chuyển khoản là trong tối đa 2 ngày từ khi có xác
+                                                    nhận đủ sách.</p>
+                                                <p>- Nội dung chuyển khoản cần ghi: <a href="#">[Mã đơn hàng]</a> ;
+                                                    hoặc <a href="#">[số điện thoại dùng đặt hàng]</a> </p>
+                                                <p>- Xem thông tin chuyển khoản của NetaBooks <a
+                                                        href="phuong-thuc-thanh-toan.html">tại đây</a> </p>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <button class="btn btn-lg btn-block btn-checkout text-uppercase text-white"
+                                                style="background: #F5A623">Đặt mua</button>
+                                        <p class="text-center note-before-checkout">(Vui lòng kiểm tra lại đơn hàng
+                                            trước khi Đặt Mua)</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <!-- het div cart-steps  -->
+            </div>
+            <!-- het row  -->
+        </div>
+        <!-- het cart-page  -->
+    </div>
+    <!-- het container  -->
+</section>
+<!-- het khoi content  -->
+
+<!-- thanh cac dich vu :mien phi giao hang, qua tang mien phi ........ -->
+
+<!-- het .abovefooter  -->
+
+<!-- footer  -->
+<footer th:replace="public/fragments :: footer">
+
+</footer>
+
+<!-- nut cuon len dau trang -->
+<div class="fixed-bottom">
+    <div class="btn btn-warning float-right rounded-circle nutcuonlen" id="backtotop" href="#" style="background:#CF111A;"><i
+            class="fa fa-chevron-up text-white"></i></div>
+</div>
+
+
+</body>
+
+</html>

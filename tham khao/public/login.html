@@ -1,0 +1,168 @@
+
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="public/fragments :: html_head">
+
+</head>
+<body id="top">
+
+<div id="overlayer"></div>
+<div class="loader">
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+
+<div class="site-wrap">
+
+    <div class="site-mobile-menu site-navbar-target">
+        <div class="site-mobile-menu-header">
+            <div class="site-mobile-menu-close mt-3">
+                <span class="icon-close2 js-menu-toggle"></span>
+            </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+    </div> <!-- .site-mobile-menu -->
+
+
+    <!-- NAVBAR -->
+    <header th:replace="public/fragments :: header_menu" class="site-navbar mt-3">
+
+    </header>
+    <div th:if="${msg_register_success}" class="toast" data-delay="2500" style="position:fixed; top: 100PX; left: 40PX;z-index: 2000;width: 300px">
+        <div class="toast-header" style="background-color: #1c7430">
+            <strong class="mr-auto" style="color: white">Notice</strong>
+            <small style="color: white">Now</small>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true" style="color: white">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body" >
+            <p th:text="'✅ ' +${msg_register_success}"></p>
+        </div>
+        <script>
+            $(document).ready(function(){
+                $('.toast').toast('show');
+            });
+        </script>
+    </div>
+
+    <div th:if="${msg_register_error}" class="toast" data-delay="2500" style="position:fixed; top: 100PX; left: 10PX;z-index: 2000;width: 300px">
+        <div class="toast-header" style="background-color: red">
+
+            <strong class="mr-auto" style="color: white">Notice</strong>
+            <small style="color: white">Now</small>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true" style="color: white">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body" >
+            <p th:text="'❌ ' +${msg_register_error}"></p>
+        </div>
+        <script>
+            $(document).ready(function(){
+                $('.toast').toast('show');
+            });
+        </script>
+    </div>
+    <!-- HOME -->
+    <section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    <h1 class="text-white font-weight-bold">Đăng kí / đăng nhập</h1>
+                    <div class="custom-breadcrumbs">
+                        <a href="#">Trang chủ</a> <span class="mx-2 slash">/</span>
+                        <span class="text-white"><strong>Đăng nhập</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="site-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mb-5">
+                    <h2 class="mb-4">Đăng kí</h2>
+                    <form action="/user/register1" method="post" class="p-4 border rounded">
+
+                        <div class="row form-group">
+                            <div class="col-md-12 mb-3 mb-md-0">
+                                <label class="text-black" for="fname">Email</label>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="Email" required>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-md-12 mb-3 mb-md-0">
+                                <label class="text-black" for="fname">Họ và tên</label>
+                                <input type="text" id="email" name="fullName" class="form-control" placeholder="Họ và tên" required>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-12 mb-3 mb-md-0">
+                                <label class="text-black" for="fname">Username</label>
+                                <input type="text" id="" name="userName" class="form-control" placeholder="User name" required>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-12 mb-3 mb-md-0">
+                                <label class="text-black" for="fname">Mật khẩu</label>
+                                <input type="password" id=""  name="password" class="form-control" placeholder="Mật khẩu" required>
+                            </div>
+                        </div>
+                        <div class="row form-group mb-4">
+                            <div class="col-md-12 mb-3 mb-md-0">
+                                <label class="text-black" for="fname">Nhập lại mật khẩu</label>
+                                <input type="password" id="fname" name="rePassword" class="form-control" placeholder="Nhập lại mật khẩu" required>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <input type="submit" value="Đăng kí" class="btn px-4 btn-primary text-white">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-6">
+                    <h2 class="mb-4">Đăng nhập</h2>
+                    <form action="/user/login" method="post" class="p-4 border rounded">
+
+                        <div class="row form-group">
+                            <div class="col-md-12 mb-3 mb-md-0">
+                                <label class="text-black" for="fname">Email</label>
+                                <input type="email" id="fname" name="email" class="form-control" placeholder="Email" required>
+                            </div>
+                        </div>
+                        <div class="row form-group mb-4">
+                            <div class="col-md-12 mb-3 mb-md-0">
+                                <label class="text-black" for="fname">Mật khẩu</label>
+                                <input type="password" id="fname" name="password" class="form-control" placeholder="Mật khẩu" required>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <input type="submit" value="Đăng nhập" class="btn px-4 btn-primary text-white">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <footer th:replace="public/fragments :: footer"  class="site-footer">
+
+    </footer>
+
+</div>
+
+
+</body>
+</html>
