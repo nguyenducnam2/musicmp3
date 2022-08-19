@@ -17,7 +17,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "orderDetail")
+@Table(name = "order_detail")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,8 +30,8 @@ public class OrderDetail {
     @Column(name = "unit_price")
     private float unitPrice;
 
-    @Column(name = "discount")
-    private float discount;
+    @Column(name = "quantity")
+    private int quantity;
 
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")

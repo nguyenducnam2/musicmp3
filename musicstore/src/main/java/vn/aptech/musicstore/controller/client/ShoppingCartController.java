@@ -109,16 +109,6 @@ public class ShoppingCartController {
         model.addAttribute("products", products);
         model.addAttribute("amount", cartService.getAmount());
         model.addAttribute("count", cartService.getCount());
-//        Account user = (Account) session.getAttribute("user");
-//        Order order = new Order();
-//        order.setAddress(user.getAddress());
-//        order.setPhoneNumber(user.getPhone());
-//        order.setUser(user);
-//        order.setIsPayment(0);
-//        order.setStatus(1);
-//        order.setOrderDate(java.time.LocalDate.now().toString());
-//        order.setAmount(0);
-//        model.addAttribute("order", orderService.save(order));
         
         return mv;
     }
