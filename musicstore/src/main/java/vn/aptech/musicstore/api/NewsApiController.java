@@ -54,6 +54,7 @@ public class NewsApiController {
 
     @PostMapping
     public String create(@RequestParam("title") String title,
+<<<<<<< Updated upstream
 	    @RequestParam("content") String content,
             @RequestParam("create_at") String date,
             @RequestParam("des") String des,
@@ -64,11 +65,23 @@ public class NewsApiController {
 	news.setContent(content);
         news.setDescription(des);
 	news.setImg_title(img);
+=======
+            @RequestParam("create_at") String date,
+            @RequestParam("des") String des,
+            @RequestParam("file") MultipartFile file) throws IOException {
+        News news = new News();
+        news.setTitle(title);
+        news.setDescription(des);
+>>>>>>> Stashed changes
         news.setImage(file.getOriginalFilename());
 //        String path_directory = "C:\\Users\\namng\\Documents\\NetBeansProjects\\musicstore\\src\\main\\resources\\static\\image";
 //        String path_directory = new ClassPathResource("static/image").getFile().getAbsolutePath();
         Files.copy(file.getInputStream(), Paths.get(base_url + "\\news" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+<<<<<<< Updated upstream
         //news.setView(0);
+=======
+        news.setView(0);
+>>>>>>> Stashed changes
         news.setCreated_at(date);
         service.save(news);
         return "created";
@@ -84,19 +97,29 @@ public class NewsApiController {
     public String update(@RequestParam("id") int id,
             @RequestParam("create_at") String date,
             @RequestParam("title") String title,
+<<<<<<< Updated upstream
 	    @RequestParam("content") String content,
             @RequestParam("des") String des,
 	    @RequestParam("img_title") String img,
+=======
+            @RequestParam("des") String des,
+>>>>>>> Stashed changes
             @RequestParam("file") MultipartFile file) throws IOException {
         if (!(file.isEmpty())) {
             News news = new News();
             news.setId(id);
             news.setTitle(title);
+<<<<<<< Updated upstream
 	    news.setContent(content);
             news.setDescription(des);
 	    news.setImg_title(img);
             news.setImage(file.getOriginalFilename());
             //news.setView(0);
+=======
+            news.setDescription(des);
+            news.setImage(file.getOriginalFilename());
+            news.setView(0);
+>>>>>>> Stashed changes
             news.setCreated_at(date);
             service.save(news);
 //            String path_directory = "C:\\Users\\namng\\Documents\\NetBeansProjects\\musicstore\\src\\main\\resources\\static\\image";
@@ -107,11 +130,17 @@ public class NewsApiController {
             News news = new News();
             news.setId(id);
             news.setTitle(title);
+<<<<<<< Updated upstream
 	    news.setContent(content);
             news.setDescription(des);
 	    news.setImg_title(img);
             news.setImage(news2.getImage());
             //news.setView(0);
+=======
+            news.setDescription(des);
+            news.setImage(news2.getImage());
+            news.setView(0);
+>>>>>>> Stashed changes
             news.setCreated_at(date);
             service.save(news);
         }
