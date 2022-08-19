@@ -30,20 +30,14 @@ public class News {
     private Integer id;
     @Column(name = "title")
     private String title;
-<<<<<<< Updated upstream
     @Column(name = "content")
     private String content;
-=======
->>>>>>> Stashed changes
     @Column(name = "description")
     private String description;
     @Column(name = "image")
     private String image;
-<<<<<<< Updated upstream
     @Column(name = "img_title")
     private String img_title;
-=======
->>>>>>> Stashed changes
     @Column(name = "[view]")
     private Integer view;
     @Column(name = "created_at")
