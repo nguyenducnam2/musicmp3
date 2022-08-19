@@ -27,9 +27,8 @@
                         <ul class="list-unstyled iq-menu-top d-flex justify-content-between mb-0 p-0">
                             <li class="active"><a th:href="@{/song/16}">Home</a></li>
                             <li><a th:href="@{/contact}">Contact</a></li>
-                            <li><a th:href="@{/product}">Product</a></li>
+                            <li th:if="${(user != null) && (user.role=='ROLE_USER' || user.role=='ROLE_VIP')}"><a th:href="@{/product}">Product</a></li>
                             <li><a th:href="@{/news}">News</a></li>
-                            <li><a th:href="@{/cart/index}">Cart</a></li>
                         </ul>
                         <ul class="navbar-nav ml-auto navbar-list">
                             <li class="nav-item nav-icon">
@@ -70,6 +69,12 @@
                                     <a th:if="${session.user.role == 'ROLE_ADMIN' || session.user.role == 'ROLE_MODERATOR' || session.user.role == 'ROLE_EDITOR'}" th:href="@{/admin}" class="ml-lg-5 font-size-32 text-black rounded">
                                         <i class="las la-cog"></i>
                                         <span class=" dots"></span>
+                                    </a>
+                                </li>
+                                <li class="nav-item nav-icon">
+                                    <a  th:if="${(user != null) && (user.role=='ROLE_USER' || user.role=='ROLE_VIP')}" th:href="@{/cart/index}" class="ml-lg-5 font-size-32 text-black rounded">
+                                        <i class="las la-shopping-cart"></i>
+                                        <span class=" dots"></span><p th:text="${count}" style="color: tomato; "></p>
                                     </a>
                                 </li>
 

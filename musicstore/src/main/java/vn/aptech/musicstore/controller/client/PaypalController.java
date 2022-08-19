@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.UUID;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
+import org.springframework.ui.Model;
 import vn.aptech.musicstore.entity.Account;
 import vn.aptech.musicstore.entity.CartItem;
 import vn.aptech.musicstore.entity.DownloadAllowed;
@@ -36,6 +37,7 @@ import vn.aptech.musicstore.service.DownloadAllowedService;
 import vn.aptech.musicstore.service.OrderDetailService;
 import vn.aptech.musicstore.service.OrderService;
 import vn.aptech.musicstore.service.PaypalService;
+import vn.aptech.musicstore.service.ProductService;
 import vn.aptech.musicstore.service.ShoppingCartService;
 import vn.aptech.musicstore.service.SongOrderDetailService;
 import vn.aptech.musicstore.service.SongOrderService;
@@ -62,6 +64,9 @@ public class PaypalController {
 
     @Autowired
     private CartService cartService;
+    
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     private ShoppingCartService shoppingCartService;
@@ -91,7 +96,10 @@ public class PaypalController {
 //        return mv;
 //    }
     @GetMapping("/cart/pay")
-    public String payment(HttpServletRequest request) {
+    public String payment(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
         try {
             Payment payment = service.createPayment(shoppingCartService.getAmount(), "USD", "paypal",
                     "sale", null, "http://localhost:8080/cart/cancel",
@@ -109,17 +117,22 @@ public class PaypalController {
     }
 
     @GetMapping("/cart/cancel")
-    public String cancelPay() {
+    public String cancelPay(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
         return "redirect:/";
     }
 
     @GetMapping("/cart/success")
-    public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, HttpServletRequest request) {
+    public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
         try {
             Payment payment = service.executePayment(paymentId, payerId);
             System.out.println(payment.toJSON());
             if (payment.getState().equals("approved")) {
-                HttpSession session = request.getSession();
                 Account user = (Account) session.getAttribute("user");
                 Order order = new Order();
                 List<Product> newList = shoppingCartService.getProducts().stream().collect(toList());
@@ -133,12 +146,16 @@ public class PaypalController {
                 order.setAmount((float) shoppingCartService.getAmount());
                 orderService.save(order);
                 for (int i = 0; i < newList.size(); i++) {
+                    Optional<Product> product = productService.findById(newList.get(i).getId());
+                    Product products = product.get();
                     OrderDetail detail = new OrderDetail();
                     detail.setOrder(order);
-                    detail.setProduct(newList.get(i));
+                    detail.setProduct(products);
                     detail.setQuantity(newList.get(i).getQuantity());
-                    detail.setUnitPrice(newList.get(i).getPrice());
+                    detail.setUnitPrice(products.getPrice());
                     orderDetailService.save(detail);
+                    products.setQuantity(products.getQuantity()-detail.getQuantity());
+                    productService.save(products);
                 }
                 shoppingCartService.clear();
                 return "client/cart/success";

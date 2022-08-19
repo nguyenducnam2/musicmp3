@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,26 +41,38 @@ public class ProductClientController {
     private CategoryService cateservice;
             
     @GetMapping("/product")
-    public String index(Model model) {
+    public String index(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("product",service.findAll());
         model.addAttribute("categories",cateservice.findAll());
         return "client/product/index";
     }
     
      @GetMapping("/product/{id}")
-    public String details(Model model, @PathVariable("id") int id) {
+    public String details(Model model, HttpServletRequest request, @PathVariable("id") int id) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("product", service.findById(id).orElseThrow());
         return "client/product/index";
     }
    
      @GetMapping("/product/detail/{id}")
-    public String getdetails(Model model, @PathVariable("id") int id) {
+    public String getdetails(Model model, HttpServletRequest request, @PathVariable("id") int id) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("product", service.findById(id).orElseThrow());
         return "client/product/detail";
     }
     
     @GetMapping(value = "/product/category/{id}")
-    public String getProductByCategory( @PathVariable("id") int categoryId,Model model){
+    public String getProductByCategory( @PathVariable("id") int categoryId,Model model, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
         List<Product> product=new ArrayList<>();
         for(Product item:service.findAll()){
             if(item.getCategoryId()==cateservice.findById(categoryId).orElseThrow()){
