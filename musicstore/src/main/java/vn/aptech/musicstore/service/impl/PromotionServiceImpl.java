@@ -4,10 +4,42 @@
  */
 package vn.aptech.musicstore.service.impl;
 
+import java.util.List;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import vn.aptech.musicstore.entity.Promotion;
+import vn.aptech.musicstore.repository.PromotionRepository;
+import vn.aptech.musicstore.repository.UpgradeVipOrderDetailsRepository;
+import vn.aptech.musicstore.service.PromotionService;
+
 /**
  *
  * @author Administrator
  */
-public class PromotionServiceImpl {
-    
+
+@Service
+public class PromotionServiceImpl implements PromotionService{
+     @Autowired
+    private PromotionRepository repo;
+
+    @Override
+    public List<Promotion> findAll() {
+        return repo.findAll();
+    }
+
+    @Override
+    public Optional<Promotion> findById(int id) {
+        return repo.findById(id);
+    }
+
+    @Override
+    public Promotion save(Promotion obj) {
+        return repo.save(obj);
+    }
+
+    @Override
+    public void delete(Promotion obj) {
+        repo.delete(obj);
+    }
 }

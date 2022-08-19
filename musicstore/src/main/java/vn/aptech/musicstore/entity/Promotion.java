@@ -32,21 +32,21 @@ public class Promotion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private double discount;
+    private int discount;
     private String title;
     private String code;
     private Date startDate;
     private Date endDate;
-    private Date expirationTime;
 
 //    private int duration;
     private int useTimes;
 
-    public Promotion(int id, double discount, String title, String code, Date endDate, int useTimes) {
+    public Promotion(int id, int discount, String title, String code,Date startDate, Date endDate, int useTimes) {
         this.id = id;
         this.discount = discount;
         this.title = title;
         this.code = code;
+        
         this.startDate = startDate();
         this.endDate = endDate;
 
@@ -59,10 +59,4 @@ public class Promotion {
         return new Date(calendar.getTime().getTime());
     }
 
-//    private Date calculateExpirationDate(int expirationTime) {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTimeInMillis(new Date().getTime());
-//        calendar.add(Calendar.MINUTE, expirationTime);
-//        return new Date(calendar.getTime().getTime());
-//    }
 }

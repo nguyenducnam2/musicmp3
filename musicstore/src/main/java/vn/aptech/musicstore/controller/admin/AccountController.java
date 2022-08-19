@@ -88,8 +88,6 @@ public class AccountController {
         model.addAttribute("name", "null");
         model.addAttribute("mess", "Successfully");
         model.addAttribute("list", serviceAccount.findAll());
-        System.out.println("name " + model.getAttribute("name"));
-        System.out.println("mess " + model.getAttribute("mess"));
         return "admin/account/index";
     }
 

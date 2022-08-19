@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import vn.aptech.musicstore.entity.Promotion;
 import vn.aptech.musicstore.service.PromotionService;
 
@@ -27,7 +25,8 @@ import vn.aptech.musicstore.service.PromotionService;
 @Controller
 @RequestMapping("/admin/promotion")
 public class PromotionController {
-       @Autowired
+
+    @Autowired
     private PromotionService servicePromotion;
 
     @GetMapping
@@ -37,8 +36,9 @@ public class PromotionController {
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("list", servicePromotion.findAll());
         model.addAttribute("name", "null");
-        return "admin/account/index";
+        return "admin/promotion/index";
     }
+
     @GetMapping("/create")
     public String create(Model model) {
         model.addAttribute("promotion", new Promotion());
@@ -47,10 +47,12 @@ public class PromotionController {
     }
 
     @PostMapping("/save")
-    public String save(Model model, @ModelAttribute("promotion") Promotion promotion, @RequestParam("file") MultipartFile file) throws IOException {
-      
-            servicePromotion.save(promotion);
-        return "redirect:/admin/promotion";
+    public String save(Model model, @ModelAttribute("promotion") Promotion promotion) throws IOException {
+        servicePromotion.save(promotion);
+        model.addAttribute("name", "null");
+        model.addAttribute("mess", "Successfully");
+        model.addAttribute("list", servicePromotion.findAll());
+        return "/admin/promotion/index";
     }
 
     @GetMapping("/update/{id}")
@@ -60,10 +62,13 @@ public class PromotionController {
         return "admin/promotion/create";
     }
 
-//    @GetMapping("/delete/{id}")
-//    public String delete(@PathVariable("id") int id) {
-//        servicePromotion.deleteById(id);
-//        return "redirect:/admin/prôpromotion";
-//    }
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable("id") int id,Model model) {
+        servicePromotion.delete(servicePromotion.findById(id).get());
+        model.addAttribute("name", "null");
+        model.addAttribute("mess", "Successfully");
+        model.addAttribute("list", servicePromotion.findAll());
+        return "/admin/promotion/index";
+    }
 
 }
