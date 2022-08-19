@@ -33,13 +33,23 @@ public class PromotionCode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String code;
-    private Date expirationTime;
     private int useTimes;
+    
+    @Column(name = "user_id", insertable = false, updatable = false)
+    private Long userId;
 
-    private Date calculateExpirationDate(int expirationTime) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(new Date().getTime());
-        calendar.add(Calendar.MINUTE, expirationTime);
-        return new Date(calendar.getTime().getTime());
-    }
+    // @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private Account acc;
+
+     @Column(name = "promotion_id", insertable = false, updatable = false)
+    private int promotionId;
+
+    // @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne
+    @JoinColumn(name = "promotion_id", referencedColumnName = "id")
+    private Promotion promotion;
+    
+   
 }

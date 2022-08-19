@@ -35,17 +35,29 @@ public class Promotion {
     private double discount;
     private String title;
     private String code;
+    private Date startDate;
+    private Date endDate;
     private Date expirationTime;
-    private int useTimes;
-    
-       @Column(name = "user_id",insertable = false,updatable = false)
-    private Long userId;
 
-    
-   // @OneToOne(fetch = FetchType.EAGER)
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private Account acc;
+//    private int duration;
+    private int useTimes;
+
+    public Promotion(int id, double discount, String title, String code, Date endDate, int useTimes) {
+        this.id = id;
+        this.discount = discount;
+        this.title = title;
+        this.code = code;
+        this.startDate = startDate();
+        this.endDate = endDate;
+
+//        this.expirationTime = new Date(this.endDate.getTime() - this.startDate.getTime());
+        this.useTimes = useTimes;
+    }
+
+    private Date startDate() {
+        Calendar calendar = Calendar.getInstance();
+        return new Date(calendar.getTime().getTime());
+    }
 
 //    private Date calculateExpirationDate(int expirationTime) {
 //        Calendar calendar = Calendar.getInstance();
