@@ -7,33 +7,36 @@ package vn.aptech.musicstore.controller.client;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import static org.apache.tomcat.jni.User.username;
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toList;
 import vn.aptech.musicstore.entity.Account;
 import vn.aptech.musicstore.entity.CartItem;
 import vn.aptech.musicstore.entity.DownloadAllowed;
 import vn.aptech.musicstore.entity.Order;
 import vn.aptech.musicstore.entity.OrderDetail;
+import vn.aptech.musicstore.entity.Product;
 import vn.aptech.musicstore.entity.SongOrder;
 import vn.aptech.musicstore.entity.SongOrderDetail;
 import vn.aptech.musicstore.entity.UpgradeVipOrderDetails;
-import vn.aptech.musicstore.entity.model.OrderOnline;
 import vn.aptech.musicstore.service.CartItemService;
 import vn.aptech.musicstore.service.CartService;
 import vn.aptech.musicstore.service.DownloadAllowedService;
 import vn.aptech.musicstore.service.OrderDetailService;
 import vn.aptech.musicstore.service.OrderService;
 import vn.aptech.musicstore.service.PaypalService;
+import vn.aptech.musicstore.service.ShoppingCartService;
 import vn.aptech.musicstore.service.SongOrderDetailService;
 import vn.aptech.musicstore.service.SongOrderService;
 import vn.aptech.musicstore.service.UpgradeVipOrderDetailsService;
@@ -49,9 +52,8 @@ public class PaypalController {
     @Autowired
     PaypalService service;
 
-    public static final String SUCCESS_URL = "pay/success";
-    public static final String CANCEL_URL = "pay/cancel";
-
+//    public static final String SUCCESS_URL = "cart/success";
+//    public static final String CANCEL_URL = "cart/cancel";
     @Autowired
     OrderService orderService;
 
@@ -60,6 +62,9 @@ public class PaypalController {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private ShoppingCartService shoppingCartService;
 
     @Autowired
     private CartItemService cartItemService;
@@ -85,7 +90,7 @@ public class PaypalController {
 //        mv.addObject("orderItems", listOrderItem);
 //        return mv;
 //    }
-    @GetMapping("/pay")
+    @GetMapping("/cart/pay")
     public String payment(HttpServletRequest request, @RequestParam("amount") Double amount, @RequestParam("orderId") int orderId) {
         try {
             Payment payment = service.createPayment(amount, "USD", "paypal",
@@ -107,26 +112,45 @@ public class PaypalController {
         return "redirect:/";
     }
 
-    @GetMapping(value = CANCEL_URL)
+    @GetMapping("/cart/cancel")
     public String cancelPay() {
         return "redirect:/";
     }
 
-    @GetMapping(value = SUCCESS_URL)
-    public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, HttpServletRequest request, RedirectAttributes rd) {
-        try {
-            Payment payment = service.executePayment(paymentId, payerId);
-            System.out.println(payment.toJSON());
-            if (payment.getState().equals("approved")) {
-                HttpSession session = request.getSession();
-                int id = (int) session.getAttribute("OrderId");
-                orderService.updateIsPayment(1, id);
-                return "redirect:/";
-            }
-        } catch (PayPalRESTException e) {
-            System.out.println(e.getMessage());
+    @GetMapping("/cart/success")
+    public String successPay(HttpServletRequest request) {
+//        try {
+//            Payment payment = service.executePayment(paymentId, payerId);
+//            System.out.println(payment.toJSON());
+//            if (payment.getState().equals("approved")) {
+        HttpSession session = request.getSession();
+        Account user = (Account) session.getAttribute("user");
+        Order order = new Order();
+        List<Product> newList = shoppingCartService.getProducts().stream().collect(toList());
+        order.setAddress(user.getAddress());
+        order.setPhoneNumber(user.getPhone());
+        order.setUser(user);
+        order.setIsPayment(0);
+        order.setStatus(1);
+        order.setDescription("Paypal");
+        order.setOrderDate(java.time.LocalDate.now().toString());
+        order.setAmount((float) shoppingCartService.getAmount());
+        orderService.save(order);
+        for (int i = 0; i < newList.size(); i++) {
+            OrderDetail detail = new OrderDetail();
+            detail.setOrder(order);
+            detail.setProduct(newList.get(i));
+            detail.setQuantity(newList.get(i).getQuantity());
+            detail.setUnitPrice(newList.get(i).getPrice());
+            orderDetailService.save(detail);
         }
-        return "redirect:/";
+        shoppingCartService.clear();
+        return "client/cart/success";
+//            }
+//        } catch (PayPalRESTException e) {
+//            System.out.println(e.getMessage());
+//        }
+//        return "redirect:/";
     }
 
     private String applicationUrl(HttpServletRequest request) {

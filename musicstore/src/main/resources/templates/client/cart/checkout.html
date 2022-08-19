@@ -219,7 +219,7 @@
                                             <div class="col text-right" th:text="${#numbers.formatCurrency(amount)}"></div>
                                         </div>
                                         <div class="row lower">
-                                            <a style="color: white;" class="btn">Checkout</a>
+                                            <a style="color: white;" th:href="@{/cart/success}" class="btn">Checkout</a>
                                         </div>
                                     </div>
                                 </div>
@@ -228,6 +228,11 @@
                     </div>
                 </div>
             </div>
+<!--            <input type="hidden" id="productId" th:value="${product.id}"/>
+            <input type="hidden" id="amount" th:value="${amount}"/>
+            <script>
+                document.querySelector('#btnPay').href="http://localhost:8080/cart/pay?amount="+document.querySelector('#amount').value+"&productId="+document.querySelector('#productId').value;
+            </script>-->
         </div>
     </body>
 </html>
