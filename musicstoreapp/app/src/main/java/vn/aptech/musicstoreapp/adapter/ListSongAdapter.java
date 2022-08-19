@@ -75,7 +75,11 @@ public class ListSongAdapter extends RecyclerView.Adapter<ListSongAdapter.ViewHo
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, PlayMusicActivity.class);
-                    intent.putExtra("cakhuc", mangbaihat.get(getAdapterPosition()));
+                    Song selected = mangbaihat.get(getAdapterPosition());
+                    Song first = mangbaihat.get(0);
+                    mangbaihat.set(0, selected);
+                    mangbaihat.set(getAdapterPosition(), first);
+                    intent.putExtra("cacbaihat", mangbaihat);
                     context.startActivity(intent);
                 }
             });

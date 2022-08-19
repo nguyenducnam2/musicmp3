@@ -20,18 +20,24 @@
         <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/activity_listsong.xml" value="0.25" />
         <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/activity_login.xml" value="0.22" />
         <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/activity_main.xml" value="0.16530797101449277" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/activity_menu2.xml" value="0.1125" />
         <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/activity_playmusic.xml" value="0.1" />
         <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/activity_test.xml" value="0.1125" />
         <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/album_list.xml" value="0.13489583333333333" />
-	<entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/artist_list.xml" value="0.17346014492753623" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/artist_list.xml" value="0.17346014492753623" />
         <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/customdialog.xml" value="0.18568840579710144" />
         <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/dialog_forget_password.xml" value="0.18" />
         <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/fragment__dialog__forget__password.xml" value="0.1" />
         <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/fragment_album.xml" value="0.13489583333333333" />
         <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/fragment_artist.xml" value="0.17346014492753623" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/fragment_genre.xml" value="0.1" />
         <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/fragment_main_home.xml" value="0.17346014492753623" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/fragment_search.xml" value="0.1" />
         <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/fragment_songcd.xml" value="0.1" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/genre_list.xml" value="0.1" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/result_list.xml" value="0.1" />
         <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/song_list.xml" value="0.15896739130434784" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/menu/menu_search.xml" value="0.67" />
       </map>
     </option>
   </component>

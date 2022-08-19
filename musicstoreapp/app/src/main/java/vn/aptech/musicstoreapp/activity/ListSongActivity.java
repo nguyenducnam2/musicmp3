@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,9 +26,12 @@ import vn.aptech.musicstoreapp.R;
 import vn.aptech.musicstoreapp.adapter.ListSongAdapter;
 import vn.aptech.musicstoreapp.entity.Album;
 import vn.aptech.musicstoreapp.entity.Artist;
+import vn.aptech.musicstoreapp.entity.Genre;
 import vn.aptech.musicstoreapp.entity.Song;
 import vn.aptech.musicstoreapp.service_api.api.ApiUtil;
+import vn.aptech.musicstoreapp.service_api.service.AlbumService;
 import vn.aptech.musicstoreapp.service_api.service.ArtistService;
+import vn.aptech.musicstoreapp.service_api.service.GenreService;
 
 public class ListSongActivity extends AppCompatActivity {
     androidx.appcompat.widget.Toolbar toolbar;
@@ -36,6 +40,7 @@ public class ListSongActivity extends AppCompatActivity {
     TextView txtcollapsing;
     Artist ngheSi = null;
     Album bangXepHang = null;
+    Genre genre;
     ImageView imgdanhsachcakhuc;
     ArrayList<Song> mangbaihat;
     ListSongAdapter danhsachbaihatAdapter;
@@ -49,11 +54,7 @@ public class ListSongActivity extends AppCompatActivity {
         mapping();
         floatingActionButton.setVisibility(View.GONE);
         DataIntent();
-      //  overridePendingTransition(R.anim.anim_intent_in, R.anim.anim_intent_out);
-
-
-
-        swipeRefreshLayout = findViewById(R.id.swipedanhsachbaihat);
+        //  overridePendingTransition(R.anim.anim_intent_in, R.anim.anim_intent_out);
 
 
     }
@@ -65,8 +66,7 @@ public class ListSongActivity extends AppCompatActivity {
         floatingActionButton = findViewById(R.id.floatingactionbutton);
         txtcollapsing = findViewById(R.id.textViewcollapsing);
         btnThemnhac = findViewById(R.id.btnthemnhacthuvien);
-
-
+        swipeRefreshLayout = findViewById(R.id.swipedanhsachbaihat);
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,16 +87,15 @@ public class ListSongActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<List<Artist>> call, Response<List<Artist>> response) {
                         ArrayList<Artist> arr = (ArrayList<Artist>) response.body();
-                        for (Artist item:arr){
-                            if(item.getId()==intent.getExtras().getInt("intentnghesi")){
-                                ngheSi=item;
+                        for (Artist item : arr) {
+                            if (item.getId() == intent.getExtras().getInt("intentnghesi")) {
+                                ngheSi = item;
                             }
                         }
                         if (ngheSi != null && !ngheSi.toString().equals("")) {
                             setValueInView(ApiUtil.WEBDATA_URL + "artist/" + ngheSi.getImage());
                             GetDataNgheSi(ngheSi.getId());
                             txtcollapsing.setText(ngheSi.getName());
-
                         }
                     }
 
@@ -106,8 +105,31 @@ public class ListSongActivity extends AppCompatActivity {
                     }
                 });
             } else if (intent.hasExtra("intentbangxephang")) {
-                bangXepHang = (Album) intent.getSerializableExtra("intentbangxephang");
-            }/*else
+                bangXepHang = (Album) intent.getParcelableExtra("intentbangxephang");
+                if (bangXepHang != null && !bangXepHang.toString().equals("")) {
+                    setValueInView(ApiUtil.WEBDATA_URL + "album/" + bangXepHang.getImage());
+                    GetDataBangXepHang(bangXepHang.getId());
+                    txtcollapsing.setText(bangXepHang.getName());
+                }
+            } else if (intent.hasExtra("intentchude")) {
+                genre = (Genre) intent.getParcelableExtra("intentchude");
+                if (genre != null && !genre.toString().equals("")) {
+                    ApiUtil.getGenreService().getSongById(genre.getId()).enqueue(new Callback<List<Song>>() {
+                        @Override
+                        public void onResponse(Call<List<Song>> call, Response<List<Song>> response) {
+                            Random random = new Random();
+                            setValueInView(ApiUtil.WEBDATA_URL+"artist/"+response.body().get(random.nextInt(response.body().size())).getArtist().getImage());
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<Song>> call, Throwable t) {
+
+                        }
+                    });
+                    GetDataChuDe(genre.getId());
+                    txtcollapsing.setText(genre.getName());
+                }
+            }/*else/*else
             if(intent.hasExtra("idthuvienplaylist")){
                 thuVienPlayList = (ThuVienPlayListModel) intent.getSerializableExtra("idthuvienplaylist");
                 id = thuVienPlayList.getIDThuVienPlayList();
@@ -122,6 +144,44 @@ public class ListSongActivity extends AppCompatActivity {
 
     private void GetDataNgheSi(int id) {
         ArtistService dataservice = ApiUtil.getArtistService();
+        Call<List<Song>> callback = dataservice.getSongById(id);
+        callback.enqueue(new Callback<List<Song>>() {
+            @Override
+            public void onResponse(Call<List<Song>> call, Response<List<Song>> response) {
+                mangbaihat = (ArrayList<Song>) response.body();
+                danhsachbaihatAdapter = new ListSongAdapter(ListSongActivity.this, mangbaihat);
+                recyclerViewdanhsachbaihat.setLayoutManager(new LinearLayoutManager(ListSongActivity.this));
+                recyclerViewdanhsachbaihat.setAdapter(danhsachbaihatAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<List<Song>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void GetDataBangXepHang(int id) {
+        AlbumService dataservice = ApiUtil.getAlbumService();
+        Call<List<Song>> callback = dataservice.getSongById(id);
+        callback.enqueue(new Callback<List<Song>>() {
+            @Override
+            public void onResponse(Call<List<Song>> call, Response<List<Song>> response) {
+                mangbaihat = (ArrayList<Song>) response.body();
+                danhsachbaihatAdapter = new ListSongAdapter(ListSongActivity.this, mangbaihat);
+                recyclerViewdanhsachbaihat.setLayoutManager(new LinearLayoutManager(ListSongActivity.this));
+                recyclerViewdanhsachbaihat.setAdapter(danhsachbaihatAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<List<Song>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void GetDataChuDe(int id) {
+        GenreService dataservice = ApiUtil.getGenreService();
         Call<List<Song>> callback = dataservice.getSongById(id);
         callback.enqueue(new Callback<List<Song>>() {
             @Override

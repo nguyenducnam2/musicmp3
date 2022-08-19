@@ -260,7 +260,7 @@ public class PlayMusicActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (mangbaihat.size() > 0) {
-                    setView(taikhoan, mangbaihat.get(position).getId(),ApiUtil.WEBDATA_URL + "album/" + mangbaihat.get(position).getArtist().getImage(), mangbaihat.get(position).getName(), mangbaihat.get(position).getArtist().getName());
+                    setView(taikhoan, mangbaihat.get(position).getId(),ApiUtil.WEBDATA_URL + "album/" + mangbaihat.get(position).getAlbum().getImage(), mangbaihat.get(position).getName(), mangbaihat.get(position).getArtist().getName());
                 }/*else if (mangbaihetthuvienplaylist.size() > 0){
                     setView(taikhoan, mangbaihetthuvienplaylist.get(position).getIdBaiHat(),
                             mangbaihetthuvienplaylist.get(position).getHinhBaiHat(), mangbaihetthuvienplaylist.get(position).getTenBaiHat()

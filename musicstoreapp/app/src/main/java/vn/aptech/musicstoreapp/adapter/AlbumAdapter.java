@@ -16,6 +16,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import vn.aptech.musicstoreapp.R;
+import vn.aptech.musicstoreapp.activity.ListSongActivity;
 import vn.aptech.musicstoreapp.entity.Album;
 import vn.aptech.musicstoreapp.service_api.api.ApiUtil;
 
@@ -43,14 +44,14 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
         Album album = mangbangxephang.get(position);
         holder.txtbangxephang.setText(album.getName());
         Picasso.get(/*context*/).load(ApiUtil.WEBDATA_URL+"album/"+album.getImage()).into(holder.imgbangxephang);
-      /*  view.setOnClickListener(new View.OnClickListener() {
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, DanhsachbaihatActivity.class);
+                Intent intent = new Intent(context, ListSongActivity.class);
                 intent.putExtra("intentbangxephang", mangbangxephang.get(position));
                 context.startActivity(intent);
             }
-        });*/
+        });
     }
 
     @Override

@@ -34,7 +34,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/appbarlayouttimkiem"
         android:layout_marginTop="20dp"
-        android:background="@drawable/bcgprofile" />
+        android:background="@drawable/dark" />
 
     <TextView
         android:id="@+id/textviewtimkiemnull"

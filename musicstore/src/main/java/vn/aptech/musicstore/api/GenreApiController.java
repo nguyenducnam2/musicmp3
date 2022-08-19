@@ -49,6 +49,11 @@ public class GenreApiController {
     public Optional<Genre> findById(@PathVariable("id") int id) {
         return service.findById(id);
     }
+    
+    @PostMapping("/getSongxById")
+    public List<Song> getSongxById(@RequestParam("id")int id){
+        return service_song.findByGenreId(id);
+    }
 
     @PostMapping
     public String create(@RequestBody Genre genre) {

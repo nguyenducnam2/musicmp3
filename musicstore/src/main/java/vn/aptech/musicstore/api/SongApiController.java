@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -74,11 +73,11 @@ public class SongApiController {
     public List<Song> findByAlbumId(@RequestParam("albumId") int albumId) {
         return service.findByAlbumId(albumId);
     }
-    
-     @GetMapping("/findByAccountId")
+
+    @GetMapping("/findByAccountId")
     public List<Song> findByAccountId(@RequestParam("accountId") Long accountId) {
         return service.findByAccountId(accountId);
-        
+
     }
 
     @GetMapping("/findByPlaylistId")
@@ -88,6 +87,11 @@ public class SongApiController {
             anotherlist.add(service_plitem.findByPlaylistId(playlistId).get(i).getSong());
         }
         return anotherlist;
+    }
+
+    @PostMapping("/searchByName")
+    public List<Song> searchByName(@RequestParam("name") String name) {
+        return service.findByName(name);
     }
 
     @PostMapping

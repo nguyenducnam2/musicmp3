@@ -13,6 +13,7 @@ import com.google.android.material.tabs.TabLayout;
 import vn.aptech.musicstoreapp.R;
 import vn.aptech.musicstoreapp.adapter.MainViewPagerAdapter;
 import vn.aptech.musicstoreapp.fragment.Fragment_Main_Home;
+import vn.aptech.musicstoreapp.fragment.Fragment_Search;
 import vn.aptech.musicstoreapp.fragment.LoadingDialog;
 
 public class HomeActivity extends AppCompatActivity {
@@ -42,9 +43,11 @@ public class HomeActivity extends AppCompatActivity {
     private void init() {
         MainViewPagerAdapter mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager());
         mainViewPagerAdapter.addFragment(new Fragment_Main_Home(), "");
+        mainViewPagerAdapter.addFragment(new Fragment_Search(), "");
         viewPager.setAdapter(mainViewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setIcon(R.drawable.icontrangchu);
+        tabLayout.getTabAt(1).setIcon(R.drawable.icontimkiem);
 
     }
 }

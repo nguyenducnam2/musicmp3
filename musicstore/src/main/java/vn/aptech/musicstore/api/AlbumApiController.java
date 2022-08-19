@@ -62,6 +62,11 @@ public class AlbumApiController {
     public Optional<Album> findById(@PathVariable int id) {
         return service.findById(id);
     }
+    
+    @PostMapping("/getSongById")
+    public List<Song> getSongById(@RequestParam("id")int id){
+        return service_song.findByAlbumId(id);
+    }
 
     @PostMapping
     public String create(@RequestParam("name") String name,
