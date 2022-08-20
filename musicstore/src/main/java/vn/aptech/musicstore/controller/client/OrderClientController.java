@@ -2,21 +2,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package vn.aptech.musicstore.controller.admin;
+package vn.aptech.musicstore.controller.client;
 
-import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+import vn.aptech.musicstore.entity.Account;
 import vn.aptech.musicstore.entity.Order;
 import vn.aptech.musicstore.entity.OrderDetail;
 import vn.aptech.musicstore.service.OrderDetailService;
@@ -28,8 +26,8 @@ import vn.aptech.musicstore.service.ProductService;
  * @author Dung
  */
 @Controller
-@RequestMapping("admin")
-public class OrderController {
+@RequestMapping
+public class OrderClientController {
     @Autowired
     OrderService orderService;
 
@@ -40,12 +38,14 @@ public class OrderController {
     OrderDetailService orderDetailService;
 
     @GetMapping("order")
-    public String index(Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size)
+    public String index(Model model, HttpServletRequest request)
     {
-        model.addAttribute("list", orderService.getPage(pageNumber, size));
-        model.addAttribute("service", orderService);
-        return "admin/order/index";
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
+        Account user = (Account) session.getAttribute("user");
+        model.addAttribute("list", orderService.findOrderByUser(user));
+        return "client/order/index";
     }
 
 //    @PostMapping(value = "/order-edit")
@@ -69,21 +69,27 @@ public class OrderController {
 //    }
 
     @GetMapping(value = "/order/detail/{id}")
-    public String detail(Model model, @PathVariable int id){
+    public String detail(Model model, HttpServletRequest request, @PathVariable int id){
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
         Order order=orderService.findOrderById(id);
         List<OrderDetail> list = orderDetailService.findOrderDetailsByOrder(order);
         model.addAttribute("order", order);
         model.addAttribute("list", list);
-        return "admin/order/detail";
+        return "client/order/detail";
     }
     
     @GetMapping("order/delete/{id}")
-    public String delete(Model model,@PathVariable int id, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+    public String delete(Model model, HttpServletRequest request, @PathVariable int id, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size)
     {
         orderService.deleteById(id);
-        model.addAttribute("list", orderService.getPage(pageNumber, size));
-        model.addAttribute("service", orderService);
-        return "admin/order/index";
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
+        Account user = (Account) session.getAttribute("user");
+        model.addAttribute("list", orderService.findOrderByUser(user));
+        return "client/order/index";
     }
 }

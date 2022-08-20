@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout.html}">
+      layout:decorate="~{client/layout.html}">
     <body>
         <div layout:fragment="content" id="content-page" class="content-page">
             <div class="container-fluid">
@@ -15,7 +15,7 @@ and open the template in the editor.
                         <div class="iq-card">
                             <div class="iq-card-header d-flex justify-content-between">
                                 <div class="iq-header-title">
-                                    <h4 class="card-title">Order Detail</h4>
+                                    <h4 class="card-title">Order History</h4>
                                 </div>
 <!--                                <div class="iq-search-bar">   
                                     <form th:action="@{/admin/order/search}" class="searchbox">
@@ -33,20 +33,34 @@ and open the template in the editor.
                                     <table class="data-tables table table-striped table-bordered" style="width:100%">
                                         <thead>
                                             <tr>
-<!--                                                <th style="width: 5%;">No</th>-->
-                                                <th style="width: 35%;">Product name</th>
-                                                <th style="width: 20%;">Quantity</th>
-                                                <th style="width: 20%;">Unit price</th>
-                                                <th style="width: 20%;">Subtotal</th>
+                                                <th style="width: 5%;">No</th>
+                                                <th style="width: 10%;">Order date</th>
+                                                <th style="width: 10%;">User name</th>
+                                                <th style="width: 15%;">Phone number</th>
+                                                <th style="width: 20%;">Address</th>
+                                                <th style="width: 15%;">Amount</th>
+                                                <th style="width: 5%;">Status</th>
+                                                <th style="width: 5%;">Is payment</th>
+                                                <th style="width: 10%;">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr th:each="item:${list}">
-<!--                                                <td th:text="${list.indexof(item)+1}"></td>-->
-                                                <td th:text="${item.product.name}"></td>
-                                                <td th:text="${item.quantity}"></td>
-                                                <td th:text="${#numbers.formatCurrency(item.unitPrice)}"></td>
-                                                <td th:text='${#numbers.formatCurrency(item.quantity*item.unitPrice)}'></td>
+                                                <td th:text="${list.indexOf(item)+1}"></td>
+                                                <td th:text="${item.orderDate}"></td>
+                                                <td th:text="${item.user.username}"></td>
+                                                <td th:text="${item.phoneNumber}"></td>
+                                                <td th:text="${item.address}"></td>
+                                                <td th:text="${#numbers.formatCurrency(item.amount)}"></td>
+                                                <td th:text="${item.status}"></td>
+                                                <td>
+                                                    <span th:if="${item.isPayment==1}">Yes</span>
+                                                    <span th:if="${item.isPayment==0}">No</span>
+                                                </td>
+                                                <td>
+                                                    <a th:if="${item.isPayment==1}" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Detail" th:href="@{/order/detail/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
+                                                    <a th:if="${item.isPayment==0}" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/order/delete/{id}(id=${item.id})}"><i class="ri-eraser-line"></i></a>
+                                                </td>
                                             </tr>
 <!--                                            <tr th:if="${title!='null' && item.title.toLowerCase().contains(title.toLowerCase())}" th:each="item:${list.page}">
                                                 <td th:text="${service.findAll().size-service.findAll().indexOf(item)}"></td>
@@ -68,8 +82,30 @@ and open the template in the editor.
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div>  
+<!--            <nav th:if="${name=='null'}" aria-label="Page navigation" class="paging">
+                <ul class="pagination" th:if="${list.page.totalPages > 1}">
+                    <li class="page-item" th:classappend="${!list.paging.isPrevEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/admin/news/?pageNumber=' + ${list.paging.pageNumber - 1}}"
+                           tabindex="-1">Previous</a>
+                    </li>
+                    <th:block th:each="item : ${list.paging.getItems()}">
+                        <li class="page-item" th:classappend="${item.index == list.paging.pageNumber? 'active' : ''}"
+                            th:if="${item.pageItemType.name() == 'PAGE'}">
+                            <a class="page-link" th:href="@{'/admin/news/?pageNumber=' + ${item.index}}"
+                               th:text="${item.index}"></a>
+                        </li>
+                        <li class="page-item disabled" th:if="${item.pageItemType.name() == 'DOTS'}">
+                            <a class="page-link" href="#">...</a>
+                        </li>
+                    </th:block>
+                    <li class="page-item" th:classappend="${!list.paging.isNextEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/admin/news/?pageNumber=' + ${list.paging.pageNumber + 1}}">Next</a>
+                    </li>
+                </ul>
+            </nav>-->
+        </div>                         
     </body>
 </html>
+
 

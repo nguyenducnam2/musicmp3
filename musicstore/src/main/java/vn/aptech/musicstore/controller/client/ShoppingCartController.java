@@ -86,6 +86,11 @@ public class ShoppingCartController {
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
         cartService.update(id, quantity);
+        Optional<Product> product = service.findById(id);
+        Product products = product.get();
+        if(quantity > products.getQuantity()){
+            cartService.remove(id);
+        }
         return "redirect:/cart/index";
     }
 
@@ -101,14 +106,14 @@ public class ShoppingCartController {
     @GetMapping("checkout")
     public ModelAndView checkout(Model model, HttpServletRequest request) {
         ModelAndView mv = new ModelAndView("client/cart/checkout");
-        Collection<Product> products = cartService.getProducts();
+        //Collection<Product> products = cartService.getProducts();
         HttpSession session = request.getSession();
         //Order order = (Order) session.getAttribute("order");
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
-        model.addAttribute("products", products);
-        model.addAttribute("amount", cartService.getAmount());
-        model.addAttribute("count", cartService.getCount());
+//        model.addAttribute("products", products);
+//        model.addAttribute("amount", cartService.getAmount());
+//        model.addAttribute("count", cartService.getCount());
         
         return mv;
     }
