@@ -241,6 +241,8 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     public boolean checkIfValidOldPassword(Account user, String oldPassword) {
+        System.out.println("old pass:"+oldPassword);
+        System.out.println("pass:"+user.getPassword());
         return encodePassword().matches(oldPassword, user.getPassword());
     }
 

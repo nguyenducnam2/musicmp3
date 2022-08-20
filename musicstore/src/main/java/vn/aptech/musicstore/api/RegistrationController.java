@@ -77,6 +77,7 @@ public class RegistrationController {
         Optional<Account> userAndroid = userService.findByUsername(username);
         if (userAndroid.isPresent()) {
             if (userService.checkIfValidOldPassword(userAndroid.get(), password)) {
+                userAndroid.get().setPassword(password);
                 return userAndroid.get();
             }
         }

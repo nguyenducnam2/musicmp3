@@ -23,21 +23,11 @@ public class Account {
     @SerializedName("enabled")
     @Expose
     private Boolean enabled = false;
-    @SerializedName("imageUrl")
+    @SerializedName("image")
     @Expose
-    private String imageUrl;
+    private String image;
 
     public Account() {
-    }
-
-    public Account(int id, String username, String password, String fullname, String role, Boolean enabled, String imageUrl) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.fullname = fullname;
-        this.role = role;
-        this.enabled = enabled;
-        this.imageUrl = imageUrl;
     }
 
     public int getId() {
@@ -89,10 +79,10 @@ public class Account {
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return image;
     }
 
     public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+        this.image = imageUrl;
     }
 }
