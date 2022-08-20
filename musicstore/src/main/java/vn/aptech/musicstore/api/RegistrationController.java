@@ -85,8 +85,12 @@ public class RegistrationController {
     }
 
     @GetMapping("/findByUsername")
-    public Optional<Account> findByUsername(@RequestParam("username") String username) {
-        return userService.findByUsername(username);
+    public Account findByUsername(@RequestParam("username") String username) {
+        Optional<Account> userAndroid = userService.findByUsername(username);
+        if (userAndroid.isPresent()) {
+            return userAndroid.get();
+        }
+        return null;
     }
 
 //

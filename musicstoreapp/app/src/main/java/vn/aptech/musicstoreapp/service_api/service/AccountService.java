@@ -16,4 +16,8 @@ public interface AccountService {
     @FormUrlEncoded
     @POST("loginAndroid")
     Call<Account> login(@Field("username")String username,@Field("password")String password);
+
+    @FormUrlEncoded
+    @POST("findByUsername")
+    Call<List<Account>> findByUsername(@Field("username") String username);
 }

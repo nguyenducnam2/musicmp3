@@ -1,5 +1,6 @@
 package vn.aptech.musicstoreapp.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import vn.aptech.musicstoreapp.R;
+import vn.aptech.musicstoreapp.activity.HomeActivity;
+import vn.aptech.musicstoreapp.activity.LoginActivity;
+import vn.aptech.musicstoreapp.entity.Account;
+import vn.aptech.musicstoreapp.service_api.api.ApiUtil;
+import vn.aptech.musicstoreapp.service_api.service.AccountService;
 
 public class Fragment_Dialog_Forget_Password extends Fragment {
 
@@ -47,7 +53,7 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
     static int interval;
     static Timer timer;
     int delay = 1000, period = 1000, timeValue, code;
-    private String emailuser="", taikhoan="";
+    private String emailuser="", username="";
 
     @Nullable
     @Override
@@ -77,11 +83,11 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
                         }
                     }, 5000);
 
-                    taikhoan = edUsernameFP.getText().toString().trim();
-                    if(taikhoan.trim().length() < 6 || taikhoan.trim().length() > 36){
+                    username = edUsernameFP.getText().toString().trim();
+                    if(username.trim().length() < 6 || username.trim().length() > 36){
                         Toast.makeText(getActivity(), "Độ dài tài khoản từ 6 -> 36 ký tự", Toast.LENGTH_SHORT).show();
                     }else {
-                        GetDataUser(taikhoan);
+                        GetDataUser(username);
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -102,21 +108,20 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
                 if (!(edPinConfirm.getText().toString().trim().equals(""))){
                     if (code == Integer.parseInt(edPinConfirm.getText().toString())){
                         FragmentManager fragmentManager = getFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
-                                .setCustomAnimations(R.anim.anim_intent_in, R.anim.anim_intent_out);
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         Fragment_Dialog_Forget_Password fragmentForgetPassword = new Fragment_Dialog_Forget_Password();
 
                         Bundle bundle = new Bundle();
-                        bundle.putString("taikhoan", taikhoan);
+                        bundle.putString("username", username);
                         fragmentForgetPassword.setArguments(bundle);
 
                         fragmentTransaction.replace(R.id.frameContent, fragmentForgetPassword);
                         fragmentTransaction.commit();
                     }else {
-                        Toast.makeText(getActivity(), "Mã xác nhận không đúng", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Pin confirm wrong", Toast.LENGTH_SHORT).show();
                     }
                 }else {
-                    Toast.makeText(getActivity(), "Bạn chưa nhập mã xác nhận", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Plz enter pin confirm", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -127,8 +132,8 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
     }
 
     private void senMail(String username) {
-        final String email = "music4bverify@gmail.com";
-        final  String password = "L581f3186";
+        final String email = "sluuthanh.demo.send@gmail.com";
+        final  String password = "nppwzhwzwlapivlk";
         Random random = new Random();
         code = 10000 + random.nextInt(89999);
         String messenger = "[Muzik App]Your Pin confirm is :"+ code+". Please don't share this code!!!";
@@ -147,7 +152,7 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
 
         try {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(email));
+            message.setFrom(new InternetAddress(email,"Muzik App"));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(username));
             message.setSubject("Reset Password");
             message.setText(messenger);
@@ -176,27 +181,30 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
 
     }
 
-    private void GetDataUser(String taikhoan) {
-//        Dataservice dataservice = APIService.getService();
-//        Call<List<NguoiDungModel>> callback = dataservice.thongtinnguoidung(username);
-//        callback.enqueue(new Callback<List<NguoiDungModel>>() {
-//            @Override
-//            public void onResponse(Call<List<NguoiDungModel>> call, Response<List<NguoiDungModel>> response) {
-//                ArrayList<NguoiDungModel> mangthongtinnguoidung = (ArrayList<NguoiDungModel>) response.body();
-//                if (mangthongtinnguoidung.size() > 0){
-//                    emailuser = mangthongtinnguoidung.get(0).getEmail();
-//                    acceptGetCode = true;
-//                }else {
-//                    Toast.makeText(getActivity(), "Tài khoản không tồn tại", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<NguoiDungModel>> call, Throwable t) {
-//
-//            }
-//        });
+    private void GetDataUser(String username) {
+        AccountService dataservice = ApiUtil.getAccountService();
+        Call<List<Account>> callback = dataservice.findByUsername(username);
+        callback.enqueue(new Callback<List<Account>>() {
+            @Override
+            public void onResponse(Call<List<Account>> call, Response<List<Account>> response) {
+                ArrayList<Account> user = (ArrayList<Account>) response.body();
+                if (user.size() > 0){
+                    emailuser = user.get(0).getUsername();
+                    acceptGetCode = true;
+                }else {
+                    Toast.makeText(getActivity(), "Account is not exist", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Account>> call, Throwable t) {
+
+            }
+        });
     }
+
+
+
 
     private static final int setInterval() {
         if (interval == 1){
