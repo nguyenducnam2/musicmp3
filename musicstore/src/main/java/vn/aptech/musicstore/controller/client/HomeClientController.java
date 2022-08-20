@@ -366,6 +366,9 @@ public class HomeClientController implements ErrorController {
             model.addAttribute("mess", "Failed");
         }
 
+        HttpSession session = request.getSession();
+        session.setAttribute("user", u.get());
+        session.setAttribute("codePromotion",p.get().getCode() );
         Calendar cal = Calendar.getInstance();
         Calendar cal1 = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);

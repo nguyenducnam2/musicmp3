@@ -5,8 +5,11 @@
 package vn.aptech.musicstore.api;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,8 +40,22 @@ public class PromotionApiController {
     }
 
     @GetMapping("/findByCode")
-    public PromotionCode findByCode(@RequestParam("code") String code) {
+    public PromotionCode findByCode(@RequestParam("code") String code, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.setAttribute("codePromotion", code);
         Optional<PromotionCode> checkCode = serviceCodeService.findByCode(code);
-        return checkCode.get();
+        Calendar cal = Calendar.getInstance();
+        Calendar cal1 = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+//        return checkCode.get();
+        if ((checkCode.get().getPromotion().getStartDate().getTime() - cal1.getTime().getTime()) < 0) {
+            if ((checkCode.get().getPromotion().getEndDate().getTime() - cal.getTime().getTime()) >= 0) {
+                if (checkCode.get().getUseTimes() < checkCode.get().getPromotion().getUseTimes()) {
+                    return checkCode.get();
+                }
+            }
+        }
+
+        return null;
     }
 }

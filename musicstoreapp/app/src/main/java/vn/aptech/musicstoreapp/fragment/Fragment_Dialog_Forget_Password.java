@@ -108,7 +108,8 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
                 if (!(edPinConfirm.getText().toString().trim().equals(""))){
                     if (code == Integer.parseInt(edPinConfirm.getText().toString())){
                         FragmentManager fragmentManager = getFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.anim_intent_in, R.anim.anim_intent_out);
                         Fragment_Dialog_Forget_Password fragmentForgetPassword = new Fragment_Dialog_Forget_Password();
 
                         Bundle bundle = new Bundle();

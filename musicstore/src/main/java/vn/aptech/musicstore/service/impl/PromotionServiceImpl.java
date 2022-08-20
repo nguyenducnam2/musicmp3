@@ -47,7 +47,7 @@ public class PromotionServiceImpl implements PromotionService{
     
     @Override
     public String validatePromotionCode(String code) {
-        Promotion promotion
+         Optional<Promotion> promotion
                 = repo.findByCode(code);
 
         if (promotion == null) {
@@ -56,7 +56,7 @@ public class PromotionServiceImpl implements PromotionService{
 
         Calendar cal = Calendar.getInstance();
 
-        if ((promotion.getEndDate().getTime()
+        if ((promotion.get().getEndDate().getTime()
                 - cal.getTime().getTime()) <= 0) {
 //            verificationTokenRepository.delete(vipToken);
             return "expired";
@@ -64,5 +64,10 @@ public class PromotionServiceImpl implements PromotionService{
 
         return "valid";
 
+    }
+
+    @Override
+    public Optional<Promotion> findByCode(String code) {
+        return repo.findByCode(code);
     }
 }

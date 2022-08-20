@@ -19,6 +19,7 @@ public interface PromotionService {
 
     Optional<Promotion> findById(int id);
 
+     Optional<Promotion> findByCode(String code);
     Promotion save(Promotion obj);
 
     void delete(Promotion obj);

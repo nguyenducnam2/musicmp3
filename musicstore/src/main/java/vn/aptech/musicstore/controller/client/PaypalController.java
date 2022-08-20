@@ -28,6 +28,8 @@ import vn.aptech.musicstore.entity.DownloadAllowed;
 import vn.aptech.musicstore.entity.Order;
 import vn.aptech.musicstore.entity.OrderDetail;
 import vn.aptech.musicstore.entity.Product;
+import vn.aptech.musicstore.entity.Promotion;
+import vn.aptech.musicstore.entity.PromotionCode;
 import vn.aptech.musicstore.entity.SongOrder;
 import vn.aptech.musicstore.entity.SongOrderDetail;
 import vn.aptech.musicstore.entity.UpgradeVipOrderDetails;
@@ -38,6 +40,8 @@ import vn.aptech.musicstore.service.OrderDetailService;
 import vn.aptech.musicstore.service.OrderService;
 import vn.aptech.musicstore.service.PaypalService;
 import vn.aptech.musicstore.service.ProductService;
+import vn.aptech.musicstore.service.PromotionCodeService;
+import vn.aptech.musicstore.service.PromotionService;
 import vn.aptech.musicstore.service.ShoppingCartService;
 import vn.aptech.musicstore.service.SongOrderDetailService;
 import vn.aptech.musicstore.service.SongOrderService;
@@ -82,6 +86,12 @@ public class PaypalController {
 
     @Autowired
     private SongOrderDetailService songOrderDetailService;
+
+    @Autowired
+    private PromotionService promotionService;
+
+    @Autowired
+    private PromotionCodeService promotionCodeService;
 
     @Autowired
     private UpgradeVipOrderDetailsService upgradeVipOrderDetailsService;
@@ -234,7 +244,11 @@ public class PaypalController {
             if (payment.getState().equals("approved")) {
                 HttpSession session = request.getSession();
                 int cartId = (int) session.getAttribute("cartId");
+                String codePromotion = (String) session.getAttribute("codePromotion");
                 Account acc = (Account) session.getAttribute("user");
+                Optional<Promotion> p = promotionService.findByCode(codePromotion);
+                Optional<PromotionCode> pCode = promotionCodeService.findByCode(codePromotion);
+                int count = 0;
                 SongOrder order = new SongOrder();
                 order.setPayment("Paypal");
                 order.setStatus("Success");
@@ -249,15 +263,21 @@ public class PaypalController {
                     orderdetail.setSong(item.getSong());
                     orderdetail.setSongOrderId(order.getId());
                     orderdetail.setSongOrder(order);
+                    orderdetail.setPromotion(p.get());
+                    orderdetail.setPromotionId(p.get().getId());
                     obj.setAccountId(acc.getId());
                     obj.setAccount(acc);
                     obj.setSongId(item.getSong().getId());
                     obj.setSong(item.getSong());
+                    pCode.get().setUseTimes(count+=1);
+                    System.out.println("userTime :" + pCode.get().getUseTimes());
+                    promotionCodeService.save(pCode.get());
                     songOrderDetailService.save(orderdetail);
                     downService.save(obj);
                     cartItemService.delete(item);
                 }
                 cartService.delete(cartService.findById(cartId).get());
+                session.removeAttribute("codePromotion");
                 session.removeAttribute("cartId");
                 session.removeAttribute("total");
                 return "client/song/success";

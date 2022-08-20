@@ -36,11 +36,15 @@ public class SongOrderDetail {
     private int songOrderId;
     @Column(name = "song_id", insertable = false, updatable = false)
     private int songId;
-
+    @Column(name = "promotion_id", insertable = false, updatable = false)
+    private int promotionId;
     @JoinColumn(name = "song_order_id", referencedColumnName = "id")
     @ManyToOne
     private SongOrder songOrder;
     @JoinColumn(name = "song_id", referencedColumnName = "id")
     @ManyToOne
     private Song song;
+    @JoinColumn(name = "promotion_id", referencedColumnName = "id")
+    @ManyToOne
+    private Promotion promotion;
 }
