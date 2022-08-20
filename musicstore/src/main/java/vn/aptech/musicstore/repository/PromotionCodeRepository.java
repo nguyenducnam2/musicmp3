@@ -4,6 +4,7 @@
  */
 package vn.aptech.musicstore.repository;
 
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import vn.aptech.musicstore.entity.PromotionCode;
 
@@ -13,5 +14,5 @@ import vn.aptech.musicstore.entity.PromotionCode;
  */
 
 public interface PromotionCodeRepository extends JpaRepository<PromotionCode, Integer>{
-    
+    Optional<PromotionCode> findByCode(String code);
 }

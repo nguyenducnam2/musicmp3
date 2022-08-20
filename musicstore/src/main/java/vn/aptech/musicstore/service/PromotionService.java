@@ -22,4 +22,6 @@ public interface PromotionService {
     Promotion save(Promotion obj);
 
     void delete(Promotion obj);
+    
+    String validatePromotionCode(String code);
 }

@@ -20,6 +20,7 @@ public interface PromotionCodeService {
 
     Optional<PromotionCode> findById(int id);
 
+    Optional<PromotionCode> findByCode(String code);
     PromotionCode save(PromotionCode obj);
 
     void delete(PromotionCode obj);

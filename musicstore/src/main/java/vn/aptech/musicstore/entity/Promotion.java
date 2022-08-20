@@ -6,16 +6,14 @@ package vn.aptech.musicstore.entity;
 
 import java.util.Calendar;
 import java.util.Date;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -35,28 +33,23 @@ public class Promotion {
     private int discount;
     private String title;
     private String code;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
 
-//    private int duration;
     private int useTimes;
 
-    public Promotion(int id, int discount, String title, String code,Date startDate, Date endDate, int useTimes) {
+    public Promotion(int id, int discount, String title, String code, Date startDate, Date endDate, int useTimes) {
         this.id = id;
         this.discount = discount;
         this.title = title;
         this.code = code;
-        
-        this.startDate = startDate();
+        this.startDate = startDate;
         this.endDate = endDate;
 
 //        this.expirationTime = new Date(this.endDate.getTime() - this.startDate.getTime());
         this.useTimes = useTimes;
-    }
-
-    private Date startDate() {
-        Calendar calendar = Calendar.getInstance();
-        return new Date(calendar.getTime().getTime());
     }
 
 }

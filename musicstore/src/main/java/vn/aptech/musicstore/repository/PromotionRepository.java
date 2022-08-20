@@ -15,5 +15,5 @@ import vn.aptech.musicstore.entity.Promotion;
 
 @Repository
 public interface PromotionRepository extends JpaRepository<Promotion, Integer> {
-    
+    Promotion findByCode(String code);
 }

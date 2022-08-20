@@ -5,6 +5,9 @@
 package vn.aptech.musicstore.controller.admin;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +39,12 @@ public class PromotionController {
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("list", servicePromotion.findAll());
         model.addAttribute("name", "null");
+//        LocalDate now = LocalDate.now();
+        Calendar cal = Calendar.getInstance();
+        Calendar cal1 = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        model.addAttribute("nowEndDate", cal.getTime().getTime());
+        model.addAttribute("nowStartDate", cal1.getTime().getTime());
         return "admin/promotion/index";
     }
 
@@ -43,14 +52,27 @@ public class PromotionController {
     public String create(Model model) {
         model.addAttribute("promotion", new Promotion());
         model.addAttribute("action", "create");
+        LocalDate now = LocalDate.now();
+        model.addAttribute("now", now);
         return "admin/promotion/create";
     }
 
     @PostMapping("/save")
     public String save(Model model, @ModelAttribute("promotion") Promotion promotion) throws IOException {
+        if (servicePromotion.findById(promotion.getId()).isEmpty()) {
+            promotion.setCode(UUID.randomUUID().toString());
+        } else {
+//            promotion.setCode(UUID.randomUUID().toString());
+            promotion.setCode(promotion.getCode());
+        }
         servicePromotion.save(promotion);
         model.addAttribute("name", "null");
         model.addAttribute("mess", "Successfully");
+        Calendar cal = Calendar.getInstance();
+        Calendar cal1 = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        model.addAttribute("nowEndDate", cal.getTime().getTime());
+        model.addAttribute("nowStartDate", cal1.getTime().getTime());
         model.addAttribute("list", servicePromotion.findAll());
         return "/admin/promotion/index";
     }
@@ -63,10 +85,15 @@ public class PromotionController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") int id,Model model) {
+    public String delete(@PathVariable("id") int id, Model model) {
         servicePromotion.delete(servicePromotion.findById(id).get());
         model.addAttribute("name", "null");
         model.addAttribute("mess", "Successfully");
+        Calendar cal = Calendar.getInstance();
+        Calendar cal1 = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        model.addAttribute("nowEndDate", cal.getTime().getTime());
+        model.addAttribute("nowStartDate", cal1.getTime().getTime());
         model.addAttribute("list", servicePromotion.findAll());
         return "/admin/promotion/index";
     }

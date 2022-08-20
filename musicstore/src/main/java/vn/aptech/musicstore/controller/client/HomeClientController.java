@@ -7,6 +7,7 @@ package vn.aptech.musicstore.controller.client;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +30,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import vn.aptech.musicstore.entity.Account;
 import vn.aptech.musicstore.entity.PasswordResetToken;
+import vn.aptech.musicstore.entity.Playlistitem;
+import vn.aptech.musicstore.entity.Promotion;
+import vn.aptech.musicstore.entity.PromotionCode;
 import vn.aptech.musicstore.entity.Song;
 import vn.aptech.musicstore.entity.VerificationToken;
 import vn.aptech.musicstore.entity.model.PasswordModel;
@@ -39,6 +44,8 @@ import vn.aptech.musicstore.service.AlbumService;
 import vn.aptech.musicstore.service.ArtistService;
 import vn.aptech.musicstore.service.SongService;
 import vn.aptech.musicstore.service.NewsService;
+import vn.aptech.musicstore.service.PromotionCodeService;
+import vn.aptech.musicstore.service.PromotionService;
 
 /**
  *
@@ -66,6 +73,11 @@ public class HomeClientController implements ErrorController {
     @Autowired
     private ArtistService service_artist;
 
+    @Autowired
+    private PromotionService promotionService;
+
+    @Autowired
+    private PromotionCodeService promotionCodeService;
 //    @Value("${uri.local}")
 //    private String uri_local;
     @Autowired
@@ -85,7 +97,7 @@ public class HomeClientController implements ErrorController {
             listsong.add(service_song.findAll().get(i));
         }
         model.addAttribute("listsong", listsong);
-        model.addAttribute("service",service_song);
+        model.addAttribute("service", service_song);
         model.addAttribute("listsong_hot", service_song.findByOrderByViewDesc());
         model.addAttribute("listalbum", service_album.findTop12());
         model.addAttribute("listartist", service_artist.findTop12ByOrderByIdDesc());
@@ -94,7 +106,7 @@ public class HomeClientController implements ErrorController {
     }
 
     @GetMapping("/result")
-    public String result(Model model, @RequestParam("searchname") String searchname,HttpServletRequest request) {
+    public String result(Model model, @RequestParam("searchname") String searchname, HttpServletRequest request) {
         HttpSession session = request.getSession();
         if (session != null) {
             session.setAttribute("user", session.getAttribute("user"));
@@ -115,7 +127,7 @@ public class HomeClientController implements ErrorController {
     }
 
     @GetMapping("/contact")
-    public String contact(Model model,HttpServletRequest request) {
+    public String contact(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
         if (session != null) {
             session.setAttribute("user", session.getAttribute("user"));
@@ -322,15 +334,57 @@ public class HomeClientController implements ErrorController {
         return "client/reset_change_pass";
     }
 
-//    test api
-//    @PostMapping("/changePassword")
-//    public String changePassword(@RequestBody PasswordModel passwordModel) {
-//        Account user = userService.findAccountByEmail(passwordModel.getEmail());
-//        if (!userService.checkIfValidOldPassword(user, passwordModel.getOldPassword())) {
-//            return "Invalid Old Password";
-//        }
-//        //Save New Password
-//        userService.changePassword(user, passwordModel.getNewPassword());
-//        return "Password Changed Successfully";
-//    }
+    @GetMapping("/promotion")
+    public String promotion(Model model, HttpServletRequest request) {
+        model.addAttribute("list", promotionService.findAll());
+        model.addAttribute("name", "null");
+//        LocalDate now = LocalDate.now();
+        Calendar cal = Calendar.getInstance();
+        Calendar cal1 = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        model.addAttribute("nowEndDate", cal.getTime().getTime());
+        model.addAttribute("nowStartDate", cal1.getTime().getTime());
+        return "client/promotion";
+    }
+
+    @GetMapping("/promotion/getCode/{promotionId}/{userId}")
+    public String getCode(@PathVariable("promotionId") int promotionId, @PathVariable("userId") Long userId, Model model, HttpServletRequest request) {
+        Optional<Promotion> p = promotionService.findById(promotionId);
+        Optional<Account> u = userService.findById(userId);
+
+        if (promotionCodeService.findByCode(p.get().getCode()).isEmpty()) {
+            PromotionCode getCode = new PromotionCode();
+            getCode.setCode(p.get().getCode());
+            getCode.setUseTimes(p.get().getUseTimes());
+            getCode.setPromotionId(promotionId);
+            getCode.setUserId(userId);
+            getCode.setAcc(u.get());
+            getCode.setPromotion(p.get());
+            promotionCodeService.save(getCode);
+            model.addAttribute("mess", "Successfully");
+        } else {
+            model.addAttribute("mess", "Failed");
+        }
+
+        Calendar cal = Calendar.getInstance();
+        Calendar cal1 = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        model.addAttribute("nowEndDate", cal.getTime().getTime());
+        model.addAttribute("nowStartDate", cal1.getTime().getTime());
+        model.addAttribute("list", promotionCodeService.findAll());
+        model.addAttribute("name", "null");
+        return "client/promotion/your-code-promotion";
+    }
+    
+    @GetMapping("/promotion/yourCode")
+    public String yourCode(Model model, HttpServletRequest request) {
+        Calendar cal = Calendar.getInstance();
+        Calendar cal1 = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        model.addAttribute("nowEndDate", cal.getTime().getTime());
+        model.addAttribute("nowStartDate", cal1.getTime().getTime());
+        model.addAttribute("list", promotionCodeService.findAll());
+        model.addAttribute("name", "null");
+        return "client/promotion/your-code-promotion";
+    }
 }

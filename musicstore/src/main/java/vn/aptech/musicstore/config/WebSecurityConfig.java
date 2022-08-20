@@ -59,6 +59,8 @@ public class WebSecurityConfig {
             "/resetChangePassword*",
             //            "/resetChangePassword",
             "/register",
+            "/promotion",
+            "/promotion/getCode**",
             "/verify*",
             "/verifyRegistration*",
             "/resendVerifyToken*",

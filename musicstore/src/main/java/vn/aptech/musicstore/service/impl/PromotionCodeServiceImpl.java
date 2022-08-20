@@ -42,4 +42,9 @@ public class PromotionCodeServiceImpl implements PromotionCodeService{
     public void delete(PromotionCode obj) {
         repo.delete(obj);
     }
+
+    @Override
+    public Optional<PromotionCode> findByCode(String code) {
+        return repo.findByCode(code);
+    }
 }

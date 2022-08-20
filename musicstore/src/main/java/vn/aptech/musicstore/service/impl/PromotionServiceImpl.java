@@ -4,10 +4,12 @@
  */
 package vn.aptech.musicstore.service.impl;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vn.aptech.musicstore.entity.Account;
 import vn.aptech.musicstore.entity.Promotion;
 import vn.aptech.musicstore.repository.PromotionRepository;
 import vn.aptech.musicstore.repository.UpgradeVipOrderDetailsRepository;
@@ -41,5 +43,26 @@ public class PromotionServiceImpl implements PromotionService{
     @Override
     public void delete(Promotion obj) {
         repo.delete(obj);
+    }
+    
+    @Override
+    public String validatePromotionCode(String code) {
+        Promotion promotion
+                = repo.findByCode(code);
+
+        if (promotion == null) {
+            return "invalid";
+        }
+
+        Calendar cal = Calendar.getInstance();
+
+        if ((promotion.getEndDate().getTime()
+                - cal.getTime().getTime()) <= 0) {
+//            verificationTokenRepository.delete(vipToken);
+            return "expired";
+        }
+
+        return "valid";
+
     }
 }

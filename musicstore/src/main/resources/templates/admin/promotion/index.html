@@ -30,13 +30,13 @@ and open the template in the editor.
                                 <div class="iq-header-title">
                                     <h4 class="card-title">Account Lists</h4>
                                 </div>
-<!--                                <div class="iq-search-bar">   
-                                    <form th:action="@{/admin/account/search}" class="searchbox">
-                                        <input type="text" class="text search-input" name="name" placeholder="Search Here..">
-                                        <a class="search-link" href="#"><i class="ri-search-line text-black"></i></a>
-                                        <a class="search-audio" href="#"><i class="las la-microphone text-black"></i></a> 
-                                    </form>
-                                </div>-->
+                                <!--                                <div class="iq-search-bar">   
+                                                                    <form th:action="@{/admin/account/search}" class="searchbox">
+                                                                        <input type="text" class="text search-input" name="name" placeholder="Search Here..">
+                                                                        <a class="search-link" href="#"><i class="ri-search-line text-black"></i></a>
+                                                                        <a class="search-audio" href="#"><i class="las la-microphone text-black"></i></a> 
+                                                                    </form>
+                                                                </div>-->
                                 <div class="iq-card-header-toolbar d-flex align-items-center">
                                     <a th:href="@{/admin/promotion/create}" class="btn btn-primary">Add New Promotion</a>
                                 </div>
@@ -47,11 +47,13 @@ and open the template in the editor.
                                         <thead>
                                             <tr>
                                                 <th style="width: 5%;">No</th>
-                                                <th style="width: 20%;">title</th>
-                                                <th style="width: 30%;">discount</th>
-                                                <th style="width: 10%;">code</th>
-                                                <th style="width: 5%;">Start date</th> 
-                                                <th style="width: 5%;">End date</th> 
+                                                <th style="width: 20%;">Title</th>
+                                                <th style="width: 10%;">Discount (%)</th>
+                                                <th style="width: 15%;">Start date</th> 
+                                                <th style="width: 15%;">End date</th> 
+                                                <th style="width: 15%;">State</th> 
+
+                                                <th style="width: 15%;">Action</th> 
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -59,22 +61,16 @@ and open the template in the editor.
                                                 <td th:text="${list.indexOf(item)+1}"></td>
                                                 <td th:text="${item.title}"></td>
                                                 <td th:text="${item.discount}"></td>
-                                                <td th:text="${item.code}"></td>
-                                                <td th:text="${item.startDate}"></td>
-                                                <td th:text="${item.endDate}"></td>
-                                                
-<!--                                                <td th:text="${item.enabled ? 'Active':'Block'}">State</td>-->
-
+                                                <td th:text="${#dates.format(item.startDate,'dd-MM-yyyy')}"></td>
+                                                <td th:text="${#dates.format(item.endDate,'dd-MM-yyyy')}"></td>
+                                                <td th:text="${((item.startDate.getTime() - nowStartDate)>=0) ? 'Inactive' : ((item.endDate.getTime() - nowEndDate)>=0) ? 'Active' :'Expired'}">State</td>
                                                 <td>
-<!--                                                    <div th:if="${#httpServletRequest.getUserPrincipal().getName()} == ${item.username}" class="flex align-items-center list-user-action">
-                                                        <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" th:href="@{/admin/account/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
-                                                        <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/admin/account/delete/{id}(id=${item.id})}"><i class="ri-delete-bin-line"></i></a>
+                                                    <div class="flex align-items-center list-user-action">
+                                                        <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" th:href="@{/admin/promotion/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
+                                                        <a class="bg-primary" th:if="${(item.startDate.getTime() - nowStartDate)>=0 || (item.endDate.getTime() - nowEndDate)<0}" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/admin/promotion/delete/{id}(id=${item.id})}"><i class="ri-delete-bin-line"></i></a>
                                                     </div>
-                                                    <div th:if="${#httpServletRequest.getUserPrincipal().getName()} != ${item.username}  " class="flex align-items-center list-user-action">
-                                                        <a th:if="${item.role} != 'ROLE_MODERATOR'" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" th:href="@{/admin/account/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
-                                                        <a sec:authorize="hasRole('MODERATOR')" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/admin/account/delete/{id}(id=${item.id})}"><i class="ri-delete-bin-line"></i></a>
-                                                    </div>-->
                                                 </td>
+
                                             </tr>
                                         </tbody>
                                     </table>

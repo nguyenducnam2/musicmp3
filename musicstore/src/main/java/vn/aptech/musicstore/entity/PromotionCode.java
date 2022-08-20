@@ -51,5 +51,4 @@ public class PromotionCode {
     @JoinColumn(name = "promotion_id", referencedColumnName = "id")
     private Promotion promotion;
     
-   
 }
