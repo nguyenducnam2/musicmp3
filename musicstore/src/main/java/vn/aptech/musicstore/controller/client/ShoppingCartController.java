@@ -85,12 +85,12 @@ public class ShoppingCartController {
         HttpSession session = request.getSession();
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
-        cartService.update(id, quantity);
         Optional<Product> product = service.findById(id);
         Product products = product.get();
         if(quantity > products.getQuantity()){
-            cartService.remove(id);
+            quantity = products.getQuantity();
         }
+        cartService.update(id, quantity);
         return "redirect:/cart/index";
     }
 
