@@ -355,7 +355,7 @@ public class HomeClientController implements ErrorController {
         if (promotionCodeService.findByCode(p.get().getCode()).isEmpty()) {
             PromotionCode getCode = new PromotionCode();
             getCode.setCode(p.get().getCode());
-            getCode.setUseTimes(p.get().getUseTimes());
+            getCode.setUseTimes(0);
             getCode.setPromotionId(promotionId);
             getCode.setUserId(userId);
             getCode.setAcc(u.get());

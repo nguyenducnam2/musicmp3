@@ -50,7 +50,11 @@ and open the template in the editor.
                                         <td th:text="${((item.startDate.getTime() - nowStartDate)>=0) ? 'Inactive' : ((item.endDate.getTime() - nowEndDate)>=0) ? 'Active' :'Expired'}">State</td>
                                         <td>
                                             <div  class="flex align-items-center list-user-action">
-                                                <a th:if="${session.user!=null && (item.startDate.getTime() - nowStartDate)<0 && (item.endDate.getTime() - nowEndDate)>=0 } " class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Get Code" th:href="@{/promotion/getCode/{promotionId}/{userId} ( promotionId=${item.id} , userId=${session.user.id} )  }"><i class="ri-Muzik-2-line"></i></a>
+                                                <a th:if="${session.user!=null && (item.startDate.getTime() - nowStartDate)<0 && (item.endDate.getTime() - nowEndDate)>=0 } " 
+                                                   class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Get Code" 
+                                                   th:href="@{/promotion/getCode/{promotionId}/{userId} ( promotionId=${item.id} , userId=${session.user.id} )  }">
+                                                    <i class="ri-send-plane-fill"></i>
+                                                </a>
                                             </div>
                                             <a th:if="${session.user==null}" class="bg-primary" th:href="@{/login}">You need login to get code</a>
                                         </td>

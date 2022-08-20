@@ -33,11 +33,11 @@ and open the template in the editor.
                                     </div>
                                     <div class="form-group">
                                         <label>Start Date:</label>
-                                        <input type="date" th:field="${promotion.startDate}" th:attr="min=${now}" class="form-control" required>
+                                        <input type="date" th:field="${promotion.startDate}" th:value="${promotion.startDate}" onchange="getStartDate()" th:attr="min=${now}" id="startDate" class="form-control" required>
                                     </div>
                                     <div class="form-group">
                                         <label>End Date:</label>
-                                        <input type="date" th:field="${promotion.endDate}"  class="form-control" required>
+                                        <input type="date" th:field="${promotion.endDate}" id="endDate" th:attr="min=${promotion.startDate}" class="form-control" required>
                                     </div>
 
                                     <div class="form-group">
@@ -48,6 +48,13 @@ and open the template in the editor.
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                     <button type="reset" class="btn btn-danger">Reset</button>
                                 </form>
+                                <script>
+                                    let startDate = document.querySelector('#startDate');
+                                    let endDate = document.querySelector('#endDate');
+                                    function getStartDate() {
+                                        endDate.min=startDate.value;
+                                    }
+                                </script>
                             </div>
                         </div>
                     </div>

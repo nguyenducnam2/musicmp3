@@ -52,11 +52,11 @@
                         <li>
                             <a href="#promotion" class="iq-waves-effect" data-toggle="collapse" aria-expanded="false"><span class="ripple rippleEffect"></span><i class="las la-th-list iq-arrow-left"></i><span>Promotion</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
                             <ul id="promotion" class="iq-submenu collapse show" data-parent="#iq-sidebar-toggle">
-                                <li class="active">
+                                <li>
                                     <a class="iq-icons-list" th:href="@{/promotion}"><div data-icon="p" class="icon"></div><span>Promotion</span></a>
                                 </li>
                                 <li>
-                                    <a class="iq-icons-list" th:href="@{/promotion/yourCode}"><div data-icon="p" class="icon"></div><span>Your promotion's code</span></a>
+                                    <a th:if="${session.user!=null}" class="iq-icons-list" th:href="@{/promotion/yourCode}"><div data-icon="p" class="icon"></div><span>Your promotion's code</span></a>
                                 </li>
                             </ul>
 
