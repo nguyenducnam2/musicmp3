@@ -46,10 +46,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     </div>
                     <div class="col-sm-4" th:unless="${#lists.isEmpty(products)}")>
                         <div>
-                            <h3>Total: <div th:text="${count}"></div></h3>
+                            <h3>Total: [[${count}]]</h3>
                         </div>
                         <div>
-                            <h3>Total price: <div th:text="${#numbers.formatCurrency(amount)}"></div></h3>
+                            <h3>Amount: [[${#numbers.formatCurrency(amount)}]]</h3>
                         </div>
                         <div>
                             <a th:href="@{/cart/clear}" class="btn btn-primary">Clear</a>

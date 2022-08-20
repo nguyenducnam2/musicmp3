@@ -74,8 +74,8 @@
                                 </li>
                                 <li class="nav-item nav-icon">
                                     <a  th:if="${(user != null) && (user.role=='ROLE_USER' || user.role=='ROLE_VIP')}" th:href="@{/cart/index}" class="ml-lg-5 font-size-32 text-black rounded">
-                                        <i class="las la-shopping-cart"></i>
-                                        <span class=" dots"></span><p th:text="${count}" style="color: tomato; "></p>
+                                        <i class="las la-shopping-cart">[[${count}]]</i>
+<!--                                        <span class=" dots"></span>-->
                                     </a>
                                 </li>
 
