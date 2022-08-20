@@ -1,13 +1,18 @@
 package vn.aptech.musicstoreapp.activity;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -34,8 +39,10 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import vn.aptech.musicstoreapp.entity.Account;
 import vn.aptech.musicstoreapp.service_api.api.ApiUtil;
 import vn.aptech.musicstoreapp.entity.Genre;
+import vn.aptech.musicstoreapp.service_api.service.AccountService;
 import vn.aptech.musicstoreapp.service_api.service.GenreService;
 
 import vn.aptech.musicstoreapp.R;
@@ -56,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     int flag = -1; // flag = 1 click free, flag = 2 click fb
-    private String username, password, name, email="", imageurl, test = "";
+    private String username, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +71,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mapping();
+        initData();
+        getData();
+        try {
+            if (!(username.isEmpty() || password.isEmpty())) {
+                login();
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+
 //        deleteData();
 //        overridePendingTransition(R.anim.anim_intent_in, R.anim.anim_intent_out);
 //        callbackManager = CallbackManager.Factory.create();
@@ -88,8 +106,8 @@ public class MainActivity extends AppCompatActivity {
 //                flag = 1;
 //                openDialog();
 
-                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                startActivity(intent);
+        //        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+        //        startActivity(intent);
             }
         });
 
@@ -104,30 +122,51 @@ public class MainActivity extends AppCompatActivity {
 
 //        overridePendingTransition(R.anim.anim_intent_in_home, R.anim.anim_intent_out);
 
-
-        tvDemo=findViewById(R.id.tvUsername);
-        genreService= ApiUtil.getGenreService();
-        genreService.findAll().enqueue(new Callback<List<Genre>>() {
-            @Override
-            public void onResponse(Call<List<Genre>> call, Response<List<Genre>> response) {
-                tvDemo.setText(response.body().get(0).getName());
-            }
-
-            @Override
-            public void onFailure(Call<List<Genre>> call, Throwable t) {
-
-            }
-        });
-
     }
 
     private void mapping() {
+        tvDemo = findViewById(R.id.tvUsername);
         edUsername = findViewById(R.id.tvUsername);
         imgUser = findViewById(R.id.ivUser);
 //        btnLoginFb = findViewById(R.id.btnLoginFb);
         btnRegister = findViewById(R.id.btnRegister);
         btnLogin = findViewById(R.id.btnGoToLogin);
-//        db = openOrCreateDatabase("NguoiDung.db", MODE_PRIVATE, null);
+        tvDemo.setText("MusicZik");
+    }
+
+    private void initData() {
+        db = openOrCreateDatabase("Account.db", MODE_PRIVATE, null);
+        String sql = "CREATE TABLE IF NOT EXISTS account(id integer primary key autoincrement,username text, password text,fullname text, role text, image text)";
+        db.execSQL(sql);
+    }
+
+    private void getData() {
+        String sql = "SELECT * FROM account";
+        Cursor cursor = db.rawQuery(sql, null);
+        cursor.moveToLast();
+        if (!cursor.isAfterLast()) {
+            username = cursor.getString(1);
+            password = cursor.getString(2);
+            Log.e(TAG,"username:"+username+"-password"+password);
+        }
+    }
+
+    private void login() {
+        AccountService networkService = ApiUtil.getAccountService();
+        Call<Account> login = networkService.login(username, password);
+        login.enqueue(new Callback<Account>() {
+            @Override
+            public void onResponse(@NonNull Call<Account> call, @NonNull Response<Account> response) {
+                Account responseBody = response.body();
+                if (responseBody != null) {
+                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Account> call, @NonNull Throwable t) {
+            }
+        });
     }
 //
 //    @Override
@@ -148,8 +187,6 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //        backPressTime = System.currentTimeMillis();
 //    }
-
-
 
 
 //    private void register(HashMap<String, String> params) {

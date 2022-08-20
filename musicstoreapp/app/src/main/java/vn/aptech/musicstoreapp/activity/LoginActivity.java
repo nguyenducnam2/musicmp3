@@ -22,11 +22,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import vn.aptech.musicstoreapp.R;
+import vn.aptech.musicstoreapp.entity.Account;
 import vn.aptech.musicstoreapp.fragment.Dialog_Forget_Password;
+import vn.aptech.musicstoreapp.service_api.api.ApiUtil;
+import vn.aptech.musicstoreapp.service_api.service.AccountService;
 
 public class LoginActivity extends AppCompatActivity {
-
-
 
     androidx.appcompat.widget.Toolbar toolbarLogin;
     private SQLiteDatabase db;
@@ -34,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
     private TextView tvForgetPassword;
     private boolean accept = false;
-    private String username, password, name, email, image;
+    private String username, password, fullname, role, image;
 
 
     @Override
@@ -43,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         mapping();
 //        overridePendingTransition(R.anim.anim_intent_in, R.anim.anim_intent_out);
-
+        db = openOrCreateDatabase("Account.db", MODE_PRIVATE, null);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,8 +53,8 @@ public class LoginActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (accept){
-//                            GetDataUser(username);
+                        if (accept) {
+                            GetDataUser();
                         }
                     }
                 }, 3000);
@@ -81,32 +82,37 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-//    private void GetDataUser(String username) {
-//        Dataservice dataservice = APIService.getService();
-//        Call<List<NguoiDungModel>> callback = dataservice.thongtinnguoidung(edUsername);
-//        callback.enqueue(new Callback<List<NguoiDungModel>>() {
-//            @Override
-//            public void onResponse(Call<List<NguoiDungModel>> call, Response<List<NguoiDungModel>> response) {
-//                ArrayList<NguoiDungModel> mangthongtinnguoidung = (ArrayList<NguoiDungModel>) response.body();
-//                if (mangthongtinnguoidung.size() > 0){
-//                    username = mangthongtinnguoidung.get(0).getUserName();
-//                    password = mangthongtinnguoidung.get(0).getPassword();
-//                    name = mangthongtinnguoidung.get(0).getNameuser();
-//                    email = mangthongtinnguoidung.get(0).getEmail();
-//                    image = mangthongtinnguoidung.get(0).getImage();
-//                    InsertData(username, password, name, email, image);
-//                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-//                }else {
-//                    Toast.makeText(LoginActivity.this, "kết nối thất bại", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<NguoiDungModel>> call, Throwable t) {
-//
-//            }
-//        });
-//    }
+    private void InsertData(String tk, String mk, String ten,String role, String url) {
+        String sql = "INSERT INTO account(username, password, fullname, role, image) VALUES('"+tk+"','"+mk+"','"+ten+"','"+role+"','"+url+"')";
+        db.execSQL(sql);
+    }
+
+    private void GetDataUser() {
+        AccountService dataservice = ApiUtil.getAccountService();
+        Call<Account> callback = dataservice.login(username, password);
+        callback.enqueue(new Callback<Account>() {
+            @Override
+            public void onResponse(Call<Account> call, Response<Account> response) {
+                Account account = (Account) response.body();
+                if (account != null) {
+                    username = account.getUsername();
+                    password = account.getPassword();
+                    fullname = account.getFullname();
+                    role = account.getRole();
+                    image = account.getImageUrl();
+                    InsertData(username, password, fullname, role, image);
+                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                } else {
+                    Toast.makeText(LoginActivity.this, "Connect Fail", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Account> call, Throwable t) {
+
+            }
+        });
+    }
 
     private void login() {
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
@@ -118,27 +124,25 @@ public class LoginActivity extends AppCompatActivity {
         username = edUsername.getEditText().getText().toString().trim();
         password = edPassword.getEditText().getText().toString().trim();
 
-//        Dataservice networkService = APIService.getService();
-//        Call<ResponseModel> login = networkService.login(username, password);
-//        login.enqueue(new Callback<ResponseModel>() {
-//            @Override
-//            public void onResponse(@NonNull Call<ResponseModel> call, @NonNull Response<ResponseModel> response) {
-//                ResponseModel responseBody = response.body();
-//                if (responseBody != null) {
-//                    if (responseBody.getSuccess().equals("1")) {
-//                        accept = true;
-//                    } else {
-//                        Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu sai !", Toast.LENGTH_LONG).show();
-//                        progressDialog.dismiss();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<ResponseModel> call, @NonNull Throwable t) {
-//                progressDialog.dismiss();
-//            }
-//        });
+        AccountService networkService = ApiUtil.getAccountService();
+        Call<Account> login = networkService.login(username, password);
+        login.enqueue(new Callback<Account>() {
+            @Override
+            public void onResponse(@NonNull Call<Account> call, @NonNull Response<Account> response) {
+                Account responseBody = response.body();
+                if (responseBody != null) {
+                    accept = true;
+                } else {
+                    Toast.makeText(LoginActivity.this, "Login Fail !", Toast.LENGTH_LONG).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Account> call, @NonNull Throwable t) {
+                progressDialog.dismiss();
+            }
+        });
     }
 
     private void mapping() {
