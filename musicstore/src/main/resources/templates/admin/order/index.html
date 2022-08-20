@@ -35,27 +35,31 @@ and open the template in the editor.
                                             <tr>
                                                 <th style="width: 5%;">No</th>
                                                 <th style="width: 10%;">Order date</th>
+                                                <th style="width: 10%;">User name</th>
                                                 <th style="width: 15%;">Phone number</th>
                                                 <th style="width: 20%;">Address</th>
                                                 <th style="width: 15%;">Amount</th>
                                                 <th style="width: 5%;">Status</th>
-                                                <th style="width: 5%;">Is payment</th> 
-                                                <th style="width: 10%;">User name</th>
+                                                <th style="width: 5%;">Is payment</th>
                                                 <th style="width: 10%;">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr th:each="item:${list}">
-                                                <td th:text="${list.indexOf(item)+1}"></td>
+                                            <tr th:each="item:${list.page}">
+                                                <td th:text="${service.findAll().size-service.findAll().indexOf(item)}"></td>
                                                 <td th:text="${item.orderDate}"></td>
+                                                <td th:text="${item.user.username}"></td>
                                                 <td th:text="${item.phoneNumber}"></td>
                                                 <td th:text="${item.address}"></td>
                                                 <td th:text="${#numbers.formatCurrency(item.amount)}"></td>
                                                 <td th:text="${item.status}"></td>
-                                                <td th:text="${item.isPayment}"></td>
-                                                <td th:text="${item.user.username}"></td>
                                                 <td>
-                                                    <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" th:href="@{/admin/order/detail/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
+                                                    <span th:if="${item.isPayment==1}">Yes</span>
+                                                    <span th:if="${item.isPayment==0}">No</span>
+                                                </td>
+                                                <td>
+                                                    <a th:if="${item.isPayment==1}" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Detail" th:href="@{/admin/order/detail/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
+                                                    <a th:if="${item.isPayment==0}" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/admin/order/delete/{id}(id=${item.id})}"><i class="ri-eraser-line"></i></a>
                                                 </td>
                                             </tr>
 <!--                                            <tr th:if="${title!='null' && item.title.toLowerCase().contains(title.toLowerCase())}" th:each="item:${list.page}">

@@ -6,10 +6,15 @@ package vn.aptech.musicstore.service.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.aptech.musicstore.entity.Account;
 import vn.aptech.musicstore.entity.Order;
 import vn.aptech.musicstore.entity.OrderDetail;
+import vn.aptech.musicstore.pagination.Paged;
+import vn.aptech.musicstore.pagination.Paging;
 import vn.aptech.musicstore.repository.OrderRepository;
 import vn.aptech.musicstore.service.OrderService;
 
@@ -55,6 +60,18 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> findOrderByUser(Account user){
         return  orderRepository.findOrderByUser(user);
+    }
+
+    @Override
+    public Paged<Order> getPage(int pageNumber, int size) {
+        PageRequest request = PageRequest.of(pageNumber - 1, size, Sort.by(Sort.Direction.DESC,"id"));
+        Page<Order> postPage = orderRepository.findAll(request);
+        return new Paged<>(postPage, Paging.of(postPage.getTotalPages(), pageNumber, size));
+    }
+
+    @Override
+    public void deleteById(int id) {
+        orderRepository.deleteById(id);
     }
 
 }

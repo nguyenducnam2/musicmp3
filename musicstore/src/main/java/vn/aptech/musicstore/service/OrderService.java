@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import vn.aptech.musicstore.entity.Account;
 import vn.aptech.musicstore.entity.Order;
 import vn.aptech.musicstore.entity.OrderDetail;
+import vn.aptech.musicstore.pagination.Paged;
 
 @Service
 public interface OrderService {
@@ -20,4 +21,6 @@ public interface OrderService {
     List<Order> getAmount(int month);
     Order save(Order order);
     List<Order> findOrderByUser(Account user);
+    Paged<Order> getPage(int pageNumber, int size);
+    void deleteById(int id);
 }

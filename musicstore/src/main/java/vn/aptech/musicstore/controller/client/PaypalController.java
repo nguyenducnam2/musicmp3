@@ -64,7 +64,7 @@ public class PaypalController {
 
     @Autowired
     private CartService cartService;
-    
+
     @Autowired
     private ProductService productService;
 
@@ -121,6 +121,18 @@ public class PaypalController {
         HttpSession session = request.getSession();
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
+        Account user = (Account) session.getAttribute("user");
+        Order order = new Order();
+        order.setAddress(user.getAddress());
+        order.setPhoneNumber(user.getPhone());
+        order.setUser(user);
+        order.setIsPayment(0);
+        order.setStatus(0);
+        order.setDescription("Paypal");
+        order.setOrderDate(java.time.LocalDate.now().toString());
+        order.setAmount((float) shoppingCartService.getAmount());
+        orderService.save(order);
+        shoppingCartService.clear();
         return "redirect:/";
     }
 
@@ -139,8 +151,8 @@ public class PaypalController {
                 order.setAddress(user.getAddress());
                 order.setPhoneNumber(user.getPhone());
                 order.setUser(user);
-                order.setIsPayment(0);
-                order.setStatus(1);
+                order.setIsPayment(1);
+                order.setStatus(0);
                 order.setDescription("Paypal");
                 order.setOrderDate(java.time.LocalDate.now().toString());
                 order.setAmount((float) shoppingCartService.getAmount());
@@ -154,7 +166,7 @@ public class PaypalController {
                     detail.setQuantity(newList.get(i).getQuantity());
                     detail.setUnitPrice(products.getPrice());
                     orderDetailService.save(detail);
-                    products.setQuantity(products.getQuantity()-detail.getQuantity());
+                    products.setQuantity(products.getQuantity() - detail.getQuantity());
                     productService.save(products);
                 }
                 shoppingCartService.clear();

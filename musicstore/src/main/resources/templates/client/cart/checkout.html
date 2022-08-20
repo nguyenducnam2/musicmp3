@@ -163,7 +163,7 @@
                                     <span id="payment"><span id="three">2</span>Checkout</span>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-7">
+                                    <div class="col-md-12">
                                         <div class="left border">
                                             <form>
                                                 <h4>Personal Infomation</h4>
@@ -171,14 +171,6 @@
                                                 <input th:value="${user.username}" readonly>
                                                 <h6>Email:</h6>
                                                 <input th:value="${user.email}" readonly>
-                                                <div class="row">
-                                                    <div class="col-4"><h6>First Name:</h6>
-                                                        <input th:value="${user.firstName}" readonly>
-                                                    </div>
-                                                    <div class="col-4"><h6>Last Name:</h6>
-                                                        <input th:value="${user.lastName}" readonly>
-                                                    </div>
-                                                </div>
                                                 <h6>Phone:</h6>
                                                 <input th:value="${user.phone}">
                                                 <h6>Address</h6>
@@ -190,36 +182,9 @@
                                                     <img src="https://cdn-icons-png.flaticon.com/512/174/174861.png?w=740&t=st=1659926924~exp=1659927524~hmac=cc4b6d082a23e117b92e5919322f4a4b22e02dbdf61a8ef37003d7092d2929ad"/>
                                                 </div>
                                             </div>
-                                        </div>    
-
-                                    </div>
-                                    <div class="col-md-5">
-                                        <th:block th:each="item, status : ${products}">
-                                            <p th:text="${status.count}"></p>
-                                            <div class="row item">
-                                                <div class="col-4 align-self-center"><img class="img-fluid" th:src="@{'/webdata/product/'+${item.image}}"></div>
-                                                <div class="col-8">
-                                                    <div class="row"><b th:text="${#numbers.formatCurrency(item.price)}"></b></div>
-                                                    <div class="row" th:text="${item.name}"></div>
-                                                    <div class="row" th:text="${item.quantity}"></div>
-                                                    <div class="row" th:text="${#numbers.formatCurrency(item.price*item.quantity)}"></div>
-                                                </div>
+                                            <div class="row lower">
+                                                <a style="color: white;" th:href="@{/cart/pay}" class="btn">Checkout</a>
                                             </div>
-                                        </th:block>
-                                        <div class="row lower">
-                                            <div class="col text-left">Total</div>
-                                            <div class="col text-right" th:text="${total}"></div>
-                                        </div>
-                                        <div class="row lower">
-                                            <div class="col text-left">Delivery</div>
-                                            <div class="col text-right">Free</div>
-                                        </div>
-                                        <div class="row lower">
-                                            <div class="col text-left"><b>Total to pay</b></div>
-                                            <div class="col text-right" th:text="${#numbers.formatCurrency(amount)}"></div>
-                                        </div>
-                                        <div class="row lower">
-                                            <a style="color: white;" th:href="@{/cart/pay}" class="btn">Checkout</a>
                                         </div>
                                     </div>
                                 </div>
@@ -227,12 +192,11 @@
                         </div>
                     </div>
                 </div>
+                <!--            <input type="hidden" id="productId" th:value="${product.id}"/>
+                            <input type="hidden" id="amount" th:value="${amount}"/>
+                            <script>
+                                document.querySelector('#btnPay').href="http://localhost:8080/cart/pay?amount="+document.querySelector('#amount').value+"&productId="+document.querySelector('#productId').value;
+                            </script>-->
             </div>
-<!--            <input type="hidden" id="productId" th:value="${product.id}"/>
-            <input type="hidden" id="amount" th:value="${amount}"/>
-            <script>
-                document.querySelector('#btnPay').href="http://localhost:8080/cart/pay?amount="+document.querySelector('#amount').value+"&productId="+document.querySelector('#productId').value;
-            </script>-->
-        </div>
     </body>
 </html>
