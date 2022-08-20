@@ -32,7 +32,7 @@
                     background-image: url("https://i.imgur.com/4bg1e6u.jpg");
                     background-size: cover;
                     background-repeat: no-repeat;
-                }  
+                }
                 .card-top{
                     padding: 0.7rem 1rem;
                 }
@@ -83,7 +83,7 @@
             }
             .left{
                 background-color: #ffffff;
-                padding: 2vh;   
+                padding: 2vh;
             }
             .left img{
                 width: 2rem;
@@ -121,7 +121,7 @@
                 color: white;
                 -webkit-box-shadow: none;
                 -webkit-user-select: none;
-                transition: none; 
+                transition: none;
             }
             .btn:hover{
                 color: white;
@@ -142,7 +142,7 @@
                 background-repeat: no-repeat;
                 background-position-x: 95%;
                 background-position-y: center;
-            } 
+            }
             #cvv:hover{
 
             }
@@ -202,24 +202,19 @@
                                                 </div>
                                             </div>
                                             <hr>
-                                             <div class="row lower">
+                                            <div class="row lower">
                                                 <div class="col text-left">Dicount Code</div>
                                                 <input id="code" onchange="checkCode()"/>
+                                                <span id='discount'></span>
                                             </div>
-                                            <script>
-                                                let code = document.querySelector('#code');
-                                            </script>
+
                                             <div class="row lower">
                                                 <div class="col text-left">Subtotal</div>
                                                 <div class="col text-right">$ [[${subTotal}]]</div>
                                             </div>
                                             <div class="row lower">
-                                                <div class="col text-left">Delivery</div>
-                                                <div class="col text-right">Free</div>
-                                            </div>
-                                            <div class="row lower">
                                                 <div class="col text-left"><b>Total to pay</b></div>
-                                                <div class="col text-right"><b>$ [[${subTotal}]]</b></div>
+                                                <div class="col text-right" id='totalAfterDiscount'><b>$ [[${subTotal}]]</b></div>
                                             </div>
                                             <div class="row lower">
                                                 <a style="color: white;" id="btnPay" class="btn">Order with Paypal</a>
@@ -234,8 +229,33 @@
             </div>
             <input type="hidden" id="cartId" th:value="${cart.id}"/>
             <input type="hidden" id="total" th:value="${subTotal}"/>
+            <input type="hidden" id="finishTotal"/>
+            
             <script>
-                document.querySelector('#btnPay').href="http://localhost:8080/song/pay?total="+document.querySelector('#total').value+"&cartId="+document.querySelector('#cartId').value;
+                let discount = document.querySelector('#discount');
+                let code = document.querySelector('#code');
+                
+                let totalAfterDiscount = document.querySelector('#totalAfterDiscount');
+                let total = document.querySelector('#total');
+                let finishTotal = document.querySelector('#finishTotal');
+
+                // dat bien fail
+//                                                let total = document.querySelector('#total');
+                function checkCode() {
+                    //fetch(String , Object) 
+                    fetch('http://localhost:8080/api/promotion/findByCode?code=' + code.value, {method: 'GET'})
+                            .then((response) => response.json())
+                            .then((response) => {
+                                console.log(total.value);
+                                total.value = parseInt(total.value) - parseInt(total.value) * parseInt(response.promotion.discount) / 100
+                                finishTotal.value =total.value
+                                console.log(total.value);
+                                document.querySelector('#totalAfterDiscount').innerHTML = '$' + total.value;
+                                discount.innerHTML = "<p>Discount: " + response.promotion.discount + "%</p>";
+                            });
+                }
+
+                document.querySelector('#btnPay').href = "http://localhost:8080/song/pay?total=" + total.value + "&cartId=" + document.querySelector('#cartId').value;
             </script>
         </div>
     </body>
