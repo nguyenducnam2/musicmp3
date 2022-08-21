@@ -165,17 +165,15 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="left border">
-                                            <form>
-                                                <h4>Personal Infomation</h4>
-                                                <h6>Username:</h6>
-                                                <input th:value="${user.username}" readonly>
-                                                <h6>Email:</h6>
-                                                <input th:value="${user.email}" readonly>
-                                                <h6>Phone:</h6>
-                                                <input th:value="${user.phone}">
-                                                <h6>Address</h6>
-                                                <input th:value="${user.address}">
-                                            </form>
+                                            <h4>Personal Infomation</h4>
+                                            <h6>Username:</h6>
+                                            <input th:value="${user.username}" readonly>
+                                            <h6>Email:</h6>
+                                            <input th:value="${user.email}" readonly>
+                                            <h6>Firstname:</h6>
+                                            <input th:value="${user.firstName}" readonly>
+                                            <h6>Lastname:</h6>
+                                            <input th:value="${user.lastName}" readonly>
                                             <div class="row">
                                                 <span class="header">Payment Support</span>
                                                 <div class="icons">
@@ -184,6 +182,7 @@
                                             </div>
                                             <div class="row lower">
                                                 <a style="color: white;" th:href="@{/cart/pay}" class="btn">Checkout</a>
+                                                <!--                                                    <button type="submit" class="btn">Order with paypal</button>-->
                                             </div>
                                         </div>
                                     </div>

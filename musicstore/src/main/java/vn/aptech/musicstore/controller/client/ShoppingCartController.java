@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import vn.aptech.musicstore.entity.Account;
-import vn.aptech.musicstore.entity.Order;
 import vn.aptech.musicstore.entity.Product;
 import vn.aptech.musicstore.service.OrderDetailService;
 import vn.aptech.musicstore.service.OrderService;
@@ -117,4 +115,19 @@ public class ShoppingCartController {
         
         return mv;
     }
+    
+//    @PostMapping("/save")
+//    public String save(Model model, HttpServletRequest request, @ModelAttribute("order") Order order) {
+//        HttpSession session = request.getSession();
+//        session.setAttribute("user", session.getAttribute("user"));
+//        model.addAttribute("user", session.getAttribute("user"));
+//        Account user=(Account) session.getAttribute("user");
+//        order.setUser(user);
+//        order.setOrderDate(java.time.LocalDate.now().toString());
+//        order.setAmount((float) cartService.getAmount());
+//        order.setStatus(0);
+//        order.setIsPayment(0);
+//        orderService.save(order);
+//        return "redirect:/order/index";
+//    }
 }

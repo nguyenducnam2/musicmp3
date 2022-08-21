@@ -4,6 +4,7 @@
  */
 package vn.aptech.musicstore.controller.client;
 
+import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -11,12 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import vn.aptech.musicstore.entity.Account;
 import vn.aptech.musicstore.entity.Order;
 import vn.aptech.musicstore.entity.OrderDetail;
+import vn.aptech.musicstore.entity.Product;
 import vn.aptech.musicstore.service.OrderDetailService;
 import vn.aptech.musicstore.service.OrderService;
 import vn.aptech.musicstore.service.ProductService;
@@ -28,6 +32,7 @@ import vn.aptech.musicstore.service.ProductService;
 @Controller
 @RequestMapping
 public class OrderClientController {
+
     @Autowired
     OrderService orderService;
 
@@ -38,8 +43,8 @@ public class OrderClientController {
     OrderDetailService orderDetailService;
 
     @GetMapping("order")
-    public String index(Model model, HttpServletRequest request)
-    {
+    public String index(Model model, HttpServletRequest request, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
         HttpSession session = request.getSession();
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
@@ -67,29 +72,47 @@ public class OrderClientController {
 //        mv.addObject("msg","success");
 //        return mv;
 //    }
-
     @GetMapping(value = "/order/detail/{id}")
-    public String detail(Model model, HttpServletRequest request, @PathVariable int id){
+    public String detail(Model model, HttpServletRequest request, @PathVariable int id) {
         HttpSession session = request.getSession();
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
-        Order order=orderService.findOrderById(id);
+        Order order = orderService.findOrderById(id);
         List<OrderDetail> list = orderDetailService.findOrderDetailsByOrder(order);
         model.addAttribute("order", order);
         model.addAttribute("list", list);
         return "client/order/detail";
     }
-    
+
+    @GetMapping("/order/update/{id}")
+    public String update(HttpServletRequest request, @PathVariable int id, Model model) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
+        model.addAttribute("order", orderService.findOrderById(id));
+        return "client/order/update";
+    }
+
+    @PostMapping("/order/save")
+    public String save(Model model, HttpServletRequest request, @ModelAttribute Order order) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
+        Account user = (Account) session.getAttribute("user");
+        order.setStatus(2);
+        orderService.save(order);
+        model.addAttribute("list", orderService.findOrderByUser(user));
+        return "redirect:/order";
+    }
+
     @GetMapping("order/delete/{id}")
-    public String delete(Model model, HttpServletRequest request, @PathVariable int id, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size)
-    {
+    public String delete(Model model, HttpServletRequest request, @PathVariable int id) {
         orderService.deleteById(id);
         HttpSession session = request.getSession();
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
         Account user = (Account) session.getAttribute("user");
         model.addAttribute("list", orderService.findOrderByUser(user));
-        return "client/order/index";
+        return "redirect:/order";
     }
 }
