@@ -44,7 +44,7 @@ public class Fragment_Doi_MatKhau extends Fragment {
                 .setCustomAnimations(R.anim.anim_intent_in, R.anim.anim_intent_out);;
         matkhaumoi = view.findViewById(R.id.edtmatkhaumoi);
         xacnhanmatkhau = view.findViewById(R.id.edtxacnhanmatkhau);
-        textView = view.findViewById(R.id.textView9);
+//        textView = view.findViewById(R.id.textView9);
         btnxacnhan = view.findViewById(R.id.buttonxacnhan);
 
         Bundle bundle = getArguments();

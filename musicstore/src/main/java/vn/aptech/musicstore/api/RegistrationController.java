@@ -84,13 +84,20 @@ public class RegistrationController {
         return null;
     }
 
-    @GetMapping("/findByUsername")
+    @PostMapping("/findByUsername")
     public Account findByUsername(@RequestParam("username") String username) {
         Optional<Account> userAndroid = userService.findByUsername(username);
         if (userAndroid.isPresent()) {
             return userAndroid.get();
         }
         return null;
+    }
+    
+    @PostMapping("/resetPasswordAndroid")
+    public String changePassword(@RequestParam("username") String username,@RequestParam("password") String password) {
+        Account user = userService.findAccountByEmail(username);
+        userService.changePassword(user, password);
+        return "success";
     }
 
 //
@@ -184,17 +191,5 @@ public class RegistrationController {
         userService.changePassword(user, passwordModel.getNewPassword());
         return "Password Changed Successfully";
     }
-//
-//    private String passwordResetTokenMail(Account user, String applicationUrl, String token) {
-//        String url
-//                = applicationUrl
-//                + "/savePassword?token="
-//                + token;
-//
-//        //sendVerificationEmail()
-//        log.info("Click the link to Reset your Password: {}",
-//                url);
-//        return url;
-//    }
 
 }

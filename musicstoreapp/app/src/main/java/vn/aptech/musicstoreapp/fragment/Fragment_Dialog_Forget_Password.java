@@ -84,8 +84,8 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
                     }, 5000);
 
                     username = edUsernameFP.getText().toString().trim();
-                    if(username.trim().length() < 6 || username.trim().length() > 36){
-                        Toast.makeText(getActivity(), "Độ dài tài khoản từ 6 -> 36 ký tự", Toast.LENGTH_SHORT).show();
+                    if(username.trim().length() < 3 || username.trim().length() > 36){
+                        Toast.makeText(getActivity(), "Lenght of Username must be higher than 3 and lower than 36", Toast.LENGTH_SHORT).show();
                     }else {
                         GetDataUser(username);
                         new Handler().postDelayed(new Runnable() {
@@ -108,16 +108,16 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
                 if (!(edPinConfirm.getText().toString().trim().equals(""))){
                     if (code == Integer.parseInt(edPinConfirm.getText().toString())){
                         FragmentManager fragmentManager = getFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
-                                .setCustomAnimations(R.anim.anim_intent_in, R.anim.anim_intent_out);
-                        Fragment_Dialog_Forget_Password fragmentForgetPassword = new Fragment_Dialog_Forget_Password();
-
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                        Fragment_Dialog_Forget_Password fragmentForgetPassword = new Fragment_Dialog_Forget_Password();
+                        Fragment_Change_Password fragmentChangePassword = new Fragment_Change_Password();
                         Bundle bundle = new Bundle();
                         bundle.putString("username", username);
-                        fragmentForgetPassword.setArguments(bundle);
+                        fragmentChangePassword.setArguments(bundle);
 
-                        fragmentTransaction.replace(R.id.frameContent, fragmentForgetPassword);
+                        fragmentTransaction.add(R.id.frameContent, fragmentChangePassword);
                         fragmentTransaction.commit();
+                        Toast.makeText(getActivity(), "success", Toast.LENGTH_SHORT).show();
                     }else {
                         Toast.makeText(getActivity(), "Pin confirm wrong", Toast.LENGTH_SHORT).show();
                     }
@@ -184,26 +184,26 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
 
     private void GetDataUser(String username) {
         AccountService dataservice = ApiUtil.getAccountService();
-        Call<List<Account>> callback = dataservice.findByUsername(username);
-        callback.enqueue(new Callback<List<Account>>() {
+        Call<Account> callback = dataservice.findByUsername(username);
+        callback.enqueue(new Callback<Account>() {
             @Override
-            public void onResponse(Call<List<Account>> call, Response<List<Account>> response) {
-                ArrayList<Account> user = (ArrayList<Account>) response.body();
-                if (user.size() > 0){
-                    emailuser = user.get(0).getUsername();
+            public void onResponse(Call<Account> call, Response<Account> response) {
+                Account account = (Account) response.body();
+                if (account != null) {
+                    emailuser = account.getUsername();
                     acceptGetCode = true;
-                }else {
-                    Toast.makeText(getActivity(), "Account is not exist", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Pin code has been sent.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Account is not exist.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Account>> call, Throwable t) {
+            public void onFailure(Call<Account> call, Throwable t) {
 
             }
         });
     }
-
 
 
 
