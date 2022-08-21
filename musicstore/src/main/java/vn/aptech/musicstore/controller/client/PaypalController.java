@@ -259,7 +259,9 @@ public class PaypalController {
                 order.setPromotion(p.get());
                 order.setPromotionId(p.get().getId());
                 order = songOrderService.save(order);
-                pCode.get().setUseTimes(pCode.get().getUseTimes() + 1);
+                if (pCode.get().getUseTimes()<pCode.get().getPromotion().getUseTimes() ) {
+                    pCode.get().setUseTimes(pCode.get().getUseTimes() + 1);
+                }
                 System.out.println("userTime :" + pCode.get().getUseTimes());
                 promotionCodeService.save(pCode.get());
                 for (CartItem item : cartItemService.findByCartId(cartId)) {
