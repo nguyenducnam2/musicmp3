@@ -183,8 +183,8 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
     }
 
     private void GetDataUser(String username) {
-        AccountService dataservice = ApiUtil.getAccountService();
-        Call<Account> callback = dataservice.findByUsername(username);
+        AccountService dataService = ApiUtil.getAccountService();
+        Call<Account> callback = dataService.findByUsername(username);
         callback.enqueue(new Callback<Account>() {
             @Override
             public void onResponse(Call<Account> call, Response<Account> response) {

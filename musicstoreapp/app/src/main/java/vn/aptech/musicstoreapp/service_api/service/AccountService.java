@@ -31,5 +31,7 @@ public interface AccountService {
     @POST("resetPasswordAndroid")
     Call<ResponseBody> resetPasswordAndroid(@Field("username")String username,@Field("password") String password);
 
-
+    @FormUrlEncoded
+    @POST("checkUsernameRegisterAndroid")
+    Call<ResponseModel> checkUsername(@Field("username")String username);
 }
