@@ -88,6 +88,8 @@
                                     <a href="#" th:if="${session.user.image==null}" class="search-toggle iq-waves-effect d-flex align-items-center">
                                         <img th:if='${session.imageUrlAvatar == null || session.user.provider ==null || session.user.provider == "" }' th:src="@{/admintemplate/images/user/user-default2.png}" class="img-fluid rounded-circle" alt="user"/>
                                         <img  th:if="${session.user.provider == 'Google'}"  th:src="@{/admintemplate/images/user/imagesGG.png}" class="img-fluid rounded-circle" alt="user"/>
+                                        <img  th:if="${session.user.provider == 'Facebook'}"  th:src="@{/admintemplate/images/user/imagesGG.png}" class="img-fluid rounded-circle" alt="user"/>
+
                                     </a>
 
 
