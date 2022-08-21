@@ -43,23 +43,31 @@ public class PromotionApiController {
 
     @GetMapping("/findByCode")
     public PromotionCode findByCode(@RequestParam("code") String code, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        session.setAttribute("codePromotion", code);
-        Account user = (Account) session.getAttribute("user");
-        Optional<PromotionCode> checkCode = serviceCodeService.findByCode(code);
-        Calendar cal = Calendar.getInstance();
-        Calendar cal1 = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);
+
 //        return checkCode.get();
-        if (Objects.equals(user.getId(), checkCode.get().getAcc().getId())) {
-            if ((checkCode.get().getPromotion().getStartDate().getTime() - cal1.getTime().getTime()) < 0) {
-                if ((checkCode.get().getPromotion().getEndDate().getTime() - cal.getTime().getTime()) >= 0) {
-                    if (checkCode.get().getUseTimes() < checkCode.get().getPromotion().getUseTimes()) {
-                        return checkCode.get();
+        try {
+            HttpSession session = request.getSession();
+            session.setAttribute("codePromotion", code);
+            Account user = (Account) session.getAttribute("user");
+            Optional<PromotionCode> checkCode = serviceCodeService.findByCodeAndUserId(code,user.getId());
+            Calendar cal = Calendar.getInstance();
+            Calendar cal1 = Calendar.getInstance();
+            cal.add(Calendar.DATE, -1);
+//            System.out.println("userId - checkCodeUserId: " + user.getId() + " " + checkCode.get().getUserId());
+//            if (user.getId() == checkCode.get().getUserId()) {
+                if ((checkCode.get().getPromotion().getStartDate().getTime() - cal1.getTime().getTime()) < 0) {
+                    if ((checkCode.get().getPromotion().getEndDate().getTime() - cal.getTime().getTime()) >= 0) {
+                        if (checkCode.get().getUseTimes() < checkCode.get().getPromotion().getUseTimes()) {
+                            return checkCode.get();
+                        }
                     }
                 }
-            }
+//            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
+
         return null;
     }
 }

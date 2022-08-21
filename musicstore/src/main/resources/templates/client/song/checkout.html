@@ -238,7 +238,7 @@
                 let totalAfterDiscount = document.querySelector('#totalAfterDiscount');
                 let total = document.querySelector('#total');
                 let finishTotal = document.querySelector('#finishTotal');
-
+                finishTotal.value = total.value;
                 // dat bien fail
 //                                                let total = document.querySelector('#total');
                 function checkCode() {
@@ -246,19 +246,21 @@
                     fetch('http://localhost:8080/api/promotion/findByCode?code=' + code.value, {method: 'GET'})
                             .then((response) => response.json())
                             .then((response) => {
-                                if (!(response === null)) {
-                                    console.log(total.value);
-                                    total.value = parseInt(total.value) - parseInt(total.value) * parseInt(response.promotion.discount) / 100 ;
-                                    finishTotal.value = total.value;
-                                    console.log(total.value);
-                                    document.querySelector('#totalAfterDiscount').innerHTML = '$' + total.value;
-                                    discount.innerHTML = "<p>Discount: " + response.promotion.discount + "%</p>";
-                                    document.querySelector('#btnPay').href = "http://localhost:8080/song/pay?total=" + total.value + "&cartId=" + document.querySelector('#cartId').value;
-                                } else {
-                                    discount.innerHTML = "<p style='color: red;' >Your code invalid</p>";
-                                }
+                                console.log(total.value);
+                                finishTotal.value = total.value;
+                                total.value = parseInt(total.value) - parseInt(total.value) * parseInt(response.promotion.discount) / 100
+                                console.log(total.value);
+                                document.querySelector('#totalAfterDiscount').innerHTML = '$' + total.value;
+                                discount.innerHTML = "<p>Discount: " + response.promotion.discount + "%</p>";
+                                document.querySelector('#btnPay').href = "http://localhost:8080/song/pay?total=" + total.value + "&cartId=" + document.querySelector('#cartId').value;
+
+                            })
+                            .catch(e => {
+                                console.log(e);
+                                total.value = finishTotal.value;
+                                document.querySelector('#totalAfterDiscount').innerHTML = '$' + total.value;
+                                discount.innerHTML = "<p style='color: red;' >Your code invalid</p>";
                             });
-                          
                 }
 
                 document.querySelector('#btnPay').href = "http://localhost:8080/song/pay?total=" + total.value + "&cartId=" + document.querySelector('#cartId').value;

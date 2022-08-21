@@ -246,9 +246,10 @@ public class PaypalController {
                 int cartId = (int) session.getAttribute("cartId");
                 String codePromotion = (String) session.getAttribute("codePromotion");
                 Account acc = (Account) session.getAttribute("user");
+                session.setAttribute("user", acc);
                 Optional<Promotion> p = promotionService.findByCode(codePromotion);
-                Optional<PromotionCode> pCode = promotionCodeService.findByCode(codePromotion);
-                int count = 0;
+                Optional<PromotionCode> pCode = promotionCodeService.findByCodeAndUserId(codePromotion, acc.getId());
+                pCode.get().getUseTimes();
                 SongOrder order = new SongOrder();
                 order.setPayment("Paypal");
                 order.setStatus("Success");
@@ -258,6 +259,9 @@ public class PaypalController {
                 order.setPromotion(p.get());
                 order.setPromotionId(p.get().getId());
                 order = songOrderService.save(order);
+                pCode.get().setUseTimes(pCode.get().getUseTimes() + 1);
+                System.out.println("userTime :" + pCode.get().getUseTimes());
+                promotionCodeService.save(pCode.get());
                 for (CartItem item : cartItemService.findByCartId(cartId)) {
                     DownloadAllowed obj = new DownloadAllowed();
                     SongOrderDetail orderdetail = new SongOrderDetail();
@@ -270,9 +274,7 @@ public class PaypalController {
                     obj.setAccount(acc);
                     obj.setSongId(item.getSong().getId());
                     obj.setSong(item.getSong());
-                    pCode.get().setUseTimes(count += 1);
-                    System.out.println("userTime :" + pCode.get().getUseTimes());
-                    promotionCodeService.save(pCode.get());
+
                     songOrderDetailService.save(orderdetail);
                     downService.save(obj);
                     cartItemService.delete(item);
