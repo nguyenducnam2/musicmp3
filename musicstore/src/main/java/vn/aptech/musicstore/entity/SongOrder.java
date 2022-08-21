@@ -56,7 +56,7 @@ public class SongOrder {
     @OneToMany(mappedBy = "SongOrder")
     private List<SongOrderDetail> items; */
     @Column(name = "promotion_id", insertable = false, updatable = false)
-    private int promotionId;
+    private Integer promotionId;
     @JoinColumn(name = "promotion_id", referencedColumnName = "id")
     @ManyToOne
     private Promotion promotion;

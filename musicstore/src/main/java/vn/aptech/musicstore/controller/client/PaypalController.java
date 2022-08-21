@@ -247,23 +247,31 @@ public class PaypalController {
                 String codePromotion = (String) session.getAttribute("codePromotion");
                 Account acc = (Account) session.getAttribute("user");
                 session.setAttribute("user", acc);
-                Optional<Promotion> p = promotionService.findByCode(codePromotion);
-                Optional<PromotionCode> pCode = promotionCodeService.findByCodeAndUserId(codePromotion, acc.getId());
-                pCode.get().getUseTimes();
                 SongOrder order = new SongOrder();
                 order.setPayment("Paypal");
                 order.setStatus("Success");
                 order.setTotal((Double) session.getAttribute("total"));
                 order.setAccountId(acc.getId());
                 order.setAccount(acc);
-                order.setPromotion(p.get());
-                order.setPromotionId(p.get().getId());
-                order = songOrderService.save(order);
-                if (pCode.get().getUseTimes()<pCode.get().getPromotion().getUseTimes() ) {
-                    pCode.get().setUseTimes(pCode.get().getUseTimes() + 1);
+                try {
+                    if (!(codePromotion.isEmpty())) {
+
+                        Optional<Promotion> p = promotionService.findByCode(codePromotion);
+                        Optional<PromotionCode> pCode = promotionCodeService.findByCodeAndUserId(codePromotion, acc.getId());
+                        pCode.get().getUseTimes();
+                        if (pCode.get().getUseTimes() < pCode.get().getPromotion().getUseTimes()) {
+                            pCode.get().setUseTimes(pCode.get().getUseTimes() + 1);
+                        }
+                        System.out.println("userTime :" + pCode.get().getUseTimes());
+                        promotionCodeService.save(pCode.get());
+                        order.setPromotion(p.get());
+                        order.setPromotionId(p.get().getId());
+                    }
+                } catch (Exception e) {
+
                 }
-                System.out.println("userTime :" + pCode.get().getUseTimes());
-                promotionCodeService.save(pCode.get());
+                order = songOrderService.save(order);
+
                 for (CartItem item : cartItemService.findByCartId(cartId)) {
                     DownloadAllowed obj = new DownloadAllowed();
                     SongOrderDetail orderdetail = new SongOrderDetail();
