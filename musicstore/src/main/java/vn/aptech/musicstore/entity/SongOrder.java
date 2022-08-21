@@ -52,9 +52,14 @@ public class SongOrder {
     @ManyToOne
     private Account account;
 
-  /*  @JsonIgnore
+    /*  @JsonIgnore
     @OneToMany(mappedBy = "SongOrder")
     private List<SongOrderDetail> items; */
+    @Column(name = "promotion_id", insertable = false, updatable = false)
+    private int promotionId;
+    @JoinColumn(name = "promotion_id", referencedColumnName = "id")
+    @ManyToOne
+    private Promotion promotion;
 
     private Date calculateExpirationDate(int expirationTime) {
         Calendar calendar = Calendar.getInstance();

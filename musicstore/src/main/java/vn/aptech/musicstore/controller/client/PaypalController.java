@@ -255,6 +255,8 @@ public class PaypalController {
                 order.setTotal((Double) session.getAttribute("total"));
                 order.setAccountId(acc.getId());
                 order.setAccount(acc);
+                order.setPromotion(p.get());
+                order.setPromotionId(p.get().getId());
                 order = songOrderService.save(order);
                 for (CartItem item : cartItemService.findByCartId(cartId)) {
                     DownloadAllowed obj = new DownloadAllowed();
@@ -263,13 +265,12 @@ public class PaypalController {
                     orderdetail.setSong(item.getSong());
                     orderdetail.setSongOrderId(order.getId());
                     orderdetail.setSongOrder(order);
-                    orderdetail.setPromotion(p.get());
-                    orderdetail.setPromotionId(p.get().getId());
+
                     obj.setAccountId(acc.getId());
                     obj.setAccount(acc);
                     obj.setSongId(item.getSong().getId());
                     obj.setSong(item.getSong());
-                    pCode.get().setUseTimes(count+=1);
+                    pCode.get().setUseTimes(count += 1);
                     System.out.println("userTime :" + pCode.get().getUseTimes());
                     promotionCodeService.save(pCode.get());
                     songOrderDetailService.save(orderdetail);

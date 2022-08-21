@@ -13,14 +13,19 @@ import vn.aptech.musicstore.entity.PromotionCode;
  *
  * @author Administrator
  */
-
 @Service
 public interface PromotionCodeService {
-       List<PromotionCode> findAll();
+
+    List<PromotionCode> findAll();
 
     Optional<PromotionCode> findById(int id);
 
+    List<PromotionCode> findByUserId(Long id);
+
     Optional<PromotionCode> findByCode(String code);
+
+    Optional<PromotionCode> findByCodeAndUserId(String code, Long id);
+
     PromotionCode save(PromotionCode obj);
 
     void delete(PromotionCode obj);

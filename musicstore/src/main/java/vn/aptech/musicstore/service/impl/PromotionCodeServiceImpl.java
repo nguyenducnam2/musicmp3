@@ -16,11 +16,10 @@ import vn.aptech.musicstore.service.PromotionCodeService;
  *
  * @author Administrator
  */
-
-
 @Service
-public class PromotionCodeServiceImpl implements PromotionCodeService{
-     @Autowired
+public class PromotionCodeServiceImpl implements PromotionCodeService {
+
+    @Autowired
     private PromotionCodeRepository repo;
 
     @Override
@@ -31,6 +30,11 @@ public class PromotionCodeServiceImpl implements PromotionCodeService{
     @Override
     public Optional<PromotionCode> findById(int id) {
         return repo.findById(id);
+    }
+
+    @Override
+    public List<PromotionCode> findByUserId(Long id) {
+        return repo.findByUserId(id);
     }
 
     @Override
@@ -46,5 +50,10 @@ public class PromotionCodeServiceImpl implements PromotionCodeService{
     @Override
     public Optional<PromotionCode> findByCode(String code) {
         return repo.findByCode(code);
+    }
+
+    @Override
+    public Optional<PromotionCode> findByCodeAndUserId(String code, Long id) {
+        return repo.findByCodeAndUserId(code, id);
     }
 }

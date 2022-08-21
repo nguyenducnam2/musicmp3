@@ -73,11 +73,7 @@ public class HomeClientController implements ErrorController {
     @Autowired
     private ArtistService service_artist;
 
-    @Autowired
-    private PromotionService promotionService;
-
-    @Autowired
-    private PromotionCodeService promotionCodeService;
+    
 //    @Value("${uri.local}")
 //    private String uri_local;
     @Autowired
@@ -334,60 +330,5 @@ public class HomeClientController implements ErrorController {
         return "client/reset_change_pass";
     }
 
-    @GetMapping("/promotion")
-    public String promotion(Model model, HttpServletRequest request) {
-        model.addAttribute("list", promotionService.findAll());
-        model.addAttribute("name", "null");
-//        LocalDate now = LocalDate.now();
-        Calendar cal = Calendar.getInstance();
-        Calendar cal1 = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);
-        model.addAttribute("nowEndDate", cal.getTime().getTime());
-        model.addAttribute("nowStartDate", cal1.getTime().getTime());
-        return "client/promotion";
-    }
-
-    @GetMapping("/promotion/getCode/{promotionId}/{userId}")
-    public String getCode(@PathVariable("promotionId") int promotionId, @PathVariable("userId") Long userId, Model model, HttpServletRequest request) {
-        Optional<Promotion> p = promotionService.findById(promotionId);
-        Optional<Account> u = userService.findById(userId);
-
-        if (promotionCodeService.findByCode(p.get().getCode()).isEmpty()) {
-            PromotionCode getCode = new PromotionCode();
-            getCode.setCode(p.get().getCode());
-            getCode.setUseTimes(0);
-            getCode.setPromotionId(promotionId);
-            getCode.setUserId(userId);
-            getCode.setAcc(u.get());
-            getCode.setPromotion(p.get());
-            promotionCodeService.save(getCode);
-            model.addAttribute("mess", "Successfully");
-        } else {
-            model.addAttribute("mess", "Failed");
-        }
-
-        HttpSession session = request.getSession();
-        session.setAttribute("user", u.get());
-        session.setAttribute("codePromotion",p.get().getCode() );
-        Calendar cal = Calendar.getInstance();
-        Calendar cal1 = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);
-        model.addAttribute("nowEndDate", cal.getTime().getTime());
-        model.addAttribute("nowStartDate", cal1.getTime().getTime());
-        model.addAttribute("list", promotionCodeService.findAll());
-        model.addAttribute("name", "null");
-        return "client/promotion/your-code-promotion";
-    }
     
-    @GetMapping("/promotion/yourCode")
-    public String yourCode(Model model, HttpServletRequest request) {
-        Calendar cal = Calendar.getInstance();
-        Calendar cal1 = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);
-        model.addAttribute("nowEndDate", cal.getTime().getTime());
-        model.addAttribute("nowStartDate", cal1.getTime().getTime());
-        model.addAttribute("list", promotionCodeService.findAll());
-        model.addAttribute("name", "null");
-        return "client/promotion/your-code-promotion";
-    }
 }
