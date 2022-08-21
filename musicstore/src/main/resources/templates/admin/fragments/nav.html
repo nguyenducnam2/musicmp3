@@ -44,6 +44,10 @@
                                 <li><a th:href="@{/admin/genre}"><i class="ri-function-line"></i>Genre</a></li>
                                 <li><a th:href="@{/admin/subtitle}"><i class="lab la-wpforms"></i>Subtitle</a></li>
                                 <li><a th:href="@{/admin/news}"><i class="ri-function-line"></i>News</a></li>
+                                <li><a th:href="@{/admin/playlist}"><i class="ri-function-line"></i>Playlist</a></li>
+                                <li><a th:href="@{/admin/playlistitem}"><i class="ri-function-line"></i>Playlist Item</a></li>
+
+
                             </ul>
                         </li>  
                         <li sec:authorize="hasAnyRole('ADMIN','MODERATOR','EDITOR')">

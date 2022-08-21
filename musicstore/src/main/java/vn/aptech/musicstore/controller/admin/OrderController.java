@@ -84,6 +84,18 @@ public class OrderController {
         orderService.deleteById(id);
         model.addAttribute("list", orderService.getPage(pageNumber, size));
         model.addAttribute("service", orderService);
-        return "admin/order/index";
+        return "redirect:/admin/order";
+    }
+    
+    @GetMapping("order/confirm/{id}")
+    public String confirm(Model model,@PathVariable int id, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size)
+    {
+        Order order = orderService.findOrderById(id);
+        order.setStatus(3);
+        orderService.save(order);
+        model.addAttribute("list", orderService.getPage(pageNumber, size));
+        model.addAttribute("service", orderService);
+        return "redirect:/admin/order";
     }
 }

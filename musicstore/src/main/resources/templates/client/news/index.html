@@ -8,7 +8,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
       layout:decorate="~{client/layout.html}">
     <body>
         <div layout:fragment="content" id="content-page" class="content-page">
-            <div class="container-fluid">
+            <div class="container-fluid" th:if="${session.user !=null}">
                 <div>
                     <h2>News list</h2>
                     <div class="iq-search-bar">   

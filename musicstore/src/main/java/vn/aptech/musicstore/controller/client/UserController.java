@@ -265,11 +265,14 @@ public class UserController {
     public String save(@RequestParam("file") MultipartFile file, @RequestParam("file2") MultipartFile file2, HttpServletRequest request,
             @ModelAttribute("song") Song s, Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam("accountId") Long accountId,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size) throws IOException {
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) throws IOException 
+       
+    {   
         HttpSession session = request.getSession();
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
-        if (!(file.isEmpty())) {
+        
+            if (!(file.isEmpty())) {
             s.setMedia(file.getOriginalFilename());
             if (!(file2.isEmpty())) {
                 s.setImage(file2.getOriginalFilename());
@@ -296,6 +299,7 @@ public class UserController {
                 s.setImage(service_song.findById(s.getId()).orElseThrow().getImage());
                 s.setAccountId(userService.findById(s.getAccountId()).orElseThrow().getId());
                 s.setAccount(userService.findById(accountId).orElseThrow());
+                s.setView(0);
                 s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
                 service_song.save(s);
             } else {
@@ -303,17 +307,83 @@ public class UserController {
                 s.setImage(file2.getOriginalFilename());
                 s.setAccountId(userService.findById(s.getAccountId()).orElseThrow().getId());
                 s.setAccount(userService.findById(accountId).orElseThrow());
+                s.setView(0);
                 s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
                 Files.copy(file2.getInputStream(), Paths.get(base_url + "\\webdata\\user" + File.separator + file2.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
                 service_song.save(s);
             }
         }
 
+       
+        
         model.addAttribute("list", service_song.getPage(pageNumber, size));
         model.addAttribute("service", service_song);
         model.addAttribute("name", "null");
         model.addAttribute("mess", "Successfully");
-        return "redirect:/user/upload";
+        return "client/upload/index" ;
+    }
+
+    
+    @PostMapping("/update")
+    public String update(@RequestParam("file") MultipartFile file, @RequestParam("file2") MultipartFile file2, HttpServletRequest request,
+            @ModelAttribute("song") Song s, Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam("accountId") Long accountId,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) throws IOException 
+       
+    {   
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
+        
+            if (!(file.isEmpty())) {
+            s.setMedia(file.getOriginalFilename());
+            if (!(file2.isEmpty())) {
+                s.setImage(file2.getOriginalFilename());
+                Files.copy(file2.getInputStream(), Paths.get(base_url + "\\webdata\\user" + File.separator + file2.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+            } else {
+                try {
+                    if (service_song.existsById(s.getId()) == true) {
+                        s.setImage(service_song.findById(s.getId()).orElseThrow().getImage());
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+            s.setAccountId(accountId);
+            s.setAccount(userService.findById(accountId).orElseThrow());
+            s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
+            s.setView(0);
+            service_song.save(s);
+            Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+            service_song.save(s);
+        } else {
+            if (file2.isEmpty()) {
+                s.setMedia(service_song.findById(s.getId()).orElseThrow().getMedia());
+                s.setImage(service_song.findById(s.getId()).orElseThrow().getImage());
+                s.setAccountId(userService.findById(s.getAccountId()).orElseThrow().getId());
+                s.setAccount(userService.findById(accountId).orElseThrow());
+                s.setView(0);
+                s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
+                service_song.save(s);
+            } else {
+                s.setMedia(service_song.findById(s.getId()).orElseThrow().getMedia());
+                s.setImage(file2.getOriginalFilename());
+                s.setAccountId(userService.findById(s.getAccountId()).orElseThrow().getId());
+                s.setAccount(userService.findById(accountId).orElseThrow());
+                s.setView(0);
+                s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
+                Files.copy(file2.getInputStream(), Paths.get(base_url + "\\webdata\\user" + File.separator + file2.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+                service_song.save(s);
+            }
+        }
+
+       
+        
+        model.addAttribute("list", service_song.getPage(pageNumber, size));
+        model.addAttribute("service", service_song);
+        model.addAttribute("name", "null");
+        model.addAttribute("mess", "Successfully");
+         return "client/upload/index";
     }
 
     @GetMapping("/upload/search")
@@ -327,14 +397,13 @@ public class UserController {
 
     @GetMapping("/upload/update/{id}")
     public String update(@PathVariable("id") int id, Model model, HttpServletRequest request) {
-
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("song", service_song.findById(id).orElseThrow());
         model.addAttribute("listgenre", service_gen.findAll());
-        model.addAttribute("listartist", service_artist.findAll());
-        model.addAttribute("listalbum", service_album.findAll());
         model.addAttribute("status", "update");
-
-        return "user/upload";
+        return "client/upload/createsong" ;
     }
 
     @GetMapping("/upload/delete/{id}")
@@ -359,7 +428,13 @@ public class UserController {
             Song s = service_song.findById(id).orElseThrow();
             s.setView(s.getView() + 1);
             service_song.save(s);
+            List<Song> anotherlist = service_song.findByAccountId(s.getAccountId());
+            Song swap = anotherlist.get(0);
+            int index_to_swap = anotherlist.indexOf(s);
+            anotherlist.set(0, s);
+            anotherlist.set(index_to_swap, swap);
             model.addAttribute("song", s);
+            model.addAttribute("anotherlist", anotherlist);
             model.addAttribute("listcomments", service_cmt.findBySongId(s.getId()));
             model.addAttribute("listcmtall", service_cmt.findAll());
             session.setAttribute("user", session.getAttribute("user"));
@@ -372,7 +447,14 @@ public class UserController {
         Song s = service_song.findById(id).orElseThrow();
         s.setView(s.getView() + 1);
         service_song.save(s);
+        List<Song> anotherlist = service_song.findByAccountId(s.getAccountId());
+            Song swap = anotherlist.get(0);
+            int index_to_swap = anotherlist.indexOf(s);
+            anotherlist.set(0, s);
+            anotherlist.set(index_to_swap, swap);
         model.addAttribute("song", s);
+             model.addAttribute("anotherlist", anotherlist);
+
         model.addAttribute("listcomments", service_cmt.findBySongId(s.getId()));
         model.addAttribute("listcmtall", service_cmt.findAll());
         session.setAttribute("user", session.getAttribute("user"));
@@ -380,5 +462,6 @@ public class UserController {
         model.addAttribute("service_pl", service_pl);
         return "client/upload/Usermedia";
     }
+   
 
 }

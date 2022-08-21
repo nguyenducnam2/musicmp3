@@ -57,12 +57,15 @@ and open the template in the editor.
                                         </thead>
                                         <tbody>
 
-                                            <tr th:if="${name=='null'}" th:each="item:${list.page}">
+                                            <tr th:if="${name=='null' && item.image==null} "  th:each="item:${list.page}">
                                                 <td th:text="${service.findAll().size-service.findAll().indexOf(item)}"></td>
-                                                <td>
+                                                
+                                                <td >
                                                     <img style="width: 200px;height: 150px;" th:src="@{'/webdata/album/'+${item.album.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
                                                 </td>
-                                               
+                                                
+                                                
+                                                
                                                 <td th:text="${item.album.name}"></td>
                                                 <td th:text="${item.name}"></td>
                                                 <td th:text="${item.artist.name}"></td>
@@ -79,7 +82,7 @@ and open the template in the editor.
                                                 </td>
                                             </tr>
                                             <!-- search case -->
-                                            <tr th:if="${name!='null' && item.name.toLowerCase().contains(name.toLowerCase())}" th:each="item:${list.page}">
+                                            <tr th:if="${name!='null' && item.image==null &&  item.name.toLowerCase().contains(name.toLowerCase())}" th:each="item:${list.page}">
                                                 <td th:text="${service.findAll().size-service.findAll().indexOf(item)}"></td>
                                                 <td>
                                                     <img style="width: 200px;height: 150px;" th:src="@{'/webdata/album/'+${item.album.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">

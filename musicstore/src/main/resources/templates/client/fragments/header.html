@@ -28,7 +28,7 @@
                             <li class="active"><a th:href="@{/song/16}">Home</a></li>
                             <li><a th:href="@{/contact}">Contact</a></li>
                             <li th:if="${(user != null) && (user.role=='ROLE_USER' || user.role=='ROLE_VIP')}"><a th:href="@{/product}">Product</a></li>
-                            <li><a th:href="@{/news}">News</a></li>
+                            <li th:if="${(user != null) && (user.role=='ROLE_USER' || user.role=='ROLE_VIP')}"><a th:href="@{/news}">News</a></li>
                             <li th:if="${(user != null) && (user.role=='ROLE_USER' || user.role=='ROLE_VIP')}"><a th:href="@{/order}">Order history</a></li>
                         </ul>
                         <ul class="navbar-nav ml-auto navbar-list">

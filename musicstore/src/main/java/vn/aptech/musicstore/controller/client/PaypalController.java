@@ -133,16 +133,12 @@ public class PaypalController {
         model.addAttribute("user", session.getAttribute("user"));
         Account user = (Account) session.getAttribute("user");
         Order order = new Order();
-        order.setAddress(user.getAddress());
-        order.setPhoneNumber(user.getPhone());
         order.setUser(user);
         order.setIsPayment(0);
         order.setStatus(0);
-        order.setDescription("Paypal");
         order.setOrderDate(java.time.LocalDate.now().toString());
         order.setAmount((float) shoppingCartService.getAmount());
         orderService.save(order);
-        shoppingCartService.clear();
         return "redirect:/";
     }
 
@@ -158,12 +154,9 @@ public class PaypalController {
                 Account user = (Account) session.getAttribute("user");
                 Order order = new Order();
                 List<Product> newList = shoppingCartService.getProducts().stream().collect(toList());
-                order.setAddress(user.getAddress());
-                order.setPhoneNumber(user.getPhone());
                 order.setUser(user);
                 order.setIsPayment(1);
-                order.setStatus(0);
-                order.setDescription("Paypal");
+                order.setStatus(1);
                 order.setOrderDate(java.time.LocalDate.now().toString());
                 order.setAmount((float) shoppingCartService.getAmount());
                 orderService.save(order);
