@@ -5,6 +5,8 @@
 package vn.aptech.musicstore.controller.client;
 
 import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +27,7 @@ import vn.aptech.musicstore.service.NewsService;
  * @author Dung
  */
 @Controller
-@RequestMapping("/news")
+@RequestMapping("news")
 public class NewsClientController {
     @Value("${static.base.url}")
     private String base_url;
@@ -34,8 +36,11 @@ public class NewsClientController {
     private NewsService service;
 
     @GetMapping
-    public String index(Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+    public String index(Model model, HttpServletRequest request, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("list", service.getPage(pageNumber, size));
         model.addAttribute("service", service);
         model.addAttribute("title", "null");
@@ -43,8 +48,11 @@ public class NewsClientController {
     }
     
     @GetMapping("/search")
-    public String search(Model model, @RequestParam("title") String title, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+    public String search(Model model, HttpServletRequest request, @RequestParam("title") String title, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam(value = "size", required = false, defaultValue = "1000") int size) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("list", service.getPage(pageNumber, size));
         model.addAttribute("service", service);
         model.addAttribute("title", title);
@@ -52,7 +60,10 @@ public class NewsClientController {
     }
     
     @GetMapping("/details/{id}")
-    public String details(Model model, @PathVariable("id") int id) {
+    public String details(Model model, HttpServletRequest request, @PathVariable("id") int id) {
+        HttpSession session = request.getSession();
+        session.setAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("list", service.findById(id).orElseThrow());
         return "client/news/details";
     }

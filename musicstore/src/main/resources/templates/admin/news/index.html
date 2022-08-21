@@ -34,22 +34,20 @@ and open the template in the editor.
                                         <thead>
                                             <tr>
                                                 <th style="width: 5%;">No</th>
-                                                <th style="width: 20%;">Picture</th>
                                                 <th style="width: 15%;">Title</th>
-                                                <!--  <th style="width: 15%;">Artist</th>
-                                                <!--<th style="width: 10%;">Price</th>
-                                                <th style="width: 10%;">Artist</th>
-                                                    <th style="width: 30%;">Audio</th> -->
+                                                <th style="width: 20%;">Picture</th>
+                                                <th style="width: 20%;">Release date</th>
                                                 <th style="width: 10%;">Action</th> 
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr th:if="${title=='null'}" th:each="item:${list.page}">
                                                 <td th:text="${service.findAll().size-service.findAll().indexOf(item)}"></td>
+                                                <td th:text="${item.title}"></td>
                                                 <td>
                                                     <img style="width: 160px;height: 150px;" th:src="@{'/webdata/news/'+${item.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
                                                 </td>
-                                                <td th:text="${item.title}"></td>
+                                                <td th:text="${item.created_at}"></td>
                                                 <td>
                                                     <div class="flex align-items-center list-user-action">
                                                         <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" th:href="@{/admin/news/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
@@ -60,10 +58,11 @@ and open the template in the editor.
                                             <!-- search case -->
                                             <tr th:if="${title!='null' && item.title.toLowerCase().contains(title.toLowerCase())}" th:each="item:${list.page}">
                                                 <td th:text="${service.findAll().size-service.findAll().indexOf(item)}"></td>
+                                                <td th:text="${item.title}"></td>
                                                 <td>
                                                     <img style="width: 160px;height: 150px;" th:src="@{'/webdata/news/'+${item.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
                                                 </td>
-                                                <td th:text="${item.title}"></td>
+                                                <td th:text="${item.created_at}"></td>
                                                 <td>
                                                     <div class="flex align-items-center list-user-action">
                                                         <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" th:href="@{/admin/news/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
