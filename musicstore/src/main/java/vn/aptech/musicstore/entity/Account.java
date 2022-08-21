@@ -50,6 +50,12 @@ public class Account implements Serializable {
     private String imageUrl;
     private String phone;
 
+    public Account(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    
     
     private String provider;
     

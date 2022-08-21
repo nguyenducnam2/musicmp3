@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bcgprofile">
+
+    <ImageView
+        android:id="@+id/imageProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="125dp"
+        android:background="@drawable/iconlogodialog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="55dp"
+        android:text="M U S I C   4 B"
+        android:textColor="#3DE5FF"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageProfile" />
+
+    <Button
+        android:id="@+id/btndangxuat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đăng xuất"
+        android:fontFamily="@font/arimo_bold"
+        android:textColor="#ffffff"
+        android:textSize="18sp"
+        android:background="@drawable/btn_dang_xuat"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:layout_constraintVertical_bias="0.276" />
+
+    <TextView
+        android:id="@+id/tennguoidung"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:text="TextView"
+        android:textSize="24sp"
+        android:maxLines="2"
+        android:fontFamily="@font/arimo_bold"
+        android:textColor="#ffffff"
+        app:layout_constraintStart_toEndOf="@+id/imageviewuserprofile"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageviewuserprofile"
+        android:layout_width="58dp"
+        android:layout_height="58dp"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/imgitem"
+        app:civ_border_color="#FFFFFF"
+        app:civ_border_width="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

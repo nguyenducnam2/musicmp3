@@ -29,8 +29,10 @@ public interface AccountService {
     Account save(Account account);
 
     void deleteById(Long id);
-    
+
     Account registerUser(UserModel userModel);
+
+    Account registerAndroid(String username, String password);
 
     void saveVerificationTokenForUser(String token, Account acc);
 
@@ -39,16 +41,17 @@ public interface AccountService {
     String validateVipToken(String token);
 
     VipToken getVipTokenByUserId(Long id);
-    
+
     VerificationToken generateNewVerificationToken(String oldToken);
 
     Account findAccountByEmail(String email);
+
     String findByEmail(String email);
 
     void createPasswordResetTokenForUser(Account user, String token);
 
-    void createVipTokenForUser(Account user, String token,int duration);
-    
+    void createVipTokenForUser(Account user, String token, int duration);
+
     String validatePasswordResetToken(String token);
 
     Optional<Account> getAccountByPasswordResetToken(String token);
@@ -56,12 +59,11 @@ public interface AccountService {
     void changePassword(Account get, String newPassword);
 
     boolean checkIfValidOldPassword(Account user, String oldPassword);
-    
+
 //      public void register(User user, String siteURL) {
 //     
 //    }
-     
-    void sendVerificationEmail(Account user, String verifyUrl, String resendUrl)  throws MessagingException, UnsupportedEncodingException ;
-    
+    void sendVerificationEmail(Account user, String verifyUrl, String resendUrl) throws MessagingException, UnsupportedEncodingException;
+
 //    Date calculateExpirationDate(int expirationTime);
 }

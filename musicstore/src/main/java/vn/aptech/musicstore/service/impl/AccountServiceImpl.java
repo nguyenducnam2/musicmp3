@@ -140,6 +140,17 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         repoAccount.save(acc);
         return acc;
     }
+    
+    @Override
+    public Account registerAndroid(String username,String password) {
+        Account acc = new Account();
+        acc.setEmail(username);
+        acc.setUsername(username);
+        acc.setRole("ROLE_USER");
+        acc.setPassword(encodePassword().encode(password));
+        repoAccount.save(acc);
+        return acc;
+    }
 
     @Override
     public void saveVerificationTokenForUser(String token, Account acc) {

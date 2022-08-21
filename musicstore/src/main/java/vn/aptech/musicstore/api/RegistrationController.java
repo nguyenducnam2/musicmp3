@@ -4,33 +4,26 @@
  */
 package vn.aptech.musicstore.api;
 
-import java.util.List;
+import java.awt.print.Account;
 import java.util.Optional;
-import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import vn.aptech.musicstore.entity.Account;
-import vn.aptech.musicstore.entity.PasswordResetToken;
-import vn.aptech.musicstore.entity.Song;
-import vn.aptech.musicstore.entity.VerificationToken;
 import vn.aptech.musicstore.entity.model.PasswordModel;
-import vn.aptech.musicstore.entity.model.UserModel;
-import vn.aptech.musicstore.event.RegistrationCompleteEvent;
-import vn.aptech.musicstore.repository.PasswordResetTokenRepository;
 import vn.aptech.musicstore.service.AccountService;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  *
@@ -58,20 +51,6 @@ public class RegistrationController {
 //    private ApplicationEventPublisher publisher;
 //
 
-    @RequestMapping("/validateEmail")
-    public @ResponseBody
-    String checkEmailValidity(HttpServletRequest request, Model model) {
-        String email = request.getParameter("email");
-        //Unique or Duplicate email
-        return userService.findByEmail(email);
-    }
-
-    @PostMapping("/registerAndroid")
-    public String registerUser(@RequestBody UserModel userModel) {
-        userService.registerUser(userModel);
-        return "Success";
-    }
-
     @PostMapping("/loginAndroid")
     public Account login(@RequestParam("username") String username, @RequestParam("password") String password) {
         Optional<Account> userAndroid = userService.findByUsername(username);
@@ -84,6 +63,36 @@ public class RegistrationController {
         return null;
     }
 
+    @PostMapping("/checkUsernameRegisterAndroid")
+    public @ResponseBody
+    String checkEmailValidityAndroid(@RequestParam("username") String email) {
+        if (userService.findByUsername(email).isPresent()) {
+            return null;
+        }
+        return "success";
+    }
+
+//    @PostMapping("/registerAndroid")
+//    public String registerUser(@RequestParam("username") String username, @RequestParam("password") String password) {
+//        if (userService.findByUsername(username).isEmpty()) {
+//            userService.registerAndroid(username, password);
+//            return "Success";
+//        }
+//        return null;
+//    }
+
+    @PostMapping("/registerAndroid")
+    @RequestMapping(method = RequestMethod.POST)
+    public Map<String, Object> registerUser(@RequestBody Map<String, Object> newUser) {
+        Account book = new Account(newUser.get("username").toString(),
+                newUser.get("password").toString());
+
+        Map<String, Object> response = new LinkedHashMap<String, Object>();
+        response.put("message", "Account created successfully");
+        response.put("account", userService.save(book));
+        return response;
+    }
+
     @PostMapping("/findByUsername")
     public Account findByUsername(@RequestParam("username") String username) {
         Optional<Account> userAndroid = userService.findByUsername(username);
@@ -92,9 +101,10 @@ public class RegistrationController {
         }
         return null;
     }
-    
+
     @PostMapping("/resetPasswordAndroid")
-    public String changePassword(@RequestParam("username") String username,@RequestParam("password") String password) {
+    public @ResponseBody
+    String changePassword(@RequestParam("username") String username, @RequestParam("password") String password) {
         Account user = userService.findAccountByEmail(username);
         userService.changePassword(user, password);
         return "success";
@@ -170,6 +180,14 @@ public class RegistrationController {
 //        }
 //    }
 //
+    @RequestMapping("/validateEmail")
+    public @ResponseBody
+    String checkEmailValidity(HttpServletRequest request, Model model) {
+        String email = request.getParameter("email");
+        //Unique or Duplicate email
+        return userService.findByEmail(email);
+    }
+
     @PostMapping("/resetPassword")
     public String savePassword(@RequestParam("username") String username,
             @RequestBody PasswordModel passwordModel) {

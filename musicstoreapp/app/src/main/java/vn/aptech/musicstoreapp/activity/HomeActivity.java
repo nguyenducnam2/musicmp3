@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
@@ -44,10 +42,13 @@ public class HomeActivity extends AppCompatActivity {
         MainViewPagerAdapter mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager());
         mainViewPagerAdapter.addFragment(new Fragment_Main_Home(), "");
         mainViewPagerAdapter.addFragment(new Fragment_Search(), "");
+//        mainViewPagerAdapter.addFragment(new Fragment_Profile(), "");
+//
         viewPager.setAdapter(mainViewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setIcon(R.drawable.icontrangchu);
         tabLayout.getTabAt(1).setIcon(R.drawable.icontimkiem);
 //        tabLayout.getTabAt(2).setIcon(R.drawable.iconlogo);
+//
     }
 }

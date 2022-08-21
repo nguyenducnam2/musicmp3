@@ -10,10 +10,10 @@
 
     <ImageView
         android:id="@+id/imageClose"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_gravity="end"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="0dp"
         android:layout_marginEnd="12dp"
         android:background="@drawable/multiply_16px"
         tools:srcCompat="@tools:sample/avatars" />
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="0dp"
         android:fontFamily="@font/arimo_bold"
         android:text="Register"
         android:textColor="@color/design_default_color_background"
@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/arimo_bold"
         android:text="Username"
         android:textColor="@color/design_default_color_background"
@@ -48,7 +48,7 @@
         android:layout_height="65dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="12dp"
         android:background="@drawable/edt_all"
         android:fontFamily="@font/arimo_bold"
         android:inputType="textPersonName"
@@ -73,7 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/arimo_bold"
         android:text="Password"
         android:textColor="@color/design_default_color_background"
@@ -157,13 +157,17 @@
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <Button
             android:id="@+id/btnSubmitRegister"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_bgr_button"
             android:fontFamily="@font/arimo_bold"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+
             android:text="Register"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
     </LinearLayout>
 </LinearLayout>

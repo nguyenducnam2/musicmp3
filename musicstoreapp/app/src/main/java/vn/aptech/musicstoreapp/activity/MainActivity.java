@@ -36,10 +36,12 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import vn.aptech.musicstoreapp.entity.Account;
+import vn.aptech.musicstoreapp.fragment.Dialog_Register;
 import vn.aptech.musicstoreapp.service_api.api.ApiUtil;
 import vn.aptech.musicstoreapp.entity.Genre;
 import vn.aptech.musicstoreapp.service_api.service.AccountService;
@@ -47,7 +49,7 @@ import vn.aptech.musicstoreapp.service_api.service.GenreService;
 
 import vn.aptech.musicstoreapp.R;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Dialog_Register.ExampleDialogListener  {
 
     private TextView tvDemo;
     private GenreService genreService;
@@ -64,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
     int flag = -1; // flag = 1 click free, flag = 2 click fb
     private String username, password;
-
+    private CallbackManager callbackManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,14 +102,15 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
+        callbackManager = CallbackManager.Factory.create();
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                flag = 1;
-//                openDialog();
+                flag = 1;
+                openDialog();
 
-        //        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-        //        startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -168,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-//
+
 //    @Override
 //    public void onBackPressed() {
 //        if (backPressTime + 2000 > System.currentTimeMillis()){
@@ -189,20 +192,43 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
 
-//    private void register(HashMap<String, String> params) {
-//
-//        final ProgressDialog progressDialog = new ProgressDialog(DangKyActivity.this);
-//        progressDialog.setTitle("Please wait");
-//        progressDialog.setMessage("Registering...");
-//        progressDialog.setCancelable(false);
-//        progressDialog.show();
-//
+    private void register(HashMap<String, String> params) {
+
+        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setTitle("Please wait");
+        progressDialog.setMessage("Registering...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        AccountService dataService = ApiUtil.getAccountService();
+        Call<ResponseBody> registerCall = dataService.registerAndroid( params);
+        registerCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                ResponseBody responseBody = response.body();
+                if (responseBody != null) {
+                    Toast.makeText(MainActivity.this, "Register Success !", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                    }
+//                else {
+//                            Toast.makeText(MainActivity.this, "Đăng nhập bằng facebook !", Toast.LENGTH_LONG).show();
+//                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+//                            startActivity(intent);
+//                    }
+                progressDialog.dismiss();
+            }
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                progressDialog.dismiss();
+            }
+        });
 //        Dataservice networkService = APIService.getService();
-//        Call<PhanHoiDangKyModel> registerCall = networkService.register(params);
-//        registerCall.enqueue(new Callback<PhanHoiDangKyModel>() {
+//        Call<ResponseBody> registerCall = networkService.register(params);
+//        registerCall.enqueue(new Callback<ResponseBody>() {
 //            @Override
-//            public void onResponse(@NonNull Call<PhanHoiDangKyModel> call, @NonNull Response<PhanHoiDangKyModel> response) {
-//                PhanHoiDangKyModel responseBody = response.body();
+//            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+//                ResponseBody responseBody = response.body();
 //                if (responseBody != null) {
 //                    if (responseBody.getSuccess().equals("1")) {
 //                        if (flag == 1){
@@ -210,15 +236,15 @@ public class MainActivity extends AppCompatActivity {
 //                        }else if (flag == 2){
 //                            InsertData(username, password, name, email, imageurl);
 //                        }
-//                        Intent intent = new Intent(DangKyActivity.this, HomeActivity.class);
+//                        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
 //                        startActivity(intent);
 //                    } else if (responseBody.getSuccess().equals("0")){
 //                        if (flag == 1){ //dang ky free
-//                            Toast.makeText(DangKyActivity.this, "Tài khoản đã được đăng ký !", Toast.LENGTH_LONG).show();
+//                            Toast.makeText(MainActivity.this, "Tài khoản đã được đăng ký !", Toast.LENGTH_LONG).show();
 //                        }else if (flag == 2){ // dang nhap bang facebook
-//                            Toast.makeText(DangKyActivity.this, "Đăng nhập bằng facebook !", Toast.LENGTH_LONG).show();
+//                            Toast.makeText(MainActivity.this, "Đăng nhập bằng facebook !", Toast.LENGTH_LONG).show();
 //                            InsertData(username, password, name, email, imageurl);
-//                            Intent intent = new Intent(DangKyActivity.this, HomeActivity.class);
+//                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
 //                            startActivity(intent);
 //                        }
 //                    }
@@ -226,11 +252,11 @@ public class MainActivity extends AppCompatActivity {
 //                progressDialog.dismiss();
 //            }
 //            @Override
-//            public void onFailure(@NonNull Call<PhanHoiDangKyModel> call, @NonNull Throwable t) {
+//            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
 //                progressDialog.dismiss();
 //            }
 //        });
-//    }
+    }
 
 
 //    @Override
@@ -276,27 +302,21 @@ public class MainActivity extends AppCompatActivity {
 //            LoginManager.getInstance().logOut();
 //        }
 //    };
-//
-//
-//    private void openDialog() {
-//        Dialog_Dangky_Free exampleDialog = new Dialog_Dangky_Free();
-//        exampleDialog.show(getSupportFragmentManager(), "example dialog");
-//    }
 
-//    public void apply(String taikhoan, String matkhau, String emailz){
-//        HashMap<String, String> params = new HashMap<>();
-//        username = taikhoan;
-//        password = matkhau;
-//        name = taikhoan;
-//        email = emailz;
-//        imageurl = "https://music4b.000webhostapp.com/HinhAnh/spotify_64px.png";
-//        params.put("UserName", taikhoan);
-//        params.put("Password", matkhau);
-//        params.put("Name", name);
-//        params.put("Email", email);
-//        params.put("Image",imageurl);
-//        register(params);
-//    }
+
+    private void openDialog() {
+        Dialog_Register exampleDialog = new Dialog_Register();
+        exampleDialog.show(getSupportFragmentManager(), "example dialog");
+    }
+
+    public void apply(String username, String password){
+        HashMap<String, String> params = new HashMap<>();
+        username = username;
+        password = password;
+        params.put("UserName", username);
+        params.put("Password", password);
+        register(params);
+    }
 
 //    @Override
 //    protected void onDestroy() {
