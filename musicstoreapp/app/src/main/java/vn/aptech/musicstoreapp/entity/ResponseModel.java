@@ -9,6 +9,8 @@ public class ResponseModel {
     @SerializedName("message")
     private String message;
 
+    public ResponseModel() {
+    }
 
     public String getSuccess() {
         return success;

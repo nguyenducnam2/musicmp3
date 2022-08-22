@@ -42,6 +42,11 @@ public class Oauth2LoginSuccessHandle extends SavedRequestAwareAuthenticationSuc
             u.setUsername(email);
             u.setFullname(name);
             u.setProvider(clientName);
+            if(clientName.equals("Google")){
+                u.setImage("imagesGG.png");
+            }else{
+                u.setImage("facebook.webp");
+            }
             u.setEnabled(true);
             u.setRole("ROLE_USER");
             repoAccount.save(u);

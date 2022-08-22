@@ -88,6 +88,7 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
                         Toast.makeText(getActivity(), "Lenght of Username must be higher than 3 and lower than 36", Toast.LENGTH_SHORT).show();
                     }else {
                         GetDataUser(username);
+
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -194,7 +195,7 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
                     acceptGetCode = true;
                     Toast.makeText(getActivity(), "Pin code has been sent.", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getActivity(), "Account is not exist.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Account is not exist.", Toast.LENGTH_LONG).show();
                 }
             }
 

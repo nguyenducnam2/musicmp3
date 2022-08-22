@@ -47,7 +47,7 @@ public class Dialog_Register extends AppCompatDialogFragment {
     TextInputLayout edUsername, edPassword, edPinRegister;
     Button btnRegister, btnGetPin;
     ImageView imgClose;
-    boolean accept = false, acceptMail = false;
+    boolean accept = false;
     private ExampleDialogListener listener;
     String username="", password="", email="", verifyPin="";
     static int interval;
@@ -73,7 +73,7 @@ public class Dialog_Register extends AppCompatDialogFragment {
             @Override
             public void onClick(View v) {
                 if(setInterval() < 1){
-                    acceptMail = false;
+                    accept = false;
                     final LoadingDialog loadingDialog = new LoadingDialog(getActivity());
                     loadingDialog.StartLoadingDialog();
                     Handler handler = new Handler();
@@ -87,19 +87,23 @@ public class Dialog_Register extends AppCompatDialogFragment {
                     username = edUsername.getEditText().getText().toString().trim();
                     EmailValidator validator = new EmailValidator();
 
-                    if (username.trim().length() < 6 || username.trim().length() > 36){
-                        Toast.makeText(getActivity(), "Email length from 6 -> 36 characters", Toast.LENGTH_LONG).show();
-                    }else {
+//                    if (username.trim().length() < 6 || username.trim().length() > 36){
+//                        Toast.makeText(getActivity(), "Email length from 6 -> 36 characters", Toast.LENGTH_LONG).show();
+//                    }else {
                         if (validator.validate(username)) {
                             checkUser(edUsername.getEditText().getText().toString().trim());
+                            System.out.println("---------------accept-btnPin"+accept);
+                            if(accept){
+                                Toast.makeText(getActivity(), "Wait!! Pin is being sent to "+username, Toast.LENGTH_LONG).show();
+                            }
                         } else {
                             Toast.makeText(getActivity(), "Invalid Email", Toast.LENGTH_LONG).show();
                         }
-                    }
+//                    }
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            if (acceptMail){
+                            if (accept){
                                 senMail(username);
                             }
                         }
@@ -123,13 +127,32 @@ public class Dialog_Register extends AppCompatDialogFragment {
                     }
                 }, 3000);
 
+                if (edUsername.getEditText().getText().toString().length() == 0) {
+                    edUsername.requestFocus();
+                    edUsername.setError("Username cannot be blank.");
+                    return;
+                }
+                if (edPassword.getEditText().getText().toString().length() == 0) {
+                    edPassword.requestFocus();
+                    edPassword.setError("Password cannot be blank.");
+                    return;
+                }
+                if (edPinRegister.getEditText().getText().toString().length() == 0) {
+                    edPinRegister.requestFocus();
+                    edPinRegister.setError("Doesn't have pin yet.");
+                    return;
+                }
                 username = edUsername.getEditText().getText().toString().trim();
                 password = edPassword.getEditText().getText().toString().trim();
                 verifyPin = edPinRegister.getEditText().getText().toString().trim();
+
+
 //                if(username.trim().length() < 6 || username.trim().length() > 36){
 //                    Toast.makeText(getActivity(), "Email's length from 6 -> 36 characters", Toast.LENGTH_LONG).show();
 //                }else {
-//                    checkUser(username);
+                    checkUser(username);
+                System.out.println("---------------accept-btnRegis"+accept);
+
 //                }
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -173,7 +196,7 @@ public class Dialog_Register extends AppCompatDialogFragment {
         final  String password = "nppwzhwzwlapivlk";
         Random random = new Random();
         code = 10000 + random.nextInt(89999);
-        String messenger = "[Muzik App]Your Pin confirm is :"+ code+". Please don't share this code!!!";
+        String messenger = "Your Pin confirm is :"+ code+". Please don't share this code!!!";
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
@@ -222,11 +245,16 @@ public class Dialog_Register extends AppCompatDialogFragment {
             public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
                 ResponseModel responseBody = response.body();
                 if (responseBody != null) {
-                    if (responseBody.getSuccess().equals("1")) {
-                        Toast.makeText(getActivity(), "The username has been used", Toast.LENGTH_SHORT).show();
-                    } else {
+                    if(responseBody.getSuccess().equals("success")){
                         accept = true;
+                        System.out.println("---------------accept-checkU "+accept);
+                    }else{
+                        System.out.println("---------------accept-checkU-fail"+accept);
+                        Toast.makeText(getActivity(), "The username has been used", Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    System.out.println("---------------accept-checkU=null"+accept);
+
                 }
             }
             @Override
@@ -248,7 +276,7 @@ public class Dialog_Register extends AppCompatDialogFragment {
     private class EmailValidator {
         Pattern pattern;
         Matcher matcher;
-        private static final String EMAIL_PATTERN = "^[a-zA-Z0-9]*@{1}gmail.com$";
+        private static final String EMAIL_PATTERN = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
 
         public EmailValidator() {
             pattern = Pattern.compile(EMAIL_PATTERN);

@@ -206,6 +206,7 @@ public class Dialog_Dangky_Free extends AppCompatDialogFragment {
             Toast.makeText(getActivity(), "Lỗi kết nối, hãy thử lại sau", Toast.LENGTH_SHORT).show();
         }
     }
+
     public void checkUser(String us) {
         Dataservice dataservice = APIService.getService();
         Call<ResponseModel> callback = dataservice.checkusername(us);
@@ -224,9 +225,9 @@ public class Dialog_Dangky_Free extends AppCompatDialogFragment {
             @Override
             public void onFailure(Call<ResponseModel> call, Throwable t) {
             }
-
         });
     }
+
     public void checkEmail(String em) {
         Dataservice dataservice = APIService.getService();
         Call<ResponseModel> callback = dataservice.checkemail(em);

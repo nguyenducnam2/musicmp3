@@ -23,6 +23,7 @@ import vn.aptech.musicstore.entity.model.PasswordModel;
 import vn.aptech.musicstore.service.AccountService;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import vn.aptech.musicstore.entity.model.ResponseModel;
 
 /**
  *
@@ -31,7 +32,6 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequestMapping("/api")
-
 public class RegistrationController {
 
     @Autowired
@@ -63,35 +63,37 @@ public class RegistrationController {
     }
 
     @PostMapping("/checkUsernameRegisterAndroid")
-    public @ResponseBody
-    String checkEmailValidityAndroid(@RequestParam("username") String email) {
-        if (userService.findByUsername(email).isPresent()) {
-            return null;
+    public ResponseModel checkEmailValidityAndroid(@RequestParam("username") String email) {
+        ResponseModel response = new ResponseModel();
+        if (userService.findByUsername(email).isEmpty()) {
+            response.setSuccess("success");
+            response.setMessage("message");
+            return response;
         }
-        return "success";
-    }
-
-//    @PostMapping("/registerAndroid")
-//    public String registerUser(@RequestParam("username") String username, @RequestParam("password") String password) {
-//        if (userService.findByUsername(username).isEmpty()) {
-//            userService.registerAndroid(username, password);
-//            return "Success";
-//        }
-//        return null;
-//    }
-
-    @PostMapping("/registerAndroid")
-    @RequestMapping(method = RequestMethod.POST)
-    public Map<String, Object> registerUser(@RequestBody Map<String, Object> newUser) {
-        Account book = new Account(newUser.get("username").toString(),
-                newUser.get("password").toString());
-
-        Map<String, Object> response = new LinkedHashMap<String, Object>();
-        response.put("message", "Account created successfully");
-        response.put("account", userService.save(book));
+        response.setSuccess("fail");
+        response.setMessage("message");
         return response;
     }
 
+    @PostMapping("/registerAndroid")
+    public ResponseModel registerUser(@RequestParam("username") String username, @RequestParam("password") String password) {
+        ResponseModel response = new ResponseModel();
+        if (userService.findByUsername(username).isEmpty()) {
+            userService.registerAndroid(username, password);
+            response.setSuccess("suceses");
+            response.setMessage("message");
+            return response;
+        }
+        response.setSuccess("fail");
+        response.setMessage("message");
+        return response;
+    }
+
+//    @RequestMapping(value = "/registerAndroid" ,method = RequestMethod.POST)
+//    public Map<String, String> registerUser(@RequestBody Map<String, String> params) {
+//      
+//        return null;
+//    }
     @PostMapping("/findByUsername")
     public Account findByUsername(@RequestParam("username") String username) {
         Optional<Account> userAndroid = userService.findByUsername(username);

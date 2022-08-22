@@ -28,7 +28,7 @@ and open the template in the editor.
                         <div class="iq-card">
                             <div class="iq-card-header d-flex justify-content-between">
                                 <div class="iq-header-title">
-                                    <h4 class="card-title">Account Lists</h4>
+                                    <h4 class="card-title">Promotion Lists</h4>
                                 </div>
                                 <!--                                <div class="iq-search-bar">   
                                                                     <form th:action="@{/admin/account/search}" class="searchbox">
@@ -67,7 +67,7 @@ and open the template in the editor.
                                                 <td>
                                                     <div class="flex align-items-center list-user-action">
                                                         <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" th:href="@{/admin/promotion/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
-                                                        <a class="bg-primary" th:if="${(item.startDate.getTime() - nowStartDate)>=0 || (item.endDate.getTime() - nowEndDate)<0}" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/admin/promotion/delete/{id}(id=${item.id})}"><i class="ri-delete-bin-line"></i></a>
+                                                        <a class="bg-primary" th:if="${(item.startDate.getTime() - nowStartDate)>=0}" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/admin/promotion/delete/{id}(id=${item.id})}"><i class="ri-delete-bin-line"></i></a>
                                                     </div>
                                                 </td>
 

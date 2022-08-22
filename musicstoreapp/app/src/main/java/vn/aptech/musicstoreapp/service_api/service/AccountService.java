@@ -39,5 +39,5 @@ public interface AccountService {
 
     @FormUrlEncoded
     @POST("registerAndroid")
-    Call<ResponseBody> registerAndroid(@FieldMap HashMap<String, String> params);
+    Call<ResponseBody> registerAndroid(@Field("username")String username,@Field("password") String password);
 }

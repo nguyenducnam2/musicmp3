@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements Dialog_Register.E
 
     private void initData() {
         db = openOrCreateDatabase("Account.db", MODE_PRIVATE, null);
-        String sql = "CREATE TABLE IF NOT EXISTS account(id integer primary key autoincrement,username text, password text,fullname text, role text, image text)";
+        String sql = "CREATE TABLE IF NOT EXISTS account(id integer primary key autoincrement,Long account_id ,username text, password text,fullname text, role text, image text)";
         db.execSQL(sql);
     }
 
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements Dialog_Register.E
 //    }
 
 
-    private void register(HashMap<String, String> params) {
+    private void register(String username,String password) {
 
         final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setTitle("Please wait");
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements Dialog_Register.E
         progressDialog.show();
 
         AccountService dataService = ApiUtil.getAccountService();
-        Call<ResponseBody> registerCall = dataService.registerAndroid( params);
+        Call<ResponseBody> registerCall = dataService.registerAndroid( username,password);
         registerCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
@@ -223,85 +223,10 @@ public class MainActivity extends AppCompatActivity implements Dialog_Register.E
                 progressDialog.dismiss();
             }
         });
-//        Dataservice networkService = APIService.getService();
-//        Call<ResponseBody> registerCall = networkService.register(params);
-//        registerCall.enqueue(new Callback<ResponseBody>() {
-//            @Override
-//            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-//                ResponseBody responseBody = response.body();
-//                if (responseBody != null) {
-//                    if (responseBody.getSuccess().equals("1")) {
-//                        if (flag == 1){
-//                            InsertData(username, password, username, email, imageurl);
-//                        }else if (flag == 2){
-//                            InsertData(username, password, name, email, imageurl);
-//                        }
-//                        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-//                        startActivity(intent);
-//                    } else if (responseBody.getSuccess().equals("0")){
-//                        if (flag == 1){ //dang ky free
-//                            Toast.makeText(MainActivity.this, "Tài khoản đã được đăng ký !", Toast.LENGTH_LONG).show();
-//                        }else if (flag == 2){ // dang nhap bang facebook
-//                            Toast.makeText(MainActivity.this, "Đăng nhập bằng facebook !", Toast.LENGTH_LONG).show();
-//                            InsertData(username, password, name, email, imageurl);
-//                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    }
-//                }
-//                progressDialog.dismiss();
-//            }
-//            @Override
-//            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-//                progressDialog.dismiss();
-//            }
-//        });
+
     }
 
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        callbackManager.onActivityResult(requestCode, resultCode, data);
-//        if (flag == 2){
-//            GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
-//                    new GraphRequest.GraphJSONObjectCallback() {
-//                        @Override
-//                        public void onCompleted(JSONObject object, GraphResponse response) {
-//                            try {
-//                                username = object.getString("id");
-//                                password = "LhKbEpmsWkl56J00r34vcnmTg";
-//                                name = object.getString("name");
-//                                email = "-";
-//                                imageurl = "https://graph.facebook.com/"+username+"/picture?style=large";
-//
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                            HashMap<String, String> params = new HashMap<>();
-//                            params.put("UserName", username);
-//                            params.put("Password", password);
-//                            params.put("Name", name);
-//                            params.put("Email", email);
-//                            params.put("Image", imageurl);
-//                            register(params);
-//                        }
-//                    });
-//
-//            Bundle bundle = new Bundle();
-//            bundle.putString("fields", "name, id");
-//
-//            graphRequest.setParameters(bundle);
-//            graphRequest.executeAsync();
-//        }
-//    }
-
-//    AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
-//        @Override
-//        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-//            LoginManager.getInstance().logOut();
-//        }
-//    };
 
 
     private void openDialog() {
@@ -309,13 +234,13 @@ public class MainActivity extends AppCompatActivity implements Dialog_Register.E
         exampleDialog.show(getSupportFragmentManager(), "example dialog");
     }
 
-    public void apply(String username, String password){
-        HashMap<String, String> params = new HashMap<>();
-        username = username;
-        password = password;
-        params.put("UserName", username);
-        params.put("Password", password);
-        register(params);
+    public void apply(String username1, String password1){
+//        HashMap<String, String> params = new HashMap<>();
+        username = username1;
+        password = password1;
+//        params.put("UserName", username);
+//        params.put("Password", password);
+        register(username1,password1);
     }
 
 //    @Override

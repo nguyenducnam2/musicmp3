@@ -49,7 +49,7 @@ public class PromotionClientController {
         cal.add(Calendar.DATE, -1);
         model.addAttribute("nowEndDate", cal.getTime().getTime());
         model.addAttribute("nowStartDate", cal1.getTime().getTime());
-        return "client/promotion";
+        return "client/promotion/index";
     }
 
     @GetMapping("/getCode/{promotionId}/{userId}")
@@ -100,6 +100,6 @@ public class PromotionClientController {
             model.addAttribute("name", "null");
             return "client/promotion/your-code-promotion";
         }
-        return "client/promotion";
+        return "client/promotion/index";
     }
 }
