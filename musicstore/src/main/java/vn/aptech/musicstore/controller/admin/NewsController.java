@@ -58,9 +58,11 @@ public class NewsController {
         if (!(file.isEmpty())) {
             news.setImage(file.getOriginalFilename());
             Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\news" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+            news.setCreated_at(java.time.LocalDate.now().toString());
             service.save(news);
         } else {
             news.setImage(service.findById(news.getId()).orElseThrow().getImage());
+            news.setCreated_at(java.time.LocalDate.now().toString());
             service.save(news);
         }
         return "redirect:/admin/news";

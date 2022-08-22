@@ -17,16 +17,16 @@ and open the template in the editor.
                                 <div class="iq-header-title">
                                     <h4 class="card-title">Order History</h4>
                                 </div>
-<!--                                <div class="iq-search-bar">   
-                                    <form th:action="@{/admin/order/search}" class="searchbox">
-                                        <input type="text" class="text search-input" name="name" placeholder="Search Here..">
-                                        <a class="search-link" href="#"><i class="ri-search-line text-black"></i></a>
-                                        <a class="search-audio" href="#"><i class="las la-microphone text-black"></i></a> 
-                                    </form>
-                                </div>
-                                <div class="iq-card-header-toolbar d-flex align-items-center">
-                                    <a th:href="@{/admin/news/create}" class="btn btn-primary">Add New News</a>
-                                </div>-->
+                                <!--                                <div class="iq-search-bar">   
+                                                                    <form th:action="@{/admin/order/search}" class="searchbox">
+                                                                        <input type="text" class="text search-input" name="name" placeholder="Search Here..">
+                                                                        <a class="search-link" href="#"><i class="ri-search-line text-black"></i></a>
+                                                                        <a class="search-audio" href="#"><i class="las la-microphone text-black"></i></a> 
+                                                                    </form>
+                                                                </div>
+                                                                <div class="iq-card-header-toolbar d-flex align-items-center">
+                                                                    <a th:href="@{/admin/news/create}" class="btn btn-primary">Add New News</a>
+                                                                </div>-->
                             </div>
                             <div class="iq-card-body">
                                 <div class="table-responsive">
@@ -61,24 +61,26 @@ and open the template in the editor.
                                                     <span th:if="${item.isPayment==1}">Yes</span>
                                                 </td>
                                                 <td>
-                                                    <a th:if="${item.status==1 || item.status==2 ||item.status==3}" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Detail" th:href="@{/order/detail/{id}(id=${item.id})}"><i class="ri-checkbox-line"></i></a>
-                                                    <a th:if="${item.status==0}" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/order/delete/{id}(id=${item.id})}"><i class="ri-eraser-line"></i></a>
-                                                    <a th:if="${item.status==1}" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Update" th:href="@{/order/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
-                                                </td>
-                                            </tr>
-<!--                                            <tr th:if="${title!='null' && item.title.toLowerCase().contains(title.toLowerCase())}" th:each="item:${list.page}">
-                                                <td th:text="${service.findAll().size-service.findAll().indexOf(item)}"></td>
-                                                <td>
-                                                    <img style="width: 160px;height: 150px;" th:src="@{'/webdata/news/'+${item.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
-                                                </td>
-                                                <td th:text="${item.title}"></td>
-                                                <td>
                                                     <div class="flex align-items-center list-user-action">
-                                                        <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" th:href="@{/admin/news/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
-                                                        <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/admin/news/delete/{id}(id=${item.id})}"><i class="ri-delete-bin-line"></i></a>
+                                                        <a th:if="${item.status==1 || item.status==2 ||item.status==3}" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Detail" th:href="@{/order/detail/{id}(id=${item.id})}"><i class="ri-checkbox-line"></i></a>
+                                                        <a th:if="${item.status==0}" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/order/delete/{id}(id=${item.id})}"><i class="ri-eraser-line"></i></a>
+                                                        <a th:if="${item.status==1}" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Update" th:href="@{/order/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
                                                     </div>
                                                 </td>
-                                            </tr>-->
+                                            </tr>
+                                            <!--                                            <tr th:if="${title!='null' && item.title.toLowerCase().contains(title.toLowerCase())}" th:each="item:${list.page}">
+                                                                                            <td th:text="${service.findAll().size-service.findAll().indexOf(item)}"></td>
+                                                                                            <td>
+                                                                                                <img style="width: 160px;height: 150px;" th:src="@{'/webdata/news/'+${item.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
+                                                                                            </td>
+                                                                                            <td th:text="${item.title}"></td>
+                                                                                            <td>
+                                                                                                <div class="flex align-items-center list-user-action">
+                                                                                                    <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" th:href="@{/admin/news/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
+                                                                                                    <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/admin/news/delete/{id}(id=${item.id})}"><i class="ri-delete-bin-line"></i></a>
+                                                                                                </div>
+                                                                                            </td>
+                                                                                        </tr>-->
                                         </tbody>
                                     </table>
                                 </div>
@@ -87,27 +89,27 @@ and open the template in the editor.
                     </div>
                 </div>
             </div>  
-<!--            <nav th:if="${name=='null'}" aria-label="Page navigation" class="paging">
-                <ul class="pagination" th:if="${list.page.totalPages > 1}">
-                    <li class="page-item" th:classappend="${!list.paging.isPrevEnabled()? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{'/admin/news/?pageNumber=' + ${list.paging.pageNumber - 1}}"
-                           tabindex="-1">Previous</a>
-                    </li>
-                    <th:block th:each="item : ${list.paging.getItems()}">
-                        <li class="page-item" th:classappend="${item.index == list.paging.pageNumber? 'active' : ''}"
-                            th:if="${item.pageItemType.name() == 'PAGE'}">
-                            <a class="page-link" th:href="@{'/admin/news/?pageNumber=' + ${item.index}}"
-                               th:text="${item.index}"></a>
-                        </li>
-                        <li class="page-item disabled" th:if="${item.pageItemType.name() == 'DOTS'}">
-                            <a class="page-link" href="#">...</a>
-                        </li>
-                    </th:block>
-                    <li class="page-item" th:classappend="${!list.paging.isNextEnabled()? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{'/admin/news/?pageNumber=' + ${list.paging.pageNumber + 1}}">Next</a>
-                    </li>
-                </ul>
-            </nav>-->
+            <!--            <nav th:if="${name=='null'}" aria-label="Page navigation" class="paging">
+                            <ul class="pagination" th:if="${list.page.totalPages > 1}">
+                                <li class="page-item" th:classappend="${!list.paging.isPrevEnabled()? 'disabled' : ''}">
+                                    <a class="page-link" th:href="@{'/admin/news/?pageNumber=' + ${list.paging.pageNumber - 1}}"
+                                       tabindex="-1">Previous</a>
+                                </li>
+                                <th:block th:each="item : ${list.paging.getItems()}">
+                                    <li class="page-item" th:classappend="${item.index == list.paging.pageNumber? 'active' : ''}"
+                                        th:if="${item.pageItemType.name() == 'PAGE'}">
+                                        <a class="page-link" th:href="@{'/admin/news/?pageNumber=' + ${item.index}}"
+                                           th:text="${item.index}"></a>
+                                    </li>
+                                    <li class="page-item disabled" th:if="${item.pageItemType.name() == 'DOTS'}">
+                                        <a class="page-link" href="#">...</a>
+                                    </li>
+                                </th:block>
+                                <li class="page-item" th:classappend="${!list.paging.isNextEnabled()? 'disabled' : ''}">
+                                    <a class="page-link" th:href="@{'/admin/news/?pageNumber=' + ${list.paging.pageNumber + 1}}">Next</a>
+                                </li>
+                            </ul>
+                        </nav>-->
         </div>                         
     </body>
 </html>

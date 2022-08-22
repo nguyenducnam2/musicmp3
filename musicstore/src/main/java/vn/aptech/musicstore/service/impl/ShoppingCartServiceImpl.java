@@ -24,9 +24,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService{
     @Override
     public void add(Product product) {
         Product existed=map.get(product.getId());
-        if(existed!=null){
-            existed.setQuantity(product.getQuantity() + existed.getQuantity());
-        } else {
+        if(existed==null){
             map.put(product.getId(), product);
         }
     }
