@@ -3,6 +3,7 @@ package vn.aptech.musicstoreapp.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -95,6 +96,7 @@ public class ListSongActivity extends AppCompatActivity {
                         if (ngheSi != null && !ngheSi.toString().equals("")) {
                             setValueInView(ApiUtil.WEBDATA_URL + "artist/" + ngheSi.getImage());
                             GetDataNgheSi(ngheSi.getId());
+                            System.out.println(ngheSi.getId());
                             txtcollapsing.setText(ngheSi.getName());
                         }
                     }
@@ -118,7 +120,7 @@ public class ListSongActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<List<Song>> call, Response<List<Song>> response) {
                             Random random = new Random();
-                            setValueInView(ApiUtil.WEBDATA_URL+"artist/"+response.body().get(random.nextInt(response.body().size())).getArtist().getImage());
+           //                 setValueInView(ApiUtil.WEBDATA_URL+"artist/"+response.body().get(random.nextInt(response.body().size())).getArtist().getImage());
                         }
 
                         @Override
@@ -182,6 +184,7 @@ public class ListSongActivity extends AppCompatActivity {
 
     private void GetDataChuDe(int id) {
         GenreService dataservice = ApiUtil.getGenreService();
+        System.out.println(id);
         Call<List<Song>> callback = dataservice.getSongById(id);
         callback.enqueue(new Callback<List<Song>>() {
             @Override

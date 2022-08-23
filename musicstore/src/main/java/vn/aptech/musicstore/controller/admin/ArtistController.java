@@ -40,10 +40,12 @@ public class ArtistController {
 
     @GetMapping
     public String index(Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size,
+            @RequestParam(value = "mess", required = false) String mess) {
         model.addAttribute("list", service.getPage(pageNumber, size));
         model.addAttribute("service", service);
         model.addAttribute("name", "null");
+        model.addAttribute("mess", mess);
         return "admin/artist/index";
     }
 
@@ -67,17 +69,9 @@ public class ArtistController {
                 service.save(artist);
             }
         } catch (Exception e) {
-            model.addAttribute("list", service.getPage(pageNumber, size));
-            model.addAttribute("service", service);
-            model.addAttribute("name", "null");
-            model.addAttribute("mess", "Failed");
-            return "admin/artist/index";
+            return "redirect:/admin/artist?mess=Failed";
         }
-        model.addAttribute("list", service.getPage(pageNumber, size));
-        model.addAttribute("service", service);
-        model.addAttribute("name", "null");
-        model.addAttribute("mess", "Successfully");
-        return "admin/artist/index";
+        return "redirect:/admin/artist?mess=Successfully";
     }
 
     @GetMapping("/update/{id}")
@@ -93,17 +87,9 @@ public class ArtistController {
         try {
             service.deleteById(id);
         } catch (Exception e) {
-            model.addAttribute("list", service.getPage(pageNumber, size));
-            model.addAttribute("service", service);
-            model.addAttribute("name", "null");
-            model.addAttribute("mess", "Failed");
-            return "admin/artist/index";
+            return "redirect:/admin/artist?mess=Failed";
         }
-        model.addAttribute("list", service.getPage(pageNumber, size));
-        model.addAttribute("service", service);
-        model.addAttribute("name", "null");
-        model.addAttribute("mess", "Successfully");
-        return "admin/artist/index";
+        return "redirect:/admin/artist?mess=Successfully";
     }
 
     @GetMapping("/search")
