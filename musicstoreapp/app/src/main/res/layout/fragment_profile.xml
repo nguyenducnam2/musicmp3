@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp"
-        android:text="M U S I C   4 B"
+        android:text="Muzik App"
         android:textColor="#3DE5FF"
         android:textSize="36sp"
         android:textStyle="bold"
@@ -32,10 +32,10 @@
         app:layout_constraintTop_toBottomOf="@+id/imageProfile" />
 
     <Button
-        android:id="@+id/btndangxuat"
+        android:id="@+id/btnLogoutProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Đăng xuất"
+        android:text="Log out"
         android:fontFamily="@font/arimo_bold"
         android:textColor="#ffffff"
         android:textSize="18sp"
@@ -46,31 +46,31 @@
         app:layout_constraintTop_toBottomOf="@+id/textView5"
         app:layout_constraintVertical_bias="0.276" />
 
-    <TextView
-        android:id="@+id/tennguoidung"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:text="TextView"
-        android:textSize="24sp"
-        android:maxLines="2"
-        android:fontFamily="@font/arimo_bold"
-        android:textColor="#ffffff"
-        app:layout_constraintStart_toEndOf="@+id/imageviewuserprofile"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <TextView-->
+<!--        android:id="@+id/tvUsername"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginTop="32dp"-->
+<!--        android:text="TextView"-->
+<!--        android:textSize="24sp"-->
+<!--        android:maxLines="2"-->
+<!--        android:fontFamily="@font/arimo_bold"-->
+<!--        android:textColor="#ffffff"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/imgAvtUser"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageviewuserprofile"
-        android:layout_width="58dp"
-        android:layout_height="58dp"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/imgitem"
-        app:civ_border_color="#FFFFFF"
-        app:civ_border_width="2dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <de.hdodenhof.circleimageview.CircleImageView-->
+<!--        android:id="@+id/imgAvtUser"-->
+<!--        android:layout_width="58dp"-->
+<!--        android:layout_height="58dp"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:src="@drawable/imgitem"-->
+<!--        app:civ_border_color="#FFFFFF"-->
+<!--        app:civ_border_width="2dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,92 +1,77 @@
-//package vn.aptech.musicstoreapp.fragment;
-//
-//import static android.content.Context.MODE_PRIVATE;
-//
-//import android.content.Intent;
-//import android.database.sqlite.SQLiteDatabase;
-//import android.graphics.Bitmap;
-//import android.os.Bundle;
-//
-//import androidx.annotation.NonNull;
-//import androidx.annotation.Nullable;
-//import androidx.fragment.app.Fragment;
-//
-//import android.view.LayoutInflater;
-//import android.view.View;
-//import android.view.ViewGroup;
-//import android.widget.Button;
-//import android.widget.TextView;
-//
-//import com.squareup.picasso.Picasso;
-//
-//import de.hdodenhof.circleimageview.CircleImageView;
-//import vn.aptech.musicstoreapp.R;
-//import vn.aptech.musicstoreapp.activity.HomeActivity;
-//import vn.aptech.musicstoreapp.activity.MainActivity;
-//
-//public class Fragment_Profile extends Fragment {
-//
-//    Button btn;
-//    TextView acc, pass, name, url;
-//    HomeActivity hm;
-//    CircleImageView imguser;
-//    String sql = "";
-//    private SQLiteDatabase db;
-//    View view;
-//
-//
-//    @Nullable
-//    @Override
-//    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        view = inflater.inflate(R.layout.fragment_profile, container, false);
-//        db = getActivity().openOrCreateDatabase("NguoiDung.db", MODE_PRIVATE, null);
-//        AnhXa();
-//        Init();
-//
-//        btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), MainActivity.class);
-//                startActivity(intent);
-//                hm.finish();
-//            }
-//        });
-//        imguser.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ShowDialogUpdate();
-//            }
-//        });
-//        return  view;
-//    }
-//
-//    private void Init() {
-//        name = view.findViewById(R.id.tennguoidung);
-//        hm = (HomeActivity) getActivity();
-//        name.setText(hm.getName());
-//        Picasso.get().load(hm.getUrl()).into(imguser);
-//    }
-//
-//    private void AnhXa() {
-//        btn = view.findViewById(R.id.btndangxuat);
-//        name = view.findViewById(R.id.tennguoidung);
-//        imguser = view.findViewById(R.id.imageviewuserprofile);
-//    }
+package vn.aptech.musicstoreapp.fragment;
+
+import static android.content.Context.MODE_PRIVATE;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import vn.aptech.musicstoreapp.R;
+import vn.aptech.musicstoreapp.activity.HomeActivity;
+import vn.aptech.musicstoreapp.activity.MainActivity;
+
+public class Fragment_Profile extends Fragment {
+
+    private String username1;
+    Button btnLogout;
+    TextView acc, pass, username, url;
+    HomeActivity hm;
+    CircleImageView imgUser;
+    String sql = "";
+    private SQLiteDatabase db;
+    View view;
+
+
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_profile, container, false);
+        mapping();
+
+
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("application", Context.MODE_PRIVATE);
+//        username.setText(sharedPreferences.getString("full_name",""));
+//        url.setText(sharedPreferences.getString("image",""));
+
+        System.out.println("username "+username1);
+        btnLogout.setOnClickListener(v -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.commit();
+            Intent it = new Intent(this.getActivity(), MainActivity.class);
+            startActivity(it);
+        });
+
+        return  view;
+    }
+
+
+
+    private void mapping() {
+        btnLogout = view.findViewById(R.id.btnLogoutProfile);
+//        username = view.findViewById(R.id.tvUsername);
+//        imgUser = view.findViewById(R.id.imgAvtUser);
+    }
 //    private void ShowDialogUpdate(){
-//        DialogUpdateUser dialog_update_user = new DialogUpdateUser(hm.getTaikhoan(), hm.getName(), hm.getUrl());
+//        DialogUpdateUser dialog_update_user = new DialogUpdateUser();
 //        dialog_update_user.show(getParentFragmentManager(), "");
 //    }
-//
-//    @Override
-//    public void apply(String tenUser, Bitmap bitmap) {
-//        name.setText(tenUser);
-//        if (bitmap != null){
-//            imguser.setImageBitmap(bitmap);
-//            sql = "UPDATE tbNguoiDung SET Ten ='"+tenUser+"', ImageURL =  'https://music4b.000webhostapp.com/HinhAnh/NguoiDung/"+hm.getTaikhoan()+".jpg' WHERE TaiKhoan = '"+hm.getTaikhoan()+"'";
-//        }else {
-//            sql = "UPDATE tbNguoiDung SET Ten ='"+tenUser+"' WHERE TaiKhoan = '"+hm.getTaikhoan()+"'";
-//        }
-//        db.execSQL(sql);
-//        hm.updateHome();
-//    }
-//}
+
+
+}

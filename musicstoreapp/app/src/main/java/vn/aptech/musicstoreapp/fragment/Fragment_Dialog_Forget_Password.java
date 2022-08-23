@@ -53,7 +53,7 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
     static int interval;
     static Timer timer;
     int delay = 1000, period = 1000, timeValue, code;
-    private String emailuser="", username="";
+    private String emailUser="", username="";
 
     @Nullable
     @Override
@@ -61,7 +61,7 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
                              @NonNull Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment__dialog__forget__password, container, false);
-        tvMess = view.findViewById(R.id.mes);
+        tvMess = view.findViewById(R.id.tvMessForgetPass);
         edUsernameFP = view.findViewById(R.id.edUsernameForgetPassword);
         btnGetPin = view.findViewById(R.id.btnGetCode);
         btnNext = view.findViewById(R.id.btnNext);
@@ -85,15 +85,19 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
 
                     username = edUsernameFP.getText().toString().trim();
                     if(username.trim().length() < 3 || username.trim().length() > 36){
-                        Toast.makeText(getActivity(), "Lenght of Username must be higher than 3 and lower than 36", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Length of Username must be higher than 3 and lower than 36", Toast.LENGTH_SHORT).show();
                     }else {
+
                         GetDataUser(username);
+                        if(!acceptGetCode){
+                            Toast.makeText(getActivity(), "Email not exist", Toast.LENGTH_SHORT).show();
+                        }
 
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 if (acceptGetCode){
-                                    senMail(emailuser);
+                                    senMail(emailUser);
                                 }
                             }
                         }, 3000);
@@ -191,11 +195,9 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
             public void onResponse(Call<Account> call, Response<Account> response) {
                 Account account = (Account) response.body();
                 if (account != null) {
-                    emailuser = account.getUsername();
+                    emailUser = account.getUsername();
                     acceptGetCode = true;
                     Toast.makeText(getActivity(), "Pin code has been sent.", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(), "Account is not exist.", Toast.LENGTH_LONG).show();
                 }
             }
 

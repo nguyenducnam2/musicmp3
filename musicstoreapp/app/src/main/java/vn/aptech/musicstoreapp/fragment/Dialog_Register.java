@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -44,6 +45,7 @@ import vn.aptech.musicstoreapp.service_api.service.AccountService;
 
 public class Dialog_Register extends AppCompatDialogFragment {
 
+    TextView tvMesRegis;
     TextInputLayout edUsername, edPassword, edPinRegister;
     Button btnRegister, btnGetPin;
     ImageView imgClose;
@@ -61,6 +63,7 @@ public class Dialog_Register extends AppCompatDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_register, null);
+        tvMesRegis = view.findViewById(R.id.tvMessRegis);
         edUsername = view.findViewById(R.id.edRegisterUsername);
         edPassword = view.findViewById(R.id.edRegisterPassword);
         edPinRegister = view.findViewById(R.id.edPinRegister);
@@ -72,6 +75,7 @@ public class Dialog_Register extends AppCompatDialogFragment {
         btnGetPin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                tvMesRegis.setVisibility(View.GONE);
                 if(setInterval() < 1){
                     accept = false;
                     final LoadingDialog loadingDialog = new LoadingDialog(getActivity());
@@ -87,6 +91,11 @@ public class Dialog_Register extends AppCompatDialogFragment {
                     username = edUsername.getEditText().getText().toString().trim();
                     EmailValidator validator = new EmailValidator();
 
+                    if (edUsername.getEditText().getText().toString().length() == 0) {
+                        edUsername.requestFocus();
+                        edUsername.setError("Username cannot be blank.");
+                        return;
+                    }
 //                    if (username.trim().length() < 6 || username.trim().length() > 36){
 //                        Toast.makeText(getActivity(), "Email length from 6 -> 36 characters", Toast.LENGTH_LONG).show();
 //                    }else {
@@ -137,11 +146,11 @@ public class Dialog_Register extends AppCompatDialogFragment {
                     edPassword.setError("Password cannot be blank.");
                     return;
                 }
-                if (edPinRegister.getEditText().getText().toString().length() == 0) {
-                    edPinRegister.requestFocus();
-                    edPinRegister.setError("Doesn't have pin yet.");
-                    return;
-                }
+//                if (edPinRegister.getEditText().getText().toString().length() == 0) {
+//                    edPinRegister.requestFocus();
+//                    edPinRegister.setError("Doesn't have pin yet.");
+//                    return;
+//                }
                 username = edUsername.getEditText().getText().toString().trim();
                 password = edPassword.getEditText().getText().toString().trim();
                 verifyPin = edPinRegister.getEditText().getText().toString().trim();
@@ -150,7 +159,7 @@ public class Dialog_Register extends AppCompatDialogFragment {
 //                if(username.trim().length() < 6 || username.trim().length() > 36){
 //                    Toast.makeText(getActivity(), "Email's length from 6 -> 36 characters", Toast.LENGTH_LONG).show();
 //                }else {
-                    checkUser(username);
+//                    checkUser(username);
                 System.out.println("---------------accept-btnRegis"+accept);
 
 //                }
@@ -190,39 +199,49 @@ public class Dialog_Register extends AppCompatDialogFragment {
         }
         return --interval;
     }
-    private void senMail(String username){
 
-        final String email = "sluuthanh.demo.send@gmail.com";
-        final  String password = "nppwzhwzwlapivlk";
+    private void senMail(String receiverEmail){
+        try {
+        String stringSenderEmail = "sluuthanh.demo.send@gmail.com";
+        String stringReceiverEmail = receiverEmail;
+        String stringPasswordSenderMail ="nppwzhwzwlapivlk";
         Random random = new Random();
         code = 10000 + random.nextInt(89999);
         String messenger = "Your Pin confirm is :"+ code+". Please don't share this code!!!";
-        Properties properties = new Properties();
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "587");
+
+        String stringHost ="smtp.gmail.com";
+        String stringPort ="465";
+
+        Properties properties = System.getProperties();
+        properties.put("mail.smtp.host",stringHost);
+        properties.put("mail.smtp.port",stringPort);
+        properties.put("mail.smtp.ssl.enable","true");
+        properties.put("mail.smtp.auth","true");
+
 
         Session session = Session.getInstance(properties, new javax.mail.Authenticator(){
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(email, password);
+                return new PasswordAuthentication(stringSenderEmail, stringPasswordSenderMail);
             }
         });
-        try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(email));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(username));
-            message.setSubject("Register Account");
-            message.setText(messenger);
-            Transport.send(message);
+
+            Message messageRegister = new MimeMessage(session);
+            messageRegister.setFrom(new InternetAddress(stringSenderEmail,"Muzik App"));
+            messageRegister.setRecipients(Message.RecipientType.TO, InternetAddress.parse(stringReceiverEmail));
+            messageRegister.setSubject("Register Account");
+            messageRegister.setText(messenger);
+            Transport.send(messageRegister);
+
 
             char[] ch = new char[37];
-            username.getChars(0, 3, ch, 0);
-            Toast.makeText(getActivity(), "Pin code is sent to "+ch[0]+ch[1]+ch[2]+"***@gmail.com", Toast.LENGTH_SHORT).show();
+            receiverEmail.getChars(0, 3, ch, 0);
+            tvMesRegis.setText("Pin code is sent to "+ch[0]+ch[1]+ch[2]+"***@gmail.com");
+            tvMesRegis.setVisibility(View.VISIBLE);
             String secs = "60";
             interval = Integer.parseInt(secs);
             timer = new Timer();
+
             timer.scheduleAtFixedRate(new TimerTask() {
                 public void run() {
                     timeValue = setInterval();
@@ -234,9 +253,13 @@ public class Dialog_Register extends AppCompatDialogFragment {
                 }
             }, delay, period);
         } catch (Exception e) {
+            e.printStackTrace();
             Toast.makeText(getActivity(), "Connection error, Please try again!", Toast.LENGTH_SHORT).show();
         }
     }
+
+
+
     public void checkUser(String us) {
         AccountService dataService = ApiUtil.getAccountService();
         Call<ResponseModel> callback = dataService.checkUsername(us);
@@ -247,13 +270,13 @@ public class Dialog_Register extends AppCompatDialogFragment {
                 if (responseBody != null) {
                     if(responseBody.getSuccess().equals("success")){
                         accept = true;
-                        System.out.println("---------------accept-checkU "+accept);
+//                        System.out.println("---------------accept-checkU "+accept);
                     }else{
-                        System.out.println("---------------accept-checkU-fail"+accept);
+//                        System.out.println("---------------accept-checkU-fail"+accept);
                         Toast.makeText(getActivity(), "The username has been used", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    System.out.println("---------------accept-checkU=null"+accept);
+//                    System.out.println("---------------accept-checkU=null"+accept);
 
                 }
             }

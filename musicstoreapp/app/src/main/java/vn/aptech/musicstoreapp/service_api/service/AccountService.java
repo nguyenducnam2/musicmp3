@@ -19,7 +19,7 @@ public interface AccountService {
 
     @FormUrlEncoded
     @POST("loginAndroid")
-    Call<Account> login(@Field("username")String username,@Field("password")String password);
+    Call<ResponseModel> login(@Field("username")String username,@Field("password")String password);
 
 //    @FormUrlEncoded
 //    @POST("findByUsername")
@@ -39,5 +39,9 @@ public interface AccountService {
 
     @FormUrlEncoded
     @POST("registerAndroid")
-    Call<ResponseBody> registerAndroid(@Field("username")String username,@Field("password") String password);
+    Call<ResponseModel> registerAndroid(@Field("username")String username,@Field("password") String password);
+
+    @FormUrlEncoded
+    @POST("changePasswordAndroid")
+    Call<ResponseModel> changePasswordAndroid(@Field("username")String username,@Field("oldPassword") String oldPassword,@Field("newPassword") String newPassword);
 }

@@ -51,13 +51,27 @@ public class RegistrationController {
 //
 
     @PostMapping("/loginAndroid")
-    public Account login(@RequestParam("username") String username, @RequestParam("password") String password) {
+    public ResponseModel login(@RequestParam("username") String username, @RequestParam("password") String password) {
         Optional<Account> userAndroid = userService.findByUsername(username);
+        ResponseModel response = new ResponseModel();
         if (userAndroid.isPresent()) {
             if (userService.checkIfValidOldPassword(userAndroid.get(), password)) {
                 userAndroid.get().setPassword(password);
-                return userAndroid.get();
+                response.setSuccess("success");
+                response.setMessage("message");
+                return response;
             }
+        }
+        response.setSuccess("fail");
+        response.setMessage("message");
+        return response;
+    }
+
+    @PostMapping("/findByUsername")
+    public Account findByUsername(@RequestParam("username") String username) {
+        Optional<Account> userAndroid = userService.findByUsername(username);
+        if (userAndroid.isPresent()) {
+            return userAndroid.get();
         }
         return null;
     }
@@ -94,15 +108,6 @@ public class RegistrationController {
 //      
 //        return null;
 //    }
-    @PostMapping("/findByUsername")
-    public Account findByUsername(@RequestParam("username") String username) {
-        Optional<Account> userAndroid = userService.findByUsername(username);
-        if (userAndroid.isPresent()) {
-            return userAndroid.get();
-        }
-        return null;
-    }
-
     @PostMapping("/resetPasswordAndroid")
     public @ResponseBody
     String changePassword(@RequestParam("username") String username, @RequestParam("password") String password) {

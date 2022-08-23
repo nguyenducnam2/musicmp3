@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +25,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import vn.aptech.musicstoreapp.R;
 import vn.aptech.musicstoreapp.entity.Account;
+import vn.aptech.musicstoreapp.entity.ResponseModel;
 import vn.aptech.musicstoreapp.fragment.Dialog_Forget_Password;
 import vn.aptech.musicstoreapp.service_api.api.ApiUtil;
 import vn.aptech.musicstoreapp.service_api.service.AccountService;
@@ -54,10 +57,10 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (accept) {
-                            GetDataUser();
+                            getDataUser();
                         }
                     }
-                }, 3000);
+                }, 1000);
             }
         });
 
@@ -82,25 +85,28 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void InsertData(String tk, String mk, String ten,String role, String url) {
-        String sql = "INSERT INTO account(username, password, fullname, role, image) VALUES('"+tk+"','"+mk+"','"+ten+"','"+role+"','"+url+"')";
-        db.execSQL(sql);
-    }
+//    private void InsertData(String tk, String mk, String ten,String role, String url) {
+//        String sql = "INSERT INTO account(username, password, fullname, role, image) VALUES('"+tk+"','"+mk+"','"+ten+"','"+role+"','"+url+"')";
+//        db.execSQL(sql);
+//    }
 
-    private void GetDataUser() {
-        AccountService dataservice = ApiUtil.getAccountService();
-        Call<Account> callback = dataservice.login(username, password);
+    private void getDataUser() {
+        AccountService accService = ApiUtil.getAccountService();
+        Call<Account> callback = accService.findByUsername(username);
         callback.enqueue(new Callback<Account>() {
             @Override
             public void onResponse(Call<Account> call, Response<Account> response) {
                 Account account = (Account) response.body();
                 if (account != null) {
-                    username = account.getUsername();
-                    password = account.getPassword();
-                    fullname = account.getFullname();
-                    role = account.getRole();
-                    image = account.getImageUrl();
-                    InsertData(username, password, fullname, role, image);
+                    SharedPreferences sharedPreferences = getSharedPreferences("application", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putLong("id",account.getId());
+                    editor.putString("username",account.getUsername());
+                    editor.putString("password",account.getPassword());
+                    editor.putString("ful_name",account.getFullname());
+                    editor.putString("role",account.getRole());
+                    editor.putString("image",account.getImageUrl());
+                    editor.apply();
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                 } else {
                     Toast.makeText(LoginActivity.this, "Connect Fail", Toast.LENGTH_SHORT).show();
@@ -118,28 +124,29 @@ public class LoginActivity extends AppCompatActivity {
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setTitle("Please wait");
         progressDialog.setMessage("Logging in...");
-        progressDialog.setCancelable(false);
+        progressDialog.setCancelable(accept);
         progressDialog.show();
 
         username = edUsername.getEditText().getText().toString().trim();
         password = edPassword.getEditText().getText().toString().trim();
 
         AccountService networkService = ApiUtil.getAccountService();
-        Call<Account> login = networkService.login(username, password);
-        login.enqueue(new Callback<Account>() {
+        Call<ResponseModel> login = networkService.login(username, password);
+        login.enqueue(new Callback<ResponseModel>() {
             @Override
-            public void onResponse(@NonNull Call<Account> call, @NonNull Response<Account> response) {
-                Account responseBody = response.body();
+            public void onResponse(@NonNull Call<ResponseModel> call, @NonNull Response<ResponseModel> response) {
+                ResponseModel responseBody = response.body();
                 if (responseBody != null) {
-                    accept = true;
+                    if(responseBody.getSuccess().equals("success")){
+                        accept = true;
+                    }
                 } else {
                     Toast.makeText(LoginActivity.this, "Login Fail !", Toast.LENGTH_LONG).show();
-
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<Account> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ResponseModel> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
             }
         });
