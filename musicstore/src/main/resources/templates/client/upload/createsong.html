@@ -59,32 +59,34 @@ and open the template in the editor.
             <div class="container-fluid">
                 <div class="row"> 
                     <div class="col-sm-12">
-                        <div class="iq-card"  style=" background: linear-gradient(to top right, darkmagenta 0%, #ff6633 100%);">
+                        <div class="iq-card" >
                             <div class="iq-card-header d-flex justify-content-between">
                                 <div class="iq-header-title">
-                                    <h4 class="card-title">Add User Information</h4>
+                                    <h4 class="card-title">Add User Song</h4>
                                 </div>
                             </div>
 
-                            <div class="iq-card-body" style="height: 400px; background: linear-gradient(to top right, darkmagenta 0%, #ff6633 100%);">
+                            <div class="iq-card-body" >
                                 <div class="new-user-info">
                                     <form th:action=${"/user/save"} th:object="${song}" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                                         <input type="hidden" th:name="accountId" th:value="${session.user.id}" />
                                         <div class="row">
                                             <div  class="form-group col-lg-3">
                                                 <div th:if="${status != 'update'}" class="add-img-user profile-img-edit">
-                                                    <img class="profile-pic img-fluid" src="images/user1/1.png" alt="profile-pic">
+                                                    <img class="profile-pic img-fluid" th:src="@{/admintemplate/images/user/imagesGG.png}" alt="profile-pic">
                                                     <div class="p-image">
-                                                        <!--                                       <a href="javascript:void();" class="upload-button btn iq-bg-primary">File Upload</a>-->
                                                         <input class="file-upload" type="file" name="file2" accept="image/*" required="">
                                                     </div>
                                                 </div>
 
                                                 <div th:if="${status == 'update'}" class="add-img-user profile-img-edit">
-                                                    <img class="profile-pic img-fluid" src="images/user1/1.png" alt="profile-pic">
+                                                    <img class="profile-pic img-fluid" th:src="@{'/webdata/user/'+${song.image}}" alt="profile-pic">
                                                     <div class="p-image">
-                                                        <!--                                       <a href="javascript:void();" class="upload-button btn iq-bg-primary">File Upload</a>-->
-                                                        <input class="file-upload" type="file" name="file2" accept="image/*">
+                                                          
+                                                                <i class="ri-pencil-line upload-button"></i>
+                                                                <input class="file-upload" type="file" name="file2" accept="image/*"/>
+                                                          
+<!--                                                        <input class="file-upload" type="file" name="file2" accept="image/*">-->
                                                     </div>
                                                 </div>
 
@@ -114,6 +116,9 @@ and open the template in the editor.
                                                             </div>
                                                         </div>
                                                     </div>
+                                                     <div  th:if="${status == 'update'}">
+                                                              <img class="profile-pic" th:src="@{'/webdata/audio/'+${song.media}}" alt="profile-pic">
+                                                     </div>
                                                     <div th:if="${status == 'update'}" class="form-group">
                                                         <label>File Audio:(<span style="color: red;">*</span>)(.mp3,.mp4):</label>
                                                         <div class="custom-file">
