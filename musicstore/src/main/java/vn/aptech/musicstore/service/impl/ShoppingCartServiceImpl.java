@@ -43,9 +43,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService{
     public void update(int id, int quantity){
         Product product=map.get(id);
         product.setQuantity(quantity);
-        if(product.getQuantity() <= 0){
-            map.remove(id);
-        }
     }
 
     @Override

@@ -30,8 +30,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                             <div th:text="${#numbers.formatCurrency(item.price)}"></div>
                                             <div>
                                                 <input type="hidden" th:value="${item.id}" name="id"/>
-                                                <input style="width: 55px" type="number" min="1" 
-                                                       th:value="${item.quantity}" name="quantity"
+                                                <input style="width: 55px" type="number" min="1" max="10"
+                                                       onkeydown="return false;" th:value="${item.quantity}" name="quantity"
                                                        onblur="this.form.submit()"/>
                                             </div>
                                             <div th:text="${#numbers.formatCurrency(item.quantity*item.price)}"></div>
