@@ -47,7 +47,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GenreAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull GenreAdapter.ViewHolder holder,int position) {
         Genre chuDe = mangchude.get(position);
         holder.txttenchude.setText(chuDe.getName());
         ApiUtil.getGenreService().getSongById(chuDe.getId()).enqueue(new Callback<List<Song>>() {
@@ -66,7 +66,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.ViewHolder>{
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ListSongActivity.class);
-                intent.putExtra("intentchude", mangchude.get(position));
+                intent.putExtra("intentchude", mangchude.get(holder.getAdapterPosition()));
                 context.startActivity(intent);
             }
         });

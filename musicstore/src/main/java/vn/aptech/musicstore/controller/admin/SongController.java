@@ -57,15 +57,17 @@ public class SongController {
 
     @GetMapping
     public String index(Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size,
+            @RequestParam(value = "mess", required = false) String mess) {
         model.addAttribute("list", service.getPage(pageNumber, size));
         model.addAttribute("service", service);
         model.addAttribute("name", "null");
+        model.addAttribute("mess", mess);
         return "admin/song/index";
     }
 
     @GetMapping("/create")
-    public String create(Model model ) {
+    public String create(Model model) {
         model.addAttribute("song", new Song());
         model.addAttribute("listgenre", service_gen.findAll());
         model.addAttribute("listartist", service_art.findAll());
@@ -80,8 +82,7 @@ public class SongController {
             @ModelAttribute("song") Song s, Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size) throws IOException {
         try {
-            
-            
+
             if (!(file.isEmpty())) {
                 s.setMedia(file.getOriginalFilename());
                 if (!(file2.isEmpty())) {
@@ -126,17 +127,9 @@ public class SongController {
                 }
             }
         } catch (Exception e) {
-            model.addAttribute("list", service.getPage(pageNumber, size));
-            model.addAttribute("service", service);
-            model.addAttribute("name", "null");
-            model.addAttribute("mess", "Failed");
-            return "admin/song/index";
+            return "redirect:/admin/song?mess=Failed";
         }
-        model.addAttribute("list", service.getPage(pageNumber, size));
-        model.addAttribute("service", service);
-        model.addAttribute("name", "null");
-        model.addAttribute("mess", "Successfully");
-        return "admin/song/index";
+        return "redirect:/admin/song?mess=Successfully";
     }
 
     @GetMapping("/delete/{id}")
@@ -151,17 +144,9 @@ public class SongController {
             service.deleteById(id);
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("list", service.getPage(pageNumber, size));
-            model.addAttribute("service", service);
-            model.addAttribute("name", "null");
-            model.addAttribute("mess", "Failed");
-            return "admin/song/index";
+            return "redirect:/admin/song?mess=Failed";
         }
-        model.addAttribute("list", service.getPage(pageNumber, size));
-        model.addAttribute("service", service);
-        model.addAttribute("name", "null");
-        model.addAttribute("mess", "Successfully");
-        return "admin/song/index";
+        return "redirect:/admin/song?mess=Successfully";
     }
 
     @GetMapping("/update/{id}")

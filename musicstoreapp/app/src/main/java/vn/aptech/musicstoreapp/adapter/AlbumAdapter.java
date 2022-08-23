@@ -48,7 +48,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder>{
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ListSongActivity.class);
-                intent.putExtra("intentbangxephang", mangbangxephang.get(position));
+                intent.putExtra("intentbangxephang", mangbangxephang.get(holder.getAdapterPosition()));
                 context.startActivity(intent);
             }
         });
