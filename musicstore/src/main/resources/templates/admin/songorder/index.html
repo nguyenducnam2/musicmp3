@@ -39,7 +39,10 @@ and open the template in the editor.
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div class="user-list-files d-flex float-right">
-                                            <a class="iq-bg-primary" th:href="@{/admin/songorder/exportPDF}">
+                                            <a class="iq-bg-primary" th:if="${mess!='filter'}" th:href="@{'/admin/songorder/exportPDF?accountId='+${session.user.id}}">
+                                                PDF
+                                            </a>
+                                              <a class="iq-bg-primary" th:if="${mess=='filter'}" th:href="@{'/admin/songorder/exportPDFFilter?accountId='+${session.user.id}+'&from='+${from}+'&to='+${to}}">
                                                 PDF
                                             </a>
                                         </div>
@@ -48,7 +51,7 @@ and open the template in the editor.
                                         <thead>
                                             <tr>
                                                 <th>Avatar</th>
-                                                <th>Username</th>                              
+                                                <th>Full name</th>                              
                                                 <th>Status</th>
                                                 <th>Total</th>
                                                 <th>Payment</th>
@@ -59,7 +62,7 @@ and open the template in the editor.
                                         <tbody th:if="${mess==null}">
                                             <tr th:each="item:${list.page}">
                                                 <td class="text-center"><img class="rounded img-fluid avatar-40" th:src="@{'/webdata/user/'+${item.account.image}}" alt="profile"></td>
-                                                <td>[[${item.account.username}]]</td>
+                                                <td><a th:href="@{/admin/songorder/{id}(id=${item.id})}">[[${item.account.fullname}]]</a></td>
                                                 <td>
                                                     <span th:if="${item.status=='Success'}" class="badge iq-bg-success">[[${item.status}]]</span>
                                                     <span th:if="${item.status=='Canceled'}" class="badge iq-bg-primary">user [[${item.status}]]</span>
@@ -77,7 +80,7 @@ and open the template in the editor.
                                         <tbody th:if="${mess!=null}">
                                             <tr th:each="item:${list}">
                                                 <td class="text-center"><img class="rounded img-fluid avatar-40" th:src="@{'/webdata/user/'+${item.account.image}}" alt="profile"></td>
-                                                <td>[[${item.account.username}]]</td>
+                                                <td><a th:href="@{/admin/songorder/{id}(id=${item.id})}">[[${item.account.fullname}]]</a></td>
                                                 <td>
                                                     <span th:if="${item.status=='Success'}" class="badge iq-bg-success">[[${item.status}]]</span>
                                                     <span th:if="${item.status=='Canceled'}" class="badge iq-bg-primary">user [[${item.status}]]</span>
