@@ -9,7 +9,7 @@ and open the template in the editor.
       layout:decorate="~{admin/layout.html}">
     <body>
         <div layout:fragment="content" id="content-page" class="content-page">
-             <div th:if="${mess} != null" class="alert bg-secondary" role="alert">
+            <div th:if="${mess} != null" class="alert bg-secondary" role="alert">
                 <div th:if="${mess}=='Successfully'" class="iq-alert-icon">
                     <i class="ri-pencil-line"></i>
                 </div>
@@ -66,14 +66,35 @@ and open the template in the editor.
                                         </div>
                                         <div class="iq-card-body">
                                             <div th:if="${session.user} != null">
-                                                <div th:object="${session.user}">
-                                                    <p>Id <span th:text="*{id}">Id</span>.</p>
-                                                    <p>Name: <span th:text="*{firstName}">Sebastian</span>.</p>
-                                                    <p>Surname: <span th:text="*{lastName}">Pepper</span>.</p>
-                                                    <p>Username <span th:text="*{username}">U</span>.</p>
-                                                    <p>Email <span th:text="*{email}">E</span>.</p>
-                                                    <p>Role <span th:text="*{role}">R</span>.</p>
-                                                    <p>Image <span th:text="*{image}">Id</span>.</p>
+                                                <div class="row align-items-center" th:object="${session.user}">
+
+                                                    <div class="form-group col-md-6">
+                                                        <label for="avatar">Avatar:</label>
+                                                        <div >
+                                                            <div id="avatar" class="profile-img-edit">
+                                                                <div th:if="${session.user.image==null}">
+                                                                    <img th:if="${session.user.provider == null }"  class="profile-pic" th:src="@{/admintemplate/images/user/user-default2.png}" alt="profile-pic">
+                                                                    <img th:if="${session.user.provider == 'Google'}"   class="profile-pic" th:src="@{/admintemplate/images/user/imagesGG.png}" alt="profile-pic">
+                                                                </div>
+                                                                <div  th:if="${session.user.image!=null}">
+                                                                    <img class="profile-pic" th:src="@{'/webdata/user/'+${session.user.image}}" alt="profile-pic">
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label for="fname">First Name:</label>
+                                                        <input  name="fname" class="form-control" id="fname" th:value="*{firstName}" disabled="">
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label for="uname">Username:</label>
+                                                        <input  class="form-control" id="uname" th:value="*{username}"  disabled>
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label for="lname">Last Name:</label>
+                                                        <input  name="lname" class="form-control" id="lname" th:value="*{lastName}" disabled>
+                                                    </div>
 
                                                 </div>
                                             </div>
