@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Muzik - Responsive Bootstrap 4 Admin Dashboard Template</title>
+        <!-- Favicon -->
+        <link rel="shortcut icon" th:href="@{/admintemplate/images/favicon.ico}" />
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" th:href="@{/admintemplate/css/bootstrap.min.css}"/>
+        <!-- Typography CSS -->
+        <link rel="stylesheet" th:href="@{/admintemplate/css/typography.css}"/>
+        <!-- Style CSS -->
+        <link rel="stylesheet" th:href="@{/admintemplate/css/style.css}"/>
+        <!-- Responsive CSS -->
+        <link rel="stylesheet" th:href="@{/admintemplate/css/responsive.css}"/>
+    </head>
+    <body>
+        <!-- loader Start -->
+        <div id="loading">
+            <div id="loading-center">
+            </div>
+        </div>
+        <!-- loader END -->
+        <!-- Sign in Start -->
+        <section class="sign-in-page">
+            <div class="container h-100">
+                <div class="row justify-content-center align-items-center h-100">
+                    <div class="col-md-6 col-sm-12 col-12 ">
+                        <div class="sign-user_card ">
+                            <div class="d-flex justify-content-center">
+                                <div class="sign-user_logo">
+                                        <img th:src="@{admintemplate/images/login/user.png}" class=" img-fluid" alt="Logo">
+                                </div>
+                            </div>
+                            <div class="sign-in-page-data">
+                                <div class="sign-in-from w-100 m-auto pt-5">
+                                    <img src="images/login/mail.png" width="80"  alt="">
+                                    <h1 class="mt-3 mb-0">Register Success !</h1>
+                                    <p class="text-white" th:inline="text">A email has been send to [[${email}]] Please check for an email from Muzik and click on the included link to verify email.</p>
+                                    <div class="d-inline-block w-100">
+                                        <a th:href="@{/}" class="btn btn-primary mt-3">Back to Home</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Sign in END -->
+        <!-- color-customizer -->
+     
+        <!-- color-customizer END -->
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+        <script th:src="@{/admintemplate/js/jquery.min.js}"></script>
+        <script th:src="@{/admintemplate/js/popper.min.js}"></script>
+        <script th:src="@{/admintemplate/js/bootstrap.min.js}"></script>
+        <!-- Appear JavaScript -->
+        <script th:src="@{/admintemplate/js/jquery.appear.js}"></script>
+        <!-- Countdown JavaScript -->
+        <script th:src="@{/admintemplate/js/countdown.min.js}"></script>
+        <!-- Counterup JavaScript -->
+        <script th:src="@{/admintemplate/js/waypoints.min.js}"></script>
+        <script th:src="@{/admintemplate/js/jquery.counterup.min.js}"></script>
+        <!-- Wow JavaScript -->
+        <script th:src="@{/admintemplate/js/wow.min.js}"></script>
+        <!-- Apexcharts JavaScript -->
+        <script th:src="@{/admintemplate/js/apexcharts.js}"></script>
+        <!-- Slick JavaScript -->
+        <script th:src="@{/admintemplate/js/slick.min.js}"></script>
+        <!-- Select2 JavaScript -->
+        <script th:src="@{/admintemplate/js/select2.min.js}"></script>
+        <!-- Owl Carousel JavaScript -->
+        <script th:src="@{/admintemplate/js/owl.carousel.min.js}"></script>
+        <!-- Magnific Popup JavaScript -->
+        <script th:src="@{/admintemplate/js/jquery.magnific-popup.min.js}"></script>
+        <!-- Smooth Scrollbar JavaScript -->
+        <script th:src="@{/admintemplate/js/smooth-scrollbar.js}"></script>
+        <!-- Style Customizer -->
+        <script th:src="@{/admintemplate/js/style-customizer.js}"></script>
+        <!-- Chart Custom JavaScript -->
+        <script th:src="@{/admintemplate/js/chart-custom.js}"></script>
+        <!-- Custom JavaScript -->
+        <script th:src="@{/admintemplate/js/custom.js}"></script>
+    </body>
+</html>

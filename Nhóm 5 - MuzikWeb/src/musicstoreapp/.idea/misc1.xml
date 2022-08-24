@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/FPTSem4/Term4/6.DAWD/musicmp3/musicstoreapp/app/src/main/res/drawable/btn_dang_xuat.xml" value="0.1" />
+        <entry key="..\:/FPTSem4/Term4/6.DAWD/musicmp3/musicstoreapp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.294" />
+        <entry key="..\:/FPTSem4/Term4/6.DAWD/musicmp3/musicstoreapp/app/src/main/res/font/molengo.xml" value="0.21979166666666666" />
+        <entry key="..\:/FPTSem4/Term4/6.DAWD/musicmp3/musicstoreapp/app/src/main/res/layout/activity_home.xml" value="0.17831813576494426" />
+        <entry key="..\:/FPTSem4/Term4/6.DAWD/musicmp3/musicstoreapp/app/src/main/res/layout/activity_login.xml" value="0.17831813576494426" />
+        <entry key="..\:/FPTSem4/Term4/6.DAWD/musicmp3/musicstoreapp/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/FPTSem4/Term4/6.DAWD/musicmp3/musicstoreapp/app/src/main/res/layout/activity_playmusic.xml" value="0.36666666666666664" />
+        <entry key="..\:/FPTSem4/Term4/6.DAWD/musicmp3/musicstoreapp/app/src/main/res/layout/customdialog.xml" value="0.36666666666666664" />
+        <entry key="..\:/FPTSem4/Term4/6.DAWD/musicmp3/musicstoreapp/app/src/main/res/layout/dialog_forget_password.xml" value="0.11730072463768115" />
+        <entry key="..\:/FPTSem4/Term4/6.DAWD/musicmp3/musicstoreapp/app/src/main/res/layout/fragment__dialog__forget__password.xml" value="0.33" />
+        <entry key="..\:/FPTSem4/Term4/6.DAWD/musicmp3/musicstoreapp/app/src/main/res/layout/fragment_forget_password.xml" value="0.17147922998986828" />
+        <entry key="..\:/FPTSem4/Term4/6.DAWD/musicmp3/musicstoreapp/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/drawable/bgr_playnhac.xml" value="0.1" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/activity_home.xml" value="0.18568840579710144" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/activity_listsong.xml" value="0.25" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/activity_login.xml" value="0.22" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/activity_main.xml" value="0.16530797101449277" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/activity_playmusic.xml" value="0.1" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/activity_test.xml" value="0.1125" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/album_list.xml" value="0.13489583333333333" />
+	<entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/artist_list.xml" value="0.17346014492753623" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/customdialog.xml" value="0.18568840579710144" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/dialog_forget_password.xml" value="0.18" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/fragment__dialog__forget__password.xml" value="0.1" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/fragment_album.xml" value="0.13489583333333333" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/fragment_artist.xml" value="0.17346014492753623" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/fragment_main_home.xml" value="0.17346014492753623" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/fragment_songcd.xml" value="0.1" />
+        <entry key="..\:/Users/namng/Documents/musicmp3/musicstoreapp/app/src/main/res/layout/song_list.xml" value="0.15896739130434784" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

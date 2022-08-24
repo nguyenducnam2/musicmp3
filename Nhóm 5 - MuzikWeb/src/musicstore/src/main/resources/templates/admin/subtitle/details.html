@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xlmns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="iq-card">
+                            <div class="iq-card-header d-flex justify-content-between">
+                                <div class="iq-header-title">
+                                    <h4 class="card-title">Subtitles List</h4>
+                                </div>
+                            </div>
+                            <div class="iq-card-body">
+                                <div id="table" class="table-editable">
+                                    <span class="float-right mb-3 mr-2">
+                                        <a th:href="@{/admin/subtitle/create/{id}(id=${song.id})}" class="btn btn-sm iq-bg-success"><i
+                                                class="ri-add-fill"><span class="pl-1">Add New</span></i>
+                                        </a>
+                                    </span>
+                                    <table class="table table-bordered table-responsive-md table-striped text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>Name Language</th>
+                                         <!--       <th>Edit</th> -->
+                                                <th>Remove</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="item:${listsub}">
+                                                <td>
+                                                    <p th:text="${item.name}"></p>
+                                                </td>
+                                           <!--     <td>
+                                                    <span class="table-remove"><button type="button"
+                                                                                       class="btn iq-bg-success btn-rounded btn-sm my-0">Edit</button></span>
+                                                </td>-->
+                                                <td>
+                                                    <span class="table-remove"><a th:href="@{/admin/subtitle/delete/{id}(id=${item.id})}" type="button"
+                                                                                       class="btn iq-bg-danger btn-rounded btn-sm my-0">Remove</a></span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

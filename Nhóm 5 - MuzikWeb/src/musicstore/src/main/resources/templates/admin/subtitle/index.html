@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xlmns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+    <body>
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="iq-card">
+                            <div class="iq-card-header d-flex justify-content-between">
+                                <div class="iq-header-title">
+                                    <h4 class="card-title">MV Lists</h4>
+                                </div>
+                                <div class="iq-search-bar">   
+                                    <form th:action="@{/admin/song/search}" class="searchbox">
+                                        <input type="text" class="text search-input" name="name" placeholder="Search Here..">
+                                        <a class="search-link" href="#"><i class="ri-search-line text-black"></i></a>
+                                        <a class="search-audio" href="#"><i class="las la-microphone text-black"></i></a> 
+                                    </form>
+                                </div>
+                                <div class="iq-card-header-toolbar d-flex align-items-center">
+                                    <a style="display: none;"  th:href="@{/admin/song/create}" class="btn btn-primary">Add New Subt</a>
+                                </div>
+                            </div>
+                            <div class="iq-card-body">
+                                <div class="table-responsive">
+                                    <table class="data-tables table table-striped table-bordered" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 5%;">No</th>
+
+                                                <th style="width: 5%;">Video</th>
+                                                <th style="width: 5%;">Subtitle Languages</th> 
+                                                <th style="width: 5%;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="item:${posts.page}" th:if="${item.video}!=null">
+                                                <td th:text="${listsong.size-listsong.indexOf(item)}"></td>
+                                                <td>  
+                                                    <div>
+                                                        <video style="width: 300px;height:200px;">
+                                                            <source th:src="@{'/webdata/video/'+${item.video}+'#t=3.5'}"/>
+                                                        </video>
+                                                    </div>
+                                                    <div>
+                                                        <p th:text="${item.name}+'-'+${item.artist.name}"></p>
+                                                    </div>   
+                                                </td>
+                                                <td>
+                                                    <p th:text="${service_sub.findBySongId(item.id).size}"></p>
+                                                </td>
+                                                <td>
+                                                    <div class="flex align-items-center list-user-action">
+                                                        <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit Subtitles" th:href="@{/admin/subtitle/details/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <nav aria-label="Page navigation" class="paging">
+                <ul class="pagination" th:if="${posts.page.totalPages > 1}">
+                    <li class="page-item" th:classappend="${!posts.paging.isPrevEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/admin/subtitle/?pageNumber=' + ${posts.paging.pageNumber - 1}}"
+                           tabindex="-1">Previous</a>
+                    </li>
+                    <th:block th:each="item : ${posts.paging.getItems()}">
+                        <li class="page-item" th:classappend="${item.index == posts.paging.pageNumber? 'active' : ''}"
+                            th:if="${item.pageItemType.name() == 'PAGE'}">
+                            <a class="page-link" th:href="@{'/admin/subtitle/?pageNumber=' + ${item.index}}"
+                               th:text="${item.index}"></a>
+                        </li>
+                        <li class="page-item disabled" th:if="${item.pageItemType.name() == 'DOTS'}">
+                            <a class="page-link" href="#">...</a>
+                        </li>
+                    </th:block>
+                    <li class="page-item" th:classappend="${!posts.paging.isNextEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/admin/subtitle/?pageNumber=' + ${posts.paging.pageNumber + 1}}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </body>
+</html>

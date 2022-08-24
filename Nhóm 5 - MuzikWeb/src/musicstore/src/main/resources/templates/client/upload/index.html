@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{client/layout.html}">
+    <head>
+        <title>Upload</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <div class="container-fluid" th:if="${session.user !=null}">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="iq-card">
+                            <div class="iq-card-header d-flex justify-content-between align-items-center">
+                                <div class="iq-header-title">
+                                    <h4 class="card-title">My Song</h4>
+                                         <div class="iq-search-bar">   
+                                  
+                                </div>
+                                    <div class="iq-card-header-toolbar d-flex align-items-center">
+                                        <a th:href="@{/user/create}" class="btn btn-primary">Add New Song</a>
+                                    </div>
+<!--                                   <form th:action="@{/user/upload/search}" class="searchbox">
+                                        <input type="text" class="text search-input" name="name" placeholder="Search Here..">
+                                        <a class="search-link" href="#"><i class="ri-search-line text-black"></i></a>
+                                        <a class="search-audio" href="#"><i class="las la-microphone text-black"></i></a> 
+                                    </form>-->
+                                </div>
+                                <div id="feature-album-slick-arrow" class="slick-aerrow-block"></div>
+                            </div>
+                            <div class="iq-card-body">
+                                  
+                                <p th:if="${service.findByAccountId(session.user.id).size == 0}">You Don't Have Song</p>
+                                <div class="people-nearby" th:if="${service.findByAccountId(session.user.id).size > 0}" th:each="item:${service.findByAccountId(session.user.id)}" >
+                                    <div class="nearby-user">
+                                          
+                                   <div class="row">
+                                            <div class="col-md-2 col-sm-2">
+                                               <a th:href="@{/user/upload/{id}(id=${item.id})}">           
+                                                      <img style="width: 150px;height: 100px;" th:src="@{'/webdata/user/'+${item.image}}" class="img-fluid avatar-50 rounded" alt="author-profile">
+                                                </a>
+                                               
+                                            </div>
+                                            <div class="col-md-7 col-sm-7">
+                                                <h5  th:text="${item.name}"></h5>
+                                            </div>
+                                            <div class="col-md-3 col-sm-3">
+                                                <a  th:href="@{/user/upload/delete/{id}(id=${item.id})}" class="btn btn-primary pull-right">Delete</a>
+                                                <a  th:href="@{/user/upload/update/{id}(id=${item.id})}" class="btn btn-primary pull-right">Edit</a>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!--                <nav aria-label="Page navigation" class="paging">
+                <ul class="pagination" th:if="${list.page.totalPages > 1}">
+                    <li class="page-item" th:classappend="${!list.paging.isPrevEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/user/upload/?pageNumber=' + ${list.paging.pageNumber - 1}}"
+                           tabindex="-1">Previous</a>
+                    </li>
+                    <th:block th:each="item : ${list.paging.getItems()}">
+                        <li class="page-item" th:classappend="${item.index == list.paging.pageNumber? 'active' : ''}"
+                            th:if="${item.pageItemType.name() == 'PAGE'}">
+                            <a class="page-link" th:href="@{'/user/upload/?pageNumber=' + ${item.index}}"
+                               th:text="${item.index}"></a>
+                        </li>
+                        <li class="page-item disabled" th:if="${item.pageItemType.name() == 'DOTS'}">
+                            <a class="page-link" href="#">...</a>
+                        </li>
+                    </th:block>
+                    <li class="page-item" th:classappend="${!list.paging.isNextEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/user/upload/?pageNumber=' + ${list.paging.pageNumber + 1}}">Next</a>
+                    </li>
+                </ul>
+            </nav>-->
+            <p th:if="${session.user == null}" style="text-align: center;"><a th:href="@{/login}">You Must Login</a></p>
+        </div>
+    </body>
+</html>

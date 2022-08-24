@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{client/layout.html}">
+    <body>
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <div class="container-fluid" th:if="${session.user !=null}">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="iq-card">
+                            <div class="iq-card-header d-flex justify-content-between align-items-center">
+                                <div class="iq-header-title">
+                                    <h4 class="card-title">My Cart</h4>
+                                </div>
+                                <div id="feature-album-slick-arrow" class="slick-aerrow-block">
+                                    <button class="btn btn-primary" onclick="deleteCartByAccountId()">Clear</button>
+                                </div>
+                            </div>
+                            <div class="iq-card-body" id='cart_root'>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" th:if="${session.user != null}" id='accountId' th:value="${session.user.id}"/>
+                <script>
+                    let cart_root = document.querySelector('#cart_root');
+                    let accountId = document.querySelector('#accountId');
+
+                    function load_items() {
+                        findItemsofCartByAccountId().then((response) => {
+                            cart_root.innerHTML = "";
+                            if (response.length > 0) {
+                                cart_root.innerHTML = "";
+                                let price = 0;
+                                for (let i = 0; i < response.length; i++) {
+                                    price += response[i].song.price;
+                                    cart_root.innerHTML += "<div class='people-nearby'><div class='nearby-user'><div class='row'><div class='col-md-2 col-sm-2'><img src='http://localhost:8080/webdata/album/" + response[i].song.album.image + "' class='img-border-radius img-fluid w-100'></div><div class='col-md-7 col-sm-7'><h5><a href='#' class='profile-link'>" + response[i].song.name + "</a></h5><p>" + response[i].song.artist.name + "</p><p class='text-muted'>" + response[i].song.price + " $ </p></div><div class='col-md-3 col-sm-3'><button class='btn btn-primary pull-right' onclick='cancelSongToCart(" + response[i].song.id + ")'>Delete</a></div></div></div></div>";
+                                }
+                                cart_root.innerHTML += "<div class='row'><div class='col-md-2 col-sm-2'><p>" + response.length + " items</p><p>Total Price: " + price + " $</p></div><div class='col-md-3 col-sm-3'><a href='http://localhost:8080/song/checkout?cartId=" + response[0].cart.id + "&subTotal=" + price + "' class='btn btn-primary pull-right'>Check Out</a></div></div>";
+                            } else {
+                                cart_root.innerHTML = "";
+                                cart_root.innerHTML += "<div class='container-fluid  mt-100'><div class='row'><div class='col-md-12''><div class='card'><div class='card-body cart'><div class='col-sm-12 empty-cart-cls text-center'><img src='https://i.imgur.com/dCdflKN.png' width='130' height='130' class='img-fluid mb-4 mr-3'><h3><strong>Your Cart is Empty</strong></h3><h4>Add something to make me happy :)</h4><a href='http://localhost:8080' class='btn btn-primary cart-btn-transform m-3' data-abc='true'>continue shopping</a></div></div></div></div> </div></div>";
+                            }
+                        }
+                        )
+                    }
+                    load_items();
+
+                    function findItemsofCartByAccountId() {
+                        return  fetch(`http://localhost:8080/api/cart/findItemsofCartByAccountId?accountId=` + accountId.value, {method: "GET"})
+                                .then((response) => response.json())
+                                .then((response) => {
+                                    return response;
+                                })
+                                .catch(e => {
+                                    console.log(e);
+                                    return [];
+                                });
+                    }
+
+                    function cancelSongToCart(songId) {
+                        fetch(`http://localhost:8080/api/cart/deleteItem?accountId=` + accountId.value + `&songId=` + songId, {method: "DELETE"})
+                                .then((response) => response.json())
+                                .then((response) => {
+                                    load_items();
+                                    getSizeCart();
+                                })
+                                .catch(e => {
+                                    console.log(e);
+                                    load_items();
+                                    getSizeCart();
+                                });
+                    }
+
+                    function deleteCartByAccountId() {
+                        fetch(`http://localhost:8080/api/cart?accountId=` + accountId.value, {method: "DELETE"})
+                                .then((response) => response.json())
+                                .then((response) => {
+                                    load_items();
+                                    getSizeCart();
+                                })
+                                .catch(e => {
+                                    console.log(e);
+                                    load_items();
+                                    getSizeCart();
+                                });
+                    }
+                </script>
+            </div>
+            <a th:if="${session.user == null}" href="http://localhost:8080/login">You must login</a>
+        </div>
+    </body>
+</html>

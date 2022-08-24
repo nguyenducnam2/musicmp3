@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+    <body>
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <div th:if="${mess} != null" class="alert bg-secondary" role="alert">
+                <div th:if="${mess}=='Successfully'" class="iq-alert-icon">
+                    <i class="ri-pencil-line"></i>
+                </div>
+                <div th:if="${mess}=='Failed'" class="iq-alert-icon">
+                    <i class="ri-error-warning-line"></i>
+                </div>
+                <div class="iq-alert-text" th:text="${mess}">A simple <b>light</b> alert—check it out!</div>
+                <button type="button" class="close text-muted" data-dismiss="alert" aria-label="Close">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="iq-card">
+                            <div class="iq-card-body p-0">
+                                <div class="iq-edit-list">
+                                    <ul class="iq-edit-profile d-flex nav nav-pills">
+                                        <li class="col-md-3 p-0">
+                                            <a class="nav-link active" data-toggle="pill" href="#personal-information">
+                                                Personal Information
+                                            </a>
+                                        </li>
+                                        <li class="col-md-3 p-0">
+                                            <a class="nav-link" data-toggle="pill" href="#edit-profile">
+                                                Edit Profile
+                                            </a>
+                                        </li>
+                                        <li class="col-md-3 p-0">
+                                            <a class="nav-link" data-toggle="pill" href="#chang-pwd">
+                                                Change Password
+                                            </a>
+                                        </li>
+                                        <li class="col-md-3 p-0">
+                                            <a class="nav-link" data-toggle="pill" href="#upgrade-account">
+                                                Upgrade Account
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="iq-edit-list-data">
+                            <div class="tab-content">
+                                <div class="tab-pane fade active show" id="personal-information" role="tabpanel">
+                                    <div class="iq-card">
+                                        <div class="iq-card-header d-flex justify-content-between">
+                                            <div class="iq-header-title">
+                                                <h4 class="card-title">Personal Information</h4>
+                                            </div>
+                                        </div>
+                                        <div class="iq-card-body">
+                                            <div th:if="${session.user} != null">
+                                                <div class="row align-items-center" th:object="${session.user}">
+
+                                                    <div class="form-group col-md-6">
+                                                        <label for="avatar">Avatar:</label>
+                                                        <div >
+                                                            <div id="avatar" class="profile-img-edit">
+                                                                <div th:if="${session.user.image==null}">
+                                                                    <img th:if="${session.user.provider == null }"  class="profile-pic" th:src="@{/admintemplate/images/user/user-default2.png}" alt="profile-pic">
+                                                                    <img th:if="${session.user.provider == 'Google'}"   class="profile-pic" th:src="@{/admintemplate/images/user/imagesGG.png}" alt="profile-pic">
+                                                                </div>
+                                                                <div  th:if="${session.user.image!=null}">
+                                                                    <img class="profile-pic" th:src="@{'/webdata/user/'+${session.user.image}}" alt="profile-pic">
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label for="fname">First Name:</label>
+                                                        <input  name="fname" class="form-control" id="fname" th:value="*{firstName}" disabled="">
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label for="uname">Username:</label>
+                                                        <input  class="form-control" id="uname" th:value="*{username}"  disabled>
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label for="lname">Last Name:</label>
+                                                        <input  name="lname" class="form-control" id="lname" th:value="*{lastName}" disabled>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade " id="edit-profile" role="tabpanel">
+                                    <div class="iq-card">
+                                        <div class="iq-card-header d-flex justify-content-between">
+                                            <div class="iq-header-title">
+                                                <h4 class="card-title">Edit Profile</h4>
+                                            </div>
+                                        </div>
+                                        <div  class="iq-card-body">
+                                            <form th:action=${"/user/processUpdate"} th:object="${account}" method="post" enctype="multipart/form-data">
+                                                <input type="hidden"  th:field="*{id}" />
+                                                <input type="hidden"  th:field="*{role}" />
+                                                <input type="hidden"  th:field="*{email}" />
+                                                <input type="hidden"  th:field="*{enabled}"/>
+                                                <input type="hidden"  th:field="*{address}" />
+                                                <input type="hidden"  th:field="*{phone}" />
+                                                <div class="form-group row align-items-center">
+                                                    <div class="col-md-12">
+                                                        <div class="profile-img-edit">
+                                                            <div th:if="${session.user.image==null}">
+                                                                <img th:if="${session.user.provider == null }"  class="profile-pic" th:src="@{/admintemplate/images/user/user-default2.png}" alt="profile-pic">
+                                                                <img th:if="${session.user.provider == 'Google'}"   class="profile-pic" th:src="@{/admintemplate/images/user/imagesGG.png}" alt="profile-pic">
+                                                            </div>
+                                                            <div  th:if="${session.user.image!=null}">
+                                                                <img class="profile-pic" th:src="@{'/webdata/user/'+${session.user.image}}" alt="profile-pic">
+                                                            </div>
+                                                            <div class="p-image">
+                                                                <i class="ri-pencil-line upload-button"></i>
+                                                                <input class="file-upload" type="file" name="file" accept="image/*"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class=" row align-items-center">
+                                                    <div class="form-group col-sm-6">
+                                                        <label for="fname">First Name:</label>
+                                                        <input th:field="*{firstName}" name="fname" class="form-control" id="fname" value="Barry">
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label for="lname">Last Name:</label>
+                                                        <input th:field="*{lastName}" name="lname" class="form-control" id="lname" value="Tech">
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label for="uname">Username:</label>
+                                                        <input th:field="*{username}" class="form-control" id="uname" value="Barry@01" readonly>
+                                                    </div>
+                                                    <!--                                                        <div class="form-group col-sm-6">
+                                                                                                                <label for="cname">City:</label>
+                                                                                                                <input class="form-control" id="cname" value="Atlanta">
+                                                                                                            </div>
+                                                                                                            <div class="form-group col-sm-6">
+                                                                                                                <label class="d-block">Gender:</label>
+                                                                                                                <div class="custom-control custom-radio custom-control-inline">
+                                                                                                                    <input type="radio" id="customRadio6" name="customRadio1" class="custom-control-input" checked="">
+                                                                                                                    <label class="custom-control-label" for="customRadio6"> Male </label>
+                                                                                                                </div>
+                                                                                                                <div class="custom-control custom-radio custom-control-inline">
+                                                                                                                    <input type="radio" id="customRadio7" name="customRadio1" class="custom-control-input">
+                                                                                                                    <label class="custom-control-label" for="customRadio7"> Female </label>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                            <div class="form-group col-sm-6">
+                                                                                                                <label for="dob">Date Of Birth:</label>
+                                                                                                                <input  class="form-control" id="dob" value="1984-01-24">
+                                                                                                            </div>
+                                                                                                            <div class="form-group col-sm-6">
+                                                                                                                <label>Marital Status:</label>
+                                                                                                                <select class="form-control" id="exampleFormControlSelect1">
+                                                                                                                    <option selected="">Single</option>
+                                                                                                                    <option>Married</option>
+                                                                                                                    <option>Widowed</option>
+                                                                                                                    <option>Divorced</option>
+                                                                                                                    <option>Separated </option>
+                                                                                                                </select>
+                                                                                                            </div>
+                                                                                                            <div class="form-group col-sm-6">
+                                                                                                                <label>Age:</label>
+                                                                                                                <select class="form-control" id="exampleFormControlSelect2">
+                                                                                                                    <option>12-18</option>
+                                                                                                                    <option>19-32</option>
+                                                                                                                    <option selected="">33-45</option>
+                                                                                                                    <option>46-62</option>
+                                                                                                                    <option>63 > </option>
+                                                                                                                </select>
+                                                                                                            </div>
+                                                                                                            <div class="form-group col-sm-6">
+                                                                                                                <label>Country:</label>
+                                                                                                                <select class="form-control" id="exampleFormControlSelect3">
+                                                                                                                    <option>Caneda</option>
+                                                                                                                    <option>Noida</option>
+                                                                                                                    <option selected="">USA</option>
+                                                                                                                    <option>India</option>
+                                                                                                                    <option>Africa</option>
+                                                                                                                </select>
+                                                                                                            </div>
+                                                                                                            <div class="form-group col-sm-6">
+                                                                                                                <label>State:</label>
+                                                                                                                <select class="form-control" id="exampleFormControlSelect4">
+                                                                                                                    <option>California</option>
+                                                                                                                    <option>Florida</option>
+                                                                                                                    <option selected="">Georgia</option>
+                                                                                                                    <option>Connecticut</option>
+                                                                                                                    <option>Louisiana</option>
+                                                                                                                </select>
+                                                                                                            </div>
+                                                                                                            <div class="form-group col-sm-12">
+                                                                                                                <label>Address:</label>
+                                                                                                                <textarea class="form-control" name="address" rows="5" style="line-height: 22px;">
+                                                    37 Cardinal Lane
+                                                    Petersburg, VA 23803
+                                                    United States of America
+                                                    Zip Code: 85001
+                                                                                                                </textarea>
+                                                                                                            </div>-->
+                                                </div>
+                                                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                                <button type="reset" class="btn iq-bg-danger">Cancel</button>
+                                            </form>
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="chang-pwd" role="tabpanel">
+                                    <div class="iq-card">
+                                        <div class="iq-card-header d-flex justify-content-between">
+                                            <div class="iq-header-title">
+                                                <h4 class="card-title">Change Password</h4>
+                                            </div>
+                                        </div>
+                                        <div class="iq-card-body">
+                                            <form th:action=${"/user/changePassword"} th:object="${passwordModel}" method="post">
+                                                <input type="hidden"  th:field="*{email}" />
+                                                <div class="form-group">
+                                                    <label for="cpass">Current Password:</label>
+                                                    <!--                                                    <a th:href="@{/resetPassword}" class="float-right">Forgot Password</a>-->
+                                                    <input type="password" name="cpass" th:field="*{oldPassword}" class="form-control" id="cpass" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="npass">New Password:</label>
+                                                    <input type="password" name="npass" th:field="*{newPassword}" class="form-control" id="npass" required>
+                                                </div>
+                                                <!--                                                <div class="form-group">
+                                                                                                    <label for="vpass">Verify Password:</label>
+                                                                                                    <input type="Password" class="form-control" id="vpass" value="" required>
+                                                                                                </div>-->
+                                                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                                <button type="reset" class="btn iq-bg-danger">Cancel</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="upgrade-account" role="tabpanel">
+                                    <div class="iq-card">
+                                        <div class="iq-card-header d-flex justify-content-between">
+                                            <div class="iq-header-title">
+                                                <h4 class="card-title" th:text="${session.user.role=='ROLE_ADMIN'|| session.user.role=='ROLE_EDITOR'|| session.user.role=='ROLE_MODERATOR' ? 'Your account no need activate' : session.user.role=='ROLE_VIP'  ? 'Your account is activated' : 'Upgrade Account' }">a</h4>
+                                            </div>
+                                        </div>
+                                        <div class="iq-card-body">
+                                            <form th:action="@{/user/checkout}" >
+                                                <div class="form-group row align-items-center">
+                                                    <label class="col-8 col-md-3" for="activeVip">Upgrade to VIP</label>
+                                                    <div class="col-4 col-md-9 custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input" id="activeVip" required=""  />
+                                                        <label class="custom-control-label" for="activeVip"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row align-items-center">
+                                                    <label class="col-md-3" for="npass">Duration</label>
+                                                    <div class="col-md-3">
+                                                        <div class="custom-control custom-radio custom-radio-color-checked">
+                                                            <input type="radio" id="customRadio6" name="duration" class="custom-control-input" value="3" checked=""/>
+                                                            <label class="custom-control-label" for="customRadio6"> 3 days </label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio">
+                                                            <input type="radio" id="customRadio7" name="duration" class="custom-control-input" value="30"/>
+                                                            <label class="custom-control-label" for="customRadio7"> 1 month (30d) </label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio">
+                                                            <input type="radio" id="customRadio8" name="duration" class="custom-control-input" value="90"/>
+                                                            <label class="custom-control-label" for="customRadio8"> 3 months (90d)</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio">
+                                                            <input type="radio" id="customRadio9" name="duration" class="custom-control-input" value="180"/>
+                                                            <label class="custom-control-label" for="customRadio9"> 6 months (180d)</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio">
+                                                            <input type="radio" id="customRadio10" name="duration" class="custom-control-input" value="360"/>
+                                                            <label class="custom-control-label" for="customRadio10"> 1 year (360d)</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-md-3" >
+                                                        <input type="radio" id="customRadio6" name="price" class="custom-control-input" value="2" />
+                                                        <label class="custom-control m-0" for="customRadio6"> $2 </label>
+                                                        <input type="radio" id="customRadio7" name="price" class="custom-control-input" value="10" />
+                                                        <label class="custom-control m-0" for="customRadio7"> $10 </label>
+                                                        <input type="radio" id="customRadio8" name="price" class="custom-control-input" value="25" />
+                                                        <label class="custom-control m-0" for="customRadio8"> $25 </label>
+                                                        <input type="radio" id="customRadio9" name="price" class="custom-control-input" value="40" />
+                                                        <label class="custom-control m-0" for="customRadio9"> $40 </label>
+                                                        <input type="radio" id="customRadio10" name="price" class="custom-control-input" value="60" />
+                                                        <label class="custom-control m-0" for="customRadio10"> $60 </label>
+                                                    </div>
+                                                </div>
+
+                                                <button type="submit" class="btn btn-primary mr-2" th:disabled="${session.user.role=='ROLE_VIP' || session.user.role=='ROLE_ADMIN'|| session.user.role=='ROLE_EDITOR'|| session.user.role=='ROLE_MODERATOR' }">Submit</button>
+                                                <button type="reset" class="btn iq-bg-danger">Cancel</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="iq-card">
+                                        <div class="iq-card-header d-flex justify-content-between">
+                                            <div class="iq-header-title">
+                                                <h4 class="card-title">VIP Account Privileges</h4>
+                                            </div>
+                                        </div>
+                                        <div class="iq-card-body">
+                                            <div class="form-group row align-items-center">
+                                                <label class="col-8 col-md-8">- VIP accounts can access many areas where other members are restricted.</label>
+                                            </div>
+                                            <div class="form-group row align-items-center">
+                                                <label class="col-8 col-md-8">- VIP accounts are not subject to H&R laws.</label>
+                                            </div> 
+                                            <div class="form-group row align-items-center">
+                                                <label class="col-8 col-md-8">- VIP accounts have a special color compared to other accounts.</label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--            <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="iq-card">
+                                        <div class="iq-card-header d-flex justify-content-between">
+                                            <div class="iq-header-title">
+                                                <h4 class="card-title">Profile Account</h4>
+                                            </div>
+                                        </div>
+                                        <div class="iq-card-body">
+                                                                            <form th:action=${"/admin/account/processUpdate"} th:object="${session.user}" method="post">
+                                            
+                                                                                <input type="hidden"  th:field="*{id}" />
+                                                                                <input type="hidden"  th:field="*{password}" />
+                                                                                <div class="form-group">
+                                                                                    <label>Username:</label>
+                                                                                    <input th:field="*{username}" class="form-control" readonly />
+                                                                                </div>
+                                                                                 <div class="form-group">
+                                                                                    <label>Password:</label>
+                                                                                    <input type="password" th:field="*{password}" class="form-control"/>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <label>Full name:</label>
+                                                                                    <input th:field="*{fullname}" class="form-control">
+                                                                                </div>
+                                            
+                                                                                <div class="form-group">
+                                                                                    <label>Role</label>
+                                                                                    <input  th:field="*{role}" class="form-control" readonly /> 
+                                                                                </div>
+                                            
+                                                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                                            </form>
+                                            <div th:if="${session.user} != null">
+                                                <div th:object="${session.user}">
+                                                    <p>Id <span th:text="*{id}">Id</span>.</p>
+                                                    <p>Name: <span th:text="*{firstName}">Sebastian</span>.</p>
+                                                    <p>Surname: <span th:text="*{lastName}">Pepper</span>.</p>
+                                                    <p>Username <span th:text="*{username}">U</span>.</p>
+                                                    <p>Email <span th:text="*{email}">E</span>.</p>
+                                                    <p>Role <span th:text="*{role}">R</span>.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+
+
+        </div>
+    </body>
+</html>

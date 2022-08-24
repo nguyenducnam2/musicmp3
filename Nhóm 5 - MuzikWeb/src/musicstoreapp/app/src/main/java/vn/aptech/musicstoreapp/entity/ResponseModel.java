@@ -1,0 +1,22 @@
+package vn.aptech.musicstoreapp.entity;
+
+import com.google.gson.annotations.SerializedName;
+
+public class ResponseModel {
+    @SerializedName("success")
+    private String success;
+
+    @SerializedName("message")
+    private String message;
+
+    public ResponseModel() {
+    }
+
+    public String getSuccess() {
+        return success;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" 
+      layout:decorate="~{admin/layout.html}">
+    <body>
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <div th:if="${mess} != null" class="alert bg-secondary" role="alert">
+                <div th:if="${mess}=='Successfully'" class="iq-alert-icon">
+                    <i class="ri-pencil-line"></i>
+                </div>
+                <div th:if="${mess}=='Failed'" class="iq-alert-icon">
+                    <i class="ri-error-warning-line"></i>
+                </div>
+                <div class="iq-alert-text" th:text="${mess}">A simple <b>light</b> alert—check it out!</div>
+                <button type="button" class="close text-muted" data-dismiss="alert" aria-label="Close">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="iq-card">
+                            <div class="iq-card-header d-flex justify-content-between">
+                                <div class="iq-header-title">
+                                    <h4 class="card-title">Account Lists</h4>
+                                </div>
+                                <div class="iq-search-bar">   
+                                    <form th:action="@{/admin/account/search}" class="searchbox">
+                                        <input type="text" class="text search-input" name="name" placeholder="Search Here..">
+                                        <a class="search-link" href="#"><i class="ri-search-line text-black"></i></a>
+                                        <a class="search-audio" href="#"><i class="las la-microphone text-black"></i></a> 
+                                    </form>
+                                </div>
+                                <div class="iq-card-header-toolbar d-flex align-items-center">
+                                    <a th:href="@{/admin/account/create}" class="btn btn-primary">Add New Account</a>
+                                </div>
+                            </div>
+                            <div class="iq-card-body">
+                                <div class="table-responsive">
+                                    <table class="data-tables table table-striped table-bordered" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 5%;">No</th>
+                                                <th style="width: 30%;">Username</th>
+                                                <!--<th style="width: 25%;">Fullname</th>-->
+                                                <th style="width: 20%;">Role</th>
+                                                <th style="width: 10%;">State</th>
+                                                <th style="width: 5%;">Action</th> 
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:if="${name=='null'}" th:each="item:${list}">
+                                                <td th:text="${list.indexOf(item)+1}"></td>
+                                                <td th:text="${item.username}"></td>
+                                                <!--<td th:text="${item.fullname}"></td>-->
+                                                <td th:switch="${item.role}"> 
+                                                    <span th:case="'ROLE_ADMIN'">Admin</span>
+                                                    <span th:case="'ROLE_EDITOR'">Editor</span>
+                                                    <span th:case="'ROLE_USER'">User</span>
+                                                    <span th:case="'ROLE_MODERATOR'">MOD</span>
+                                                    <span th:case="*">Other</span>
+                                                </td>
+                                                <td th:text="${item.enabled ? 'Active':'Block'}">State</td>
+
+                                                <td>
+                                                    <div th:if="${#httpServletRequest.getUserPrincipal().getName()} == ${item.username}" class="flex align-items-center list-user-action">
+                                                        <!--<a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" th:href="@{/admin/account/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>-->
+                                                        <!--<a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/admin/account/delete/{id}(id=${item.id})}"><i class="ri-delete-bin-line"></i></a>-->
+                                                    </div>
+                                                    <div th:if="${#httpServletRequest.getUserPrincipal().getName()} != ${item.username}  " class="flex align-items-center list-user-action">
+                                                        <a th:if="${item.role} != 'ROLE_MODERATOR'" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" th:href="@{/admin/account/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
+                                                        <!--<a sec:authorize="hasRole('MODERATOR')" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/admin/account/delete/{id}(id=${item.id})}"><i class="ri-delete-bin-line"></i></a>-->
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>        
+        </div>                         
+    </body>
+</html>

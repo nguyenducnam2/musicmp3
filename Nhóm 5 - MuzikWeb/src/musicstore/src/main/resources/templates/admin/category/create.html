@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+    <body>
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="iq-card">
+                            <div class="iq-card-header d-flex justify-content-between">
+                                <div class="iq-header-title">
+                                  
+                                    <h4 th:if="${action=='create'}" class="card-title">Add New Category</h4>
+                                    <h4 th:if="${action=='update'}" class="card-title">Update Category</h4>
+                               
+                                </div>
+                            </div>
+                            <div class="iq-card-body">
+                                <form th:action=${"/admin/category/save"} th:object="${category}" method="post">
+                                    <input type="hidden"  th:field="${category.id}" />
+                                    <div class="form-group">
+                                        <label>Category Name:</label>
+                                        <input type="text" th:field="${category.name}" class="form-control">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="reset" class="btn btn-danger">Reset</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

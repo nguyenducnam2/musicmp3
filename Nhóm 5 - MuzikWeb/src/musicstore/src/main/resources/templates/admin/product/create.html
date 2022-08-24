@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+    <body>
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="iq-card">
+                            <div class="iq-card-header d-flex justify-content-between">
+                                <div class="iq-header-title">
+                                  
+                                    <h4 th:if="${action=='create'}" class="card-title">Add New Product</h4>
+                                    <h4 th:if="${action=='update'}" class="card-title">Update Product</h4>
+                               
+                                </div>
+                            </div>
+                            <div class="iq-card-body">
+                                <form th:action=${"/admin/product/save"} th:object="${product}" method="post" enctype="multipart/form-data">
+                                    <input type="hidden"  th:field="${product.id}" />
+                                    <div class="form-group">
+                                        <label>Product Name:</label>
+                                        <input type="text" th:field="${product.name}" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Image:</label>
+                                        <div class="custom-file">
+                                            <input type="file" name="file" class="custom-file-input" id="customFile">
+                                            <label class="custom-file-label" for="customFile">Choose file</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Price:</label>
+                                        <input type="text" th:field="${product.price}" class="form-control">
+                                    </div>
+				    <div class="form-group">
+                                        <label>Quantity:</label>
+                                        <input type="text" th:field="${product.quantity}" class="form-control">
+                                    </div>
+                                    
+                                     <div class="form-group">
+                                        <label>Description:</label>
+                                        <textarea th:field="${product.description}" class="form-control" rows="8"></textarea>
+                                    </div>   
+                                    
+                                     <div class="form-group">
+                                        <label>Brand:</label>
+                                        <select class="form-control" id="exampleFormControlSelect1" th:field="${product.brandId}">
+                                            <option th:each="item:${brandproduct}" th:text="${item.name}" th:value="${item.id}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Category:</label>
+                                        <select class="form-control" id="exampleFormControlSelect1" th:field="${product.categoryId}">
+                                            <option th:each="item:${cateproduct}" th:text="${item.name}" th:value="${item.id}"></option>
+                                        </select>
+                                    </div>
+<!--                                     <div class="form-group">
+                                        <label>Description:</label>
+                                        <textarea th:field="${artist.description}" class="form-control" rows="4"></textarea>
+                                     </div>               -->
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="reset" class="btn btn-danger">Reset</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
