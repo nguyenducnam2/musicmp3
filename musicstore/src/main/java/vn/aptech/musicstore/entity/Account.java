@@ -34,11 +34,11 @@ public class Account implements Serializable {
 
     @Column(nullable = false)
     private String password;
-    private String fullname;
+    private String fullname="FPT Aptech";
     private String role;
 
-    private String firstName;
-    private String lastName;
+    private String firstName="FPT";
+    private String lastName="Aptech";
     private String email;
     private Boolean enabled = false;
     private Boolean isUpgrade = false;

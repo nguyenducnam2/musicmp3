@@ -61,16 +61,16 @@ public class HomeController {
             totalProfitBuySong+=songOrderDetail.getSongOrder().getTotal();
         }
 
-        double totalProfitUpgradeAcc = 0;
-        List<UpgradeVipOrderDetails> upgradeVipOrderDetailses = upgradeVipOrderDetailsService.findAll();
-        for (UpgradeVipOrderDetails upgradeVipOrderDetailse : upgradeVipOrderDetailses) {
-            totalProfitUpgradeAcc += upgradeVipOrderDetailse.getTotal();
-        }
+//        double totalProfitUpgradeAcc = 0;
+//        List<UpgradeVipOrderDetails> upgradeVipOrderDetailses = upgradeVipOrderDetailsService.findAll();
+//        for (UpgradeVipOrderDetails upgradeVipOrderDetailse : upgradeVipOrderDetailses) {
+//            totalProfitUpgradeAcc += upgradeVipOrderDetailse.getTotal();
+//        }
 
         model.addAttribute("user", user.get());
         model.addAttribute("totalAccount", accList.size());
         model.addAttribute("totalSong", songList.size());
-        model.addAttribute("totalProfitUpgradeAcc", totalProfitUpgradeAcc);
+//        model.addAttribute("totalProfitUpgradeAcc", totalProfitUpgradeAcc);
         model.addAttribute("totalProfitBuySong", totalProfitBuySong);
         return "admin/index";
     }
