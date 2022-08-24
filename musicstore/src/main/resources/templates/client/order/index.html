@@ -64,7 +64,7 @@ and open the template in the editor.
                                                     <div class="flex align-items-center list-user-action">
                                                         <a th:if="${item.status==1 || item.status==2 ||item.status==3}" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Detail" th:href="@{/order/detail/{id}(id=${item.id})}"><i class="ri-checkbox-line"></i></a>
                                                         <a th:if="${item.status==0}" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" th:href="@{/order/delete/{id}(id=${item.id})}"><i class="ri-eraser-line"></i></a>
-                                                        <a th:if="${item.status==1}" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Update" th:href="@{/order/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
+                                                        <a th:if="${item.status==1}" class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add information" th:href="@{/order/update/{id}(id=${item.id})}"><i class="ri-pencil-line"></i></a>
                                                     </div>
                                                 </td>
                                             </tr>
