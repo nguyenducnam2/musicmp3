@@ -1,9 +1,12 @@
 package vn.aptech.musicstoreapp.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Account {
+public class Account implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -29,6 +32,29 @@ public class Account {
 
     public Account() {
     }
+
+    protected Account(Parcel in) {
+        id = in.readInt();
+        username = in.readString();
+        password = in.readString();
+        fullname = in.readString();
+        role = in.readString();
+        byte tmpEnabled = in.readByte();
+        enabled = tmpEnabled == 0 ? null : tmpEnabled == 1;
+        image = in.readString();
+    }
+
+    public static final Creator<Account> CREATOR = new Creator<Account>() {
+        @Override
+        public Account createFromParcel(Parcel in) {
+            return new Account(in);
+        }
+
+        @Override
+        public Account[] newArray(int size) {
+            return new Account[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -84,5 +110,21 @@ public class Account {
 
     public void setImageUrl(String imageUrl) {
         this.image = imageUrl;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(username);
+        parcel.writeString(password);
+        parcel.writeString(fullname);
+        parcel.writeString(role);
+        parcel.writeByte((byte) (enabled == null ? 0 : enabled ? 1 : 2));
+        parcel.writeString(image);
     }
 }

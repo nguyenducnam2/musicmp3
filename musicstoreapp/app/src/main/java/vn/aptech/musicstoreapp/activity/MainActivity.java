@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements Dialog_Register.E
             }
         });
 
-        btnLogout.setOnClickListener(new View.OnClickListener() {
+        /*btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences sharedPreferences = getSharedPreferences("application", Context.MODE_PRIVATE);
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements Dialog_Register.E
                 finishAffinity();
                 startActivity(it);
             }
-        });
+        });*/
 
 
 //        overridePendingTransition(R.anim.anim_intent_in_home, R.anim.anim_intent_out);
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements Dialog_Register.E
 //        btnLoginFb = findViewById(R.id.btnLoginFb);
         btnRegister = findViewById(R.id.btnRegister);
         btnLogin = findViewById(R.id.btnGoToLogin);
-        btnLogout = findViewById(R.id.btnLogout);
+        //btnLogout = findViewById(R.id.btnLogout);
         tvDemo.setText("MusicZik");
     }
 
