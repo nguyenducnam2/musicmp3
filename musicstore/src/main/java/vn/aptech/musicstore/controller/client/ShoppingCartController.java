@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import vn.aptech.musicstore.entity.Product;
-import vn.aptech.musicstore.service.OrderDetailService;
-import vn.aptech.musicstore.service.OrderService;
 import vn.aptech.musicstore.service.ProductService;
 import vn.aptech.musicstore.service.ShoppingCartService;
 
@@ -30,19 +28,13 @@ import vn.aptech.musicstore.service.ShoppingCartService;
 @Controller
 @RequestMapping("cart")
 public class ShoppingCartController {
-
+    
     @Autowired
     private ProductService service;
-
+    
     @Autowired
     private ShoppingCartService cartService;
-
-    @Autowired
-    private OrderService orderService;
-
-    @Autowired
-    private OrderDetailService detailService;
-
+    
     @GetMapping("index")
     public String index(Model model, HttpServletRequest request) {
         Collection<Product> products = cartService.getProducts();
@@ -54,21 +46,25 @@ public class ShoppingCartController {
         model.addAttribute("count", cartService.getCount());
         return "client/cart/index";
     }
-
+    
     @GetMapping("add/{id}")
     public String add(Model model, HttpServletRequest request, @PathVariable("id") Integer id) {
-        Optional<Product> product = service.findById(id);
         HttpSession session = request.getSession();
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
-        Product products = product.get();
-        if (products != null) {
-            products.setQuantity(1);
-            cartService.add(products);
+        try {
+            Optional<Product> product = service.findById(id);
+            Product products = product.get();
+            if (products != null) {
+                products.setQuantity(1);
+                cartService.add(products);
+            }
+        } catch (Exception e) {
+            cartService.remove(id);
         }
         return "redirect:/cart/index";
     }
-
+    
     @GetMapping("remove/{id}")
     public String remove(Model model, HttpServletRequest request, @PathVariable("id") Integer id) {
         HttpSession session = request.getSession();
@@ -77,21 +73,25 @@ public class ShoppingCartController {
         cartService.remove(id);
         return "redirect:/cart/index";
     }
-
+    
     @PostMapping("update")
     public String update(Model model, HttpServletRequest request, @RequestParam("id") Integer id, @RequestParam("quantity") int quantity) {
         HttpSession session = request.getSession();
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
-        Optional<Product> product = service.findById(id);
-        Product products = product.get();
-        if(quantity > products.getQuantity()){
-            quantity = products.getQuantity();
+        try {
+            Optional<Product> product = service.findById(id);
+            Product products = product.get();
+            if (quantity > products.getQuantity()) {
+                quantity = products.getQuantity();
+            }
+            cartService.update(id, quantity);
+        } catch (Exception e) {
+            cartService.remove(id);
         }
-        cartService.update(id, quantity);
         return "redirect:/cart/index";
     }
-
+    
     @GetMapping("clear")
     public String clear(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -100,7 +100,7 @@ public class ShoppingCartController {
         cartService.clear();
         return "redirect:/cart/index";
     }
-
+    
     @GetMapping("checkout")
     public ModelAndView checkout(Model model, HttpServletRequest request) {
         ModelAndView mv = new ModelAndView("client/cart/checkout");
@@ -112,10 +112,10 @@ public class ShoppingCartController {
 //        model.addAttribute("products", products);
 //        model.addAttribute("amount", cartService.getAmount());
 //        model.addAttribute("count", cartService.getCount());
-        
+
         return mv;
     }
-    
+
 //    @PostMapping("/save")
 //    public String save(Model model, HttpServletRequest request, @ModelAttribute("order") Order order) {
 //        HttpSession session = request.getSession();
