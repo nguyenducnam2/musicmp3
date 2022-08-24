@@ -5,6 +5,7 @@
  */
 package vn.aptech.musicstore.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import vn.aptech.musicstore.entity.Song;
 import vn.aptech.musicstore.entity.SongOrder;
 import vn.aptech.musicstore.pagination.Paged;
 import vn.aptech.musicstore.pagination.Paging;
@@ -57,7 +57,7 @@ public class SongOrderServiceImpl implements SongOrderService {
     }
 
     @Override
-    public List<SongOrder> getPageByDate(int pageNumber, int size, String from, String to) {
+    public List<SongOrder> getPageByDate(int pageNumber, int size, Date from, Date to) {
         return repo.filterByDate(from, to);
     }
 
