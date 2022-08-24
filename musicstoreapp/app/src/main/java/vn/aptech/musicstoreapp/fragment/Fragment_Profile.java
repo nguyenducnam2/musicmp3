@@ -65,8 +65,7 @@ public class Fragment_Profile extends Fragment {
 
     private void mapping() {
         btnLogout = view.findViewById(R.id.btnLogoutProfile);
-//        username = view.findViewById(R.id.tvUsername);
-//        imgUser = view.findViewById(R.id.imgAvtUser);
+//       Z
     }
 //    private void ShowDialogUpdate(){
 //        DialogUpdateUser dialog_update_user = new DialogUpdateUser();
