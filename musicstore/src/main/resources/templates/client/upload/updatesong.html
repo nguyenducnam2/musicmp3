@@ -54,89 +54,125 @@ and open the template in the editor.
 
     </head>
     <body>
+
         <div layout:fragment="content" id="content-page" class="content-page">
             <div class="container-fluid">
-                <div class="row">
+                <div class="row"> 
                     <div class="col-sm-12">
-                        <div class="iq-card">
+                        <div class="iq-card" >
                             <div class="iq-card-header d-flex justify-content-between">
                                 <div class="iq-header-title">
-                                    <h4 class="card-title" th:text="${status}"></h4>
-
+                                    <h4 class="card-title">Add User Song</h4>
                                 </div>
                             </div>
-                            <div class="iq-card-body">
-                                <form th:action=${"/user/update"} th:object="${song}" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-                                    <input type="hidden" th:name="accountId" th:value="${session.user.id}" />
 
-                                    <div class="form-group">
-                                        <label>Song Name(<span style="color: red;">*</span>):</label>
-                                        <input type="text" th:field="${song.name}" class="form-control">
-                                       
-                                    </div>
+                            <div class="iq-card-body" >
+                                <div class="new-user-info">
+                                    <form th:action=${"/user/update"} th:object="${song}" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                                        <input type="hidden" th:field="${song.accountId}"  />
+                                        <input type="hidden" th:field="${song.id}" />
 
+                                        <div class="row">
+                                            <div  class="form-group col-lg-3">
+                                                <div th:if="${status != 'update'}" class="add-img-user profile-img-edit">
+                                                    <img class="profile-pic img-fluid" th:src="@{/admintemplate/images/user/imagesGG.png}" alt="profile-pic">
+                                                    <div class="p-image">
+                                                        <input class="file-upload" type="file" name="file2" accept="image/*" required="">
+                                                    </div>
+                                                </div>
+                                                <div th:if="${status == 'update'}">
+                                                    <img class="profile-pic img-fluid" th:src="@{'/webdata/user/'+${song.image}}" alt="profile-pic">
+                                                </div>
 
-     
-                                    <div th:if="${status == 'update'}" class="form-group">
-                                        <label>File Audio:(<span style="color: red;">*</span>)(.mp3,.mp4):</label>
-                                        <div class="custom-file">
-                                            <input type="file" name="file" class="custom-file-input" id="customFile"> 
-                                            <label class="custom-file-label" for="customFile">Choose file</label>
+                                                <div th:if="${status == 'update'}" class="add-img-user profile-img-edit">
+                                                    <div class="p-image">
+
+                                                        <input class="file-upload" type="file" name="file2" accept="image/*"/>
+
+                                                        <!--                                                        <input class="file-upload" type="file" name="file2" accept="image/*">-->
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-lg-9">
+                                                <div class="form-group col-md-12">
+                                                    <div class="form-group">
+                                                        <label>Song Name(<span style="color: red;">*</span>):</label>
+                                                        <input type="text" th:field="${song.name}" class="form-control" required>
+                                                        <div class="valid-feedback">
+                                                            Looks good!
+                                                        </div>
+                                                        <div class="invalid-feedback">
+                                                            Required
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group col-md-12">
+                                                    <div th:if="${status != 'update'}" class="form-group">
+                                                        <label>File Audio(<span style="color: red;">*</span>)(.mp3,.mp4):</label>
+                                                        <div class="custom-file">
+                                                            <input type="file" name="file" class="custom-file-input" id="customFile" required> 
+                                                            <label class="custom-file-label" for="customFile">Choose file</label>
+                                                            <div class="invalid-feedback">
+                                                                Required
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div th:if="${status == 'update'}" class="form-group">
+                                                        <label>File Audio:(<span style="color: red;">*</span>)(.mp3,.mp4):</label>
+                                                        <div class="custom-file">
+                                                            <input type="file" name="file" class="custom-file-input" id="customFile"> 
+                                                            <label class="custom-file-label" for="customFile">Choose file</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="country">Genre:</label>
+                                                        <select class="form-control" id="country" name="genreId" th:field="${song.genreId}" data-dropdown>
+<!--                                                            <option th:if="${status == 'update'}" th:value="${song.genreId}" th:text="${song.genre.name}"></option>-->
+<!--                                                            <option th:if="${song.genre == null}" th:value=" '' ">None</option>-->
+                                                            <option th:each="item:${listgenre}" th:text="${item.name}" th:value="${item.id}"></option>
+                                                        </select>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Add New User</button>
+
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-
-                           
-                                    <div th:if="${status == 'update'}" class="form-group">
-                                        <label>File Image:(<span style="color: red;">*</span>)(.mp3,.mp4):</label>
-                                        <div class="custom-file">
-                                            <input type="file" name="file2" class="custom-file-input" id="customFile" > 
-                                            <label class="custom-file-label" for="customFile">Choose file</label>
-                                           
-                                        </div>
-                                    </div>
-                                        <div class="form-group">
-                                            <label>Genre:</label>
-                                            <select class="form-control" id="exampleFormControlSelect1" th:field="${song.genreId}">
-                                                <option th:each="item:${listgenre}" th:text="${item.name}" th:value="${item.id}"></option>
-                                            </select>
-                                        </div>
-                                       <button type="submit" class="btn btn-primary">Submit</button>
-                                        <button type="reset" class="btn btn-danger">Reset</button>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
-                       
+                        </div>
                     </div>
+
                 </div>
             </div>
-            <p th:if="${session.user == null}" style="text-align: center;"><a th:href="@{/login}">You Must Login</a></p>
         </div>
-             </div>
+
         <script th:inline="javascript">
-          
+
             // Get dropdowns and form
             const dropdowns = document.querySelectorAll('[data-dropdown]');
             const form = document.querySelector('form');
 
             function populate() {
                 var country = document.getElementById('country');
-                var artist_id = country.value;
-                var list_album = /*[[${listalbum}]]*/[];
-                var list_album2 = [];
+                var genre_id = country.value;
+                var list_genre = /*[[${listalbum}]]*/[];
+                var list_genre2 = [];
                 var size = 0;
-                for (let i = 0; i < list_album.length; i++) {
-                    if (list_album[i].artistId == artist_id) {
-                        list_album2[size++] = list_album[i];
+                for (let i = 0; i < list_genre.length; i++) {
+                    if (list_genre[i].genreId == genre_id) {
+                        list_genre2[size++] = list_genre[i];
                     }
                 }
-                var country2 = document.getElementById('country2');
-                country2.innerHTML = "";
-                for (let i = 0; i < list_album2.length; i++) {
-                    country2.innerHTML += "<option value='" + list_album2[i].id + "'>" + list_album2[i].name + "</option>";
-                }
+
 
             }
 
-// Check if dropdowns exist on page
+            // Check if dropdowns exist on page
             if (dropdowns.length > 0) {
                 // Loop through dropdowns and create custom dropdown for each select element
                 dropdowns.forEach(dropdown => {
@@ -144,16 +180,16 @@ and open the template in the editor.
                 });
             }
 
-// Check if form element exist on page
+            // Check if form element exist on page
             if (form !== null) {
                 // When form is submitted console log the value of the select field
                 form.addEventListener('submit', (e) => {
                     e.preventDefault();
-                    console.log('Selected artist:', form.querySelector('[name="artistId"]').value);
+                    console.log('Selected Genre:', form.querySelector('[name="genreId"]').value);
                 });
             }
 
-// Create custom dropdown
+            // Create custom dropdown
             function createCustomDropdown(dropdown) {
                 // Get all options and convert them from nodelist to array
                 const options = dropdown.querySelectorAll('option');
@@ -215,7 +251,7 @@ and open the template in the editor.
                 dropdown.style.display = 'none';
             }
 
-// Toggle dropdown
+            // Toggle dropdown
             function toggleDropdown() {
                 // Check if dropdown is opened and if it is close it, otherwise open it and focus search input
                 if (this.offsetParent !== null) {
@@ -226,7 +262,7 @@ and open the template in the editor.
                 }
             }
 
-// Set selected option
+            // Set selected option
             function setSelected(selected, dropdown, menu) {
                 // Get value and label from clicked custom option
                 const value = this.dataset.value;
@@ -255,7 +291,7 @@ and open the template in the editor.
                 this.classList.add('selected');
             }
 
-// Filter items
+            // Filter items
             function filterItems(itemsArr, menu) {
                 // Get all custom options
                 // Get the value of search input and convert it to all lowercase characters
@@ -300,7 +336,7 @@ and open the template in the editor.
                 });
             }
 
-// Close dropdown if clicked outside dropdown element
+            // Close dropdown if clicked outside dropdown element
             function closeIfClickedOutside(menu, e) {
                 if (e.target.closest('.dropdown') === null && e.target !== this && menu.offsetParent !== null) {
                     menu.style.display = 'none';
