@@ -236,6 +236,8 @@ public class Dialog_Register extends AppCompatDialogFragment {
 
 //            char[] ch = new char[37];
 //            receiverEmail.getChars(0, 3, ch, 0);
+
+
 //            tvMesRegis.setText("Pin code is sent to "+ch[0]+ch[1]+ch[2]+"***@gmail.com");
 //            tvMesRegis.setVisibility(View.VISIBLE);
             String secs = "60";
