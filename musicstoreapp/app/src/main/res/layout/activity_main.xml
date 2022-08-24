@@ -58,13 +58,5 @@
         android:textColor="#ffffff"
         android:textSize="18sp"/>
 
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/btn_dang_xuat"
-        android:text="Logout"
-        android:textColor="#ffffff"
-        android:textSize="18sp"/>
+
 </LinearLayout>
