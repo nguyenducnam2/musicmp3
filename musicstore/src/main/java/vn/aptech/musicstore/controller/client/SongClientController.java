@@ -127,8 +127,8 @@ public class SongClientController {
         model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("service_pl", service_pl);
         List<Song> moreArtist = service.findByArtistId(s.getArtistId());
-        for(int i=0;i<moreArtist.size();i++){
-            if(moreArtist.get(i).getAlbum().getId()==s.getAlbum().getId()){
+        for (int i = 0; i < moreArtist.size(); i++) {
+            if (moreArtist.get(i).getAlbum().getId() == s.getAlbum().getId()) {
                 moreArtist.remove(i);
             }
         }
@@ -234,6 +234,16 @@ public class SongClientController {
         model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("service_pl", service_pl);
         model.addAttribute("service_plitem", service_plitem);
+        List<Song> moreArtist = service.findByArtistId(s.getArtistId());
+        for (int i = 0; i < moreArtist.size(); i++) {
+            if (moreArtist.get(i).getAlbum().getId() == s.getAlbum().getId()) {
+                moreArtist.remove(i);
+            }
+        }
+        while (moreArtist.size() > 12) {
+            moreArtist.remove(getRandomIndex(0, moreArtist.size() - 1));
+        }
+        model.addAttribute("moreArtist", moreArtist);
         model.addAttribute("playlistname", service_pl.findById(playlistId).orElseThrow().getName());
         return "client/song/mediaplayer";
     }

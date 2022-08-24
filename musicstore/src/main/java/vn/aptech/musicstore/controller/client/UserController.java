@@ -283,7 +283,6 @@ public class UserController {
                         s.setImage(service_song.findById(s.getId()).orElseThrow().getImage());
                     }
                 } catch (Exception e) {
-
                 }
             }
             s.setAccountId(accountId);
@@ -295,7 +294,7 @@ public class UserController {
             service_song.save(s);
         } else {
             if (file2.isEmpty()) {
-                s.setMedia(service_song.findById(s.getId()).orElseThrow().getMedia());
+//                s.setMedia(service_song.findById(s.getId()).orElseThrow().getMedia());
                 s.setImage(service_song.findById(s.getId()).orElseThrow().getImage());
                 s.setAccountId(userService.findById(s.getAccountId()).orElseThrow().getId());
                 s.setAccount(userService.findById(accountId).orElseThrow());
@@ -326,15 +325,14 @@ public class UserController {
     
     @PostMapping("/update")
     public String update(@RequestParam("file") MultipartFile file, @RequestParam("file2") MultipartFile file2, HttpServletRequest request,
-            @ModelAttribute("song") Song s, Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
-            @RequestParam("accountId") Long accountId,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size) throws IOException 
-       
+            @ModelAttribute("song") Song s, Model model, 
+            @RequestParam("accountId") Long accountId) throws IOException 
+  
     {   
         HttpSession session = request.getSession();
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
-        
+        System.out.println(s);
             if (!(file.isEmpty())) {
             s.setMedia(file.getOriginalFilename());
             if (!(file2.isEmpty())) {
@@ -349,10 +347,9 @@ public class UserController {
 
                 }
             }
-            s.setAccountId(accountId);
-            s.setAccount(userService.findById(accountId).orElseThrow());
+            
             s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
-            s.setView(0);
+           
             service_song.save(s);
             Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
             service_song.save(s);
@@ -360,26 +357,17 @@ public class UserController {
             if (file2.isEmpty()) {
                 s.setMedia(service_song.findById(s.getId()).orElseThrow().getMedia());
                 s.setImage(service_song.findById(s.getId()).orElseThrow().getImage());
-                s.setAccountId(userService.findById(s.getAccountId()).orElseThrow().getId());
-                s.setAccount(userService.findById(accountId).orElseThrow());
-                s.setView(0);
                 s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
                 service_song.save(s);
             } else {
                 s.setMedia(service_song.findById(s.getId()).orElseThrow().getMedia());
                 s.setImage(file2.getOriginalFilename());
-                s.setAccountId(userService.findById(s.getAccountId()).orElseThrow().getId());
-                s.setAccount(userService.findById(accountId).orElseThrow());
-                s.setView(0);
+            
                 s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
                 Files.copy(file2.getInputStream(), Paths.get(base_url + "\\webdata\\user" + File.separator + file2.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
                 service_song.save(s);
-            }
-        }
-
-       
-        
-        model.addAttribute("list", service_song.getPage(pageNumber, size));
+            } 
+        }   
         model.addAttribute("service", service_song);
         model.addAttribute("name", "null");
         model.addAttribute("mess", "Successfully");
@@ -401,6 +389,7 @@ public class UserController {
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("song", service_song.findById(id).orElseThrow());
+        System.out.println(service_song.findById(id).get());
         model.addAttribute("listgenre", service_gen.findAll());
         model.addAttribute("status", "update");
         return "client/upload/createsong" ;
