@@ -35,7 +35,7 @@ and open the template in the editor.
                                             <tr>
                                                 <th style="width: 5%;">No</th>
                                                 <th style="width: 10%;">Order date</th>
-                                                <th style="width: 10%;">User name</th>
+                                                <th style="width: 10%;">Full name</th>
                                                 <th style="width: 15%;">Phone number</th>
                                                 <th style="width: 20%;">Address</th>
                                                 <th style="width: 15%;">Amount</th>
@@ -48,7 +48,7 @@ and open the template in the editor.
                                             <tr th:each="item:${list.page}">
                                                 <td th:text="${service.findAll().size-service.findAll().indexOf(item)}"></td>
                                                 <td th:text="${item.orderDate}"></td>
-                                                <td th:text="${item.user.username}"></td>
+                                                <td th:text="${item.user.fullname}"></td>
                                                 <td th:text="${item.phoneNumber}"></td>
                                                 <td th:text="${item.address}"></td>
                                                 <td th:text="${#numbers.formatCurrency(item.amount)}"></td>
