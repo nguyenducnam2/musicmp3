@@ -99,6 +99,8 @@
                                                 <div class="bg-primary p-3"> 
                                                     <!--<h5 class="mb-0 text-white line-height">Hello <span sec:authentication="name"></span></h5>-->
                                                     <h5 class="mb-0 text-white line-height">Hello <span th:text="*{fullname}">Name</span></h5>
+                                                    <h5 class="mb-0 text-white line-height">Role <span th:text="*{role=='ROLE_VIP'?'VIP':'USER'}">Vip</span> </h5>
+                                                    <h5 class="mb-0 text-white line-height" th:if='${session.expireTimeVip!=null}'>Duration <span th:text="${#dates.format(session.expireTimeVip,'dd-MM-yyyy')}">30-12-2022</span> </h5>
                                                 </div>
                                                 <a th:href="@{/user/profile/{id} (id=*{id}) }"  class="iq-sub-card iq-bg-primary-hover">
                                                     <div class="media align-items-center">

@@ -259,6 +259,8 @@ and open the template in the editor.
                                         <div class="iq-card-header d-flex justify-content-between">
                                             <div class="iq-header-title">
                                                 <h4 class="card-title" th:text="${session.user.role=='ROLE_ADMIN'|| session.user.role=='ROLE_EDITOR'|| session.user.role=='ROLE_MODERATOR' ? 'Your account no need activate' : session.user.role=='ROLE_VIP'  ? 'Your account is activated' : 'Upgrade Account' }">a</h4>
+                                                <h6 class="mb-0 text-black line-height" th:if='${session.expireTimeVip!=null}'>Duration <span th:text="${#dates.format(session.expireTimeVip,'dd-MM-yyyy')}">30-12-2022</span> </h6>
+
                                             </div>
                                         </div>
                                         <div class="iq-card-body">

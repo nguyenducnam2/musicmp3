@@ -9,6 +9,7 @@ import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -343,6 +344,10 @@ public class PaypalController {
                 String token = UUID.randomUUID().toString();
                 Optional<Account> user = userService.findByUsername(acc.getUsername());
                 userService.createVipTokenForUser(user.get(), token, duration * 24 * 60);
+
+                Date expireTimeVip = userService.getVipTokenByUserId(user.get().getId()).getExpirationTime();
+                session.setAttribute("expireTimeVip", expireTimeVip);
+
                 rd.addFlashAttribute("mess", "Successfully");
                 session.removeAttribute("duration");
                 session.removeAttribute("total2");
