@@ -46,6 +46,8 @@ public class Song {
     private Integer price;
     @Column(name = "image")
     private String image;
+    @Column(name = "vip")
+    private Boolean vip;
 
     @Column(name = "album_id", insertable = false, updatable = false)
     private Integer albumId;

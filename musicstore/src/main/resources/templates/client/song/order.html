@@ -35,7 +35,7 @@ and open the template in the editor.
                                         <thead>
                                             <tr>
                                                 <th>Avatar</th>
-                                                <th>Username</th>                              
+                                                <th>Full Name</th>                              
                                                 <th>Status</th>
                                                 <th>Total</th>
                                                 <th>Payment</th>
@@ -46,7 +46,7 @@ and open the template in the editor.
                                         <tbody>
                                             <tr th:each="item:${list}">
                                                 <td class="text-center"><img class="rounded img-fluid avatar-40" th:src="@{'/webdata/user/'+${item.account.image}}" alt="profile"></td>
-                                                <td>[[${item.account.username}]]</td>
+                                                <td><a th:href="@{/song/order/{id}(id=${item.id})}">[[${item.account.fullname}]]</a></td>
                                                 <td>
                                                     <span th:if="${item.status=='Success'}" class="badge iq-bg-success">[[${item.status}]]</span>
                                                     <span th:if="${item.status=='Canceled'}" class="badge iq-bg-primary">user [[${item.status}]]</span>

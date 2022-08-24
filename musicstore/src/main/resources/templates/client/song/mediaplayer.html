@@ -226,36 +226,6 @@ and open the template in the editor.
                                 </div>
                             </div>
                             <div class="iq-card-body" style="height: 550px;">
-                                <!--   <div class="row">
-                                        <div class="col-lg-4">
-                                            <img style="width: 200px;height: 250px;" th:src="@{'/webdata/album/'+${song.album.image}}" class="img-fluid w-100"  alt="">
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <div class="d-flex align-items-top justify-content-between iq-music-play-detail">
-                                                <div class="music-detail">
-                                                    <h3 th:text="${song.name}"><i class="las la-headphones"> Views</h3>
-                                                    <span th:text="${song.artist.name}"></span>
-                                                    <p class="mb-0"><p class="las la-headphones" th:text="'    '+${song.view}">   </p>
-                                                    <div class="d-flex align-items-center">                                       
-                                                         <a href="javascript:void(0);" class="btn btn-primary iq-play mr-2">Play music</a> 
-                                                        <audio controls loop class="audiplay" nodownload style="width: 100%;">
-                                                            <source th:src="@{'/webdata/audio/'+${song.media}}"/>
-                                                        </audio> 
-                                                    </div>
-                                                </div>
-                                                <div class="music-right">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="iq-circle mr-2 share"><a href="javascript:void();"><i class="las la-share-alt-square text-primary"></i></a></div>
-                                                        <div class="iq-circle mr-2"><a href="javascript:void();"><i class="ri-heart-fill  text-primary"></i></a></div>                 
-                                                        <div class="iq-circle">
-                                                            <a href="javascript:void();"><i class="las la-download text-primary"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div> 
-                                    </div> -->
-
                                 <div style="font-size: larger;" id="cart"></div>
                                 <div class="main">
                                     <p id="logo"><i class="fa fa-music"></i></p>
@@ -306,7 +276,7 @@ and open the template in the editor.
                         <div class="iq-card-body">
                             <ul class="nav nav-tabs" id="myTab-1" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">All Songs</a>
+                                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">All In Albums</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Lyric</a>
@@ -321,33 +291,7 @@ and open the template in the editor.
                             <div class="tab-content" id="myTabContent-2">
                                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                                     <ul id="myListSong" class="list-unstyled iq-music-slide mb-0">
-                                        <!--          <li class="mb-3">
-                                                       <div class="d-flex justify-content-between align-items-center row">
-                                                           <div class="media align-items-center col-10 col-md-5">
-                                                               <div class="iq-realese-song ">
-                                                                   <a th:href="@{/song/{id}(id=${item.id})}"><img th:src="@{'/webdata/album/'+${item.album.image}}" class="img-border-radius avatar-60 img-fluid" alt=""></a>
-                                                               </div>
-                                                               <div class="media-body ml-3">
-                                                                   <p class="mb-0" th:text="${item.name}"></p>
-                                                                   <small th:text="${item.artist.name}"></small>
-                                                               </div>
-                                                           </div>
-                                                           <p class="mb-0 col-md-2 col-md-2 iq-music-time">
-                                                           <p class="mb-0 col-2 col-md-2 iq-music-play"><a th:href="@{/song/{id}(id=${item.id})}"><i class="las la-play-circle font-size-32"></i></a></p>
-                                                           <div class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1">
-                                                               <div class="dropdown">
-                                                                   <span class="dropdown-toggle text-primary" id="dropdownMenuButton2" data-toggle="dropdown" aria-expanded="false" role="button">
-                                                                       <i class="ri-more-2-fill text-primary"></i>
-                                                                   </span>
-                                                                   <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton2" style="">
-                                                                       <a class="dropdown-item" href="#"><i class="ri-eye-fill mr-2"></i>View</a>
-                                                                       <a class="dropdown-item" href="#"><i class="ri-delete-bin-6-fill mr-2"></i>Delete</a>
-                                                                       <a class="dropdown-item" href="#"><i class="ri-file-download-fill mr-2"></i>Download</a>
-                                                                   </div>
-                                                               </div>
-                                                           </div>
-                                                       </div>
-                                                   </li> -->
+
                                     </ul>
                                 </div>
                                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
@@ -373,27 +317,7 @@ and open the template in the editor.
                                             </div>
                                         </div>
                                         <ul id="myList">
-                                            <!--    <li class="media"> <span class="round"><img style=" border-radius: 10px;
-                                                                                            padding-right: 5px;
-                                                                                            width: 60px;
-                                                                                            height: 55px" th:src="@{'/webdata/user/'+${item.account.image}}" class="align-self-start mr-3"></span>
-                                                    <div class="media-body">
-                                                        <div class="row d-flex">
-                                                            <h6 style=" color: #5C5C5C;
-                                                                font-size: 15px !important;
-                                                                padding-left: 15px !important;
-                                                                margin-bottom: 0; font-weight: bolder; " th:text="${item.account.username}">Leo Aminoff</h6>
-                                                            <div class="ml-auto">
-                                                                <p class="text"></p>
-                                                            </div>
-                                                        </div>
-                                                        <p th:text="${item.content}">Bought your "Palace of Versailles"</p>
-                                                    </div>
-                                                    <div th:if="${session.user != null && session.user.id==item.account.id}" class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-2 col-md-1">
-                                                        <span class="table-remove"><a th:href="@{/song/comment/delete/{id}(id=${item.id})}" type="button"
-                                                                                      class="btn iq-bg-danger btn-rounded btn-sm my-0"><i class="ri-delete-bin-6-fill"></i></a></span>
-                                                    </div>
-                                                </li> -->
+
                                         </ul>
                                     </div>
                                 </div>
@@ -428,53 +352,84 @@ and open the template in the editor.
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!--   <div th:if="${session.user !=null}" id="myModal" class="modal" role="dialog">
-   
-                 
-                   <div class="modal-dialog">
-   
-                     
-                       <div class="modal-content">
-   
-                          
-                           <div class="modal-header" style="background: #ff8a65;">
-                               <h3 style="color: white;">Add To ...</h3>
-   
-                           
-                               <button type="button" class="close" data-dismiss="modal">&times;</button>
-                           </div>
-   
-                           <form id="html_form_id" th:action=${"/song/playlist/add"}>
-   
-                               <input type="hidden" id="songId2" th:name="songId" th:value="${song.id}"/>
-                               <input type="hidden" th:name="accountId" th:value="${session.user.id}"/>
-                             
-                               <div class="form-check mb-4" th:each="item:${service_pl.findByAccountId(session.user.id)}">
-                                   <input th:name="playlistId" type="checkbox" th:value="${item.id}">
-                                   <label class="ml-3" th:text="${item.name}"></label>
-                               </div>
-   
-                              
-                               <div class="text-center">
-                                   <h4>Create New Playlist</h4>
-                               </div>
-                               <input name="name" class="form-control mr-3" placeholder="Enter name"/>
-   
-                             
-                               <div class="modal-footer">
-                                   <button id="btn" class="btn btn-primary">Add
-                                       <i class="fa fa-paper-plane"></i>
-                                   </button>
-                                   <a href="" class="btn btn-outline-primary" data-dismiss="modal">Cancel</a>
-                               </div>
-                           </form>
-                       </div>
-   
-                   </div>
-   
-               </div> -->
+                <!-- artist -->
+                <div class="col-lg-12" th:if="${moreArtist!=null}">
+                    <div class="iq-card">
+                        <div class="iq-card-header d-flex justify-content-between">
+                            <div class="iq-header-title">
+                                <h4 class="card-title">More About [[${moreArtist.get(0).artist.name}]]</h4>
+                            </div>
+                        </div>
+                        <div class="iq-card-body">
+                            <ul class="list-unstyled row iq-box-hover mb-0">
+                                <li class="col-xl-2 col-lg-3 col-md-4 iq-music-box" th:each="item:${moreArtist}">
+                                    <div class="iq-card">
+                                        <div class="iq-card-body p-0">
+                                            <div class="iq-thumb">
+                                                <div class="iq-music-overlay"></div>
+                                                <a th:href="@{/song/{id}(id=${item.id})}">
+                                                    <img th:src="@{'/webdata/album/'+${item.album.image}}" style="height: 110px;width: 130px;"
+                                                         class="img-border-radius img-fluid w-100" alt="">
+                                                </a>
+                                                <div class="overlay-music-icon">
+                                                    <a th:href="@{/song/{id}(id=${item.id})}">
+                                                        <i class="las la-play-circle"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="feature-list text-center">
+                                                <h6 class="font-weight-600  mb-0">[[${item.name}]]</h6>
+                                                <p class="mb-0">[[${item.artist.name}]]</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="iq-card">
+                        <div class="iq-card-header d-flex justify-content-between align-items-center">
+                            <div class="iq-header-title">
+                                <h4 id="name-genre" class="card-title"></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="iq-card">
+                        <div class="iq-card-body">
+                            <ul class="list-unstyled iq-music-slide mb-0" id="main-root">
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    let main = document.querySelector('#main-root');
+                    let name_genre = document.querySelector('#name-genre');
+                    function getListFromGenre(genreId) {
+                        fetch(`http://localhost:8080/api/genre/getSongById?id=` + genreId, {method: "GET"})
+                                .then((response) => response.json())
+                                .then((response) => {
+                                    name_genre.innerHTML = "<p>More About: " + response[0].genre.name + "</p>"
+                                    main.innerHTML = "";
+                                    for (let i = 0; i < response.length; i++) {
+                                        main.innerHTML += "<li class='mb-3'><div class='d-flex justify-content-between align-items-center row'><div class='media align-items-center col-10 col-md-5'><div class='iq-realese-song'><a href='http://localhost:8080/song/" + response[i].id + "'><img src='http://localhost:8080/webdata/album/" + response[i].album.image + "' class='img-border-radius avatar-60 img-fluid'></a></div><div class='media-body ml-3'><p class='mb-0'>" + response[i].name + "</p><small>" + response[i].artist.name + "</small></div></div><p class='mb-0 col-md-2 col-md-2 iq-music-time'><div data-icon='&#xe003;' class='icon'>  " + response[i].view + "</div></p><p class='mb-0 col-2 col-md-2 iq-music-play'><a href='http://localhost:8080/song/" + response[i].id + "'><i class='las la-play-circle font-size-32'></i></a></p></div></li>";
+                                    }
+                                })
+                                .catch(e => {
+                                    console.log(e);
+                                    main.innerHTML = "<p>This Genre Has No Song</p>";
+                                });
+                    }
+                </script>
+            </div>
 
             <div th:if="${session.user != null}" id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenteredScrollableTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
@@ -746,9 +701,9 @@ and open the template in the editor.
                                     myListSong.innerHTML = "";
                                     for (let i = 0; i < arr.length; i++) {
                                         if (arr[i].id == songId.value) {
-                                            myListSong.innerHTML += "<li style='background-color:wheat;' class='mb-3'><div class='d-flex justify-content-between align-items-center row'><div class='media align-items-center col-10 col-md-5'><div class='iq-realese-song '><a href='http://localhost:8080/song/" + arr[i].id + "'><img src='http://localhost:8080/webdata/album/" + arr[i].album.image + "' class='img-border-radius avatar-60 img-fluid' alt=''></a></div><div class='media-body ml-3'><p style='font-weight:bolder;' class='mb-0'>" + arr[i].name + "</p><small>" + arr[i].artist.name + "</small></div></div><p class='mb-0 col-md-2 col-md-2 iq-music-time'><div data-icon='&#xe003;' class='icon'>  "+arr[i].view+"</div></p><p class='mb-0 col-2 col-md-2 iq-music-play'><a href='http://localhost:8080/song/" + arr[i].id + "'><i class='las la-pause-circle font-size-32' aria-hidden='true'></i></a></p></div></li>";
+                                            myListSong.innerHTML += "<li style='background-color:wheat;' class='mb-3'><div class='d-flex justify-content-between align-items-center row'><div class='media align-items-center col-10 col-md-5'><div class='iq-realese-song '><a href='http://localhost:8080/song/" + arr[i].id + "'><img src='http://localhost:8080/webdata/album/" + arr[i].album.image + "' class='img-border-radius avatar-60 img-fluid' alt=''></a></div><div class='media-body ml-3'><p style='font-weight:bolder;' class='mb-0'>" + arr[i].name + "</p><small>" + arr[i].artist.name + "</small></div></div><p class='mb-0 col-md-2 col-md-2 iq-music-time'><div data-icon='&#xe003;' class='icon'>  " + arr[i].view + "</div></p><p class='mb-0 col-2 col-md-2 iq-music-play'><a href='http://localhost:8080/song/" + arr[i].id + "'><i class='las la-pause-circle font-size-32' aria-hidden='true'></i></a></p></div></li>";
                                         } else {
-                                            myListSong.innerHTML += "<li class='mb-3'><div class='d-flex justify-content-between align-items-center row'><div class='media align-items-center col-10 col-md-5'><div class='iq-realese-song '><a href='http://localhost:8080/song/" + arr[i].id + "'><img src='http://localhost:8080/webdata/album/" + arr[i].album.image + "' class='img-border-radius avatar-60 img-fluid' alt=''></a></div><div class='media-body ml-3'><p class='mb-0'>" + arr[i].name + "</p><small>" + arr[i].artist.name + "</small></div></div><p class='mb-0 col-md-2 col-md-2 iq-music-time'><div data-icon='&#xe003;' class='icon'>  "+arr[i].view+"</div></p><p class='mb-0 col-2 col-md-2 iq-music-play'><a href='http://localhost:8080/song/" + arr[i].id + "'><i class='las la-play-circle font-size-32'></i></a></p></div></li>";
+                                            myListSong.innerHTML += "<li class='mb-3'><div class='d-flex justify-content-between align-items-center row'><div class='media align-items-center col-10 col-md-5'><div class='iq-realese-song '><a href='http://localhost:8080/song/" + arr[i].id + "'><img src='http://localhost:8080/webdata/album/" + arr[i].album.image + "' class='img-border-radius avatar-60 img-fluid' alt=''></a></div><div class='media-body ml-3'><p class='mb-0'>" + arr[i].name + "</p><small>" + arr[i].artist.name + "</small></div></div><p class='mb-0 col-md-2 col-md-2 iq-music-time'><div data-icon='&#xe003;' class='icon'>  " + arr[i].view + "</div></p><p class='mb-0 col-2 col-md-2 iq-music-play'><a href='http://localhost:8080/song/" + arr[i].id + "'><i class='las la-play-circle font-size-32'></i></a></p></div></li>";
                                         }
                                     }
 
@@ -784,7 +739,7 @@ and open the template in the editor.
                     title.innerHTML = All_song[index_no].name;
                     track_image.src = "http://localhost:8080/webdata/album/" + All_song[index_no].album.image;
                     artist.innerHTML = All_song[index_no].artist.name;
-                    artist.href="http://localhost:8080/artist/"+All_song[index_no].artist.id;
+                    artist.href = "http://localhost:8080/artist/" + All_song[index_no].artist.id;
                     logo.innerHTML = All_song[index_no].album.name;
                     lyric.innerHTML = All_song[index_no].lyric;
                     let video = All_song[index_no].video;
@@ -794,6 +749,7 @@ and open the template in the editor.
                     } else {
                         mv.hidden = true;
                     }
+                    getListFromGenre(All_song[index_no].genreId);
                     songId.value = All_song[index_no].id;
                     songId2.value = All_song[index_no].id;
 

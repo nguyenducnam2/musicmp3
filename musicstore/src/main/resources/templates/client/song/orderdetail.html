@@ -22,8 +22,8 @@ and open the template in the editor.
                                                 <table class="table">
                                                     <tbody>
                                                         <tr class="table-warning">
-                                                            <th scope="row"> Username</th>
-                                                            <td>[[${songorder.account.username}]]</td>
+                                                            <th scope="row"> Full Name</th>
+                                                            <td>[[${songorder.account.fullname}]]</td>
                                                         </tr>
                                                         <tr class="table-warning">
                                                             <th scope="row"> Email</th>
@@ -60,7 +60,8 @@ and open the template in the editor.
                                                         <tr class="table-danger">
                                                             <th scope="row">Total</th>
                                                             <td>[[${list.size()}]] items</td>
-                                                            <td>[[${songorder.total}]] $</td>
+                                                            <td th:if="${songorder.promotion == null}">[[${songorder.total}]] $</td>
+                                                            <td th:if="${songorder.promotion != null}">[[${songorder.total}]] $ ( -[[${songorder.promotion.discount}]]%)</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>

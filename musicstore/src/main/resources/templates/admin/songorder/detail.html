@@ -60,7 +60,8 @@ and open the template in the editor.
                                                         <tr class="table-danger">
                                                             <th scope="row">Total</th>
                                                             <td>[[${list.size()}]] items</td>
-                                                            <td>[[${songorder.total}]] $</td>
+                                                            <td th:if="${songorder.promotion == null}">[[${songorder.total}]] $</td>
+                                                            <td th:if="${songorder.promotion != null}">[[${songorder.total}]] $ ( -[[${songorder.promotion.discount}]]%)</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>

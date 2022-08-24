@@ -7,6 +7,7 @@ package vn.aptech.musicstore.controller.client;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,6 +104,11 @@ public class SongClientController {
             model.addAttribute("service_pl", service_pl);
             model.addAttribute("mess", session.getAttribute("mess").toString());
             session.removeAttribute("mess");
+            List<Song> moreArtist = service.findByArtistId(s.getArtistId());
+            while (moreArtist.size() > 12) {
+                moreArtist.remove(getRandomIndex(0, moreArtist.size() - 1));
+            }
+            model.addAttribute("moreArtist", moreArtist);
             return "client/song/mediaplayer";
         }
         Song s = service.findById(id).orElseThrow();
@@ -120,6 +126,16 @@ public class SongClientController {
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("service_pl", service_pl);
+        List<Song> moreArtist = service.findByArtistId(s.getArtistId());
+        for(int i=0;i<moreArtist.size();i++){
+            if(moreArtist.get(i).getAlbum().getId()==s.getAlbum().getId()){
+                moreArtist.remove(i);
+            }
+        }
+        while (moreArtist.size() > 12) {
+            moreArtist.remove(getRandomIndex(0, moreArtist.size() - 1));
+        }
+        model.addAttribute("moreArtist", moreArtist);
         return "client/song/mediaplayer";
     }
 
@@ -300,4 +316,7 @@ public class SongClientController {
         return "client/song/genre";
     }
 
+    private int getRandomIndex(int min, int max) {
+        return min + new Random().nextInt(max - min + 1);
+    }
 }

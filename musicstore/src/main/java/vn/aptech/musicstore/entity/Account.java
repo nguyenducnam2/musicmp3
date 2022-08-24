@@ -46,7 +46,7 @@ public class Account implements Serializable {
 //    @Column(name = "gender")
     private Boolean gender = false;
     private String address;
-    private String image;
+    private String image="cat.jpg";
     private String imageUrl;
     private String phone;
 
