@@ -22,37 +22,64 @@ and open the template in the editor.
                                 </div>
                             </div>
                             <div class="iq-card-body">
-                                <form th:action=${"/admin/product/save"} th:object="${product}" method="post" enctype="multipart/form-data">
+                                <form th:action=${"/admin/product/save"} th:object="${product}" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                                     <input type="hidden"  th:field="${product.id}" />
                                     <div class="form-group">
                                         <label>Product Name:</label>
-                                        <input type="text" th:field="${product.name}" class="form-control">
+                                        <input type="text" th:field="${product.name}" class="form-control" required="">
+                                         <div class="valid-feedback">
+                                                            Looks good!
+                                                        </div>
+                                                        <div class="invalid-feedback">
+                                                            Required
+                                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label>Image:</label>
                                         <div class="custom-file">
-                                            <input type="file" name="file" class="custom-file-input" id="customFile">
+                                            <input type="file" name="file" class="custom-file-input" id="customFile" required>
                                             <label class="custom-file-label" for="customFile">Choose file</label>
+                                            <div class="invalid-feedback">
+                                                                Required
+                                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label>Price:</label>
-                                        <input type="text" th:field="${product.price}" class="form-control">
+                                        <input type="text" th:field="${product.price}" class="form-control" required>
+                                         <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                        <div class="invalid-feedback">
+                                          Required
+                                        </div>
                                     </div>
 				    <div class="form-group">
                                         <label>Quantity:</label>
-                                        <input type="text" th:field="${product.quantity}" class="form-control">
+                                        <input type="text" th:field="${product.quantity}" class="form-control" required>
+                                         <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                        <div class="invalid-feedback">
+                                          Required
+                                        </div>
                                     </div>
                                     
                                      <div class="form-group">
                                         <label>Description:</label>
-                                        <textarea th:field="${product.description}" class="form-control" rows="8"></textarea>
+                                        <textarea th:field="${product.description}" class="form-control" rows="8" required></textarea>
+                                         <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                        <div class="invalid-feedback">
+                                          Required
+                                        </div>
                                     </div>   
                                     
                                      <div class="form-group">
                                         <label>Brand:</label>
                                         <select class="form-control" id="exampleFormControlSelect1" th:field="${product.brandId}">
-                                            <option th:each="item:${brandproduct}" th:text="${item.name}" th:value="${item.id}"></option>
+                                            <option th:each="item:${brandproduct}" th:text="${item.name}" th:value="${item.id}" ></option>
                                         </select>
                                     </div>
                                     <div class="form-group">
