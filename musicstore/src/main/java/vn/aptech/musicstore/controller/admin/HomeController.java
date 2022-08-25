@@ -57,14 +57,18 @@ public class HomeController {
         List<Account> accList = serviceAccount.findAll();
         List<Song> songList = songService.findAll();
         List<SongOrderDetail> songOrderDetails = songOrderDetailService.findAll();
-         for (SongOrderDetail songOrderDetail : songOrderDetails) {
-            totalProfitBuySong+=songOrderDetail.getSongOrder().getTotal();
+        for (SongOrderDetail songOrderDetail : songOrderDetails) {
+            if (songOrderDetail.getSongOrder().getTotal() != null) {
+                totalProfitBuySong += songOrderDetail.getSongOrder().getTotal();
+            }
         }
 
         double totalProfitUpgradeAcc = 0;
         List<UpgradeVipOrderDetails> upgradeVipOrderDetailses = upgradeVipOrderDetailsService.findAll();
         for (UpgradeVipOrderDetails upgradeVipOrderDetailse : upgradeVipOrderDetailses) {
-            totalProfitUpgradeAcc += upgradeVipOrderDetailse.getTotal();
+            if (upgradeVipOrderDetailse.getTotal() != null) {
+                totalProfitUpgradeAcc += upgradeVipOrderDetailse.getTotal();
+            }
         }
 
         model.addAttribute("user", user.get());
