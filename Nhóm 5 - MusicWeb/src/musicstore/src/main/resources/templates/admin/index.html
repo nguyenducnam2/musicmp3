@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout.html}">
+    <head>  
+    </head>
+    <body>
+
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <span style="margin-left: 30rem" th:object="${user}" th:inline="text" class="text-center text-justify text-black text-uppercase">Welcome [[${user.fullname}]]</span> 
+            <div th:if="${session.user} != null">
+                <div class="row align-items-center" th:object="${session.user}">
+                    <div class="form-group col-sm-6">
+                        
+                        <label for="fname">Total Song</label>
+                        <input  name="fname" class="form-control" id="fname" th:value="${totalSong}" disabled="">
+                    </div>
+
+                    <div class="form-group col-sm-6">
+                        <label for="uname">Total Account</label>
+                        <input  class="form-control" id="uname" th:value="${totalAccount}"  disabled>
+                    </div>
+
+                   
+                    <div class="form-group col-sm-6">
+                        <label for="lname">Total Profit Song sell</label>
+                        <input  name="lname" class="form-control" id="lname" th:value="${totalProfitBuySong}" disabled>
+                    </div>
+                     <div class="form-group col-sm-6">
+                        <label for="lname">Total Profit Upgrade Account</label>
+                        <input  name="lname" class="form-control" id="lname" th:value="${totalProfitUpgradeAcc}" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

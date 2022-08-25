@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+        <title>Title</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <title>Muzik- Responsive Bootstrap 4 Admin Dashboard Template</title>
+        <!-- Favicon -->
+        <link rel="shortcut icon" th:href="@{/admintemplate/images/favicon.ico}" />
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" th:href="@{/admintemplate/css/bootstrap.min.css}">
+        <!-- Typography CSS -->
+        <link rel="stylesheet" th:href="@{/admintemplate/css/typography.css}">
+        <!-- Style CSS -->
+        <link rel="stylesheet" th:href="@{/admintemplate/css/style.css}">
+        <!-- Responsive CSS -->
+
+        <link rel="stylesheet" th:href="@{/admintemplate/css/responsive.css}">
+
+
+
+        <!-- Font Awesome -->
+        <!-- Libraries Stylesheet -->
+
+
+
+
+    </head>
+    <body>
+        <!-- <div id="loading">
+             <div id="loading-center">
+             </div>
+         </div> -->
+
+
+        <div th:replace="client/fragments/header::header"></div>
+
+        <div th:replace="client/fragments/nav::nav"></div>
+
+        <div layout:fragment="content"></div>
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:700,300" rel="stylesheet">
+
+
+        <!--    <div th:replace="client/fragments/footer::footer"></div> -->
+
+
+        <!--        <div class="iq-colorbox color-fix">
+                    <div class="buy-button"> <a class="color-full" href="#"><i class="fa fa-spinner fa-spin"></i></a> </div>
+                    <div id="right-sidebar-scrollbar" class="iq-colorbox-inner">
+                        <div class="clearfix color-picker">
+                            <h3 class="iq-font-black">music Awesome Color</h3>
+                            <p>This color combo available inside whole template. You can change on your wish, Even you can create your own with limitless possibilities! </p>
+                            <ul class="iq-colorselect clearfix">
+                                <li class="color-1 iq-colormark" data-style="color-1"></li>
+                                <li class="color-2" data-style="iq-color-2"></li>
+                                <li class="color-3" data-style="iq-color-3"></li>
+                                <li class="color-4" data-style="iq-color-4"></li>
+                                <li class="color-5" data-style="iq-color-5"></li>
+                                <li class="color-6" data-style="iq-color-6"></li>
+                                <li class="color-7" data-style="iq-color-7"></li>
+                                <li class="color-8" data-style="iq-color-8"></li>
+                                <li class="color-9" data-style="iq-color-9"></li>
+                                <li class="color-10" data-style="iq-color-10"></li>
+                                <li class="color-11" data-style="iq-color-11"></li>
+                                <li class="color-12" data-style="iq-color-12"></li>
+                                <li class="color-13" data-style="iq-color-13"></li>
+                                <li class="color-14" data-style="iq-color-14"></li>
+                                <li class="color-15" data-style="iq-color-15"></li>
+                                <li class="color-16" data-style="iq-color-16"></li>
+                                <li class="color-17" data-style="iq-color-17"></li>
+                                <li class="color-18" data-style="iq-color-18"></li>
+                                <li class="color-19" data-style="iq-color-19"></li>
+                                <li class="color-20" data-style="iq-color-20"></li>
+                            </ul>
+        
+                        </div>
+                    </div>
+                </div> -->
+
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script th:src="@{/admintemplate/js/jquery.min.js}"></script>
+        <script th:src="@{/admintemplate/js/popper.min.js}"></script>
+        <script th:src="@{/admintemplate/js/bootstrap.min.js}"></script>
+        <!-- Appear JavaScript -->
+        <script th:src="@{/admintemplate/js/jquery.appear.js}"></script>
+        <!-- Countdown JavaScript -->
+        <script th:src="@{/admintemplate/js/countdown.min.js}"></script>
+        <!-- Counterup JavaScript -->
+        <script th:src="@{/admintemplate/js/waypoints.min.js}"></script>
+        <script th:src="@{/admintemplate/js/jquery.counterup.min.js}"></script>
+        <!-- Wow JavaScript -->
+        <script th:src="@{/admintemplate/js/wow.min.js}"></script>
+        <!-- Apexcharts JavaScript -->
+        <script th:src="@{/admintemplate/js/apexcharts.js}"></script>
+        <!-- Slick JavaScript -->
+        <script th:src="@{/admintemplate/js/slick.min.js}"></script>
+        <!-- Select2 JavaScript -->
+        <script th:src="@{/admintemplate/js/select2.min.js}"></script>
+        <!-- Owl Carousel JavaScript -->
+        <script th:src="@{/admintemplate/js/owl.carousel.min.js}"></script>
+        <!-- Magnific Popup JavaScript -->
+        <script th:src="@{/admintemplate/js/jquery.magnific-popup.min.js}"></script>
+        <!-- Smooth Scrollbar JavaScript -->
+        <script th:src="@{/admintemplate/js/smooth-scrollbar.js}"></script>
+        <!-- lottie JavaScript -->
+        <script th:src="@{/admintemplate/js/lottie.js}"></script>
+        <!-- am core JavaScript -->
+        <script th:src="@{/admintemplate/js/core.js}"></script>
+        <!-- am charts JavaScript -->
+        <script th:src="@{/admintemplate/js/charts.js}"></script>
+        <!-- am animated JavaScript -->
+        <script th:src="@{/admintemplate/js/animated.js}"></script>
+        <!-- am kelly JavaScript -->
+        <script th:src="@{/admintemplate/js/kelly.js}"></script>
+        <!-- am maps JavaScript -->
+        <script th:src="@{/admintemplate/js/maps.js}"></script>
+        <!-- am worldLow JavaScript -->
+        <script th:src="@{/admintemplate/js/worldLow.js}"></script>
+        <!-- Raphael-min JavaScript -->
+        <script th:src="@{/admintemplate/js/raphael-min.js}"></script>
+        <!-- Morris JavaScript -->
+        <script th:src="@{/admintemplate/js/morris.js}"></script>
+        <!-- Morris min JavaScript -->
+        <script th:src="@{/admintemplate/js/morris.min.js}"></script>
+        <!-- Flatpicker Js -->
+        <script th:src="@{/admintemplate/js/flatpickr.js}"></script>
+        <!-- Style Customizer -->
+        <script th:src="@{/admintemplate/js/style-customizer.js}"></script>
+        <!-- Chart Custom JavaScript -->
+        <script th:src="@{/admintemplate/js/chart-custom.js}"></script>
+        <!-- Music js -->
+        <script th:src="@{/admintemplate/js/music-player.js}"></script>
+        <!-- Music-player js -->
+        <script th:src="@{/admintemplate/js/music-player-dashboard.js}"></script>
+        <!-- Custom JavaScript -->
+        <script th:src="@{/admintemplate/js/custom.js}"></script>
+
+
+
+        <script th:src="@{/clienttemplate/lib/easing/easing.min.js}"></script>
+        <script th:src="@{/clienttemplate/lib/owlcarousel/owl.carousel.min.js}"></script>
+
+        <!-- Contact Javascript File -->
+        <script th:src="@{/clienttemplate/mail/jqBootstrapValidation.min.js}"></script>
+        <script th:src="@{/clienttemplate/mail/contact.js}"></script>
+
+        <!-- Template Javascript -->
+        <script th:src="@{/clienttemplate/js/main.js}"></script>
+
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <input type="hidden" th:if="${session.user == null}" id="accountId" value="-1"/> 
+        <input type="hidden" th:if="${session.user != null}" id="accountId" th:value="${session.user.id}"/> 
+        <script>
+            let items = document.querySelector('#items');
+            let genre = document.querySelector('#genre');
+            function getSizeCart() {
+                fetch(`http://localhost:8080/api/cart/findItemsofCartByAccountId?accountId=` + accountId.value, {method: "GET"})
+                        .then((response) => response.json())
+                        .then((response) => {
+                            items.innerHTML = response.length;
+                        })
+                        .catch(e => {
+                            console.log(e);
+                            items.innerHTML = "0";
+                        });
+            }
+            if (accountId.value != null && accountId.value > 0) {
+                getSizeCart();
+            }
+            getGenreItems();
+
+            function getGenreItems() {
+                fetch(`http://localhost:8080/api/genre`, {method: "GET"})
+                        .then((response) => response.json())
+                        .then((response) => {
+                            genre.innerHTML = "";
+                            for (let i = 0; i < response.length; i++) {
+                            genre.innerHTML+="<li><a href='http://localhost:8080/song/genre/"+response[i].id+"'><i class='lar la-file-audio'></i>"+response[i].name+"</a></li>";
+                            }
+                        })
+                        .catch(e => {
+                            console.log(e);
+                        });
+            }
+        </script>
+
+    </body>
+
+</html>

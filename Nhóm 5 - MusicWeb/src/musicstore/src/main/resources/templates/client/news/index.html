@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{client/layout.html}">
+    <body>
+        <div layout:fragment="content" id="content-page" class="content-page">
+            <div class="container-fluid">
+                <div>
+                    <h2>News list</h2>
+                    <div class="iq-search-bar">   
+                        <form th:action="@{/news/search}" class="searchbox">
+                            <input type="text" class="text search-input" name="name" placeholder="Search Here..">
+                            <a class="search-link" href="#"><i class="ri-search-line text-black"></i></a>
+                            <a class="search-audio" href="#"><i class="las la-microphone text-black"></i></a> 
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <th:block  th:if="${title=='null'}" th:each="item:${list.page}">
+                            <div class="row border rounded">
+                                <div class="col-sm-2">
+                                    <figure class="bm_As bm_BK">
+                                        <img style="width: 160px;height: 150px;" th:src="@{'/webdata/news/'+${item.image}}" class="bm_BL">
+                                    </figure>
+                                </div>
+                                <div class="col-sm-10">
+                                    <h4><a th:text="${item.title}" th:href="@{/news/details/{id}(id=${item.id})}"></a></h4>
+                                    <div th:text="${item.created_at}"></div>
+                                </div>
+                            </div>
+                        </th:block>
+                        <th:block th:if="${title!='null' && item.title.toLowerCase().contains(title.toLowerCase())}" th:each="item:${list.page}">
+                            <div class="row border rounded">
+                                <div class="col-sm-2">
+                                    <a th:href="@{/news/details/{id}(id=${item.id})}" class="" target="_blank" rel="noopener noreferrer">
+                                        <figure class="bm_As bm_BK">
+                                            <img style="width: 160px;height: 150px;" th:src="@{'/webdata/news/'+${item.image}}" class="bm_BL">
+                                        </figure>
+                                    </a>
+                                </div>
+                                <div class="col-sm-6">
+                                    <h4>
+                                        <div><a th:text="${item.title}" th:href="@{/news/details/{id}(id=${item.id})}"></a></div>
+                                        <div th:text="${item.created_at}"></div>
+                                    </h4>
+                                </div>
+                            </div>
+                        </th:block>
+                        <!--                        <div class="iq-card">
+                                                    <div class="iq-card-header d-flex justify-content-between">
+                                                                                        <div class="iq-header-title">
+                                                                                            <h4 class="card-title">News Lists</h4>
+                                                                                        </div>
+                                                        <div class="iq-search-bar">   
+                                                            <form th:action="@{/admin/news/search}" class="searchbox">
+                                                                <input type="text" class="text search-input" name="name" placeholder="Search Here..">
+                                                                <a class="search-link" href="#"><i class="ri-search-line text-black"></i></a>
+                                                                <a class="search-audio" href="#"><i class="las la-microphone text-black"></i></a> 
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    <div class="bm_E" th:if="${title=='null'}" th:each="item:${list.page}">
+                                                        <div class="col-lg-2">
+                                                            <span>
+                                                                <a th:href="@{/news/details/{id}(id=${item.id})}" class="" target="_blank" rel="noopener noreferrer">
+                                                                    <figure class="bm_As bm_BK">
+                                                                        <img style="width: 160px;height: 150px;" th:src="@{'/webdata/news/'+${item.image}}" class="bm_BL">
+                                                                    </figure>
+                                                                </a>
+                                                            </span>
+                                                        </div>
+                                                        <div class="col-lg-10">
+                                                            <div class="bm_y">
+                                                                <h4 class="bm_L">
+                                                                    <span>
+                                                                        <a th:href="@{/news/details/{id}(id=${item.id})}" class="" th:text="${item.title}" target="_blank" rel="noopener noreferrer">
+                        
+                                                                        </a>
+                                                                    </span>
+                                                                </h4>
+                                                            </div>
+                                                            <div class="bm_R">
+                                                                <time datetime="2022-08-01T11:10:00+07:00" th:text="${item.created_at}"></time>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="bm_E" th:if="${title!='null' && item.title.toLowerCase().contains(title.toLowerCase())}" th:each="item:${list.page}">
+                                                        <div class="col-lg-2">
+                                                            <span>
+                                                                <a th:href="@{/news/details/{id}(id=${item.id})}" class="" target="_blank" rel="noopener noreferrer">
+                                                                    <figure class="bm_As bm_BK">
+                                                                        <img style="width: 160px;height: 150px;" th:src="@{'/webdata/news/'+${item.image}}" class="bm_BL">
+                                                                    </figure>
+                                                                </a>
+                                                            </span>
+                                                        </div>
+                                                        <div class="col-lg-10">
+                                                            <div class="bm_y">
+                                                                <h4 class="bm_L">
+                                                                    <span>
+                                                                        <a th:href="@{/news/details/{id}(id=${item.id})}" class="" th:text="${item.title}" target="_blank" rel="noopener noreferrer">
+                        
+                                                                        </a>
+                                                                    </span>
+                                                                </h4>
+                                                            </div>
+                                                            <div class="bm_R">
+                                                                <time datetime="2022-08-01T11:10:00+07:00" th:text="${item.created_at}"></time>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>-->
+                    </div>
+                </div>  
+                <nav th:if="${name=='null'}" aria-label="Page navigation" class="paging">
+                    <ul class="pagination" th:if="${list.page.totalPages > 1}">
+                        <li class="page-item" th:classappend="${!list.paging.isPrevEnabled()? 'disabled' : ''}">
+                            <a class="page-link" th:href="@{'/admin/news/?pageNumber=' + ${list.paging.pageNumber - 1}}"
+                               tabindex="-1">Previous</a>
+                        </li>
+                        <th:block th:each="item : ${list.paging.getItems()}">
+                            <li class="page-item" th:classappend="${item.index == list.paging.pageNumber? 'active' : ''}"
+                                th:if="${item.pageItemType.name() == 'PAGE'}">
+                                <a class="page-link" th:href="@{'/admin/news/?pageNumber=' + ${item.index}}"
+                                   th:text="${item.index}"></a>
+                            </li>
+                            <li class="page-item disabled" th:if="${item.pageItemType.name() == 'DOTS'}">
+                                <a class="page-link" href="#">...</a>
+                            </li>
+                        </th:block>
+                        <li class="page-item" th:classappend="${!list.paging.isNextEnabled()? 'disabled' : ''}">
+                            <a class="page-link" th:href="@{'/admin/news/?pageNumber=' + ${list.paging.pageNumber + 1}}">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </body>
+</html>

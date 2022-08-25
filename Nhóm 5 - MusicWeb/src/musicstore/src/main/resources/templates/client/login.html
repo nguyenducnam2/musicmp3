@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" >
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+            <title>Muzik - Login</title>
+            <!-- Favicon -->
+
+            <link rel="shortcut icon" th:href="@{/admintemplate/images/favicon.ico}" />
+            <!-- Bootstrap CSS -->
+            <link rel="stylesheet" th:href="@{/admintemplate/css/bootstrap.min.css}"/>
+            <!-- Typography CSS -->
+            <link rel="stylesheet" th:href="@{/admintemplate/css/typography.css}"/>
+            <!-- Style CSS -->
+            <link rel="stylesheet" th:href="@{/admintemplate/css/style.css}"/>
+            <!-- Responsive CSS -->
+            <link rel="stylesheet" th:href="@{/admintemplate/css/responsive.css}"/>
+            
+            <!-- Google Web Fonts -->
+    <!--<link rel="preconnect" href="https://fonts.gstatic.com">-->
+    <!--<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>-->  
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet"/>
+
+    <!-- Libraries Stylesheet -->
+    <!--<link th:href="@{/clienttemplate/lib/animate/animate.min.css}" rel="stylesheet"/>-->
+    <!--<link th:href="@{/clienttemplate/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet"/>-->
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <!--<link th:href="@{/clienttemplate/css/style.css}" rel="stylesheet">-->
+    </head>
+    <body>
+        <!-- loader Start -->
+        <div id="loading">
+            <div id="loading-center">
+            </div>
+        </div>
+        <!-- loader END -->
+        <!-- Sign in Start -->
+        <section class="sign-in-page">
+            <div class="container">
+                <div class="row justify-content-center align-items-center height-self-center">
+                    <div class="col-md-6 col-sm-12 col-12 align-self-center">
+                        <div class="sign-user_card ">
+                            <div class="d-flex justify-content-center">
+                                <div class="sign-user_logo">
+                                    <a th:href="@{/}">
+                                        <img th:src="@{/admintemplate/images/logo.png}" class=" img-fluid" alt="Logo">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="sign-in-page-data">
+                                <div class="sign-in-from w-100 pt-5 m-auto">
+                                    <h1 class="mb-3 text-center">Log in Muzik</h1>
+                                    <div th:if="${param.error}" class="alert-warning">
+                                        <h4>Invalid username and password.</h4>
+                                    </div>
+                                    <div>
+                                        <a class="btn btn-lg btn-secondary fab fa-google mt-2"
+                                           th:href="@{/oauth2/authorization/google}">
+                                            &nbsp;&nbsp;Continue with Google
+                                        </a> 
+                                        
+                                        <a class="btn btn-lg btn-secondary fab fa-facebook-f mt-2"
+                                           th:href="@{/oauth2/authorization/facebook}">
+                                            &nbsp;&nbsp;Continue with Facebook
+                                        </a>
+                                    </div>
+                                    <div th:if="${param.logout}" class="alert-heading">
+                                        <h4>You have been logged out.</h4>
+                                    </div>
+                                    <form class="mt-4" th:action="@{/user-login-process}" method="post">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail2">Username</label>
+                                            <input class="form-control mb-0" name="username" id="exampleInputEmail2" placeholder="Enter username" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputPassword2">Password</label>
+                                            <input type="password" class="form-control mb-0" name="password" id="exampleInputPassword2" placeholder="Password" required>
+                                        </div>
+                                        <div class="sign-info">
+                                            <button type="submit" class="btn btn-primary mb-2">Log in</button>
+                                            <span class="dark-color d-block line-height-2">Don't have an account? <a href="sign-up.html">Sign up</a></span>
+                                        </div>
+<!--                                        <div class="d-inline-block w-100">
+                                            <div class="custom-control custom-checkbox d-inline-block mt-2 pt-1">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                                    <label class="custom-control-label" for="customCheck1">Remember Me</label>
+                                            </div>
+                                        </div>-->
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <div class="d-flex justify-content-center links">
+                                    Don't have an account? <a th:href="@{/register}" class="ml-2">Sign Up</a>
+                                </div>
+                                <div class="d-flex justify-content-center links">
+                                    <a th:href="@{/resetPassword}">Forgot your password?</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Sign in END -->
+                <!-- color-customizer -->
+            </div>
+        </section>
+        <!--      <div class="iq-colorbox color-fix">
+                 <div class="buy-button"> <a class="color-full" href="#"><i class="fa fa-spinner fa-spin"></i></a> </div>
+                 <div class="clearfix color-picker">
+                    <h3 class="iq-font-black">Muzik Awesome Color</h3>
+                    <p>This color combo available inside whole template. You can change on your wish, Even you can create your own with limitless possibilities! </p>
+                    <ul class="iq-colorselect clearfix">
+                       <li class="color-1 iq-colormark" data-style="color-1"></li>
+                       <li class="color-2" data-style="iq-color-2"></li>
+                       <li class="color-3" data-style="iq-color-3"></li>
+                       <li class="color-4" data-style="iq-color-4"></li>
+                       <li class="color-5" data-style="iq-color-5"></li>
+                       <li class="color-6" data-style="iq-color-6"></li>
+                       <li class="color-7" data-style="iq-color-7"></li>
+                       <li class="color-8" data-style="iq-color-8"></li>
+                       <li class="color-9" data-style="iq-color-9"></li>
+                       <li class="color-10" data-style="iq-color-10"></li>
+                       <li class="color-11" data-style="iq-color-11"></li>
+                       <li class="color-12" data-style="iq-color-12"></li>
+                       <li class="color-13" data-style="iq-color-13"></li>
+                       <li class="color-14" data-style="iq-color-14"></li>
+                       <li class="color-15" data-style="iq-color-15"></li>
+                       <li class="color-16" data-style="iq-color-16"></li>
+                       <li class="color-17" data-style="iq-color-17"></li>
+                       <li class="color-18" data-style="iq-color-18"></li>
+                       <li class="color-19" data-style="iq-color-19"></li>
+                       <li class="color-20" data-style="iq-color-20"></li>
+                    </ul>
+                    <a target="_blank" class="btn btn-primary d-block mt-3" href="https://themeforest.net/item/muzik-music-streaming-admin-template/27967164">Purchase Now</a>
+                 </div>
+              </div>-->
+        <!-- color-customizer END -->
+        <!-- Optional JavaScript -->
+
+
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script th:src="@{/admintemplate/js/jquery.min.js}"></script>
+        <script th:src="@{/admintemplate/js/popper.min.js}"></script>
+        <script th:src="@{/admintemplate/js/bootstrap.min.js}"></script>
+        <!-- Appear JavaScript -->
+        <script th:src="@{/admintemplate/js/jquery.appear.js}"></script>
+        <!-- Countdown JavaScript -->
+        <script th:src="@{/admintemplate/js/countdown.min.js}"></script>
+        <!-- Counterup JavaScript -->
+        <script th:src="@{/admintemplate/js/waypoints.min.js}"></script>
+        <script th:src="@{/admintemplate/js/jquery.counterup.min.js}"></script>
+        <!-- Wow JavaScript -->
+        <script th:src="@{/admintemplate/js/wow.min.js}"></script>
+        <!-- Apexcharts JavaScript -->
+        <script th:src="@{/admintemplate/js/apexcharts.js}"></script>
+        <!-- Slick JavaScript -->
+        <script th:src="@{/admintemplate/js/slick.min.js}"></script>
+        <!-- Select2 JavaScript -->
+        <script th:src="@{/admintemplate/js/select2.min.js}"></script>
+        <!-- Owl Carousel JavaScript -->
+        <script th:src="@{/admintemplate/js/owl.carousel.min.js}"></script>
+        <!-- Magnific Popup JavaScript -->
+        <script th:src="@{/admintemplate/js/jquery.magnific-popup.min.js}"></script>
+        <!-- Smooth Scrollbar JavaScript -->
+        <script th:src="@{/admintemplate/js/smooth-scrollbar.js}"></script>
+        <!-- Style Customizer -->
+        <script th:src="@{/admintemplate/js/style-customizer.js}"></script>
+        <!-- Chart Custom JavaScript -->
+        <script th:src="@{/admintemplate/js/chart-custom.js}"></script>
+        <!-- Custom JavaScript -->
+        <script th:src="@{/admintemplate/js/custom.js}"></script>
+
+
+
+    </body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <body>
+        <div th:fragment="nav" class="iq-sidebar">
+            <div class="iq-sidebar-logo d-flex justify-content-between">
+                <a th:href="@{/}" class="header-logo">
+                    <img th:src="@{/admintemplate/images/logo.png}" class="img-fluid rounded-normal" alt="">
+                    <div class="logo-title">
+                        <span class="text-primary text-uppercase">Music</span> 
+                    </div>
+
+                </a>
+
+                <div class="iq-menu-bt-sidebar">
+                    <div class="iq-menu-bt align-self-center">
+                        <div class="wrapper-menu">
+                            <div class="main-circle"><i class="las la-bars"></i></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div sec:authorize="isAuthenticated()" class="logo-title ml-5">
+                <span th:inline="text" class="text-primary text-uppercase"></span> 
+            </div>
+            <div id="sidebar-scrollbar">
+                <nav class="iq-sidebar-menu">
+                    <ul id="iq-sidebar-toggle" class="iq-menu">
+                        <!-- case phan trang nav page cua ai thi copy the <li>,
+                        tu xet th:if xu li rieng ,cua tui la vi du cho viec user dang nhap moi thay dc cho nay -->
+                        <li>
+                            <a href='#genre' class='iq-waves-effect' data-toggle='collapse' aria-expanded='false'><span class='ripple rippleEffect'></span><i class='las la-th-list iq-arrow-left'></i><span>Genre</span><i class='ri-arrow-right-s-line iq-arrow-right'></i></a><ul class='iq-submenu collapse' data-parent='#iq-sidebar-toggle' id="genre"></ul>
+                        </li>
+                        <li th:if="${(user != null) && (user.role=='ROLE_USER' || user.role=='ROLE_VIP')}">
+                            <a href="#shop" class="iq-waves-effect" data-toggle="collapse" aria-expanded="false"><span class="ripple rippleEffect"></span><i class="las la-th-list iq-arrow-left"></i><span>Manage account</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
+                            <ul id="shop" class="iq-submenu collapse show" data-parent="#iq-sidebar-toggle">
+                                <li class="active">
+                                    <a class="iq-icons-list" th:href="@{/song/playlist}"><div data-icon="p" class="icon"></div><span>Playlist</span></a>
+                                </li>
+                                <li>
+                                    <a class="iq-icons-list" th:href="@{/song/cart}"><div data-icon="Q" class="icon"></div><span>Song Cart</span><p id="items" style="color: tomato; "></p></a>
+                                </li>
+                                <li>
+                                    <a class="iq-icons-list" th:href="@{/song/buyed}"><div data-icon=":" class="icon"></div><span>Song Bought</span></a>
+                                </li>
+                                <li>
+                                    <a class="iq-icons-list" th:href="@{/user/upload}"><div data-icon="p" class="icon"></div><span>Upload</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#promotion" class="iq-waves-effect" data-toggle="collapse" aria-expanded="false"><span class="ripple rippleEffect"></span><i class="las la-th-list iq-arrow-left"></i><span>Promotion</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
+                            <ul id="promotion" class="iq-submenu collapse show" data-parent="#iq-sidebar-toggle">
+                                <li>
+                                    <a class="iq-icons-list" th:href="@{/promotion}"><div data-icon="p" class="icon"></div><span>Promotion</span></a>
+                                </li>
+                                <li>
+                                    <a th:if="${session.user!=null}" class="iq-icons-list" th:href="@{/promotion/yourCode}"><div data-icon="p" class="icon"></div><span>Your promotion's code</span></a>
+                                </li>
+                            </ul>
+
+                        </li>
+
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </body>
+</html>

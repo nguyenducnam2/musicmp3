@@ -1,0 +1,220 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package vn.aptech.musicstore.config;
+
+import java.io.IOException;
+import java.util.Optional;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import vn.aptech.musicstore.config.oauth2.ClientOauth2User;
+import vn.aptech.musicstore.config.oauth2.ClientOauth2UserService;
+import vn.aptech.musicstore.config.oauth2.Oauth2LoginSuccessHandle;
+import vn.aptech.musicstore.entity.Account;
+import vn.aptech.musicstore.service.impl.AccountServiceImpl;
+
+/**
+ *
+ * @author Administrator
+ */
+@Configuration
+@EnableWebSecurity
+public class WebSecurityConfig {
+
+    @Bean
+    public PasswordEncoder encodePassword() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Configuration
+    @Order(1)
+    public class WebUserCustomerSecurityConfig extends WebSecurityConfigurerAdapter {
+
+        public WebUserCustomerSecurityConfig() {
+            super();
+        }
+
+        private final String[] WHITE_LIST_URLS = {
+            "/",
+            "/contact",
+            "/api/**",
+            "/register*",
+            "/resetPassword*",
+            "/resetChangePassword*",
+            //            "/resetChangePassword",
+            "/register",
+            "/promotion",
+            "/promotion/getCode**",
+            "/verify*",
+            "/verifyRegistration*",
+            "/resendVerifyToken*",
+            "/savePassword*",
+            "/changePassword",
+            "/login",
+            "/news",
+            "logout"
+        };
+
+        @Autowired
+        private AccountServiceImpl accountService;
+        
+        @Autowired
+        private ClientOauth2UserService oauth2UserService;
+
+        @Autowired
+        private Oauth2LoginSuccessHandle oauth2LoginSuccessHandle;
+
+        public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+            auth.userDetailsService(accountService).passwordEncoder(encodePassword());
+        }
+
+        @Override
+        protected void configure(final HttpSecurity http) throws Exception {
+
+            http.cors().and().csrf().disable();
+
+            http.authorizeHttpRequests()
+                    .antMatchers(WHITE_LIST_URLS).permitAll()
+                    //                    .antMatchers("/api/**").authenticated()
+                    .antMatchers("/user/**").hasAnyRole("ADMIN", "EDITOR", "MODERATOR", "USER","VIP")
+                    .antMatchers("/admin/account/**").hasAnyRole("ADMIN", "MODERATOR")
+                    .antMatchers("/admin/**").hasAnyRole("ADMIN", "EDITOR", "MODERATOR")
+//                    .antMatchers("admin/account/updateProfile/editor").hasAnyRole("EDITOR")
+                    .anyRequest().authenticated();
+
+            http.authorizeHttpRequests()
+                    .and().formLogin()
+                    .loginProcessingUrl("/user-login-process")//submit url
+                    .loginPage("/login")
+                    .usernameParameter("username")
+                    .passwordParameter("password")
+                    .defaultSuccessUrl("/user", true)
+                    .failureUrl("/login?error=true")
+                    .and()
+                    .oauth2Login()
+                    .loginPage("/login")
+                    .userInfoEndpoint()
+                    .userService(oauth2UserService)
+                    .and()
+                    //                 xu ly cho login thanh cong
+                    //                    .successHandler(oauth2LoginSuccessHandle)
+                    .successHandler(new AuthenticationSuccessHandler() {
+                        @Override
+                        public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                            // nhan thong tin nguoi dung thong qua Priciple
+                            ClientOauth2User oauth2User = (ClientOauth2User) authentication.getPrincipal();
+                            String email = oauth2User.getEmail();
+                            String clientName = oauth2User.getClientName();
+                            String name = oauth2User.getName();
+                            String imageUrl = oauth2User.getImageUrl();
+                            System.out.println("imageUrl :" +imageUrl);
+                            
+                            HttpSession session = request.getSession();
+                            accountService.processOAuthPostLogin(email, name, clientName,imageUrl);
+                            Optional<Account>  user =accountService.findByUsername(email);
+                            session.setAttribute("user", user.get());
+                            session.setAttribute("imageUrlAvatar", imageUrl);
+                            System.out.println("image"+imageUrl);
+                            //check token Vip after login
+//                            accountService.validateVipToken(accountService.getVipTokenByUserId(user.get().getId()).getToken());
+                            response.sendRedirect("/user");
+                        }
+                    })
+                    //cau hinh Logout Page
+                    .and().logout().logoutUrl("/logout")
+                    .logoutSuccessUrl("/login?logout=true")
+                    .and()
+                    .exceptionHandling()
+                    .accessDeniedPage("/403");
+            http.authorizeHttpRequests().and().rememberMe();
+            //config remember
+//                .tokenRepository("abc")
+//                .tokenValiditySeconds(24*60*60); //1 ngay
+        }
+
+        @Override
+        public void configure(WebSecurity web) throws Exception {
+            web
+                    .ignoring()
+                    .antMatchers("/", "/login", "/admin/login", "/song/**", "/result/**", "/admintemplate/**", "/webdata/**");
+        }
+    }
+
+//     @Configuration
+//    @Order(2)
+//    public class WebAdminSecurityConfig extends WebSecurityConfigurerAdapter {
+//
+//        public WebAdminSecurityConfig() {
+//            super();
+//        }
+//
+//        @Autowired
+//        private AccountServiceImpl accountService;
+//
+////    @Bean
+////    public BCryptPasswordEncoder passwordEncoder(){
+////        return new BCryptPasswordEncoder();
+////    }
+//        public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//            auth.userDetailsService(accountService).passwordEncoder(encodePassword());
+//        }
+//
+//        @Override
+//        protected void configure(final HttpSecurity http) throws Exception {
+//
+////            http.authorizeRequests().anyRequest().authenticated().and().formLogin().loginPage("/admin/login").permitAll().defaultSuccessUrl("/admin").loginProcessingUrl("/j_spring_security_check");
+////        super.configure(http); //To change body of generated methods, choose Tools | Templates.
+//            http.cors().and().csrf().disable();
+//
+//            http.authorizeHttpRequests()
+//                    .antMatchers("/admin/login", "logout", "/", "/contact, /user-login-process").permitAll();
+//            http.authorizeHttpRequests()
+//                    .antMatchers("/admin/account/**").hasAnyRole("ADMIN", "MODERATOR")
+//                    .antMatchers("/admin/**").hasAnyRole("ADMIN", "EDITOR", "MODERATOR", "USER")
+//                    //                    .anyRequest().hasAnyRole("ADMIN", "EDITOR", "MODERATOR");
+//                    .anyRequest().authenticated();
+//
+//            http.authorizeHttpRequests()
+//                    .and().formLogin()
+//                    .loginProcessingUrl("/admin-login-process")//submit url
+//                    .loginPage("/admin/login")
+//                    .usernameParameter("username")
+//                    .passwordParameter("password")
+//                    .defaultSuccessUrl("/", true)
+//                    .failureUrl("/admin/login?error=true")
+//                    //cau hinh Logout Page
+//                    .and().logout().logoutUrl("/admin/logout")
+//                    .logoutSuccessUrl("/admin/login?logout=true")
+//                    .and()
+//                    .exceptionHandling()
+//                    .accessDeniedPage("/admin/403");
+//            http.authorizeHttpRequests().and().rememberMe();
+//            //config remember
+////                .tokenRepository("abc")
+////                .tokenValiditySeconds(24*60*60); //1 ngay
+//        }
+//
+//        @Override
+//        public void configure(WebSecurity web) throws Exception {
+//            web
+//                    .ignoring()
+//                    .antMatchers("/", "/login", "/admin/login", "/song/**", "/result/**", "/admintemplate/**", "/webdata/**");
+//        }
+//    }
+}
