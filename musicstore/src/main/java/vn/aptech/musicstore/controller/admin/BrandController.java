@@ -51,7 +51,7 @@ public class BrandController {
      @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id")int id){
         service.deleteById(id);
-        return "redirect:/admin/category";
+        return "redirect:/admin/brand";
     }
     
     @GetMapping("/update/{id}")
