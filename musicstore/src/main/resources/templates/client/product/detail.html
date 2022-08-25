@@ -105,7 +105,7 @@
                                 </button>
                             </div>
                         </div>-->
-                        <a th:if="${item.quantity > 0 && (user.role=='ROLE_USER' || user.role=='ROLE_VIP')}" th:href="@{/cart/add/{id}(id=${item.id})}" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To
+                        <a th:if="${(user != null) && (user.role=='ROLE_USER' || user.role=='ROLE_VIP')}" th:href="@{/cart/add/{id}(id=${item.id})}" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To
                             Cart</a>
                     </div>
                   
