@@ -85,7 +85,7 @@
                                                 <!--<span sec:authentication="principal.authorities" class="text-white font-size-12">Roles</span>-->
                                             </div>
                                             <div >
-                                                <a  sec:authorize="hasAnyRole('ADMIN','MODERATOR','EDITOR')" th:href="@{/user/profile/{id} (id=${session.user.id}) }" class="iq-sub-card iq-bg-primary-hover">
+                                                <a  th:href="@{/user/profile/{id} (id=${session.user.id}) }" class="iq-sub-card iq-bg-primary-hover">
                                                     <div class="media align-items-center">
                                                         <div class="rounded iq-card-icon iq-bg-primary">
                                                             <i class="ri-file-user-line"></i>
@@ -96,7 +96,7 @@
                                                         </div>
                                                     </div>
                                                 </a>
-                                                <a sec:authorize="hasAnyRole('USER')" th:href="@{/user/profile/{id} (id=*{id}) }"  class="iq-sub-card iq-bg-primary-hover">
+<!--                                                <a sec:authorize="hasAnyRole('USER')" th:href="@{/user/profile/{id} (id=*{id}) }"  class="iq-sub-card iq-bg-primary-hover">
                                                     <div class="media align-items-center">
                                                         <div class="rounded iq-card-icon iq-bg-primary">
                                                             <i class="ri-file-user-line"></i>
@@ -106,7 +106,7 @@
                                                             <p class="mb-0 font-size-12">View personal profile details.</p>
                                                         </div>
                                                     </div>
-                                                </a>
+                                                </a>-->
                                             </div>
 
                                             <!--                                  

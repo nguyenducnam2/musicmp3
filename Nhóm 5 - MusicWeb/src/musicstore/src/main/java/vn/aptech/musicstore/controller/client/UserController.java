@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
@@ -104,11 +105,15 @@ public class UserController {
             HttpSession session = request.getSession();
             session.setAttribute("user", user.get());
 
+            //check token vip after login
             String token = "";
+            token = userService.getVipTokenByUserId(user.get().getId()).getToken();
             if (!token.equals("")) {
-                token = userService.getVipTokenByUserId(user.get().getId()).getToken();
-                System.out.println("tokenVip" + token);
+                Date expireTimeVip = userService.getVipTokenByUserId(user.get().getId()).getExpirationTime();
+                session.setAttribute("expireTimeVip", expireTimeVip);
+//                System.out.println("expireTimeVip: " + expireTimeVip);
                 userService.validateVipToken(token);
+                session.setAttribute("user", user.get());
             }
             model.addAttribute("user", user.get());
         } catch (Exception e) {
@@ -117,7 +122,6 @@ public class UserController {
 
             e.printStackTrace();
         }
-        //check token vip after login
 
         List<Song> listsong = new ArrayList<>();
         for (int i = service_song.findAll().size() - 1; i >= 0; i--) {
@@ -186,8 +190,9 @@ public class UserController {
             rd.addFlashAttribute("mess", "Failed");
             return "redirect:/user/profile/" + user.getId();
         }
-
         HttpSession session = request.getSession();
+       
+
         session.setAttribute("user", user);
         rd.addFlashAttribute("mess", "Successfully");
         return "redirect:/user/profile/" + user.getId();
@@ -265,14 +270,12 @@ public class UserController {
     public String save(@RequestParam("file") MultipartFile file, @RequestParam("file2") MultipartFile file2, HttpServletRequest request,
             @ModelAttribute("song") Song s, Model model, @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam("accountId") Long accountId,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size) throws IOException 
-       
-    {   
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) throws IOException {
         HttpSession session = request.getSession();
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
-        
-            if (!(file.isEmpty())) {
+
+        if (!(file.isEmpty())) {
             s.setMedia(file.getOriginalFilename());
             if (!(file2.isEmpty())) {
                 s.setImage(file2.getOriginalFilename());
@@ -313,27 +316,22 @@ public class UserController {
             }
         }
 
-       
-        
         model.addAttribute("list", service_song.getPage(pageNumber, size));
         model.addAttribute("service", service_song);
         model.addAttribute("name", "null");
         model.addAttribute("mess", "Successfully");
-        return "client/upload/index" ;
+        return "client/upload/index";
     }
 
-    
     @PostMapping("/update")
     public String update(@RequestParam("file") MultipartFile file, @RequestParam("file2") MultipartFile file2, HttpServletRequest request,
-            @ModelAttribute("song") Song s, Model model, 
-            @RequestParam("accountId") Long accountId) throws IOException 
-  
-    {   
+            @ModelAttribute("song") Song s, Model model,
+            @RequestParam("accountId") Long accountId) throws IOException {
         HttpSession session = request.getSession();
         session.setAttribute("user", session.getAttribute("user"));
         model.addAttribute("user", session.getAttribute("user"));
         System.out.println(s);
-            if (!(file.isEmpty())) {
+        if (!(file.isEmpty())) {
             s.setMedia(file.getOriginalFilename());
             if (!(file2.isEmpty())) {
                 s.setImage(file2.getOriginalFilename());
@@ -347,9 +345,9 @@ public class UserController {
 
                 }
             }
-            
+
             s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
-           
+
             service_song.save(s);
             Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
             service_song.save(s);
@@ -362,16 +360,16 @@ public class UserController {
             } else {
                 s.setMedia(service_song.findById(s.getId()).orElseThrow().getMedia());
                 s.setImage(file2.getOriginalFilename());
-            
+
                 s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
                 Files.copy(file2.getInputStream(), Paths.get(base_url + "\\webdata\\user" + File.separator + file2.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
                 service_song.save(s);
-            } 
-        }   
+            }
+        }
         model.addAttribute("service", service_song);
         model.addAttribute("name", "null");
         model.addAttribute("mess", "Successfully");
-         return "client/upload/index";
+        return "client/upload/index";
     }
 
     @GetMapping("/upload/search")
@@ -392,7 +390,7 @@ public class UserController {
         System.out.println(service_song.findById(id).get());
         model.addAttribute("listgenre", service_gen.findAll());
         model.addAttribute("status", "update");
-        return "client/upload/createsong" ;
+        return "client/upload/createsong";
     }
 
     @GetMapping("/upload/delete/{id}")
@@ -437,12 +435,12 @@ public class UserController {
         s.setView(s.getView() + 1);
         service_song.save(s);
         List<Song> anotherlist = service_song.findByAccountId(s.getAccountId());
-            Song swap = anotherlist.get(0);
-            int index_to_swap = anotherlist.indexOf(s);
-            anotherlist.set(0, s);
-            anotherlist.set(index_to_swap, swap);
+        Song swap = anotherlist.get(0);
+        int index_to_swap = anotherlist.indexOf(s);
+        anotherlist.set(0, s);
+        anotherlist.set(index_to_swap, swap);
         model.addAttribute("song", s);
-             model.addAttribute("anotherlist", anotherlist);
+        model.addAttribute("anotherlist", anotherlist);
 
         model.addAttribute("listcomments", service_cmt.findBySongId(s.getId()));
         model.addAttribute("listcmtall", service_cmt.findAll());
@@ -451,6 +449,5 @@ public class UserController {
         model.addAttribute("service_pl", service_pl);
         return "client/upload/Usermedia";
     }
-   
 
 }

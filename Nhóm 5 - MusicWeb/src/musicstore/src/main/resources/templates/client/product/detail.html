@@ -13,7 +13,7 @@
                        
    
     <!-- Navbar Start -->
-    <div class="container-fluid bg-dark mb-30" th:if="${session.user !=null}">
+    <div class="container-fluid bg-dark mb-30">
         <div class="row px-xl-5" >
             <div class="col-lg-3 d-none d-lg-block" >
                 <a class="btn d-flex align-items-center justify-content-between bg-primary w-100" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; padding: 0 30px;">
@@ -105,7 +105,7 @@
                                 </button>
                             </div>
                         </div>-->
-                        <a th:if="${item.quantity > 0 && (user.role=='ROLE_USER' || user.role=='ROLE_VIP')}" th:href="@{/cart/add/{id}(id=${item.id})}" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To
+                        <a th:if="${(user != null) && (user.role=='ROLE_USER' || user.role=='ROLE_VIP') && item.quantity > 0}" th:href="@{/cart/add/{id}(id=${item.id})}" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To
                             Cart</a>
                     </div>
                   
