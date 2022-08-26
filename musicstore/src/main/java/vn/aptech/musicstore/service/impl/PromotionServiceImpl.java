@@ -27,7 +27,7 @@ public class PromotionServiceImpl implements PromotionService{
 
     @Override
     public List<Promotion> findAll() {
-        return repo.findAll();
+        return repo.findAllByOrderByIdDesc();
     }
 
     @Override

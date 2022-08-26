@@ -33,7 +33,7 @@ public class HomeActivity extends AppCompatActivity {
         mapping();
 
 //        SharedPreferences sharedPreferences = getSharedPreferences("application", Context.MODE_PRIVATE);
-
+//        sharedPreferences.getString("username","");
 
 
         init();

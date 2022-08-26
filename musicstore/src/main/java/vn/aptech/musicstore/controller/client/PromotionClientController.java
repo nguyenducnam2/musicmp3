@@ -57,6 +57,7 @@ public class PromotionClientController {
         Optional<Promotion> p = promotionService.findById(promotionId);
         Optional<Account> u = userService.findById(userId);
 
+        //check get code
         if (promotionCodeService.findByCodeAndUserId(p.get().getCode(), u.get().getId()).isEmpty()) {
             PromotionCode getCode = new PromotionCode();
             getCode.setCode(p.get().getCode());
@@ -79,7 +80,7 @@ public class PromotionClientController {
         cal.add(Calendar.DATE, -1);
         model.addAttribute("nowEndDate", cal.getTime().getTime());
         model.addAttribute("nowStartDate", cal1.getTime().getTime());
-        model.addAttribute("list", promotionCodeService.findAll());
+        model.addAttribute("list", promotionCodeService.findByUserId(u.get().getId()));
         model.addAttribute("name", "null");
         return "client/promotion/your-code-promotion";
     }

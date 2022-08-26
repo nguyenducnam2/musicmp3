@@ -207,7 +207,7 @@ public class Dialog_Register extends AppCompatDialogFragment {
         String stringPasswordSenderMail ="nppwzhwzwlapivlk";
         Random random = new Random();
         code = 10000 + random.nextInt(89999);
-        String messenger = "Your Pin confirm is :"+ code+". Please don't share this code!!!";
+        String messengerRegisterPin = "Your Pin confirm is :"+ code+". Please don't share this code!!!";
 
         String stringHost ="smtp.gmail.com";
         String stringPort ="465";
@@ -229,7 +229,7 @@ public class Dialog_Register extends AppCompatDialogFragment {
             messageRegister.setFrom(new InternetAddress(stringSenderEmail,"Muzik App"));
             messageRegister.setRecipients(Message.RecipientType.TO, InternetAddress.parse(stringReceiverEmail));
             messageRegister.setSubject("Register Account");
-            messageRegister.setText(messenger);
+            messageRegister.setText(messengerRegisterPin);
             //gui mail
             Transport.send(messageRegister);
 
