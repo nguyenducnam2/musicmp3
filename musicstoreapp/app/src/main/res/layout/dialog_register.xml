@@ -140,7 +140,16 @@
             app:counterEnabled="true"
             app:counterMaxLength="5"
             app:endIconMode="clear_text"
-            app:endIconTint="#FFFFFF"/>
+            app:endIconTint="#FFFFFF">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:hint="Enter Pin"
+                android:textColor="#FFFFFF"
+                tools:ignore="TouchTargetSizeCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/btnGetPinRegister"
