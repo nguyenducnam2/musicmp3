@@ -160,7 +160,6 @@ public class PaypalController {
                 order.setIsPayment(1);
                 order.setStatus(1);
                 order.setOrderDate(java.time.LocalDate.now().toString());
-                order.setAmount((float) shoppingCartService.getAmount());
                 orderService.save(order);
                 for (int i = 0; i < newList.size(); i++) {
                     Optional<Product> product = productService.findById(newList.get(i).getId());
@@ -174,6 +173,7 @@ public class PaypalController {
                     products.setQuantity(products.getQuantity() - detail.getQuantity());
                     productService.save(products);
                 }
+                order.setAmount((float) shoppingCartService.getAmount());
                 shoppingCartService.clear();
                 return "client/cart/success";
             }
