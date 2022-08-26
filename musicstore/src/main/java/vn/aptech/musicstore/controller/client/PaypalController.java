@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -176,7 +177,7 @@ public class PaypalController {
                 shoppingCartService.clear();
                 return "client/cart/success";
             }
-        } catch (PayPalRESTException e) {
+        } catch (PayPalRESTException | NoSuchElementException e) {
             System.out.println(e.getMessage());
         }
         return "redirect:/";
