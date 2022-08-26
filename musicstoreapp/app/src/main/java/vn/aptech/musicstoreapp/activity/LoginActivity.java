@@ -104,6 +104,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("username",account.getUsername());
                     editor.putString("password",account.getPassword());
                     editor.putString("ful_name",account.getFullname());
+//                    System.out.println("ful_name "+account.getFullname());
                     editor.putString("role",account.getRole());
                     editor.putString("image",account.getImageUrl());
                     editor.apply();

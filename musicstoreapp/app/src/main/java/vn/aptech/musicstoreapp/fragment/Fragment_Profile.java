@@ -24,12 +24,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import vn.aptech.musicstoreapp.R;
 import vn.aptech.musicstoreapp.activity.HomeActivity;
 import vn.aptech.musicstoreapp.activity.MainActivity;
+import vn.aptech.musicstoreapp.service_api.api.ApiUtil;
 
 public class Fragment_Profile extends Fragment {
 
-    private String username1;
     Button btnLogout;
-    TextView acc, pass, username, url;
+    TextView acc, pass, tvUsername;
+    de.hdodenhof.circleimageview.CircleImageView imgUserProfile;
     HomeActivity hm;
     CircleImageView imgUser;
     String sql = "";
@@ -46,10 +47,13 @@ public class Fragment_Profile extends Fragment {
 
 
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("application", Context.MODE_PRIVATE);
-//        username.setText(sharedPreferences.getString("full_name",""));
+        String ful_name = sharedPreferences.getString("ful_name","");
+        String img = sharedPreferences.getString("image","");
+        tvUsername.setText("Hi "+ful_name);
+        Picasso.get(/*context*/).load(ApiUtil.WEBDATA_URL + "user/" + img).into(imgUserProfile);
 //        url.setText(sharedPreferences.getString("image",""));
-
-        System.out.println("username "+username1);
+//        System.out.println("tvUsername ");
+        System.out.println("tvUsername "+ful_name);
         btnLogout.setOnClickListener(v -> {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
@@ -65,7 +69,8 @@ public class Fragment_Profile extends Fragment {
 
     private void mapping() {
         btnLogout = view.findViewById(R.id.btnLogoutProfile);
-//       Z
+        tvUsername = view.findViewById(R.id.tvUsernameProfile);
+        imgUserProfile = view.findViewById(R.id.imgUserProfile);
     }
 //    private void ShowDialogUpdate(){
 //        DialogUpdateUser dialog_update_user = new DialogUpdateUser();
