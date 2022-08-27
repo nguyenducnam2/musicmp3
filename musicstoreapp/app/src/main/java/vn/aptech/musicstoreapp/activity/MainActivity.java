@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements Dialog_Register.E
 
 
     int flag = -1; // flag = 1 click free, flag = 2 click fb
-    private String username, password;
+//    private String username, password;
 
     private CallbackManager callbackManager;
     @Override
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements Dialog_Register.E
         progressDialog.show();
 
         AccountService dataService = ApiUtil.getAccountService();
-        Call<ResponseModel> registerCall = dataService.registerAndroid( username,password);
+        Call<ResponseModel> registerCall = dataService.registerAndroid(username,password);
         registerCall.enqueue(new Callback<ResponseModel>() {
             @Override
             public void onResponse(@NonNull Call<ResponseModel> call, @NonNull Response<ResponseModel> response) {
@@ -205,13 +205,13 @@ public class MainActivity extends AppCompatActivity implements Dialog_Register.E
         exampleDialog.show(getSupportFragmentManager(), "example dialog");
     }
 
-    public void apply(String username1, String password1){
+    public void apply(String username, String password){
 //        HashMap<String, String> params = new HashMap<>();
-        username = username1;
-        password = password1;
+//        username = username1;
+//        password = password1;
 //        params.put("UserName", username);
 //        params.put("Password", password);
-        register(username1,password1);
+        register(username,password);
     }
 
 //    @Override
@@ -220,8 +220,8 @@ public class MainActivity extends AppCompatActivity implements Dialog_Register.E
 //        accessTokenTracker.stopTracking();
 //    }
 
-    private void insertData(String username, String password) {
-        String sql = "INSERT INTO account(id integer primary key autoincrement,username , password ) VALUES('"+username+"','"+password+"')";
-        db.execSQL(sql);
-    }
+//    private void insertData(String username, String password) {
+//        String sql = "INSERT INTO account(id integer primary key autoincrement,username , password ) VALUES('"+username+"','"+password+"')";
+//        db.execSQL(sql);
+//    }
 }
