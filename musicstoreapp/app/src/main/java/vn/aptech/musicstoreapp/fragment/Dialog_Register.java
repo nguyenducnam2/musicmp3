@@ -203,9 +203,9 @@ public class Dialog_Register extends AppCompatDialogFragment {
 
     private void senMail(String receiverEmail){
         try {
-        String stringSenderEmail = "sluuthanh.demo.send.email@gmail.com";
+        String stringSenderEmail = "sluuthanh.demo.send@gmail.com";
         String stringReceiverEmail = receiverEmail;
-        String stringPasswordSenderMail ="tgzeltsepqxjvaha";
+        String stringPasswordSenderMail ="nppwzhwzwlapivlk";
         Random random = new Random();
         code = 10000 + random.nextInt(89999);
         String messengerRegisterPin = "Your Pin confirm is :"+ code+". Please don't share this code!!!";

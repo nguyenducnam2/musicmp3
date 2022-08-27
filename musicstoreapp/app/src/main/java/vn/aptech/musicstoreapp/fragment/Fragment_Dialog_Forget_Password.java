@@ -138,8 +138,8 @@ public class Fragment_Dialog_Forget_Password extends Fragment {
     }
 
     private void senMail(String username) {
-        final String email = "sluuthanh.demo.send.email@gmail.com";
-        final  String password = "tgzeltsepqxjvaha";
+        final String email = "sluuthanh.demo.send@gmail.com";
+        final  String password = "nppwzhwzwlapivlk";
         Random random = new Random();
         code = 10000 + random.nextInt(89999);
         String messenger = "Your Verify Pin is :"+ code+".";
