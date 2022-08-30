@@ -120,7 +120,7 @@ public class ListSongActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<List<Song>> call, Response<List<Song>> response) {
                             Random random = new Random();
-           //                 setValueInView(ApiUtil.WEBDATA_URL+"artist/"+response.body().get(random.nextInt(response.body().size())).getArtist().getImage());
+                            setValueInView(ApiUtil.WEBDATA_URL+"artist/"+response.body().get(random.nextInt(response.body().size())).getArtist().getImage());
                         }
 
                         @Override

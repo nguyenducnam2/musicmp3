@@ -127,6 +127,7 @@ public class SongController {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return "redirect:/admin/song?mess=Failed";
         }
         return "redirect:/admin/song?mess=Successfully";

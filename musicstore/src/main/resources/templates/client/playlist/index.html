@@ -35,7 +35,8 @@ and open the template in the editor.
                                                 </a>
                                                 <a th:if="${service_plitem.findByPlaylistId(item.id).size==0}" href="">
                                                     <img src="http://localhost:8080/webdata/album/nothumbnail.jpg"  class="img-border-radius img-fluid w-100" alt="">
-                                                </a>
+                                               </a>
+                                              
                                             </div>
                                             <div class="col-md-7 col-sm-7">
                                                 <h5 th:if="${service_plitem.findByPlaylistId(item.id).size>0}" th:text="${item.name}"><a href="#" class="profile-link">Sophia Page</a></h5>

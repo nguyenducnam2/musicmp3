@@ -347,7 +347,8 @@ public class UserController {
             }
 
             s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
-
+            s.setAccountId(accountId);
+            s.setAccount(userService.findById(accountId).orElseThrow());
             service_song.save(s);
             Files.copy(file.getInputStream(), Paths.get(base_url + "\\webdata\\audio" + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
             service_song.save(s);
@@ -355,12 +356,15 @@ public class UserController {
             if (file2.isEmpty()) {
                 s.setMedia(service_song.findById(s.getId()).orElseThrow().getMedia());
                 s.setImage(service_song.findById(s.getId()).orElseThrow().getImage());
+                s.setAccountId(userService.findById(s.getAccountId()).orElseThrow().getId());
+                s.setAccount(userService.findById(accountId).orElseThrow());
                 s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
                 service_song.save(s);
             } else {
                 s.setMedia(service_song.findById(s.getId()).orElseThrow().getMedia());
                 s.setImage(file2.getOriginalFilename());
-
+                s.setAccountId(userService.findById(s.getAccountId()).orElseThrow().getId());
+                s.setAccount(userService.findById(accountId).orElseThrow());
                 s.setGenre(service_gen.findById(s.getGenreId()).orElseThrow());
                 Files.copy(file2.getInputStream(), Paths.get(base_url + "\\webdata\\user" + File.separator + file2.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
                 service_song.save(s);
@@ -390,7 +394,7 @@ public class UserController {
         System.out.println(service_song.findById(id).get());
         model.addAttribute("listgenre", service_gen.findAll());
         model.addAttribute("status", "update");
-        return "client/upload/createsong";
+        return "client/upload/updatesong";
     }
 
     @GetMapping("/upload/delete/{id}")
@@ -413,7 +417,7 @@ public class UserController {
         HttpSession session = request.getSession();
         if (!(session.getAttribute("mess") == null)) {
             Song s = service_song.findById(id).orElseThrow();
-            s.setView(s.getView() + 1);
+           
             service_song.save(s);
             List<Song> anotherlist = service_song.findByAccountId(s.getAccountId());
             Song swap = anotherlist.get(0);
@@ -432,7 +436,7 @@ public class UserController {
             return "client/song/Usermedia";
         }
         Song s = service_song.findById(id).orElseThrow();
-        s.setView(s.getView() + 1);
+     
         service_song.save(s);
         List<Song> anotherlist = service_song.findByAccountId(s.getAccountId());
         Song swap = anotherlist.get(0);

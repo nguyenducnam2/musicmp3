@@ -60,8 +60,7 @@ public class ProductController {
         model.addAttribute("product", new Product());
         model.addAttribute("cateproduct", cate_service.findAll());
         model.addAttribute("brandproduct", brand_service.findAll());
-
-           model.addAttribute("action", "create");
+               model.addAttribute("status", "create");
 
         return "admin/product/create";
     }
@@ -121,7 +120,7 @@ public class ProductController {
         model.addAttribute("product", service.findById(id));
         model.addAttribute("cateproduct",cate_service.findAll());
         model.addAttribute("brandproduct", brand_service.findAll());
-           model.addAttribute("action", "update");
+        model.addAttribute("status", "update");
         return "admin/product/create";
     }
       

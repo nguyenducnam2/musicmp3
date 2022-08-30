@@ -16,8 +16,7 @@ and open the template in the editor.
                             <div class="iq-card-header d-flex justify-content-between">
                                 <div class="iq-header-title">
                                   
-                                    <h4 th:if="${action=='create'}" class="card-title">Add New Product</h4>
-                                    <h4 th:if="${action=='update'}" class="card-title">Update Product</h4>
+                                <h4 class="card-title" th:text="${status}"></h4>
                                
                                 </div>
                             </div>
@@ -26,7 +25,7 @@ and open the template in the editor.
                                     <input type="hidden"  th:field="${product.id}" />
                                     <div class="form-group">
                                         <label>Product Name:</label>
-                                        <input type="text" th:field="${product.name}" class="form-control" required="">
+                                        <input type="text" th:field="${product.name}" class="form-control" required>
                                          <div class="valid-feedback">
                                                             Looks good!
                                                         </div>
@@ -34,7 +33,7 @@ and open the template in the editor.
                                                             Required
                                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div th:if="${status != 'update'}"  class="form-group">
                                         <label>Image:</label>
                                         <div class="custom-file">
                                             <input type="file" name="file" class="custom-file-input" id="customFile" required>
@@ -44,6 +43,16 @@ and open the template in the editor.
                                                             </div>
                                         </div>
                                     </div>
+                                      <div th:if="${status == 'update'}" class="form-group">
+                                        <label>Image:</label>
+                                        <div class="custom-file">
+                                            <input type="file" name="file" class="custom-file-input" id="customFile" >
+                                            <label class="custom-file-label" for="customFile">Choose file</label>
+                                          
+                                        </div>
+                                    </div>
+                                    
+                                    
                                     <div class="form-group">
                                         <label>Price:</label>
                                         <input type="text" th:field="${product.price}" class="form-control" required>
@@ -68,9 +77,6 @@ and open the template in the editor.
                                      <div class="form-group">
                                         <label>Description:</label>
                                         <textarea th:field="${product.description}" class="form-control" rows="8" required></textarea>
-                                         <div class="valid-feedback">
-                                            Looks good!
-                                        </div>
                                         <div class="invalid-feedback">
                                           Required
                                         </div>

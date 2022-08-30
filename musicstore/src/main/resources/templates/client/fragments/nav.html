@@ -32,7 +32,7 @@
                         <li>
                             <a href='#genre' class='iq-waves-effect' data-toggle='collapse' aria-expanded='false'><span class='ripple rippleEffect'></span><i class='las la-th-list iq-arrow-left'></i><span>Genre</span><i class='ri-arrow-right-s-line iq-arrow-right'></i></a><ul class='iq-submenu collapse' data-parent='#iq-sidebar-toggle' id="genre"></ul>
                         </li>
-                        <li th:if="${(user != null) && (user.role=='ROLE_USER' || user.role=='ROLE_VIP')}">
+                        <li th:if="${(session.user != null) && (session.user.role=='ROLE_USER' || session.user.role=='ROLE_VIP')}">
                             <a href="#shop" class="iq-waves-effect" data-toggle="collapse" aria-expanded="false"><span class="ripple rippleEffect"></span><i class="las la-th-list iq-arrow-left"></i><span>Manage account</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
                             <ul id="shop" class="iq-submenu collapse show" data-parent="#iq-sidebar-toggle">
                                 <li class="active">

@@ -177,7 +177,7 @@ public class PaypalController {
                 shoppingCartService.clear();
                 return "client/cart/success";
             }
-        } catch (PayPalRESTException | NoSuchElementException e) {
+        } catch (PayPalRESTException e) {
             System.out.println(e.getMessage());
         }
         return "redirect:/";
